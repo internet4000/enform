@@ -1,0 +1,415 @@
+/* Record forms generated from lexicons (components/form) */
+:where(
+	enform-form,
+	enform-fields,
+	enform-field,
+	enform-list,
+	enform-union,
+	enform-blob,
+	enform-strongref,
+	enform-datetime,
+	enform-counter
+) {
+	display: block;
+}
+
+enform-form {
+	max-width: var(--form-measure);
+}
+
+enform-form form {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: var(--space-l);
+}
+
+enform-form form > p {
+	margin: 0;
+	color: var(--color-muted);
+}
+
+enform-fields {
+	display: flex;
+	flex-direction: column;
+	gap: var(--fields-gap);
+}
+
+/* A field: label, hint, control, then counters and errors */
+enform-field {
+	display: flex;
+	flex-direction: column;
+	gap: var(--field-gap);
+	min-width: 0;
+}
+
+enform-field > label,
+enform-field > fieldset > legend {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--space-s);
+	font-size: var(--font-size-m);
+	font-weight: var(--label-weight);
+	color: var(--color-text);
+	overflow-wrap: anywhere;
+}
+
+enform-field small {
+	font-size: var(--font-size-s);
+	font-weight: normal;
+	color: var(--color-muted);
+}
+
+enform-field > p,
+enform-field > fieldset > p {
+	margin: 0;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-field :is(input:not([type='checkbox']), select, textarea) {
+	width: 100%;
+}
+
+enform-field textarea,
+enform-field input[type='file'] {
+	padding: var(--space-s);
+	font: inherit;
+	color: inherit;
+	background: var(--color-bg);
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--radius);
+}
+
+enform-field textarea {
+	min-height: var(--textarea-min-height);
+	max-height: var(--textarea-max-height);
+	line-height: var(--line-height);
+	resize: vertical;
+	field-sizing: content;
+}
+
+enform-field[type='unknown'] textarea,
+enform-field[type='cid-link'] textarea,
+enform-field[type='bytes'] textarea {
+	font-family: var(--font-mono);
+	font-size: var(--font-size-s);
+}
+
+enform-field input[type='number'] {
+	max-width: var(--number-width);
+}
+
+enform-form :is(input, select, textarea, button, summary, a):focus-visible {
+	outline: var(--focus-ring);
+	outline-offset: var(--focus-offset);
+}
+
+enform-form [aria-invalid='true'] {
+	border-color: var(--color-danger);
+}
+
+enform-form button:disabled {
+	cursor: not-allowed;
+	opacity: var(--disabled-opacity);
+}
+
+enform-field > p[role='alert'],
+enform-field > fieldset > p[role='alert'] {
+	color: var(--color-danger);
+}
+
+/* Checkboxes sit before their label */
+enform-field[type='boolean'] {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	column-gap: var(--space-s);
+}
+
+enform-field[type='boolean'] > label {
+	grid-area: 1 / 2;
+}
+
+enform-field[type='boolean'] > input {
+	grid-area: 1 / 1;
+	inline-size: var(--checkbox-size);
+	block-size: var(--checkbox-size);
+	margin: 0;
+	accent-color: var(--color-accent);
+}
+
+enform-field[type='boolean'] > p {
+	grid-column: 2;
+}
+
+/* Groups: objects, lists, unions */
+enform-field > fieldset {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+	min-width: 0;
+	margin: 0;
+	padding: var(--space-m);
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--radius);
+}
+
+enform-field > fieldset > legend {
+	padding: 0 var(--space-xs);
+}
+
+enform-field > fieldset > enform-fields {
+	padding-top: var(--space-xs);
+}
+
+enform-field menu,
+enform-list menu {
+	display: flex;
+	gap: var(--space-xs);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+/* A group's buttons sit on its frame, across from the legend */
+enform-field > fieldset {
+	position: relative;
+}
+
+enform-field > fieldset > menu {
+	position: absolute;
+	inset-block-start: calc(var(--control-height) / -2);
+	inset-inline-end: var(--space-s);
+	padding-inline: var(--space-xs);
+	background: var(--color-bg);
+}
+
+/* An optional object not added yet */
+enform-field[absent] {
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--space-s);
+	padding: var(--space-s);
+	border: var(--border-width) dashed var(--color-border);
+	border-radius: var(--radius);
+}
+
+enform-field[absent] > p {
+	flex: 1;
+}
+
+enform-fields > details > summary {
+	cursor: pointer;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-fields > details > enform-field {
+	margin-top: var(--fields-gap);
+}
+
+/* Lists */
+enform-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+}
+
+enform-list > ol {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+enform-list > ol > li {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--space-s);
+}
+
+enform-list > ol > li > enform-field {
+	flex: 1;
+}
+
+/* Items of plain values are rows, named by the list's legend */
+:is(enform-list[items='string'], enform-list[items='integer'], enform-list[items='boolean'])
+	> ol
+	> li
+	> enform-field
+	> label {
+	position: absolute;
+	width: var(--visually-hidden-size);
+	height: var(--visually-hidden-size);
+	overflow: hidden;
+	clip-path: var(--visually-hidden-clip);
+	white-space: nowrap;
+}
+
+/* Items made of fields keep their controls on their frame, like a legend */
+enform-list:not([items='string'], [items='integer'], [items='boolean']) > ol > li {
+	position: relative;
+}
+
+enform-list:not([items='string'], [items='integer'], [items='boolean']) > ol > li > menu {
+	position: absolute;
+	inset-block-start: 0;
+	inset-inline-end: var(--space-s);
+	padding-inline: var(--space-xs);
+	background: var(--color-bg);
+}
+
+enform-list button:is([value='up'], [value='down'], [value='remove']) {
+	inline-size: var(--control-height);
+	padding: 0;
+}
+
+enform-list button[value='up']::before {
+	content: var(--icon-up);
+}
+
+enform-list button[value='down']::before {
+	content: var(--icon-down);
+}
+
+enform-list button[value='remove']::before {
+	content: var(--icon-remove);
+}
+
+enform-form button[value='add']::before {
+	content: var(--icon-add);
+	margin-inline-end: var(--space-xs);
+}
+
+enform-list > footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-s);
+}
+
+/* Unions: the type, then its fields */
+enform-union {
+	display: flex;
+	flex-direction: column;
+	gap: var(--field-gap);
+}
+
+enform-union select {
+	width: auto;
+	max-width: 100%;
+}
+
+/* Datetimes */
+enform-datetime {
+	display: flex;
+	gap: var(--space-s);
+}
+
+enform-datetime > input {
+	flex: 1;
+}
+
+/* Blobs */
+enform-blob {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+}
+
+enform-blob img {
+	width: auto;
+	max-height: var(--preview-max-height);
+}
+
+enform-blob[uploading] img {
+	opacity: var(--busy-opacity);
+}
+
+enform-blob > p {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--space-s);
+	margin: 0;
+	font-size: var(--font-size-s);
+}
+
+/* Strong refs: what the URI points to */
+enform-strongref dl {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: var(--space-xs) var(--space-s);
+	margin: 0;
+	font-size: var(--font-size-s);
+}
+
+enform-strongref dt {
+	color: var(--color-muted);
+}
+
+enform-strongref dd {
+	margin: 0;
+	overflow-wrap: anywhere;
+}
+
+enform-counter {
+	align-self: flex-end;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-counter[over] {
+	color: var(--color-danger);
+}
+
+enform-field[loading] > p {
+	color: var(--color-muted);
+}
+
+/* Submitting, kept in reach at the bottom */
+enform-form form > footer {
+	position: sticky;
+	inset-block-end: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: var(--space-m);
+	padding-block: var(--space-m);
+	background: var(--color-bg);
+	border-top: var(--border-width) solid var(--color-border);
+}
+
+enform-form button[type='submit'] {
+	padding-inline: var(--space-m);
+	font-weight: var(--label-weight);
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+	border-color: var(--color-accent);
+}
+
+enform-form form > footer > output {
+	flex: 1;
+	min-width: 0;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-form form > footer > output > p {
+	margin: 0;
+}
+
+enform-form form > footer > output > ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs) var(--space-s);
+	padding: 0;
+	margin: var(--space-xs) 0 0;
+	list-style: none;
+}

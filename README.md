@@ -22,6 +22,7 @@ bun run build    # static site in dist/
 - `src/lib/atproto/`: identity (DNS, DID documents) and public repo reads
 - `src/lib/lexicons/`: lexicon resolution and refs
 - `src/lib/records/`: how record values are summarized and shown
-- `src/lib/components/`: `enform-*` elements
+- `src/lib/forms/`: record forms from lexicons: initial values, constraints, cleaning, validation
+- `src/lib/components/`: `enform-*` elements (`form/`: the generated record form)
 - `src/lib/config/app.json`: services and settings
 - `i18n/messages/`: translations

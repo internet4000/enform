@@ -2,7 +2,7 @@
 import type {LexNode} from '#lib/lexicons/types'
 
 /** Property names that usually say what a record is, most telling first */
-const TITLE_KEYS = ['title', 'name', 'displayName', 'text', 'description', 'url', 'subject']
+export const TITLE_KEYS = ['title', 'name', 'displayName', 'text', 'description', 'url', 'subject']
 
 function text(value: unknown): string | undefined {
 	if (typeof value === 'string' && value.trim()) return value.trim()
