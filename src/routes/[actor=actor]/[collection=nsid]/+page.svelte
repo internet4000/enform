@@ -8,20 +8,17 @@
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
+	let owner = $derived(auth.session?.did === data.repo.did)
 </script>
 
 <Breadcrumbs {actor} collection={data.collection} />
 <section>
 	<h2>{data.collection}</h2>
 	<LexiconStatus nsid={data.collection} lexicon={data.lexicon} />
-	{#if auth.session}
+	{#if auth.session && !owner}
 		{#await data.lexicon then doc}
 			{#if doc}
-				<p>
-					<a href={newPath(data.collection)} role="button">
-						{auth.session.did === data.repo.did ? m.collection_new() : m.collection_new_yours()}
-					</a>
-				</p>
+				<p><a href={newPath(data.collection)}>{m.collection_new_yours()}</a></p>
 			{/if}
 		{/await}
 	{/if}
@@ -34,3 +31,14 @@
 		first={data.page}
 	/>
 {/key}
+{#if owner}
+	{#await data.lexicon then doc}
+		{#if doc}
+			<enform-action-bar>
+				<menu>
+					<li><a href={newPath(data.collection)} role="button">{m.collection_add()}</a></li>
+				</menu>
+			</enform-action-bar>
+		{/if}
+	{/await}
+{/if}

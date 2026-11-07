@@ -2,10 +2,13 @@
 	import * as m from '#lib/paraglide/messages.js'
 	import {groupByApp} from '#lib/collections'
 	import ProfileCard from '#lib/components/ProfileCard.svelte'
-	import {actorName, collectionPath} from '#lib/paths'
+	import {auth} from '#lib/auth/session.svelte'
+	import {profileKey} from '#lib/lexicons/kind'
+	import {actorName, collectionPath, editPath, newPath, recordPath} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
+	let owner = $derived(auth.session?.did === data.repo.did)
 </script>
 
 <enform-repo verified={!!data.repo.handle || undefined}>
@@ -37,16 +40,34 @@
 			<section>
 				<h2>{app.app}</h2>
 				{#each app.profiles as profile (profile.nsid)}
-					<ProfileCard repo={data.repo} {actor} {profile} />
+					<ProfileCard repo={data.repo} {actor} {profile} {owner} />
 				{/each}
 				{#if app.collections.length}
 					<ul>
 						{#each app.collections as collection (collection.nsid)}
+							{@const key = collection.lexicon && profileKey(collection.lexicon)}
 							<li>
-								<a href={collectionPath(actor, collection.nsid)}>
+								<!-- A one-record collection opens its record; others list theirs -->
+								<a
+									href={key
+										? recordPath(actor, collection.nsid, key)
+										: collectionPath(actor, collection.nsid)}
+								>
 									<span>{collection.nsid}</span>
 									<small>{collection.lexicon?.defs.main?.description ?? ''}</small>
 								</a>
+								{#if owner && collection.lexicon}
+									{#if key}
+										<a href={editPath(actor, collection.nsid, key)}>{m.record_edit()}</a>
+									{:else}
+										<a
+											href={newPath(collection.nsid)}
+											aria-label={m.collection_add_to({collection: collection.nsid})}
+										>
+											{m.collection_add()}
+										</a>
+									{/if}
+								{/if}
 							</li>
 						{/each}
 					</ul>

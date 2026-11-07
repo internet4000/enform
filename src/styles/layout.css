@@ -10,7 +10,8 @@
 	enform-account,
 	enform-home,
 	enform-breadcrumbs,
-	enform-record-actions
+	enform-record-actions,
+	enform-action-bar
 ) {
 	display: block;
 }
@@ -160,8 +161,8 @@ enform-permission p {
 	margin: 0;
 }
 
-/* A record's actions, kept in reach at the bottom */
-enform-record-actions {
+/* A page's main actions, kept in reach at the bottom */
+enform-action-bar {
 	position: sticky;
 	inset-block-end: var(--sticky-bottom);
 	margin-inline: calc(-1 * var(--gutter));
@@ -171,7 +172,7 @@ enform-record-actions {
 	border-top: var(--border-width) solid var(--color-border);
 }
 
-enform-record-actions menu {
+enform-action-bar menu {
 	display: grid;
 	grid-auto-columns: 1fr;
 	grid-auto-flow: column;
@@ -181,7 +182,7 @@ enform-record-actions menu {
 	list-style: none;
 }
 
-enform-record-actions menu > li > * {
+enform-action-bar menu > li > * {
 	width: 100%;
 	justify-content: center;
 }
@@ -400,23 +401,21 @@ header > p {
 }
 
 @media (min-width: 48rem) {
-	enform-apps ul,
-	enform-records > ol,
-	enform-record-actions {
+	enform-action-bar {
 		margin-inline: 0;
 	}
 
-	enform-record-actions {
+	enform-action-bar {
 		border-radius: var(--radius);
 		border: var(--border-width) solid var(--color-border);
 	}
 
-	enform-record-actions menu {
+	enform-action-bar menu {
 		display: flex;
 		justify-content: end;
 	}
 
-	enform-record-actions menu > li > * {
+	enform-action-bar menu > li > * {
 		width: auto;
 	}
 }
@@ -426,4 +425,37 @@ enform-apps h3 {
 	font-size: var(--font-size-s);
 	font-weight: 400;
 	color: var(--color-muted);
+}
+
+/* A row with a secondary action at its end, e.g. adding to a list */
+enform-apps li:has(> a + a) {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: stretch;
+	border-bottom: var(--border-width) solid var(--color-border);
+}
+
+enform-apps li:has(> a + a) > a:first-child {
+	border-bottom: 0;
+}
+
+enform-apps li > a + a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: var(--row-min-height);
+	padding: 0 var(--gutter);
+	color: var(--color-accent);
+	font-size: var(--font-size-s);
+	border-bottom: 0;
+}
+
+enform-profile > p {
+	margin: var(--space-s) 0 0;
+}
+
+/* A row's lines never run wider than the row: long ones truncate */
+enform-apps li a > *,
+enform-records > ol > li > a > * {
+	max-width: 100%;
 }

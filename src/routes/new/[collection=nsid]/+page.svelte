@@ -9,13 +9,26 @@
 	import PermissionNotice from '#lib/components/PermissionNotice.svelte'
 	import RecordForm from '#lib/components/form/RecordForm.svelte'
 	import {createFromForm} from '#lib/records/save'
-	import {lexiconPath, recordPath} from '#lib/paths'
+	import {getRecord} from '#lib/atproto/repo'
+	import {profileKey} from '#lib/lexicons/kind'
+	import {actorName, editPath, lexiconPath, recordPath} from '#lib/paths'
 
 	let {data} = $props()
 
 	let lexicon = $derived(data.lexicon)
 	// The keyboard covering a form on arrival is worse than one more tap
 	const autofocus = typeof matchMedia !== 'undefined' && matchMedia('(pointer: fine)').matches
+
+	// A profile has one record per account: if yours exists, this is editing it
+	$effect(() => {
+		const key = profileKey(lexicon)
+		const me = auth.identity
+		if (!key || !me) return
+		getRecord(me, lexicon.id, key).then(
+			() => goto(editPath(actorName(me), lexicon.id, key), {replaceState: true}),
+			() => {}
+		)
+	})
 
 	async function create(value: Record<string, unknown>) {
 		const {uri} = await createFromForm(lexicon, value)

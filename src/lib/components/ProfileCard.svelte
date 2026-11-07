@@ -4,9 +4,11 @@
 	import {blobUrl} from '#lib/atproto/repo'
 	import type {AppProfile} from '#lib/apps'
 	import {recordCard} from '#lib/records/card'
-	import {recordPath} from '#lib/paths'
+	import * as m from '#lib/paraglide/messages.js'
+	import {editPath, recordPath} from '#lib/paths'
 
-	let {repo, actor, profile}: {repo: Identity; actor: string; profile: AppProfile} = $props()
+	type Props = {repo: Identity; actor: string; profile: AppProfile; owner?: boolean}
+	let {repo, actor, profile, owner = false}: Props = $props()
 
 	let card = $derived(recordCard(profile.record.value, profile.lexicon?.defs.main?.record))
 </script>
@@ -23,4 +25,11 @@
 			</figcaption>
 		</figure>
 	</a>
+	{#if owner && profile.lexicon}
+		<p>
+			<a href={editPath(actor, profile.nsid, profile.rkey)} role="button">
+				{m.profile_edit()}
+			</a>
+		</p>
+	{/if}
 </enform-profile>

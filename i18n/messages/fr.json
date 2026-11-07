@@ -153,5 +153,8 @@
 	"collection_new_yours": "En créer un dans votre dépôt",
 	"lexicon_view_short": "Lexique",
 	"home_examples": "Ou jetez un œil :",
-	"home_mine": "Votre dépôt"
+	"home_mine": "Votre dépôt",
+	"profile_edit": "Modifier le profil",
+	"collection_add": "Ajouter",
+	"collection_add_to": "Ajouter à {collection}"
 }

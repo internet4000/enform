@@ -30,12 +30,14 @@
 </script>
 
 <enform-record-actions>
-	<menu>
-		<li><a href={editHref}>{m.record_edit()}</a></li>
-		<li>
-			<button type="button" onclick={() => dialog?.showModal()}>{m.record_delete()}</button>
-		</li>
-	</menu>
+	<enform-action-bar>
+		<menu>
+			<li><a href={editHref} role="button">{m.record_edit()}</a></li>
+			<li>
+				<button type="button" onclick={() => dialog?.showModal()}>{m.record_delete()}</button>
+			</li>
+		</menu>
+	</enform-action-bar>
 	<dialog bind:this={dialog} aria-labelledby="delete-title">
 		<h2 id="delete-title">{m.record_delete_confirm_title()}</h2>
 		<p>{m.record_delete_confirm({rkey, collection})}</p>

@@ -153,5 +153,8 @@
 	"collection_new_yours": "Create one in your repo",
 	"lexicon_view_short": "Lexicon",
 	"home_examples": "Or look around:",
-	"home_mine": "Your repo"
+	"home_mine": "Your repo",
+	"profile_edit": "Edit profile",
+	"collection_add": "Add",
+	"collection_add_to": "Add to {collection}"
 }
