@@ -17,7 +17,9 @@
 	let owner = $derived(auth.session?.did === data.repo.did)
 	let editing = $derived(owner && page.url.searchParams.has('edit'))
 	let label = $derived(typeLabel(data.collection))
-	let title = $derived(recordSummary(data.record.value) ?? data.rkey)
+	// A link (to a record or a person) isn't a title: the type names it then
+	let summary = $derived(recordSummary(data.record.value))
+	let title = $derived(summary && !/^(at:\/\/|did:)/.test(summary) ? summary : label)
 </script>
 
 {#if editing}

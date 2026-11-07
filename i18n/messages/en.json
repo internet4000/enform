@@ -196,5 +196,6 @@
 	"accounts_sign_out_of": "Sign out {actor}",
 	"accounts_add": "Add another account",
 	"accounts_add_hint": "Each account signs in with its own server and stays signed in here. Switch between them at any time.",
-	"accounts_add_submit": "Add account"
+	"accounts_add_submit": "Add account",
+	"row_linked_record": "{author}: {title}"
 }

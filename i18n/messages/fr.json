@@ -196,5 +196,6 @@
 	"accounts_sign_out_of": "Déconnecter {actor}",
 	"accounts_add": "Ajouter un autre compte",
 	"accounts_add_hint": "Chaque compte se connecte auprès de son propre serveur et reste connecté ici. Passez de l'un à l'autre à tout moment.",
-	"accounts_add_submit": "Ajouter le compte"
+	"accounts_add_submit": "Ajouter le compte",
+	"row_linked_record": "{author} : {title}"
 }

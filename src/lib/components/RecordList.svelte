@@ -8,6 +8,7 @@
 	import {actorName, recordPath} from '#lib/paths'
 	import {recordDate, recordSummary} from '#lib/records/summary'
 	import {AtUri} from '@atproto/syntax'
+	import RowSummary from './RowSummary.svelte'
 	import {page} from '$app/state'
 
 	type Props = {
@@ -49,7 +50,7 @@
 						href={recordPath(actor, collection, rkey)}
 						aria-current={page.params.rkey === rkey ? 'page' : undefined}
 					>
-						<p>{recordSummary(record.value, doc?.defs.main?.record) ?? rkey}</p>
+						<RowSummary text={recordSummary(record.value, doc?.defs.main?.record) ?? rkey} />
 						{#if date}<time datetime={date}>{formatDate(date)}</time>{/if}
 					</a>
 				</li>
