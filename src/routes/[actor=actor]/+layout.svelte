@@ -10,7 +10,7 @@
 
 	let {data, children} = $props()
 	let actor = $derived(actorName(data.repo))
-	let owner = $derived(auth.session?.did === data.repo.did)
+	let owner = $derived(auth.owns(data.repo))
 
 	/** Who this is: the first app profile with a name or picture, Bluesky's first */
 	async function who() {
@@ -35,19 +35,23 @@
 		<enform-identity verified={!!data.repo.handle || undefined}>
 			{#await who() then card}
 				{#if card?.avatar}<img src={blobUrl(data.repo, card.avatar)} alt="" />{/if}
-				<strong>{card?.title ?? `@${actor}`}</strong>
-				{#if card?.title}<span>@{actor}</span>{/if}
+				<strong>{card?.title ?? data.repo.name ?? `@${actor}`}</strong>
+				{#if card?.title && !data.repo.local}<span>@{actor}</span>{/if}
 			{/await}
-			<details>
-				<summary>{m.repo_details()}</summary>
-				<dl>
-					<dt>{m.repo_did()}</dt>
-					<dd><code>{data.repo.did}</code></dd>
-					<dt>{m.repo_pds()}</dt>
-					<dd>{new URL(data.repo.pds).host}</dd>
-					{#if !data.repo.handle}<dt>{m.repo_handle_unverified()}</dt>{/if}
-				</dl>
-			</details>
+			{#if data.repo.local}
+				<span>{m.local_on_device()}</span>
+			{:else}
+				<details>
+					<summary>{m.repo_details()}</summary>
+					<dl>
+						<dt>{m.repo_did()}</dt>
+						<dd><code>{data.repo.did}</code></dd>
+						<dt>{m.repo_pds()}</dt>
+						<dd>{new URL(data.repo.pds).host}</dd>
+						{#if !data.repo.handle}<dt>{m.repo_handle_unverified()}</dt>{/if}
+					</dl>
+				</details>
+			{/if}
 		</enform-identity>
 		{#await data.apps}
 			<p><small>{m.collection_loading()}</small></p>

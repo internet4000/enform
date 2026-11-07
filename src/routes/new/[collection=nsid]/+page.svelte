@@ -10,15 +10,15 @@
 	let {data} = $props()
 
 	$effect(() => {
-		if (auth.identity) {
-			goto(createPath(actorName(auth.identity), data.lexicon.id), {replaceState: true})
+		if (auth.me) {
+			goto(createPath(actorName(auth.me), data.lexicon.id), {replaceState: true})
 		}
 	})
 </script>
 
 <enform-page>
 	<h1>{m.new_record_title({collection: typeLabel(data.lexicon.id)})}</h1>
-	{#if auth.ready && !auth.session}
+	{#if auth.ready && !auth.me}
 		<p>{m.new_sign_in({collection: typeLabel(data.lexicon.id)})}</p>
 		<Account />
 	{/if}

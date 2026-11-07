@@ -14,7 +14,7 @@
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
-	let owner = $derived(auth.session?.did === data.repo.did)
+	let owner = $derived(auth.owns(data.repo))
 	let editing = $derived(owner && page.url.searchParams.has('edit'))
 	let label = $derived(typeLabel(data.collection))
 	// A link (to a record or a person) isn't a title: the type names it then

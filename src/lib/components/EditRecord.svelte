@@ -2,6 +2,7 @@
 	// Edit one of your records with the form its lexicon makes
 	import {goto} from '$app/navigation'
 	import * as m from '#lib/paraglide/messages.js'
+	import {auth} from '#lib/auth/session.svelte'
 	import type {RepoRecord} from '#lib/atproto/repo'
 	import {uploadBlob} from '#lib/atproto/write'
 	import type {LexiconDoc} from '#lib/lexicons/types'
@@ -23,7 +24,7 @@
 	<RecordForm
 		{lexicon}
 		value={record.value}
-		{uploadBlob}
+		uploadBlob={auth.local ? undefined : uploadBlob}
 		onsubmit={save}
 		submitLabel={m.edit_submit()}
 		autofocus={false}

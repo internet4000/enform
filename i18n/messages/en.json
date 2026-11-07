@@ -207,5 +207,20 @@
 	"repo_pane_title": "Repo",
 	"overview_app": "A record type of {app}",
 	"overview_pick": "Open a record from the list to see it here.",
-	"overview_unpublished": "No lexicon is published for this type, so its records are shown as plain data and can't be created here."
+	"overview_unpublished": "No lexicon is published for this type, so its records are shown as plain data and can't be created here.",
+	"local_title": "Local profiles",
+	"local_intro": "A local profile keeps records in this browser only, with no account: to try apps, or work offline. Publish it to your account when you want.",
+	"local_default_name": "On this device",
+	"local_on_device": "On this device",
+	"local_use": "Use",
+	"local_stop": "Use your account again",
+	"local_create": "Create a local profile",
+	"local_name_label": "Name",
+	"local_publish": "Publish to {handle}",
+	"local_remove": "Remove",
+	"local_remove_confirm": "Remove {name} and all its records from this browser?",
+	"local_published": "{count} records published.",
+	"local_published_skipped": "Skipped, already in your account: {records}.",
+	"local_published_invalid": "Not valid against their lexicons, kept here: {records}.",
+	"apps_try_local": "Try it on this device, without an account"
 }

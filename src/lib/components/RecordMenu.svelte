@@ -10,7 +10,7 @@
 	import {findSame} from '#lib/apps/existing'
 	import {carried, relatedTypes} from '#lib/apps/related'
 	import type {LexiconDoc} from '#lib/lexicons/types'
-	import {actorName, atUriPath, createPath, lexiconPath} from '#lib/paths'
+	import {actorName, createPath, lexiconPath, recordPath} from '#lib/paths'
 
 	type Props = {
 		repo: Identity
@@ -29,14 +29,17 @@
 	/** Where this record's copy to `target` is already: in this repo, else in yours */
 	async function existing(target: string, prefill: Record<string, unknown>) {
 		const here = await findSame(repo, target, prefill)
-		if (here || !auth.identity || auth.identity.did === repo.did) return here
-		return findSame(auth.identity, target, prefill)
+		if (here) return {repo, record: here}
+		if (!auth.me || auth.owns(repo)) return undefined
+		const me = auth.me
+		const mine = await findSame(me, target, prefill)
+		return mine ? {repo: me, record: mine} : undefined
 	}
 
 	function copyTo(target: string, prefill: Record<string, unknown>) {
-		if (!auth.identity) return
+		if (!auth.me) return
 		menu?.hidePopover()
-		goto(createPath(actorName(auth.identity), target), {state: {prefill}})
+		goto(createPath(actorName(auth.me), target), {state: {prefill}})
 	}
 
 	async function copyLink() {
@@ -60,8 +63,14 @@
 							<span>{m.related_copy({app: label})}</span>
 						{:then found}
 							{#if found}
-								<a href={atUriPath(found.uri)}>{m.related_exists_short({type: label})}</a>
-							{:else if auth.identity}
+								<a
+									href={recordPath(
+										actorName(found.repo),
+										found.record.collection,
+										found.record.rkey
+									)}>{m.related_exists_short({type: label})}</a
+								>
+							{:else if auth.me}
 								<button type="button" onclick={() => copyTo(type.nsid, prefill)}>
 									{m.related_copy({app: label})}
 									<small>{m.related_reason({fields: fields.join(', ')})}</small>
@@ -72,11 +81,13 @@
 				{/each}
 			{/await}
 			<li><a href={lexiconPath(nsid)}>{m.lexicon_view()}</a></li>
-			<li>
-				<button type="button" onclick={copyLink}>
-					{copied ? m.record_link_copied() : m.record_copy_link()}
-				</button>
-			</li>
+			{#if uri}
+				<li>
+					<button type="button" onclick={copyLink}>
+						{copied ? m.record_link_copied() : m.record_copy_link()}
+					</button>
+				</li>
+			{/if}
 		</ul>
 	</enform-menu>
 </li>

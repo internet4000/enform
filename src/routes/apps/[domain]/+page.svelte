@@ -1,6 +1,9 @@
 <script lang="ts">
 	// An app of the atmosphere: what it is, what you can make there, and starting on it
 	import * as m from '#lib/paraglide/messages.js'
+	import {goto} from '$app/navigation'
+	import {localIdentity} from '#lib/atproto/identity'
+	import {createProfile, listProfiles} from '#lib/local/store'
 	import {auth} from '#lib/auth/session.svelte'
 	import {listCollections} from '#lib/atproto/repo'
 	import {byDirectory, directoryTypes, typeLabel} from '#lib/apps/directory'
@@ -11,8 +14,15 @@
 	import {actorName, collectionPath, createPath, repoPath} from '#lib/paths'
 
 	let {data} = $props()
+
+	/** Starts on the app in a local profile (the first one, else a new one) */
+	async function tryLocally(type: string) {
+		const profile = (await listProfiles())[0] ?? (await createProfile(m.local_default_name()))
+		await auth.useLocal(profile)
+		await goto(createPath(actorName(localIdentity(profile)), type))
+	}
 	let info = $derived(data.info)
-	let me = $derived(auth.identity)
+	let me = $derived(auth.me)
 	let mine = $derived(
 		me
 			? listCollections(me).then((all) =>
@@ -42,8 +52,13 @@
 		{@const start = startType(app)}
 		<section aria-labelledby="start">
 			<h2 id="start">{m.apps_your_place()}</h2>
-			{#if !auth.session}
+			{#if !auth.me}
 				{#if auth.ready}
+					{#if start}
+						<p>
+							<button type="button" onclick={() => tryLocally(start)}>{m.apps_try_local()}</button>
+						</p>
+					{/if}
 					<p>{m.apps_sign_in({app: info.name})}</p>
 					<Account />
 				{/if}

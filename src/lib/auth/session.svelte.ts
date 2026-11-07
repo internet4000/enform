@@ -4,7 +4,9 @@
  */
 import type {OAuthSession} from '@atproto/oauth-client-browser'
 import {refreshAll} from '$app/navigation'
-import {resolveIdentity, type Identity} from '#lib/atproto/identity'
+import {localIdentity, resolveIdentity, type Identity} from '#lib/atproto/identity'
+import {getProfile, type LocalProfile} from '#lib/local/store'
+import app from '#lib/config/app.json' with {type: 'json'}
 import {loadAccounts, nextAccount, saveAccounts, withAccount, withoutAccount} from './accounts'
 import {
 	authorizePopup,
@@ -32,9 +34,33 @@ class Auth {
 	/** Every account signed in on this browser, the current one included */
 	accounts = $state.raw<Account[]>([])
 	ready = $state(false)
+	/** The local profile you act as, instead of the current account, when set */
+	local = $state.raw<LocalProfile>()
 
 	get did() {
 		return this.session?.did
+	}
+
+	/** Who you are acting as: the current local profile, else the current account */
+	get me(): Identity | undefined {
+		return this.local ? localIdentity(this.local) : this.identity
+	}
+
+	/** Whether this repo is yours to write to, as who you are acting as */
+	owns(repo: {did: string}): boolean {
+		return !!this.me && this.me.did === repo.did
+	}
+
+	/** Acts as this local profile (or, with none, as the current account again) */
+	async useLocal(profile: LocalProfile | undefined) {
+		this.local = profile
+		try {
+			if (profile) localStorage.setItem(app.storage.local, profile.id)
+			else localStorage.removeItem(app.storage.local)
+		} catch {
+			// Storage blocked: it's only remembering the choice
+		}
+		await refreshAll()
 	}
 
 	/** Makes this session the current one */
@@ -71,6 +97,7 @@ class Auth {
 	}
 
 	async switchTo(did: string) {
+		if (this.local) await this.useLocal(undefined)
 		if (this.session?.did === did) return
 		await this.use(await restoreSession(did))
 		await refreshAll()
@@ -121,6 +148,15 @@ class Auth {
 		return this.authorize([scopeForRepo(collection, action)])
 	}
 
+	/** One authorization for an action on several collections (publishing many records) */
+	async authorizeRepos(collections: string[], action: RepoAction): Promise<OAuthSession> {
+		const missing = collections.filter((collection) => !this.canWrite(collection, action))
+		if (this.session && missing.length === 0) return this.session
+		return this.authorize([
+			...new Set(missing.map((collection) => scopeForRepo(collection, action)))
+		])
+	}
+
 	async authorizeBlob(mime: string): Promise<OAuthSession> {
 		if (this.session && this.canUpload(mime)) return this.session
 		return this.authorize([scopeForBlob(mime)])
@@ -135,10 +171,21 @@ onSessionDeleted((did) => void auth.forget(did))
 export async function startAuth(): Promise<string | undefined> {
 	try {
 		auth.list(loadAccounts())
+		auth.local = await restoreLocal()
 		const {session, returnTo} = await initSession()
 		await auth.use(session)
 		return returnTo
 	} finally {
 		auth.ready = true
+	}
+}
+
+/** The local profile acted as last time, if any */
+async function restoreLocal(): Promise<LocalProfile | undefined> {
+	try {
+		const id = localStorage.getItem(app.storage.local)
+		return id ? await getProfile(id) : undefined
+	} catch {
+		return undefined
 	}
 }
