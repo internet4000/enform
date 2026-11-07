@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as m from '#lib/paraglide/messages.js'
 	import {groupByApp} from '#lib/collections'
-	import FollowButton from '#lib/components/FollowButton.svelte'
 	import ProfileCard from '#lib/components/ProfileCard.svelte'
 	import {actorName, collectionPath} from '#lib/paths'
 
@@ -18,7 +17,6 @@
 			{#if !data.repo.handle}· {m.repo_handle_unverified()}{/if}
 		</small>
 	</p>
-	<FollowButton subject={data.repo.did} />
 </enform-repo>
 
 <enform-apps>

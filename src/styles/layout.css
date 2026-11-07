@@ -10,8 +10,7 @@
 	enform-account,
 	enform-home,
 	enform-breadcrumbs,
-	enform-record-actions,
-	enform-follow
+	enform-record-actions
 ) {
 	display: block;
 }
@@ -427,24 +426,4 @@ enform-apps h3 {
 	font-size: var(--font-size-s);
 	font-weight: 400;
 	color: var(--color-muted);
-}
-
-enform-follow {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: var(--space-s);
-	margin-top: var(--space-s);
-}
-
-enform-follow button[aria-pressed='false'] {
-	color: var(--color-on-accent);
-	background: var(--color-accent);
-	border-color: var(--color-accent);
-}
-
-enform-records > ol > li > a > small {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 }

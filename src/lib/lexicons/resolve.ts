@@ -11,7 +11,6 @@ import {NSID} from '@atproto/syntax'
 import {txtDids} from '#lib/atproto/dns'
 import {didDocument, pdsEndpoint} from '#lib/atproto/did'
 import {xrpcGet} from '#lib/atproto/xrpc'
-import {ownLexicon} from './bundled'
 import type {LexiconDoc} from './types'
 
 export const SCHEMA_COLLECTION = 'com.atproto.lexicon.schema'
@@ -45,8 +44,7 @@ const lexicons = new Map<string, Promise<LexiconDoc>>()
 export function resolveLexicon(nsid: string): Promise<LexiconDoc> {
 	let doc = lexicons.get(nsid)
 	if (!doc) {
-		const own = ownLexicon(nsid)
-		doc = own ? Promise.resolve(own) : fetchLexicon(nsid)
+		doc = fetchLexicon(nsid)
 		lexicons.set(nsid, doc)
 	}
 	return doc

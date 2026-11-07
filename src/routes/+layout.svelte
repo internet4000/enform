@@ -3,17 +3,11 @@
 	import {onMount} from 'svelte'
 	import {goto} from '$app/navigation'
 	import {navigating} from '$app/state'
-	import {auth, startAuth} from '#lib/auth/session.svelte'
-	import {follows} from '#lib/follows/follows.svelte'
+	import {startAuth} from '#lib/auth/session.svelte'
 	import AppNav from '#lib/components/shell/AppNav.svelte'
 	import app from '#lib/config/app.json' with {type: 'json'}
 
 	let {children} = $props()
-
-	// The signed-in account's follows, for follow buttons and the Following feed
-	$effect(() => {
-		follows.load(auth.identity)
-	})
 
 	onMount(() => {
 		startAuth().then((returnTo) => {

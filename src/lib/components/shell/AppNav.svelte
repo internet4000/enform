@@ -11,7 +11,6 @@
 	)
 	let items = $derived([
 		{href: '/', icon: 'explore', label: m.nav_explore()},
-		{href: '/following', icon: 'following', label: m.nav_following()},
 		{href: '/new', icon: 'new', label: m.nav_new()},
 		{href: me ?? '/settings', icon: 'me', label: me ? m.nav_me() : m.session_sign_in()},
 		{href: '/settings', icon: 'settings', label: m.nav_settings()}
@@ -19,7 +18,7 @@
 
 	function current(href: string, index: number) {
 		const path = page.url.pathname
-		if (index === 3 && !me) return false
+		if (index === 2 && !me) return false
 		if (href === '/') return path === '/'
 		return path === href || path.startsWith(`${href}/`)
 	}
