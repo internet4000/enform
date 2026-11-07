@@ -26,13 +26,19 @@ We don't hack the protocol.
 - An NSID belongs to whoever controls its domain. enform never publishes or squats
   lexicons in namespaces it doesn't own.
 
-## Writing (to come)
+## Writing
 
-- OAuth only, no app passwords. Sign in asks for `atproto` alone. Each collection's
-  `repo:<nsid>?action=…` scope is requested the first time it's needed, or the namespace's
-  `include:` permission set when published.
-- Records are written only to the signed-in user's repo, validated against their
-  lexicon, never with `validate: false`, and with `swapRecord` against lost updates.
+- OAuth only, no app passwords. Sign-in asks for `atproto` alone.
+- Authorization servers accept only scopes the client metadata declares, as exact
+  strings. So each write steps up, in a popup so forms keep their state, to:
+  - `repo:<nsid>?action=<action>` for the collections listed in
+    `src/lib/config/permissions.json`, one collection and action at a time;
+  - `repo:*?action=<action>` for any other collection. The app says plainly that
+    this covers every collection.
+- Each step-up requests everything already granted plus what's new, since a new
+  authorization replaces the session's scope.
+- Records are written only to the signed-in user's repo, never with
+  `validate: false`, and with `swapRecord` against lost updates.
 - Records whose lexicon can't be resolved are read-only.
 
 ## Namespace
