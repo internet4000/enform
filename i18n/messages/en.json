@@ -166,5 +166,11 @@
 	"app_unpublished": "{app} hasn't published its lexicons, so only the types already in this repo are known.",
 	"new_other": "Another type, by its NSID",
 	"app_lists_one": "{count} list",
-	"new_more": "More {app} types ({count})"
+	"new_more": "More {app} types ({count})",
+	"repo_details": "Identity details",
+	"pane_pick_title": "Nothing open",
+	"pane_pick_collection": "Open a profile or a list on the left.",
+	"pane_pick_record": "Open a record from the list.",
+	"nav_start_more": "Start more in {app}",
+	"nav_start_type": "Add {type}"
 }

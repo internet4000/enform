@@ -29,19 +29,24 @@ enform-app > header > a {
 
 enform-app > main {
 	grid-area: main;
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-l);
-	width: 100%;
-	max-width: var(--measure);
-	margin: 0 auto;
-	padding: var(--space-s) var(--gutter) var(--space-l);
+	min-width: 0;
 	transition: opacity var(--duration);
 }
 
+/* A page that isn't panes: one centered column */
+enform-page {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-l);
+	max-width: var(--measure);
+	margin: 0 auto;
+	padding: var(--space-s) var(--gutter) var(--space-l);
+}
+
 /* Flex children may shrink below their content (long one-line text truncates instead) */
-enform-app > main > *,
-enform-app > main section > * {
+enform-page > *,
+enform-pane > *,
+:is(enform-page, enform-pane) section > * {
 	min-width: 0;
 }
 
@@ -101,8 +106,6 @@ enform-app > nav svg {
 	enform-app {
 		grid-template-areas: 'header nav' 'main main';
 		grid-template-columns: minmax(0, 1fr) auto;
-		/* The header lines up with the page, centered at its measure */
-		padding-inline: max(0px, calc((100% - var(--measure)) / 2));
 		padding-bottom: 0;
 		--sticky-bottom: 0px;
 	}
@@ -112,7 +115,7 @@ enform-app > nav svg {
 		border-bottom: var(--border-width) solid var(--color-border);
 	}
 
-	enform-app > main {
+	enform-page {
 		padding-top: var(--space-l);
 	}
 

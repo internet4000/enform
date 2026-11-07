@@ -1,0 +1,300 @@
+/*
+ * Browsing a repo in panes: repo › collection › record. Phones show the deepest pane
+ * chosen, with a link back up; wider screens show two, then all three side by side,
+ * each scrolling on its own.
+ */
+enform-panes {
+	display: block;
+}
+
+enform-pane {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-m);
+	padding: 0 var(--gutter) var(--space-l);
+}
+
+/* On phones: only the deepest chosen pane */
+@media (max-width: 47.99rem) {
+	enform-pane[placeholder],
+	enform-pane:has(~ enform-pane:not([placeholder])) {
+		display: none;
+	}
+}
+
+enform-pane > header {
+	position: sticky;
+	inset-block-start: 0;
+	z-index: 1;
+	display: grid;
+	grid-template-areas: 'back back' 'title actions';
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: center;
+	gap: var(--space-2xs) var(--space-s);
+	margin-inline: calc(-1 * var(--gutter));
+	padding: var(--space-s) var(--gutter);
+	background: var(--color-bar);
+	backdrop-filter: blur(var(--bar-blur));
+	border-bottom: var(--border-width) solid var(--color-border);
+}
+
+enform-pane > header > a[rel='up'] {
+	grid-area: back;
+	justify-self: start;
+	display: inline-flex;
+	align-items: center;
+	min-height: var(--control-height-small);
+	font-size: var(--font-size-s);
+	text-decoration: none;
+}
+
+enform-pane > header > a[rel='up']::before {
+	content: '‹';
+	margin-inline-end: var(--space-xs);
+	font-size: var(--font-size-l);
+	line-height: 1;
+}
+
+enform-pane > header > hgroup {
+	grid-area: title;
+	min-width: 0;
+}
+
+enform-pane > header h1 {
+	overflow: hidden;
+	font-size: var(--font-size-pane-title);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-pane > header hgroup > p {
+	margin: 0;
+	overflow: hidden;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-pane > header > menu {
+	grid-area: actions;
+	display: flex;
+	gap: var(--space-s);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+enform-pane[placeholder] {
+	color: var(--color-muted);
+}
+
+/* The repo's identity, atop its apps */
+enform-identity {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	align-items: center;
+	gap: var(--space-xs) var(--space-m);
+}
+
+enform-identity > img {
+	grid-row: span 2;
+	width: var(--avatar-size);
+	height: var(--avatar-size);
+	object-fit: cover;
+	border-radius: var(--avatar-radius);
+}
+
+enform-identity > strong {
+	font-size: var(--font-size-l);
+	line-height: 1.2;
+}
+
+enform-identity > details {
+	grid-column: -2;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-identity dl {
+	margin: var(--space-xs) 0 0;
+	overflow-wrap: anywhere;
+}
+
+enform-identity dd {
+	margin: 0 0 var(--space-xs);
+}
+
+/* A repo's apps: each a heading with its icon, and its profile and lists */
+enform-repo-nav {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-l);
+}
+
+enform-repo-app {
+	display: block;
+}
+
+enform-repo-app[protocol] {
+	opacity: 0.7;
+}
+
+enform-repo-nav h2 {
+	display: flex;
+	align-items: center;
+	gap: var(--space-s);
+	font-size: var(--font-size-s);
+	font-weight: 600;
+	color: var(--color-muted);
+	text-transform: uppercase;
+	letter-spacing: var(--caps-spacing);
+}
+
+enform-app-icon {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: var(--app-icon-size);
+	height: var(--app-icon-size);
+	overflow: hidden;
+	font-size: var(--font-size-xs);
+	font-weight: 700;
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+	border-radius: var(--app-icon-radius);
+}
+
+enform-app-icon img {
+	width: 100%;
+	height: 100%;
+	max-height: none;
+	object-fit: cover;
+	border-radius: 0;
+}
+
+enform-repo-nav ul {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2xs);
+	padding: 0;
+	margin: var(--space-s) calc(-1 * var(--space-s)) 0;
+	list-style: none;
+}
+
+enform-repo-nav li {
+	display: flex;
+	align-items: stretch;
+}
+
+enform-repo-nav li > a {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	gap: var(--space-s);
+	min-width: 0;
+	min-height: var(--control-height);
+	padding: var(--space-xs) var(--space-s);
+	color: inherit;
+	text-decoration: none;
+	border-radius: var(--radius);
+	-webkit-tap-highlight-color: transparent;
+}
+
+enform-repo-nav li > a > span {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-repo-nav li > a > small {
+	flex: none;
+}
+
+enform-repo-nav li > a > img {
+	width: var(--nav-avatar-size);
+	height: var(--nav-avatar-size);
+	object-fit: cover;
+	border-radius: var(--avatar-radius);
+}
+
+enform-repo-nav li > a:hover,
+enform-repo-nav li > a:active {
+	background: var(--color-surface);
+}
+
+enform-repo-nav li > a[aria-current='page'] {
+	font-weight: 600;
+	background: var(--color-selected);
+}
+
+/* The add button at a list's end */
+enform-repo-nav li > a + a {
+	flex: none;
+	justify-content: center;
+	width: var(--control-height);
+	font-size: var(--font-size-l);
+	color: var(--color-accent);
+}
+
+enform-repo-nav details {
+	flex: 1;
+}
+
+enform-repo-nav summary {
+	display: flex;
+	align-items: center;
+	min-height: var(--control-height);
+	padding: 0 var(--space-s);
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+	cursor: pointer;
+}
+
+enform-records > ol > li > a[aria-current='page'] {
+	background: var(--color-selected);
+}
+
+/* Tablets: the chosen pane and the one above it */
+@media (min-width: 48rem) {
+	enform-panes {
+		display: grid;
+		grid-template-columns: minmax(var(--pane-min), var(--pane-nav)) minmax(0, 1fr);
+		height: calc(100dvh - var(--header-height) - var(--sticky-bottom));
+	}
+
+	enform-pane {
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		border-inline-end: var(--border-width) solid var(--color-border);
+	}
+
+	enform-pane > header > a[rel='up'] {
+		display: none;
+	}
+
+	enform-pane[placeholder] > header {
+		display: none;
+	}
+
+	enform-pane[placeholder] {
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+	}
+}
+
+/* Tablets only: the last two panes */
+@media (min-width: 48rem) and (max-width: 71.99rem) {
+	enform-pane:not(:nth-last-child(-n + 2)) {
+		display: none;
+	}
+}
+
+/* Wide screens: repo, collection and record side by side */
+@media (min-width: 72rem) {
+	enform-panes:has(> enform-pane:nth-child(3)) {
+		grid-template-columns: var(--pane-nav) var(--pane-list) minmax(0, 1fr);
+	}
+}

@@ -1,0 +1,120 @@
+{
+	"$comment": "Apps of the atmosphere enform presents by name. Their record types come from their published lexicons; labels here only name them for people. Apps not listed show by domain.",
+	"apps": [
+		{
+			"namespace": "app.bsky",
+			"name": "Bluesky",
+			"url": "https://bsky.app",
+			"description": {
+				"en": "Social network: posts, likes, follows and lists.",
+				"fr": "Réseau social : publications, j'aime, abonnements et listes."
+			},
+			"types": {
+				"app.bsky.actor.profile": {"en": "Profile", "fr": "Profil"},
+				"app.bsky.actor.status": {"en": "Status", "fr": "Statut"},
+				"app.bsky.actor.link": {"en": "Links", "fr": "Liens"},
+				"app.bsky.feed.post": {"en": "Posts", "fr": "Publications"},
+				"app.bsky.feed.like": {"en": "Likes", "fr": "J'aime"},
+				"app.bsky.feed.repost": {"en": "Reposts", "fr": "Republications"},
+				"app.bsky.feed.generator": {"en": "Feeds", "fr": "Fils"},
+				"app.bsky.feed.threadgate": {"en": "Reply settings", "fr": "Réglages des réponses"},
+				"app.bsky.feed.postgate": {"en": "Quote settings", "fr": "Réglages des citations"},
+				"app.bsky.graph.follow": {"en": "Follows", "fr": "Abonnements"},
+				"app.bsky.graph.block": {"en": "Blocks", "fr": "Blocages"},
+				"app.bsky.graph.list": {"en": "Lists", "fr": "Listes"},
+				"app.bsky.graph.listitem": {"en": "List members", "fr": "Membres de listes"},
+				"app.bsky.graph.listblock": {"en": "Blocked lists", "fr": "Listes bloquées"},
+				"app.bsky.graph.starterpack": {"en": "Starter packs", "fr": "Packs de démarrage"},
+				"app.bsky.graph.verification": {"en": "Verifications", "fr": "Vérifications"},
+				"app.bsky.notification.declaration": {
+					"en": "Notification settings",
+					"fr": "Réglages des notifications"
+				},
+				"app.bsky.labeler.service": {"en": "Labeler", "fr": "Étiqueteur"}
+			}
+		},
+		{
+			"namespace": "radio.4000",
+			"name": "Radio4000",
+			"url": "https://4000.radio",
+			"description": {
+				"en": "Your radio: curate tracks from across the web, and listen to others'.",
+				"fr": "Votre radio : rassemblez des morceaux du web, et écoutez celles des autres."
+			},
+			"types": {
+				"radio.4000.profile": {"en": "Radio", "fr": "Radio"},
+				"radio.4000.track": {"en": "Tracks", "fr": "Morceaux"},
+				"radio.4000.follow": {"en": "Followed radios", "fr": "Radios suivies"},
+				"radio.4000.broadcast": {"en": "Broadcast", "fr": "Diffusion"},
+				"radio.4000.chat.message": {"en": "Chat messages", "fr": "Messages"}
+			}
+		},
+		{
+			"namespace": "org.tangled",
+			"name": "Tangled",
+			"url": "https://tangled.org",
+			"description": {
+				"en": "Git collaboration: repositories, issues and pull requests.",
+				"fr": "Collaboration Git : dépôts, tickets et demandes de fusion."
+			},
+			"types": {
+				"org.tangled.actor.profile": {"en": "Profile", "fr": "Profil"},
+				"org.tangled.repo.declaration": {"en": "Repositories", "fr": "Dépôts"},
+				"org.tangled.feed.star": {"en": "Stars", "fr": "Étoiles"},
+				"org.tangled.graph.follow": {"en": "Follows", "fr": "Abonnements"},
+				"org.tangled.key.sshKey": {"en": "SSH keys", "fr": "Clés SSH"}
+			}
+		},
+		{
+			"namespace": "xyz.statusphere",
+			"name": "Statusphere",
+			"url": "https://statusphere.xyz",
+			"description": {
+				"en": "Share how you feel, in one emoji.",
+				"fr": "Partagez votre humeur, en un emoji."
+			},
+			"types": {
+				"xyz.statusphere.status": {"en": "Statuses", "fr": "Statuts"}
+			}
+		},
+		{
+			"namespace": "today.joblist",
+			"name": "Joblist",
+			"url": "https://joblist.today",
+			"description": {
+				"en": "Companies and their job offers.",
+				"fr": "Des entreprises et leurs offres d'emploi."
+			},
+			"types": {
+				"today.joblist.company": {"en": "Companies", "fr": "Entreprises"},
+				"today.joblist.job": {"en": "Jobs", "fr": "Offres"},
+				"today.joblist.list": {"en": "Lists", "fr": "Listes"}
+			}
+		},
+		{
+			"namespace": "com.whtwnd",
+			"name": "WhiteWind",
+			"url": "https://whtwnd.com",
+			"description": {
+				"en": "Blogging: long-form posts in Markdown.",
+				"fr": "Blog : des articles longs en Markdown."
+			},
+			"types": {
+				"com.whtwnd.blog.entry": {"en": "Blog posts", "fr": "Articles"}
+			}
+		},
+		{
+			"namespace": "com.atproto",
+			"name": "AT Protocol",
+			"protocol": true,
+			"url": "https://atproto.com",
+			"description": {
+				"en": "The protocol itself: published lexicons and other plumbing.",
+				"fr": "Le protocole lui-même : lexiques publiés et autre tuyauterie."
+			},
+			"types": {
+				"com.atproto.lexicon.schema": {"en": "Lexicons", "fr": "Lexiques"}
+			}
+		}
+	]
+}

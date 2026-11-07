@@ -8,6 +8,7 @@
 	import {actorName, recordPath} from '#lib/paths'
 	import {recordDate, recordSummary} from '#lib/records/summary'
 	import {AtUri} from '@atproto/syntax'
+	import {page} from '$app/state'
 
 	type Props = {
 		repo: Identity
@@ -44,7 +45,10 @@
 				{@const rkey = new AtUri(record.uri).rkey}
 				{@const date = recordDate(record.value)}
 				<li>
-					<a href={recordPath(actor, collection, rkey)}>
+					<a
+						href={recordPath(actor, collection, rkey)}
+						aria-current={page.params.rkey === rkey ? 'page' : undefined}
+					>
 						<p>{recordSummary(record.value, doc?.defs.main?.record) ?? rkey}</p>
 						{#if date}<time datetime={date}>{formatDate(date)}</time>{/if}
 					</a>

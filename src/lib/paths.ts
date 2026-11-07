@@ -55,10 +55,15 @@ export function newPath(collection?: string): string {
 }
 
 export function editPath(actor: string, collection: string, rkey: string): string {
-	return `${recordPath(actor, collection, rkey)}/edit`
+	return `${recordPath(actor, collection, rkey)}?edit`
 }
 
-/** An app's page within a repo: its profile, its lists, what can be created */
-export function appPath(actor: string, app: string): string {
-	return `${repoPath(actor)}/apps/${app}`
+/** Creating a record in a collection of your repo, beside its records */
+export function createPath(actor: string, collection: string): string {
+	return `${collectionPath(actor, collection)}?new`
+}
+
+/** An app in the directory: what it is, and how to start on it */
+export function appPath(domain: string): string {
+	return `/apps/${domain}`
 }

@@ -21,40 +21,42 @@
 	}
 </script>
 
-<enform-lexicon-page>
-	<header>
-		<h1>{lexicon.id}</h1>
-		{#if main?.key}<p><small>{m.lexicon_record_key({key: main.key})}</small></p>{/if}
-	</header>
+<enform-page>
+	<enform-lexicon-page>
+		<header>
+			<h1>{lexicon.id}</h1>
+			{#if main?.key}<p><small>{m.lexicon_record_key({key: main.key})}</small></p>{/if}
+		</header>
 
-	{#if main?.type === 'record'}
-		<section aria-labelledby="preview">
-			<h2 id="preview">{m.lexicon_preview()}</h2>
-			<p><small>{m.lexicon_preview_note()}</small></p>
-			{#key lexicon.id}
-				<RecordForm {lexicon} onsubmit={preview} submitLabel={m.lexicon_preview_submit()} />
-			{/key}
-		</section>
-		{#if result}
-			<section aria-labelledby="result" tabindex="-1" bind:this={output}>
-				<h2 id="result">{m.lexicon_preview_result()}</h2>
-				<enform-validation valid={result.validation.success || undefined}>
-					<p role="status">
-						{result.validation.success
-							? m.lexicon_preview_valid()
-							: m.lexicon_preview_invalid({error: result.validation.error})}
-					</p>
-				</enform-validation>
-				<pre>{JSON.stringify(result.value, null, 2)}</pre>
+		{#if main?.type === 'record'}
+			<section aria-labelledby="preview">
+				<h2 id="preview">{m.lexicon_preview()}</h2>
+				<p><small>{m.lexicon_preview_note()}</small></p>
+				{#key lexicon.id}
+					<RecordForm {lexicon} onsubmit={preview} submitLabel={m.lexicon_preview_submit()} />
+				{/key}
 			</section>
+			{#if result}
+				<section aria-labelledby="result" tabindex="-1" bind:this={output}>
+					<h2 id="result">{m.lexicon_preview_result()}</h2>
+					<enform-validation valid={result.validation.success || undefined}>
+						<p role="status">
+							{result.validation.success
+								? m.lexicon_preview_valid()
+								: m.lexicon_preview_invalid({error: result.validation.error})}
+						</p>
+					</enform-validation>
+					<pre>{JSON.stringify(result.value, null, 2)}</pre>
+				</section>
+			{/if}
+		{:else}
+			{#if lexicon.description}<p>{lexicon.description}</p>{/if}
+			<p>{m.lexicon_not_record({nsid: lexicon.id})}</p>
 		{/if}
-	{:else}
-		{#if lexicon.description}<p>{lexicon.description}</p>{/if}
-		<p>{m.lexicon_not_record({nsid: lexicon.id})}</p>
-	{/if}
 
-	<details>
-		<summary>{m.lexicon_source()}</summary>
-		<pre>{JSON.stringify(lexicon, null, 2)}</pre>
-	</details>
-</enform-lexicon-page>
+		<details>
+			<summary>{m.lexicon_source()}</summary>
+			<pre>{JSON.stringify(lexicon, null, 2)}</pre>
+		</details>
+	</enform-lexicon-page>
+</enform-page>

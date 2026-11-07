@@ -29,15 +29,10 @@
 	}
 </script>
 
-<enform-record-actions>
-	<enform-action-bar>
-		<menu>
-			<li><a href={editHref} role="button">{m.record_edit()}</a></li>
-			<li>
-				<button type="button" onclick={() => dialog?.showModal()}>{m.record_delete()}</button>
-			</li>
-		</menu>
-	</enform-action-bar>
+<!-- Items of the pane's actions menu -->
+<li><a href={editHref} role="button">{m.record_edit()}</a></li>
+<li>
+	<button type="button" onclick={() => dialog?.showModal()}>{m.record_delete()}</button>
 	<dialog bind:this={dialog} aria-labelledby="delete-title">
 		<h2 id="delete-title">{m.record_delete_confirm_title()}</h2>
 		<p>{m.record_delete_confirm({rkey, collection})}</p>
@@ -48,4 +43,4 @@
 			<button type="submit" disabled={pending} aria-busy={pending}>{m.record_delete()}</button>
 		</form>
 	</dialog>
-</enform-record-actions>
+</li>

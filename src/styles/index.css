@@ -1,6 +1,7 @@
 @import './variables.css';
 @import './base.css';
 @import './shell.css';
+@import './panes.css';
 @import './forms.css';
 @import './layout.css';
 @import './values.css';

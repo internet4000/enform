@@ -166,5 +166,11 @@
 	"app_unpublished": "{app} n'a pas publié ses lexiques : seuls les types déjà présents dans ce dépôt sont connus.",
 	"new_other": "Un autre type, par son NSID",
 	"app_lists_one": "{count} liste",
-	"new_more": "Autres types {app} ({count})"
+	"new_more": "Autres types {app} ({count})",
+	"repo_details": "Détails de l'identité",
+	"pane_pick_title": "Rien d'ouvert",
+	"pane_pick_collection": "Ouvrez un profil ou une liste à gauche.",
+	"pane_pick_record": "Ouvrez un enregistrement de la liste.",
+	"nav_start_more": "Commencer plus dans {app}",
+	"nav_start_type": "Ajouter : {type}"
 }
