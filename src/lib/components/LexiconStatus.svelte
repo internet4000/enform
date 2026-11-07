@@ -2,6 +2,7 @@
 	// Whether a collection's lexicon resolved, and what it says about itself
 	import * as m from '#lib/paraglide/messages.js'
 	import type {LexiconDoc} from '#lib/lexicons/types'
+	import {lexiconPath} from '#lib/paths'
 
 	let {nsid, lexicon}: {nsid: string; lexicon: Promise<LexiconDoc | undefined>} = $props()
 </script>
@@ -13,6 +14,7 @@
 		{#if doc}
 			{@const description = doc.description ?? doc.defs.main?.description}
 			{#if description}<p>{description}</p>{/if}
+			<p><small><a href={lexiconPath(nsid)}>{m.lexicon_view()}</a></small></p>
 		{:else}
 			<p>{m.lexicon_missing({nsid})}</p>
 		{/if}

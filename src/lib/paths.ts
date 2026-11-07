@@ -19,6 +19,11 @@ export function recordPath(actor: string, collection: string, rkey: string): str
 	return `${collectionPath(actor, collection)}/${encodeURIComponent(rkey)}`
 }
 
+/** A lexicon's page: what it defines, and its form */
+export function lexiconPath(nsid: string): string {
+	return `/lexicon/${nsid}`
+}
+
 /** An at:// URI's page in the app */
 export function atUriPath(uri: string): string | undefined {
 	try {

@@ -122,3 +122,43 @@ enform-records > button {
 enform-lexicon {
 	color: var(--color-muted);
 }
+
+enform-lexicon > p {
+	margin: var(--space-xs) 0 0;
+}
+
+enform-lexicon-page {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-l);
+}
+
+enform-lexicon-page > header > h1 {
+	overflow-wrap: anywhere;
+}
+
+enform-lexicon-page :is(header, section) > p {
+	margin: var(--space-xs) 0 var(--space-m);
+}
+
+enform-lexicon-page > section > h2 {
+	margin-bottom: var(--space-xs);
+}
+
+enform-lexicon-page > section:focus {
+	outline: none;
+}
+
+enform-validation {
+	display: block;
+	color: var(--color-danger);
+}
+
+enform-validation[valid] {
+	color: var(--color-success);
+}
+
+enform-lexicon-page > details > summary {
+	cursor: pointer;
+	color: var(--color-muted);
+}
