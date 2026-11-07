@@ -66,9 +66,12 @@ class Auth {
 	/** Makes this session the current one */
 	async use(session: OAuthSession | undefined) {
 		const scope = session ? (await session.getTokenInfo(false)).scope : undefined
+		// A new authorization for the same account (more permissions) keeps who it is:
+		// clearing it would unmount, and empty, the form that asked
+		const same = !!session && this.identity?.did === session.did
 		this.session = session
 		this.scope = scope
-		this.identity = undefined
+		if (!same) this.identity = undefined
 		if (!session) return
 		this.list(withAccount(this.#dids, session.did))
 		const identity = await resolveIdentity(session.did).catch(() => undefined)
@@ -139,9 +142,23 @@ class Auth {
 	/** Make sure the current account's session allows these scopes, asking the user if not */
 	async authorize(needed: string[]): Promise<OAuthSession> {
 		if (!this.session) throw new Error('Not signed in')
-		await this.use(await authorizePopup(this.session.did, withScopes(this.scope, needed)))
+		const did = this.session.did
+		this.reauthorizing.add(did)
+		try {
+			await this.use(await authorizePopup(did, withScopes(this.scope, needed)))
+		} finally {
+			// The library revokes the replaced session as the new one arrives; its
+			// deletion may be announced a moment after, from the popup's tab
+			setTimeout(() => this.reauthorizing.delete(did), 2000)
+		}
 		return this.session
 	}
+
+	/**
+	 * Accounts being authorized again (more permissions): the library revokes their
+	 * previous session then, which isn't a sign-out
+	 */
+	reauthorizing = new Set<string>()
 
 	async authorizeRepo(collection: string, action: RepoAction): Promise<OAuthSession> {
 		if (this.session && this.canWrite(collection, action)) return this.session
@@ -165,7 +182,9 @@ class Auth {
 
 export const auth = new Auth()
 
-onSessionDeleted((did) => void auth.forget(did))
+onSessionDeleted((did) => {
+	if (!auth.reauthorizing.has(did)) void auth.forget(did)
+})
 
 /** Restores the last used account at start; resolves with where a sign-in wanted to return to */
 export async function startAuth(): Promise<string | undefined> {
