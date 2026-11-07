@@ -11,8 +11,8 @@
 
 	const apps = directoryApps()
 	let joined = $derived(
-		auth.identity
-			? listCollections(auth.identity).then((all) => new Set(all.map(namespaceOf)))
+		auth.me
+			? listCollections(auth.me).then((all) => new Set(all.map(namespaceOf)))
 			: Promise.resolve(new Set<string>())
 	)
 </script>
@@ -22,8 +22,8 @@
 		<h1>{m.app_tagline()}</h1>
 		<p>{m.app_intro()}</p>
 		<ActorSearch />
-		{#if auth.identity}
-			<p><a href={repoPath(actorName(auth.identity))} role="button">{m.home_mine()}</a></p>
+		{#if auth.me}
+			<p><a href={repoPath(actorName(auth.me))} role="button">{m.home_mine()}</a></p>
 		{/if}
 	</enform-home>
 

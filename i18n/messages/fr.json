@@ -207,5 +207,20 @@
 	"repo_pane_title": "Dépôt",
 	"overview_app": "Un type d'enregistrement de {app}",
 	"overview_pick": "Ouvrez un enregistrement de la liste pour le voir ici.",
-	"overview_unpublished": "Aucun lexique n'est publié pour ce type : ses enregistrements s'affichent comme données brutes et ne peuvent pas être créés ici."
+	"overview_unpublished": "Aucun lexique n'est publié pour ce type : ses enregistrements s'affichent comme données brutes et ne peuvent pas être créés ici.",
+	"local_title": "Profils locaux",
+	"local_intro": "Un profil local garde ses enregistrements dans ce navigateur seulement, sans compte : pour essayer des apps, ou travailler hors ligne. Publiez-le sur votre compte quand vous voulez.",
+	"local_default_name": "Sur cet appareil",
+	"local_on_device": "Sur cet appareil",
+	"local_use": "Utiliser",
+	"local_stop": "Revenir à votre compte",
+	"local_create": "Créer un profil local",
+	"local_name_label": "Nom",
+	"local_publish": "Publier sur {handle}",
+	"local_remove": "Supprimer",
+	"local_remove_confirm": "Supprimer {name} et tous ses enregistrements de ce navigateur ?",
+	"local_published": "{count} enregistrements publiés.",
+	"local_published_skipped": "Ignorés, déjà dans votre compte : {records}.",
+	"local_published_invalid": "Non valides selon leurs lexiques, gardés ici : {records}.",
+	"apps_try_local": "L'essayer sur cet appareil, sans compte"
 }

@@ -3,7 +3,6 @@
 	// per account) that exists already is edited instead.
 	import {goto} from '$app/navigation'
 	import {page} from '$app/state'
-	import {AtUri} from '@atproto/syntax'
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {getRecord} from '#lib/atproto/repo'
@@ -23,7 +22,7 @@
 
 	$effect(() => {
 		const key = profileKey(lexicon)
-		const me = auth.identity
+		const me = auth.me
 		if (!key || !me) return
 		getRecord(me, lexicon.id, key).then(
 			() => goto(editPath(actorName(me), lexicon.id, key), {replaceState: true}),
@@ -32,19 +31,17 @@
 	})
 
 	async function create(value: Record<string, unknown>) {
-		const {uri} = await createFromForm(lexicon, value)
-		const at = new AtUri(uri)
-		const actor = auth.identity ? actorName(auth.identity) : at.host
-		await goto(recordPath(actor, at.collection, at.rkey), {refreshAll: true})
+		const {collection, rkey} = await createFromForm(lexicon, value)
+		if (auth.me) await goto(recordPath(actorName(auth.me), collection, rkey), {refreshAll: true})
 	}
 </script>
 
-{#if auth.session}
+{#if auth.me}
 	{#key lexicon.id}
 		<RecordForm
 			{lexicon}
 			value={page.state.prefill ? {...page.state.prefill, $type: lexicon.id} : undefined}
-			{uploadBlob}
+			uploadBlob={auth.local ? undefined : uploadBlob}
 			onsubmit={create}
 			submitLabel={m.new_submit()}
 			{autofocus}

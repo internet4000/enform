@@ -21,6 +21,7 @@ export function recordSummary(
 	// Else the first string property, in the lexicon's order when there is one
 	const keys = Object.keys(record?.properties ?? value)
 	for (const key of keys) {
+		if (key === '$type') continue
 		const node = record?.properties?.[key]
 		if (node && node.type !== 'string') continue
 		if (node?.format === 'datetime') continue

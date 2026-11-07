@@ -10,10 +10,21 @@ import {claimedHandle, didDocument, pdsEndpoint} from './did'
 import {xrpcGet} from './xrpc'
 
 export type Identity = {
+	/** The account's DID, or `local:<id>` for a local profile (never sent anywhere) */
 	did: string
 	/** Verified both ways, else undefined */
 	handle?: string
 	pds: string
+	/** A local profile's id: a repo in this browser only (docs/local-first.md) */
+	local?: string
+	/** A local profile's name, as its person gave it */
+	name?: string
+}
+
+export const LOCAL_PREFIX = 'local:'
+
+export function localIdentity(profile: {id: string; name: string}): Identity {
+	return {did: `${LOCAL_PREFIX}${profile.id}`, pds: '', local: profile.id, name: profile.name}
 }
 
 async function wellKnownDid(handle: string): Promise<string | undefined> {

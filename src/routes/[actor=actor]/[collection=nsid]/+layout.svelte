@@ -10,7 +10,7 @@
 
 	let {data, children} = $props()
 	let actor = $derived(actorName(data.repo))
-	let owner = $derived(auth.session?.did === data.repo.did)
+	let owner = $derived(auth.owns(data.repo))
 	let app = $derived(appInfo(namespaceOf(data.collection)))
 </script>
 

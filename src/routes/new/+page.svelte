@@ -16,9 +16,7 @@
 	let nsid = $state('')
 	let invalid = $state(false)
 	let mine = $derived(
-		auth.identity
-			? listCollections(auth.identity).then((c) => repoApps(auth.identity!, c))
-			: Promise.resolve([])
+		auth.me ? listCollections(auth.me).then((c) => repoApps(auth.me!, c)) : Promise.resolve([])
 	)
 
 	function open(event: SubmitEvent) {

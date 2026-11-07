@@ -8,7 +8,6 @@
 	import {formatDate} from '#lib/dates'
 	import {actorName, recordPath} from '#lib/paths'
 	import {recordDate, recordSummary} from '#lib/records/summary'
-	import {AtUri} from '@atproto/syntax'
 	import RowSummary from './RowSummary.svelte'
 	import {page} from '$app/state'
 
@@ -44,7 +43,7 @@
 	{#await lexicon then doc}
 		<ol>
 			{#each records as record (record.uri)}
-				{@const rkey = new AtUri(record.uri).rkey}
+				{@const rkey = record.rkey}
 				{@const date = recordDate(record.value)}
 				<li>
 					<a

@@ -18,7 +18,8 @@
 		"allowHttp": false
 	},
 	"storage": {
-		"accounts": "enform:accounts"
+		"accounts": "enform:accounts",
+		"local": "enform:local"
 	},
 	"logo": "/favicon.svg",
 	"examples": ["bsky.app", "4000.radio", "atproto.com", "tangled.org"]

@@ -6,9 +6,7 @@
 	import {actorName, repoPath} from '#lib/paths'
 	import Icon from './Icon.svelte'
 
-	let me = $derived(
-		auth.session ? repoPath(auth.identity ? actorName(auth.identity) : auth.session.did) : undefined
-	)
+	let me = $derived(auth.me ? repoPath(actorName(auth.me)) : undefined)
 	let items = $derived([
 		{href: '/', icon: 'explore', label: m.nav_explore()},
 		{href: '/new', icon: 'new', label: m.nav_new()},

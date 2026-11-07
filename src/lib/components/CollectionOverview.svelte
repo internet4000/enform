@@ -14,7 +14,7 @@
 	let {repo, collection, lexicon}: Props = $props()
 
 	let app = $derived(appInfo(namespaceOf(collection)))
-	let owner = $derived(auth.session?.did === repo.did)
+	let owner = $derived(auth.owns(repo))
 </script>
 
 <enform-overview>

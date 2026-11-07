@@ -25,7 +25,7 @@
 	<ul>
 		{#each auth.accounts as account (account.did)}
 			{@const actor = account.identity ? actorName(account.identity) : account.did}
-			{@const current = account.did === auth.did}
+			{@const current = !auth.local && account.did === auth.did}
 			<li>
 				<enform-account-item
 					current={current || undefined}

@@ -8,7 +8,7 @@
 
 	let {collection, action}: {collection: string; action: RepoAction} = $props()
 
-	let locked = $derived(!!auth.session && !auth.canWrite(collection, action))
+	let locked = $derived(!auth.local && !!auth.session && !auth.canWrite(collection, action))
 	let actionName = $derived(
 		{create: m.action_create, update: m.action_update, delete: m.action_delete}[action]()
 	)
