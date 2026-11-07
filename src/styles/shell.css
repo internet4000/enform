@@ -141,3 +141,14 @@ enform-app > nav svg {
 		height: var(--icon-size-small);
 	}
 }
+
+/* Writes waiting to be sent, said in the header */
+enform-app > header > a[rel='status'] {
+	margin-inline-start: auto;
+	padding: var(--space-2xs) var(--space-s);
+	font-size: var(--font-size-s);
+	color: var(--color-on-accent);
+	text-decoration: none;
+	background: var(--color-accent);
+	border-radius: var(--pill-radius);
+}

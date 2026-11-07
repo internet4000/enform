@@ -56,6 +56,9 @@
 				/>
 			{/if}
 		{/snippet}
+		{#if data.record.pending}
+			<p role="status"><a href="/settings#waiting">{m.outbox_record_waiting()}</a></p>
+		{/if}
 		<enform-record>
 			{#await data.lexicon}
 				<RecordValue

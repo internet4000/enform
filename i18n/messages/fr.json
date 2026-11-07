@@ -230,5 +230,14 @@
 	"discover_count": "{count} comptes publient des lexiques. Chaque app s'affiche une fois confirmé que son domaine la publie.",
 	"discover_unavailable": "Le relais est injoignable : impossible de lister plus d'apps.",
 	"apps_types_count": "{count} types d'enregistrements",
-	"apps_types_count_one": "{count} type d'enregistrement"
+	"apps_types_count_one": "{count} type d'enregistrement",
+	"outbox_title": "En attente d'envoi",
+	"outbox_count": "{count} en attente",
+	"outbox_conflict": "Non envoyé : {message}",
+	"outbox_conflict_short": "Non envoyé : conflit",
+	"outbox_discard": "Abandonner",
+	"outbox_send": "Envoyer maintenant",
+	"outbox_empty": "Rien en attente : chaque changement a atteint son compte.",
+	"outbox_waiting": "Pas encore envoyé",
+	"outbox_record_waiting": "Ce changement n'est pas encore envoyé : il le sera quand le serveur de votre compte sera joignable."
 }

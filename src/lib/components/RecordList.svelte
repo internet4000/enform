@@ -52,6 +52,11 @@
 					>
 						<RowSummary text={recordSummary(record.value, doc?.defs.main?.record) ?? rkey} />
 						{#if date}<time datetime={date}>{formatDate(date)}</time>{/if}
+						{#if record.pending}
+							<enform-pending state={record.pending}>
+								{record.pending === 'conflict' ? m.outbox_conflict_short() : m.outbox_waiting()}
+							</enform-pending>
+						{/if}
 					</a>
 				</li>
 			{:else}

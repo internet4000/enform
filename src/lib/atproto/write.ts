@@ -7,7 +7,16 @@ import type {OAuthSession} from '@atproto/oauth-client-browser'
 import {AtUri} from '@atproto/syntax'
 import {auth} from '#lib/auth/session.svelte'
 import * as local from '#lib/local/store'
-import {XrpcError} from './xrpc'
+import {TID} from '@atproto/common-web'
+import {
+	enqueue,
+	markConflict,
+	pendingFor,
+	removePending,
+	type PendingWrite
+} from '#lib/outbox/store'
+import {outbox} from '#lib/outbox/outbox.svelte'
+import {isNetworkFailure, XrpcError} from './xrpc'
 
 async function procedure<T>(session: OAuthSession, nsid: string, body: BodyInit, type: string) {
 	const res = await session.fetchHandler(`/xrpc/${nsid}`, {
@@ -32,6 +41,26 @@ function result(written: {uri: string; cid: string}): WriteResult {
 	return {...written, collection: at.collection, rkey: at.rkey}
 }
 
+/**
+ * Sends a write, or, if its PDS can't be reached, keeps it to send later and answers
+ * as if written: you see it at once, marked as not sent yet (docs/local-first.md)
+ */
+async function sendOrKeep(
+	write: Omit<PendingWrite, 'did' | 'createdAt'>,
+	session: OAuthSession,
+	send: () => Promise<WriteResult>
+): Promise<WriteResult> {
+	try {
+		return await send()
+	} catch (err) {
+		if (!isNetworkFailure(err)) throw err
+		await enqueue({...write, did: session.did})
+		await outbox.refresh()
+		const {collection, rkey} = write
+		return {uri: `at://${session.did}/${collection}/${rkey}`, cid: '', collection, rkey}
+	}
+}
+
 const fromLocal = (record: local.LocalRecord): WriteResult => ({
 	uri: '',
 	cid: record.version,
@@ -47,13 +76,17 @@ export async function createRecord(
 	if (auth.local)
 		return fromLocal(await local.createRecord(auth.local.id, collection, record, rkey))
 	const session = await auth.authorizeRepo(collection, 'create')
-	return result(
-		await call<WriteResult>(session, 'com.atproto.repo.createRecord', {
-			repo: session.did,
-			collection,
-			rkey,
-			record
-		})
+	// Its key is chosen here (a TID, unless the lexicon fixes it), so it can wait offline
+	const key = rkey ?? TID.nextStr()
+	return sendOrKeep({op: 'create', collection, rkey: key, value: record}, session, async () =>
+		result(
+			await call<WriteResult>(session, 'com.atproto.repo.createRecord', {
+				repo: session.did,
+				collection,
+				rkey: key,
+				record
+			})
+		)
 	)
 }
 
@@ -68,25 +101,40 @@ export async function putRecord(
 		return fromLocal(await local.putRecord(auth.local.id, collection, rkey, record, swapRecord))
 	}
 	const session = await auth.authorizeRepo(collection, 'update')
-	return result(
-		await call<WriteResult>(session, 'com.atproto.repo.putRecord', {
-			repo: session.did,
-			collection,
-			rkey,
-			record,
-			swapRecord
-		})
+	const write = {op: 'update' as const, collection, rkey, value: record, swap: swapRecord}
+	// A record with writes still waiting gets this one after them
+	if (await waitingOn(session.did, collection, rkey)) {
+		return sendOrKeep(write, session, () => Promise.reject(new TypeError('waiting')))
+	}
+	return sendOrKeep(write, session, async () =>
+		result(
+			await call<WriteResult>(session, 'com.atproto.repo.putRecord', {
+				repo: session.did,
+				collection,
+				rkey,
+				record,
+				swapRecord
+			})
+		)
 	)
 }
 
 export async function deleteRecord(collection: string, rkey: string, swapRecord: string) {
 	if (auth.local) return local.deleteRecord(auth.local.id, collection, rkey, swapRecord)
 	const session = await auth.authorizeRepo(collection, 'delete')
-	await call(session, 'com.atproto.repo.deleteRecord', {
-		repo: session.did,
-		collection,
-		rkey,
-		swapRecord
+	const write = {op: 'delete' as const, collection, rkey, swap: swapRecord}
+	if (await waitingOn(session.did, collection, rkey)) {
+		await sendOrKeep(write, session, () => Promise.reject(new TypeError('waiting')))
+		return
+	}
+	await sendOrKeep(write, session, async () => {
+		await call(session, 'com.atproto.repo.deleteRecord', {
+			repo: session.did,
+			collection,
+			rkey,
+			swapRecord
+		})
+		return {uri: '', cid: '', collection, rkey}
 	})
 }
 
@@ -120,4 +168,52 @@ export async function createBatch(records: BatchCreate[], size = 200) {
 			}))
 		})
 	}
+}
+
+async function waitingOn(did: string, collection: string, rkey: string): Promise<boolean> {
+	return (await pendingFor(did, collection).catch(() => [])).some((write) => write.rkey === rkey)
+}
+
+/**
+ * Sends the current account's waiting writes, in order. A write that waited on another
+ * swaps against the version that one made. A conflict (the record changed elsewhere)
+ * or a refusal stops that write, kept to look at; an unreachable PDS stops them all.
+ */
+export async function sendWaiting(): Promise<number> {
+	const session = auth.session
+	if (!session || auth.local) return 0
+	const writes = (await pendingFor(session.did)).filter((write) => !write.conflict)
+	const versions = new Map<string, string>()
+	let sent = 0
+	for (const write of writes) {
+		const key = `${write.collection}/${write.rkey}`
+		const swap = write.swap || versions.get(key) || undefined
+		const input = {repo: session.did, collection: write.collection, rkey: write.rkey}
+		try {
+			if (write.op === 'create') {
+				const done = await call<WriteResult>(session, 'com.atproto.repo.createRecord', {
+					...input,
+					record: write.value
+				})
+				versions.set(key, done.cid)
+			} else if (write.op === 'update') {
+				const done = await call<WriteResult>(session, 'com.atproto.repo.putRecord', {
+					...input,
+					record: write.value,
+					swapRecord: swap
+				})
+				versions.set(key, done.cid)
+			} else {
+				await call(session, 'com.atproto.repo.deleteRecord', {...input, swapRecord: swap})
+				versions.delete(key)
+			}
+			await removePending(write.id as number)
+			sent++
+		} catch (err) {
+			if (isNetworkFailure(err)) break
+			await markConflict(write, (err as Error).message)
+		}
+	}
+	await outbox.refresh()
+	return sent
 }

@@ -3,6 +3,7 @@
 	import {getLocale, locales, setLocale, type Locale} from '#lib/paraglide/runtime.js'
 	import Account from '#lib/components/Account.svelte'
 	import LocalProfiles from '#lib/components/LocalProfiles.svelte'
+	import Outbox from '#lib/components/Outbox.svelte'
 
 	const names = new Intl.DisplayNames([getLocale()], {type: 'language'})
 </script>
@@ -12,6 +13,10 @@
 	<section aria-labelledby="account">
 		<h2 id="account">{m.account_title()}</h2>
 		<Account returnTo="/settings" />
+	</section>
+	<section aria-labelledby="waiting-title" id="waiting">
+		<h2 id="waiting-title">{m.outbox_title()}</h2>
+		<Outbox />
 	</section>
 	<section aria-labelledby="local">
 		<h2 id="local">{m.local_title()}</h2>

@@ -230,5 +230,14 @@
 	"discover_count": "{count} accounts publish lexicons. Each app shows once its domain is confirmed to publish it.",
 	"discover_unavailable": "The relay couldn't be reached to list more apps.",
 	"apps_types_count": "{count} record types",
-	"apps_types_count_one": "{count} record type"
+	"apps_types_count_one": "{count} record type",
+	"outbox_title": "Waiting to be sent",
+	"outbox_count": "{count} waiting",
+	"outbox_conflict": "Not sent: {message}",
+	"outbox_conflict_short": "Not sent: conflict",
+	"outbox_discard": "Give up",
+	"outbox_send": "Send now",
+	"outbox_empty": "Nothing waiting: every change reached its account.",
+	"outbox_waiting": "Not sent yet",
+	"outbox_record_waiting": "This change isn't sent yet: it will be when your account's server can be reached."
 }

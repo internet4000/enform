@@ -32,3 +32,11 @@ export async function xrpcGet<T>(
 	}
 	return body as T
 }
+
+/** A request that never reached its server (offline, unreachable, timed out), unlike
+ * a server's own error answer */
+export function isNetworkFailure(err: unknown): boolean {
+	if (err instanceof XrpcError) return false
+	if (typeof navigator !== 'undefined' && !navigator.onLine) return true
+	return err instanceof TypeError || (err as Error)?.name === 'TimeoutError'
+}

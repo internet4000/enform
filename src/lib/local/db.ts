@@ -3,11 +3,12 @@
  * Records are keyed [profile, collection, rkey], listed by [profile, collection].
  */
 const NAME = 'enform'
-const VERSION = 1
+const VERSION = 2
 
 export const PROFILES = 'profiles'
 export const RECORDS = 'records'
 export const BY_COLLECTION = 'byCollection'
+export const OUTBOX = 'outbox'
 
 let opened: Promise<IDBDatabase> | undefined
 
@@ -16,11 +17,16 @@ export function db(): Promise<IDBDatabase> {
 		const request = indexedDB.open(NAME, VERSION)
 		request.onupgradeneeded = () => {
 			const database = request.result
-			database.createObjectStore(PROFILES, {keyPath: 'id'})
-			const records = database.createObjectStore(RECORDS, {
-				keyPath: ['profile', 'collection', 'rkey']
-			})
-			records.createIndex(BY_COLLECTION, ['profile', 'collection'])
+			const has = (name: string) => database.objectStoreNames.contains(name)
+			if (!has(PROFILES)) database.createObjectStore(PROFILES, {keyPath: 'id'})
+			if (!has(RECORDS)) {
+				const records = database.createObjectStore(RECORDS, {
+					keyPath: ['profile', 'collection', 'rkey']
+				})
+				records.createIndex(BY_COLLECTION, ['profile', 'collection'])
+			}
+			// Writes to accounts not sent yet, in order (version 2)
+			if (!has(OUTBOX)) database.createObjectStore(OUTBOX, {keyPath: 'id', autoIncrement: true})
 		}
 		request.onsuccess = () => resolve(request.result)
 		request.onerror = () => reject(request.error)

@@ -6,7 +6,9 @@ import {AtUri} from '@atproto/syntax'
 import app from '#lib/config/app.json' with {type: 'json'}
 import * as local from '#lib/local/store'
 import type {Identity} from './identity'
-import {xrpcGet} from './xrpc'
+import {overlayList, overlayRecord} from '#lib/outbox/overlay'
+import {pendingFor} from '#lib/outbox/store'
+import {isNetworkFailure, xrpcGet, XrpcError} from './xrpc'
 
 export type RepoRecord = {
 	/** Its at:// URI; empty for a local profile's record, which has none */
@@ -16,6 +18,8 @@ export type RepoRecord = {
 	collection: string
 	rkey: string
 	value: Record<string, unknown>
+	/** A write to it not sent yet: waiting, or stopped by a conflict */
+	pending?: 'waiting' | 'conflict'
 }
 
 type Wire = {uri: string; cid: string; value: Record<string, unknown>}
@@ -30,14 +34,30 @@ export function fromLocal(record: local.LocalRecord): RepoRecord {
 	return {uri: '', cid: version, collection, rkey, value}
 }
 
+/** What was last read of each account, to show while its PDS can't be reached */
+const lastSeen = new Map<string, unknown>()
+
+async function orLastSeen<T>(key: string, read: () => Promise<T>): Promise<T> {
+	try {
+		const result = await read()
+		lastSeen.set(key, result)
+		return result
+	} catch (err) {
+		if (isNetworkFailure(err) && lastSeen.has(key)) return lastSeen.get(key) as T
+		throw err
+	}
+}
+
+const waiting = (did: string, collection?: string) => pendingFor(did, collection).catch(() => [])
+
 export async function listCollections(repo: Identity): Promise<string[]> {
 	if (repo.local) return local.listCollections(repo.local)
-	const {collections} = await xrpcGet<{collections: string[]}>(
-		repo.pds,
-		'com.atproto.repo.describeRepo',
-		{repo: repo.did}
+	const {collections} = await orLastSeen(`collections ${repo.did}`, () =>
+		xrpcGet<{collections: string[]}>(repo.pds, 'com.atproto.repo.describeRepo', {repo: repo.did})
 	)
-	return collections
+	// Collections created by writes not sent yet are there too
+	const pending = (await waiting(repo.did)).map((write) => write.collection)
+	return [...new Set([...collections, ...pending])].sort()
 }
 
 export async function listRecords(
@@ -50,12 +70,22 @@ export async function listRecords(
 		const page = await local.listRecords(repo.local, collection, limit, cursor)
 		return {records: page.records.map(fromLocal), cursor: page.cursor}
 	}
-	const page = await xrpcGet<{records: Wire[]; cursor?: string}>(
-		repo.pds,
-		'com.atproto.repo.listRecords',
-		{repo: repo.did, collection, limit, cursor}
-	)
-	return {records: page.records.map(fromWire), cursor: page.cursor}
+	const writes = await waiting(repo.did, collection)
+	const page = await orLastSeen(`records ${repo.did} ${collection} ${cursor} ${limit}`, () =>
+		xrpcGet<{records: Wire[]; cursor?: string}>(repo.pds, 'com.atproto.repo.listRecords', {
+			repo: repo.did,
+			collection,
+			limit,
+			cursor
+		})
+	).catch((err) => {
+		// A collection only made of writes not sent yet
+		if (writes.length && (isNetworkFailure(err) || err instanceof XrpcError))
+			return {records: [] as Wire[], cursor: undefined}
+		throw err
+	})
+	const records = overlayList(page.records.map(fromWire), writes, !cursor)
+	return {records, cursor: page.cursor}
 }
 
 export async function getRecord(repo: Identity, collection: string, rkey: string) {
@@ -64,13 +94,15 @@ export async function getRecord(repo: Identity, collection: string, rkey: string
 		if (!record) throw new Error(`No ${collection} record ${rkey}`)
 		return fromLocal(record)
 	}
-	return fromWire(
-		await xrpcGet<Wire>(repo.pds, 'com.atproto.repo.getRecord', {
-			repo: repo.did,
-			collection,
-			rkey
-		})
-	)
+	const writes = await waiting(repo.did, collection)
+	const read = orLastSeen(`record ${repo.did} ${collection} ${rkey}`, () =>
+		xrpcGet<Wire>(repo.pds, 'com.atproto.repo.getRecord', {repo: repo.did, collection, rkey})
+	).then(fromWire)
+	if (!writes.length) return read
+	const record = await read.catch(() => undefined)
+	const shown = overlayRecord(record, writes, collection, rkey)
+	if (!shown) throw new Error(`No ${collection} record ${rkey}`)
+	return shown
 }
 
 /** Where a blob of this repo can be fetched (local profiles hold none) */
