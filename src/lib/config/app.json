@@ -1,0 +1,14 @@
+{
+	"name": "enform",
+	"domain": "enform.internet4000.com",
+	"namespace": "com.internet4000.enform",
+	"services": {
+		"plcDirectory": "https://plc.directory",
+		"dnsOverHttps": "https://cloudflare-dns.com/dns-query",
+		"handleResolver": "https://public.api.bsky.app"
+	},
+	"reads": {
+		"pageSize": 25,
+		"timeoutMs": 10000
+	}
+}

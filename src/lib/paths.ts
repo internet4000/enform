@@ -1,0 +1,45 @@
+/** The app's URLs for repos, collections and records, and parsing what people type */
+import {AtUri, isValidDid, isValidHandle} from '@atproto/syntax'
+import type {Identity} from './atproto/identity'
+
+/** A repo's name in URLs: its verified handle, else its DID */
+export function actorName(repo: Pick<Identity, 'did' | 'handle'>): string {
+	return repo.handle ?? repo.did
+}
+
+export function repoPath(actor: string): string {
+	return `/@${actor}`
+}
+
+export function collectionPath(actor: string, collection: string): string {
+	return `${repoPath(actor)}/${collection}`
+}
+
+export function recordPath(actor: string, collection: string, rkey: string): string {
+	return `${collectionPath(actor, collection)}/${encodeURIComponent(rkey)}`
+}
+
+/** An at:// URI's page in the app */
+export function atUriPath(uri: string): string | undefined {
+	try {
+		const at = new AtUri(uri)
+		if (!at.collection) return repoPath(at.host)
+		if (!at.rkey) return collectionPath(at.host, at.collection)
+		return recordPath(at.host, at.collection, at.rkey)
+	} catch {
+		return undefined
+	}
+}
+
+/** What someone typed to open a repo: a handle (with or without @), a DID or an at:// URI */
+export function searchPath(input: string): string | undefined {
+	const value = input.trim().replace(/^@/, '')
+	if (value.startsWith('at://')) return atUriPath(value)
+	if (isValidDid(value) || isValidHandle(value)) return repoPath(value.toLowerCase())
+	return undefined
+}
+
+/** The actor in a route's `@actor` segment */
+export function actorParam(param: string): string {
+	return decodeURIComponent(param.slice(1))
+}

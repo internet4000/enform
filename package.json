@@ -1,0 +1,38 @@
+{
+	"name": "enform",
+	"version": "0.0.1",
+	"description": "A universal app for your AT Protocol data: browse any repo, and create, edit and delete records with forms generated from their lexicons",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"test": "vitest run",
+		"i18n": "paraglide-js compile --project ./i18n/project.inlang --outdir ./src/lib/paraglide",
+		"types": "bun run i18n && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"format": "prettier --write . --log-level=warn"
+	},
+	"imports": {
+		"#lib/*": "./src/lib/*"
+	},
+	"dependencies": {
+		"@atproto/lexicon": "^0.7.19",
+		"@atproto/syntax": "^0.7.7",
+		"@inlang/paraglide-js": "^2.29.3"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-static": "^4.0.1",
+		"@sveltejs/kit": "^3.1.1",
+		"@sveltejs/vite-plugin-svelte": "^7.3.1",
+		"@types/node": "^26.6.6",
+		"happy-dom": "^21.0.4",
+		"prettier": "^3.9.10",
+		"prettier-plugin-svelte": "^4.1.1",
+		"svelte": "^5.57.3",
+		"svelte-check": "^4.7.8",
+		"typescript": "^6.0.2",
+		"vite": "^8.3.6",
+		"vitest": "^5.1.0"
+	}
+}

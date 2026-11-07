@@ -1,0 +1,49 @@
+/* A record's value, laid out from its lexicon */
+enform-value {
+	display: block;
+	overflow-wrap: anywhere;
+}
+
+enform-value[type='object'] > dl {
+	display: grid;
+	grid-template-columns: minmax(min-content, max-content) 1fr;
+	gap: var(--space-s) var(--space-m);
+	margin: 0;
+}
+
+enform-value[type='object'] > dl > dt {
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-value[type='object'] > dl > dd {
+	margin: 0;
+}
+
+enform-value[type='object'] enform-value[type='object'] {
+	padding-inline-start: var(--space-m);
+	border-inline-start: var(--border-width) solid var(--color-border);
+}
+
+enform-value[type='array'] > ol {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+	padding-inline-start: var(--space-m);
+	margin: 0;
+}
+
+enform-value[empty] {
+	color: var(--color-muted);
+}
+
+enform-value[type='string'][format='language'],
+enform-value[type='string'][format='cid'] {
+	font-family: var(--font-mono);
+}
+
+@media (max-width: 40rem) {
+	enform-value[type='object'] > dl {
+		grid-template-columns: 1fr;
+	}
+}

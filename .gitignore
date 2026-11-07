@@ -1,0 +1,11 @@
+node_modules
+dist
+.svelte-kit/
+.env
+.DS_Store
+*.log
+
+# Paraglide output, compiled by the Vite plugin
+src/lib/paraglide/
+i18n/project.inlang/cache/
+i18n/project.inlang/project_id

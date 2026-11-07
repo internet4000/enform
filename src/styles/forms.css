@@ -1,0 +1,44 @@
+form {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
+	gap: var(--space-s);
+}
+
+label {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+input,
+select,
+button {
+	min-height: var(--control-height);
+	padding: 0 var(--space-s);
+	font: inherit;
+	color: inherit;
+	background: var(--color-bg);
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--radius);
+}
+
+input {
+	min-width: 0;
+}
+
+button {
+	cursor: pointer;
+	background: var(--color-surface);
+}
+
+button:hover,
+button:focus-visible {
+	border-color: var(--color-accent);
+}
+
+[role='alert'] {
+	color: var(--color-danger);
+}
