@@ -156,5 +156,15 @@
 	"home_mine": "Votre dépôt",
 	"profile_edit": "Modifier le profil",
 	"collection_add": "Ajouter",
-	"collection_add_to": "Ajouter à {collection}"
+	"collection_add_to": "Ajouter à {collection}",
+	"repo_apps": "Apps",
+	"app_lists": "{count} listes",
+	"app_lists_title": "Listes",
+	"app_settings_title": "Réglages",
+	"app_more_title": "Créer quelque chose de nouveau",
+	"app_create_profile": "Créer votre profil {app}",
+	"app_unpublished": "{app} n'a pas publié ses lexiques : seuls les types déjà présents dans ce dépôt sont connus.",
+	"new_other": "Un autre type, par son NSID",
+	"app_lists_one": "{count} liste",
+	"new_more": "Autres types {app} ({count})"
 }

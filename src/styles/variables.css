@@ -33,6 +33,8 @@
 	--duration: 0.2s;
 	--row-min-height: 3.25rem;
 	--row-lines: 2;
+	--tile-min-width: 15rem;
+	--tile-icon-size: 2.5rem;
 	--image-max-height: 20rem;
 	--avatar-size: 4.5rem;
 	--avatar-radius: 50%;

@@ -1,7 +1,6 @@
-import permissions from '#lib/config/permissions.json' with {type: 'json'}
-import {groupByApp} from '#lib/collections'
+import {knownApps} from '#lib/apps/apps'
 
 export function load() {
-	// Collections enform knows, by app, as suggestions of what to create
-	return {known: groupByApp(permissions.collections)}
+	// Apps enform knows, with their record types, as suggestions of what to create
+	return {known: knownApps()}
 }

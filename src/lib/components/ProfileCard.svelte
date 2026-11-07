@@ -2,12 +2,18 @@
 	// A profile record (one per account) as a card, linking to the record itself
 	import type {Identity} from '#lib/atproto/identity'
 	import {blobUrl} from '#lib/atproto/repo'
-	import type {AppProfile} from '#lib/apps'
+	import type {AppSingle} from '#lib/apps/types'
+	import type {RepoRecord} from '#lib/atproto/repo'
 	import {recordCard} from '#lib/records/card'
 	import * as m from '#lib/paraglide/messages.js'
 	import {editPath, recordPath} from '#lib/paths'
 
-	type Props = {repo: Identity; actor: string; profile: AppProfile; owner?: boolean}
+	type Props = {
+		repo: Identity
+		actor: string
+		profile: AppSingle & {record: RepoRecord}
+		owner?: boolean
+	}
 	let {repo, actor, profile, owner = false}: Props = $props()
 
 	let card = $derived(recordCard(profile.record.value, profile.lexicon?.defs.main?.record))

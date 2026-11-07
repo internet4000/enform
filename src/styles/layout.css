@@ -11,7 +11,11 @@
 	enform-home,
 	enform-breadcrumbs,
 	enform-record-actions,
-	enform-action-bar
+	enform-action-bar,
+	enform-app-tiles,
+	enform-app-tile,
+	enform-app-view,
+	enform-type-rows
 ) {
 	display: block;
 }
@@ -71,14 +75,14 @@ enform-apps > section + section {
 	margin-top: var(--space-m);
 }
 
-enform-apps ul,
+enform-type-rows ul,
 enform-records > ol {
 	padding: 0;
 	margin: var(--space-s) 0 0;
 	list-style: none;
 }
 
-enform-apps li a,
+enform-type-rows li a,
 enform-records > ol > li > a {
 	display: flex;
 	flex-wrap: wrap;
@@ -94,17 +98,17 @@ enform-records > ol > li > a {
 }
 
 /* Lists run edge to edge on phones, their rows the full width to tap */
-enform-apps ul,
+enform-type-rows ul,
 enform-records > ol {
 	margin-inline: calc(-1 * var(--gutter));
 }
 
-enform-apps li a:active,
+enform-type-rows li a:active,
 enform-records > ol > li > a:active {
 	background: var(--color-surface);
 }
 
-enform-apps li a:hover,
+enform-type-rows li a:hover,
 enform-records > ol > li > a:hover {
 	background: var(--color-surface);
 }
@@ -224,19 +228,19 @@ enform-apps > section > h2 {
 	font-weight: 400;
 }
 
-enform-apps li a {
+enform-type-rows li a {
 	flex-direction: column;
 	align-items: stretch;
 	gap: var(--space-xs);
 }
 
-enform-apps li a small {
+enform-type-rows li a small {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-enform-apps li a small:empty {
+enform-type-rows li a small:empty {
 	display: none;
 }
 
@@ -428,18 +432,18 @@ enform-apps h3 {
 }
 
 /* A row with a secondary action at its end, e.g. adding to a list */
-enform-apps li:has(> a + a) {
+enform-type-rows li:has(> a + a) {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) auto;
 	align-items: stretch;
 	border-bottom: var(--border-width) solid var(--color-border);
 }
 
-enform-apps li:has(> a + a) > a:first-child {
+enform-type-rows li:has(> a + a) > a:first-child {
 	border-bottom: 0;
 }
 
-enform-apps li > a + a {
+enform-type-rows li > a + a {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -455,7 +459,79 @@ enform-profile > p {
 }
 
 /* A row's lines never run wider than the row: long ones truncate */
-enform-apps li a > *,
+enform-type-rows li a > *,
 enform-records > ol > li > a > * {
 	max-width: 100%;
+}
+
+/* A repo's apps, as tiles */
+enform-app-tiles {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(var(--tile-min-width), 1fr));
+	gap: var(--space-s);
+}
+
+enform-app-tile > a {
+	display: grid;
+	grid-template-areas: 'icon name' 'icon meta';
+	grid-template-columns: auto minmax(0, 1fr);
+	align-items: center;
+	gap: 0 var(--space-s);
+	min-height: var(--row-min-height);
+	padding: var(--space-s) var(--space-m);
+	color: inherit;
+	text-decoration: none;
+	background: var(--color-surface);
+	border-radius: var(--radius);
+	-webkit-tap-highlight-color: transparent;
+}
+
+enform-app-tile > a > :is(img, span) {
+	grid-area: icon;
+	display: grid;
+	place-items: center;
+	width: var(--tile-icon-size);
+	height: var(--tile-icon-size);
+	object-fit: cover;
+	font-weight: 700;
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+	border-radius: var(--avatar-radius);
+}
+
+enform-app-tile > a > strong {
+	grid-area: name;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-app-tile > a > small {
+	grid-area: meta;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-app-tile[loading] {
+	opacity: 0.6;
+}
+
+enform-app-view {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-l);
+}
+
+enform-app-view section > h2,
+enform-apps h2 {
+	margin-top: var(--space-s);
+}
+
+enform-apps details > summary {
+	min-height: var(--row-min-height);
+	display: flex;
+	align-items: center;
+	color: var(--color-muted);
+	cursor: pointer;
 }

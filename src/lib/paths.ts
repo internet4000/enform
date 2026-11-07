@@ -57,3 +57,8 @@ export function newPath(collection?: string): string {
 export function editPath(actor: string, collection: string, rkey: string): string {
 	return `${recordPath(actor, collection, rkey)}/edit`
 }
+
+/** An app's page within a repo: its profile, its lists, what can be created */
+export function appPath(actor: string, app: string): string {
+	return `${repoPath(actor)}/apps/${app}`
+}

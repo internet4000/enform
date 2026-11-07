@@ -156,5 +156,15 @@
 	"home_mine": "Your repo",
 	"profile_edit": "Edit profile",
 	"collection_add": "Add",
-	"collection_add_to": "Add to {collection}"
+	"collection_add_to": "Add to {collection}",
+	"repo_apps": "Apps",
+	"app_lists": "{count} lists",
+	"app_lists_title": "Lists",
+	"app_settings_title": "Settings",
+	"app_more_title": "Create something new",
+	"app_create_profile": "Create your {app} profile",
+	"app_unpublished": "{app} hasn't published its lexicons, so only the types already in this repo are known.",
+	"new_other": "Another type, by its NSID",
+	"app_lists_one": "{count} list",
+	"new_more": "More {app} types ({count})"
 }

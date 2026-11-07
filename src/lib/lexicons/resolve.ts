@@ -49,3 +49,8 @@ export function resolveLexicon(nsid: string): Promise<LexiconDoc> {
 	}
 	return doc
 }
+
+/** Add lexicons already fetched from their authority's repo (a catalog) to the cache */
+export function primeLexicons(docs: LexiconDoc[]) {
+	for (const doc of docs) if (!lexicons.has(doc.id)) lexicons.set(doc.id, Promise.resolve(doc))
+}
