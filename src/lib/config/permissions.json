@@ -1,0 +1,24 @@
+{
+	"$comment": "Collections enform declares in its OAuth client metadata, so writing to them asks for exactly that collection and action. Other collections can only be authorized for all collections at once (repo:*), as the authorization server accepts only declared scopes.",
+	"collections": [
+		"app.bsky.feed.post",
+		"app.bsky.feed.like",
+		"app.bsky.feed.repost",
+		"app.bsky.graph.follow",
+		"app.bsky.graph.list",
+		"app.bsky.graph.listitem",
+		"app.bsky.actor.profile",
+		"radio.4000.profile",
+		"radio.4000.track",
+		"radio.4000.follow",
+		"today.joblist.job",
+		"today.joblist.company",
+		"today.joblist.list",
+		"com.lpepfinder.want",
+		"com.lpepfinder.profile",
+		"xyz.statusphere.status",
+		"com.internet4000.enform.follow",
+		"com.internet4000.enform.view"
+	],
+	"blobs": ["image/*", "video/*", "audio/*", "*/*"]
+}

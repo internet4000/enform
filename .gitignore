@@ -9,3 +9,6 @@ dist
 src/lib/paraglide/
 i18n/project.inlang/cache/
 i18n/project.inlang/project_id
+
+# Agent worktrees
+.claude/worktrees/

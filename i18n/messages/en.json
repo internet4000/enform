@@ -28,5 +28,9 @@
 	"error_title": "Something went wrong",
 	"error_not_found": "Not found",
 	"error_back_home": "Back to start",
-	"nav_breadcrumb": "Breadcrumb"
+	"nav_breadcrumb": "Breadcrumb",
+	"session_sign_in": "Sign in",
+	"session_sign_out": "Sign out",
+	"session_handle_label": "Your handle",
+	"session_sign_in_hint": "Signing in only proves who you are. enform asks for permission to write the first time you create, edit or delete something."
 }

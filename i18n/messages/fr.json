@@ -28,5 +28,9 @@
 	"error_title": "Une erreur est survenue",
 	"error_not_found": "Introuvable",
 	"error_back_home": "Retour à l'accueil",
-	"nav_breadcrumb": "Fil d'Ariane"
+	"nav_breadcrumb": "Fil d'Ariane",
+	"session_sign_in": "Se connecter",
+	"session_sign_out": "Se déconnecter",
+	"session_handle_label": "Votre pseudo",
+	"session_sign_in_hint": "Se connecter prouve seulement qui vous êtes. enform demande la permission d'écrire la première fois que vous créez, modifiez ou supprimez quelque chose."
 }

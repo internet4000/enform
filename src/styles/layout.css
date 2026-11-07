@@ -122,3 +122,11 @@ enform-records > button {
 enform-lexicon {
 	color: var(--color-muted);
 }
+
+enform-session {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
+	gap: var(--space-s);
+	margin-inline-start: auto;
+}

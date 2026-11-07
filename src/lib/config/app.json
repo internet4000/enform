@@ -10,5 +10,6 @@
 	"reads": {
 		"pageSize": 25,
 		"timeoutMs": 10000
-	}
+	},
+	"logo": "/favicon.svg"
 }
