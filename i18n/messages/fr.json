@@ -199,5 +199,6 @@
 	"accounts_add_submit": "Ajouter le compte",
 	"row_linked_record": "{author} : {title}",
 	"related_exists": "@{actor} l’a déjà dans {type} {app}",
-	"related_exists_yours": "Déjà dans vos {type}"
+	"related_exists_yours": "Déjà dans vos {type}",
+	"link_preview_loading": "Recherche du lien…"
 }

@@ -8,7 +8,9 @@
 	import Field from './Field.svelte'
 	import FieldShell from './FieldShell.svelte'
 	import {focusField, getForm, type FieldProps} from './context.svelte'
-	import {tick} from 'svelte'
+	import {tick, untrack} from 'svelte'
+	import {enrichment, linkFields} from '#lib/forms/enrich'
+	import {isWebLink, linkDetails} from '#lib/links/details'
 
 	let {
 		node,
@@ -29,6 +31,29 @@
 	// A required object is always there to fill in
 	$effect.pre(() => {
 		if ((required || flat) && !isObject(value)) value = initialValue(node, base)
+	})
+
+	// A web link fills its empty title and description siblings (by lexicon shape)
+	const filled: Record<string, string> = {}
+	$effect(() => {
+		const key = linkFields(node).find((name) => isWebLink(object[name]))
+		if (!key) return
+		const url = object[key] as string
+		const timer = setTimeout(async () => {
+			const details = await linkDetails(url)
+			if (!details || object[key] !== url) return
+			const patch = enrichment(
+				node,
+				untrack(() => $state.snapshot(object)),
+				details,
+				filled
+			)
+			for (const [name, text] of Object.entries(patch)) {
+				object[name] = text
+				filled[name] = text
+			}
+		}, 400)
+		return () => clearTimeout(timer)
 	})
 
 	async function add() {

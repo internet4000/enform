@@ -11,6 +11,7 @@
         "@atproto/oauth-types": "^0.7.7",
         "@atproto/syntax": "^0.7.7",
         "@inlang/paraglide-js": "^2.29.3",
+        "media-now": "^2.2.3",
       },
       "devDependencies": {
         "@sveltejs/adapter-static": "^4.0.1",
@@ -473,6 +474,8 @@
     "lru-cache": ["lru-cache@10.4.3", "", {}, "sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ=="],
 
     "magic-string": ["magic-string@1.4.5", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.6.0" } }, "sha512-oLLC2+YvQUfAa+vxoufE/yc1icb87M9iXIRqAoR/2EhE/8cb3SF/+Gi0c2By1B+5Vz2e2vQtUvHiu1+63Znh+w=="],
+
+    "media-now": ["media-now@2.2.3", "", {}, "sha512-JQih6jWH+pr3H+zqcHc9sZH23x6vC8gmFKlKciYGZOLGXaePIsAu25wAdGw3kcFKajt7cY5TfVE6mW7x5pn7CA=="],
 
     "miniflare": ["miniflare@5.20261104.0-beta", "", { "dependencies": { "@cspotcode/source-map-support": "0.8.1", "sharp": "0.35.5", "undici": "7.30.1", "workerd": "1.20261104.1", "ws": "8.21.0", "youch": "4.1.0-beta.10" } }, "sha512-pYZ2n85+FYUb7s0oIVcQxO63/+wgaknm+A/kQjctJqshvHPJs3UtnzaIZ7xrrHMOk8atD7yAfauf6G9VAv7Upg=="],
 

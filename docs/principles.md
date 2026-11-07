@@ -41,6 +41,18 @@ We don't hack the protocol.
   `validate: false`, and with `swapRecord` against lost updates.
 - Records whose lexicon can't be resolved are read-only.
 
+## Forms
+
+- Every form is generated from its lexicon, and improved through patterns keyed on
+  lexicon definitions (a field's type, format, constraints and siblings), never on
+  a particular app. Per-app knowledge only lives in the editable directory
+  (`src/lib/config/apps.json`), e.g. names and declared related types.
+- Example: a `format: uri` field previews its link, and fills empty plain-text
+  title and description siblings, within their limits, never over what someone typed.
+- Link details come from media-now (media providers' own oEmbed endpoints) and a
+  link card service (`services.linkCards`, Bluesky's by default): pasting a link
+  sends it to them.
+
 ## Namespace
 
 enform's own lexicons are `com.internet4000.enform.*`, published by the account

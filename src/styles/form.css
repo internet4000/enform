@@ -413,3 +413,38 @@ enform-form form > footer > output > ul {
 	margin: var(--space-xs) 0 0;
 	list-style: none;
 }
+
+/* What a web link points to, under its field */
+enform-link-preview {
+	display: flex;
+	align-items: center;
+	gap: var(--space-s);
+	padding: var(--space-xs);
+	overflow: hidden;
+	background: var(--color-surface);
+	border-radius: var(--radius);
+}
+
+enform-link-preview img {
+	flex: none;
+	width: var(--link-preview-image);
+	height: var(--link-preview-image);
+	object-fit: cover;
+	border-radius: var(--radius);
+}
+
+enform-link-preview[media] img {
+	width: calc(var(--link-preview-image) * 16 / 9);
+}
+
+enform-link-preview > span {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+enform-link-preview strong {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

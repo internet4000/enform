@@ -23,7 +23,8 @@
 		"@atproto/oauth-scopes": "^0.5.14",
 		"@atproto/oauth-types": "^0.7.7",
 		"@atproto/syntax": "^0.7.7",
-		"@inlang/paraglide-js": "^2.29.3"
+		"@inlang/paraglide-js": "^2.29.3",
+		"media-now": "^2.2.3"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^4.0.1",

@@ -5,7 +5,9 @@
 	import {inputType, isIdentifier, stringControl, suggestedLanguages} from '#lib/forms/controls'
 	import {fromLocalInput, localTimeZone, toLocalInput} from '#lib/forms/datetime'
 	import {graphemeLength} from '#lib/forms/text'
+	import {isWebLink} from '#lib/links/details'
 	import FieldShell from './FieldShell.svelte'
+	import LinkPreview from './LinkPreview.svelte'
 	import type {FieldProps} from './context.svelte'
 
 	let {node, value = $bindable(), base, name, path, required, item}: FieldProps = $props()
@@ -100,6 +102,8 @@
 			</enform-counter>
 		{:else if control === 'datetime'}
 			<small>{m.form_timezone({zone: localTimeZone()})}</small>
+		{:else if node.format === 'uri' && isWebLink(text)}
+			<LinkPreview url={text} />
 		{/if}
 	{/snippet}
 </FieldShell>
