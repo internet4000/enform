@@ -1,2 +1,7 @@
 src/lib/paraglide
 bun.lock
+i18n/project.inlang/.lix
+i18n/project.inlang/.meta.json
+i18n/project.inlang/README.md
+i18n/project.inlang/.gitignore
+e2e/.network
