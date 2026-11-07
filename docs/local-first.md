@@ -25,12 +25,12 @@ Nothing local pretends to be atproto:
 ## Local profiles
 
 - Stored in the browser's IndexedDB: profiles, and records keyed by
-  `[profile, collection, rkey]` with their value and a version (a CID of the value).
+  `[profile, collection, rkey]` with their value and a version (a hash of the value).
 - Opened like any repo, at `/@local:<id>`: the same panes, apps, lists and forms.
   Reads and writes go through the same modules as remote repos
   (`src/lib/atproto/repo.ts`, `write.ts`), which dispatch on the repo.
 - **Who you are** is the current account _or_ local profile: Settings lists both,
-  to switch, add, rename or remove. Owner actions (Add, Edit, Delete) follow it.
+  to switch to, add or remove. Owner actions (Add, Edit, Delete) follow it.
 - **Publishing** copies a local profile's records into a signed-in account in one
   batch (`com.atproto.repo.applyWrites`), after one permission request covering all
   their collections, keeping record keys. The local profile can then be removed.
