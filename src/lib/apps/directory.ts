@@ -6,7 +6,7 @@
 import directory from '#lib/config/apps.json' with {type: 'json'}
 import {getLocale} from '#lib/paraglide/runtime.js'
 import {resolveIdentity} from '#lib/atproto/identity'
-import {blobUrl, getRecord} from '#lib/atproto/repo'
+import {profileAvatar} from '#lib/atproto/profile'
 import {appOf, namespaceOf, typeName} from './names'
 
 type Localized = Record<string, string>
@@ -70,11 +70,7 @@ export function appIcon(domain: string): Promise<string | undefined> {
 	let icon = icons.get(domain)
 	if (!icon) {
 		icon = resolveIdentity(domain)
-			.then(async (repo) => {
-				const {value} = await getRecord(repo, 'app.bsky.actor.profile', 'self')
-				const avatar = value.avatar as {ref?: {$link?: string}} | undefined
-				return avatar?.ref?.$link ? blobUrl(repo, avatar.ref.$link) : undefined
-			})
+			.then(profileAvatar)
 			.catch(() => undefined)
 		icons.set(domain, icon)
 	}
