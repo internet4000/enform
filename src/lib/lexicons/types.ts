@@ -3,11 +3,16 @@
 export type LexNode = {
 	type: string
 	description?: string
+	// boolean, integer, string
+	default?: unknown
+	const?: unknown
 	// string
 	format?: string
 	knownValues?: string[]
 	enum?: (string | number)[]
+	minLength?: number
 	maxLength?: number
+	minGraphemes?: number
 	maxGraphemes?: number
 	// integer
 	minimum?: number
@@ -33,6 +38,7 @@ export type LexNode = {
 export type LexiconDoc = {
 	lexicon: 1
 	id: string
+	revision?: number
 	description?: string
 	defs: Record<string, LexNode>
 }
