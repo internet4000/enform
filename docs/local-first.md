@@ -36,15 +36,20 @@ Nothing local pretends to be atproto:
   their collections, keeping record keys. The local profile can then be removed.
 - Not in the first version: blobs (files) in local profiles.
 
-## Writes to accounts, local-first (second step)
+## Writes to accounts, local-first
 
-- A write to an account first lands in an **outbox** in IndexedDB, and shows at once
-  (lists and records read the outbox over the PDS).
-- The outbox is sent in order when online and authorized; each write keeps its
-  `swapRecord`. A conflict (the record changed elsewhere) stops that write and shows
-  both versions to choose from; nothing is overwritten silently.
-- A **local copy** of read collections makes repeat visits instant; the PDS stays
-  the source of truth and refreshes it.
+- A write whose PDS can't be reached (offline, unreachable), and whose permission is
+  already granted, lands in an **outbox** in IndexedDB and shows at once, marked
+  "not sent yet"; the header says how many wait. A write needing a new permission
+  is never queued: asking needs your tap, so it's written (or fails) right away.
+- Reads of your own repo lay the waiting writes over what the PDS returns, and show
+  what was last read (this visit) while it can't be reached.
+- The outbox is sent in order on start and when the network is back; a write that
+  waited on another swaps against the version that one made. A conflict (the record
+  changed elsewhere) or a refusal stops that write, kept in Settings to give up;
+  nothing is overwritten silently.
+- The app itself works offline: a service worker keeps its built files.
+- Not yet: a lasting local copy of read collections (only this visit's reads).
 
 ## Testing
 
