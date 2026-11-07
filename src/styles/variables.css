@@ -53,6 +53,7 @@
 	--avatar-radius: 50%;
 	--avatar-border: 3px;
 	--banner-height: 9rem;
+	--account-name-min-width: 6rem;
 
 	--color-bg: light-dark(#fdfdfc, #111110);
 	--color-surface: light-dark(#f1f0ef, #1c1b1a);

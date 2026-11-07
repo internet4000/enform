@@ -356,10 +356,6 @@ enform-account > h3 {
 	color: var(--color-muted);
 }
 
-enform-account > button {
-	align-self: start;
-}
-
 enform-home {
 	display: flex;
 	flex-direction: column;
