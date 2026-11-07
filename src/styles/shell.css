@@ -39,6 +39,12 @@ enform-app > main {
 	transition: opacity var(--duration);
 }
 
+/* Flex children may shrink below their content (long one-line text truncates instead) */
+enform-app > main > *,
+enform-app > main section > * {
+	min-width: 0;
+}
+
 enform-app > main[aria-busy='true'] {
 	opacity: 0.5;
 }
@@ -95,6 +101,8 @@ enform-app > nav svg {
 	enform-app {
 		grid-template-areas: 'header nav' 'main main';
 		grid-template-columns: minmax(0, 1fr) auto;
+		/* The header lines up with the page, centered at its measure */
+		padding-inline: max(0px, calc((100% - var(--measure)) / 2));
 		padding-bottom: 0;
 		--sticky-bottom: 0px;
 	}
@@ -104,10 +112,14 @@ enform-app > nav svg {
 		border-bottom: var(--border-width) solid var(--color-border);
 	}
 
+	enform-app > main {
+		padding-top: var(--space-l);
+	}
+
 	enform-app > nav {
 		grid-area: nav;
 		position: static;
-		padding: 0 var(--gutter) 0 0;
+		padding: 0;
 		background: none;
 		backdrop-filter: none;
 		border-top: 0;

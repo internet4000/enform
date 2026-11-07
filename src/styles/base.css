@@ -5,6 +5,8 @@
 }
 
 html {
+	/* Room for the scrollbar always kept, so pages don't shift as they grow past the screen */
+	scrollbar-gutter: stable;
 	font-family: var(--font-sans);
 	font-size: var(--font-size-m);
 	line-height: var(--line-height);
