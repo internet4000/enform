@@ -14,6 +14,8 @@ export class FormState {
 	problems = new SvelteMap<string, (string | number)[]>()
 	/** Fields still working (uploading, fetching), by id */
 	busy = new SvelteSet<string>()
+	/** Images chosen in blob fields, their size, by field id: for siblings to use */
+	images = new SvelteMap<string, {width: number; height: number}>()
 
 	constructor(
 		/** Prefix of field ids, unique to the form */

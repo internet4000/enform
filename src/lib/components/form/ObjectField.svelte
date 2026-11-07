@@ -11,6 +11,9 @@
 	import {tick, untrack} from 'svelte'
 	import {enrichment, linkFields} from '#lib/forms/enrich'
 	import {isWebLink, linkDetails} from '#lib/links/details'
+	import {imageFields, richTextFields} from '#lib/forms/patterns'
+	import {detect, facets as findFacets} from '#lib/forms/richtext'
+	import {resolveHandle} from '#lib/atproto/identity'
 
 	let {
 		node,
@@ -56,6 +59,43 @@
 		return () => clearTimeout(timer)
 	})
 
+	// An image fills its size sibling, and asks for its alt text next
+	let image = $derived(imageFields(node))
+	let lastImage: {width: number; height: number} | undefined
+	$effect(() => {
+		if (!image) return
+		const size = form.images.get(form.fieldId([...path, image.image]))
+		if (!size || size === lastImage) return
+		lastImage = size
+		untrack(() => {
+			if (image.ratio && (!isObject(object[image.ratio]) || filledRatio)) {
+				object[image.ratio] = {width: size.width, height: size.height}
+				filledRatio = true
+			}
+			if (image.alt && !object[image.alt]) focusField(form.fieldId([...path, image.alt]))
+		})
+	})
+	let filledRatio = false
+
+	// A text with facets: its links, #tags and @mentions become its facets as it is typed
+	let rich = $derived(richTextFields(node))
+	let found = $derived(rich ? detect(String(object[rich.text] ?? '')) : [])
+	let autoFacets = ''
+	$effect(() => {
+		if (!rich) return
+		const text = String(object[rich.text] ?? '')
+		const timer = setTimeout(async () => {
+			const generated = await findFacets(text, (handle) => resolveHandle(handle))
+			if (object[rich.text] !== text && text !== '') return
+			const current = JSON.stringify(untrack(() => $state.snapshot(object[rich.facets])) ?? [])
+			// What someone set by hand stays; what was generated before is replaced
+			if (current !== '[]' && current !== autoFacets) return
+			autoFacets = JSON.stringify(generated)
+			object[rich.facets] = generated.length ? generated : undefined
+		}, 400)
+		return () => clearTimeout(timer)
+	})
+
 	async function add() {
 		value = initialValue(node, base)
 		await tick()
@@ -70,7 +110,7 @@
 </script>
 
 {#snippet fields(keys: string[])}
-	{#each keys as key (key)}
+	{#each keys.filter((key) => key !== rich?.facets) as key (key)}
 		<Field
 			node={properties[key]}
 			bind:value={object[key]}
@@ -79,6 +119,13 @@
 			path={[...path, key]}
 			required={!!node.required?.includes(key)}
 		/>
+		{#if key === rich?.text && found.length}
+			<enform-facets aria-label={m.form_facets()}>
+				{#each found as item, index (index)}
+					<data value={item.kind}>{item.text}</data>
+				{/each}
+			</enform-facets>
+		{/if}
 	{/each}
 {/snippet}
 

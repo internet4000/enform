@@ -222,5 +222,8 @@
 	"local_published": "{count} records published.",
 	"local_published_skipped": "Skipped, already in your account: {records}.",
 	"local_published_invalid": "Not valid against their lexicons, kept here: {records}.",
-	"apps_try_local": "Try it on this device, without an account"
+	"apps_try_local": "Try it on this device, without an account",
+	"form_blob_drop": "Drop or paste a file here",
+	"form_facets": "Detected in the text",
+	"form_alt_hint": "Describe the image for people who can't see it"
 }

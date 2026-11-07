@@ -222,5 +222,8 @@
 	"local_published": "{count} enregistrements publiés.",
 	"local_published_skipped": "Ignorés, déjà dans votre compte : {records}.",
 	"local_published_invalid": "Non valides selon leurs lexiques, gardés ici : {records}.",
-	"apps_try_local": "L'essayer sur cet appareil, sans compte"
+	"apps_try_local": "L'essayer sur cet appareil, sans compte",
+	"form_blob_drop": "Déposez ou collez un fichier ici",
+	"form_facets": "Repéré dans le texte",
+	"form_alt_hint": "Décrivez l'image pour qui ne peut pas la voir"
 }

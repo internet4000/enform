@@ -33,6 +33,30 @@
 		if (preview) URL.revokeObjectURL(preview)
 	})
 
+	/** An image's size, for fields that hold it (an aspect ratio) */
+	async function measure(file: File) {
+		if (!file.type.startsWith('image/')) return
+		const bitmap = await createImageBitmap(file).catch(() => undefined)
+		if (bitmap) form.images.set(form.fieldId(path), {width: bitmap.width, height: bitmap.height})
+		bitmap?.close()
+	}
+
+	let dragging = $state(false)
+
+	function drop(event: DragEvent) {
+		event.preventDefault()
+		dragging = false
+		choose(event.dataTransfer?.files?.[0])
+	}
+
+	function paste(event: ClipboardEvent) {
+		const file = [...(event.clipboardData?.files ?? [])][0]
+		if (file) {
+			event.preventDefault()
+			choose(file)
+		}
+	}
+
 	async function choose(file: File | undefined) {
 		problem = undefined
 		if (!file || !form.uploadBlob) return
@@ -49,6 +73,7 @@
 		uploading = true
 		try {
 			value = await form.uploadBlob(file)
+			await measure(file)
 		} catch (err) {
 			problem = m.form_blob_failed({message: (err as Error).message})
 			show()
@@ -77,7 +102,19 @@
 	busy={uploading}
 >
 	{#snippet children({id, describedby, invalid})}
-		<enform-blob uploading={uploading || undefined} disabled={!form.uploadBlob || undefined}>
+		<enform-blob
+			uploading={uploading || undefined}
+			disabled={!form.uploadBlob || undefined}
+			dragging={dragging || undefined}
+			role="group"
+			ondragover={(event: DragEvent) => {
+				event.preventDefault()
+				dragging = true
+			}}
+			ondragleave={() => (dragging = false)}
+			ondrop={drop}
+			onpaste={paste}
+		>
 			{#if preview}<img src={preview} alt="" />{/if}
 			{#if info}
 				<p>
@@ -107,7 +144,9 @@
 		{:else if uploading}
 			<small aria-live="polite">{m.form_blob_uploading()}</small>
 		{:else if limits}
-			<small>{limits}</small>
+			<small>{limits} · {m.form_blob_drop()}</small>
+		{:else}
+			<small>{m.form_blob_drop()}</small>
 		{/if}
 	{/snippet}
 </FieldShell>

@@ -448,3 +448,27 @@ enform-link-preview strong {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+/* Links, #tags and @mentions found in a text, as they will be linked */
+enform-facets {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
+	margin-top: calc(-1 * var(--field-gap));
+}
+
+enform-facets data {
+	padding: var(--space-2xs) var(--space-s);
+	font-size: var(--font-size-s);
+	color: var(--color-accent);
+	background: var(--color-selected);
+	border-radius: var(--pill-radius);
+	overflow-wrap: anywhere;
+}
+
+/* A file field while something is dragged over it */
+enform-blob[dragging] {
+	outline: var(--accent-border) dashed var(--color-accent);
+	outline-offset: var(--space-xs);
+	border-radius: var(--radius);
+}
