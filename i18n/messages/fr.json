@@ -32,5 +32,16 @@
 	"session_sign_in": "Se connecter",
 	"session_sign_out": "Se déconnecter",
 	"session_handle_label": "Votre pseudo",
-	"session_sign_in_hint": "Se connecter prouve seulement qui vous êtes. enform demande la permission d'écrire la première fois que vous créez, modifiez ou supprimez quelque chose."
+	"session_sign_in_hint": "Se connecter prouve seulement qui vous êtes. enform demande la permission d'écrire la première fois que vous créez, modifiez ou supprimez quelque chose.",
+	"action_create": "créer",
+	"action_update": "modifier",
+	"action_delete": "supprimer",
+	"action_cancel": "Annuler",
+	"permission_collection": "enform demandera à votre serveur la permission de {action} des enregistrements dans {collection}, et rien d'autre.",
+	"permission_all_collections": "{collection} ne fait pas partie des collections déclarées par enform : votre serveur ne peut accorder la permission de {action} des enregistrements que dans toutes vos collections à la fois.",
+	"permission_grant": "Accorder la permission",
+	"record_edit": "Modifier",
+	"record_delete": "Supprimer",
+	"record_delete_confirm_title": "Supprimer cet enregistrement ?",
+	"record_delete_confirm": "{rkey} sera retiré de {collection} dans votre dépôt. C'est irréversible."
 }
