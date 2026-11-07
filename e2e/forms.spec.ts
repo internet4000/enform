@@ -3,14 +3,14 @@
  * @mentions become facets; a dropped image is uploaded, fills its aspect ratio and asks
  * for its alt text
  */
-import {approvePopup, expect, signIn, t, test} from './fixtures'
+import {approvePopup, creating, expect, opened, signIn, t, test} from './fixtures'
 
 const NSID = 'test.enform.photo'
 
 test('a photo: facets from its text, and an image with its size and alt', async ({page}) => {
 	await signIn(page, 'alice.test')
 	await page.goto(`/new/${NSID}`)
-	await page.waitForURL(`**/@alice.test/${NSID}?new`)
+	await page.waitForURL(creating)
 
 	// Rich text: chips for what will be linked
 	await page.getByRole('textbox', {name: 'text', exact: true}).fill('New #photo for @bob.test')
@@ -36,7 +36,7 @@ test('a photo: facets from its text, and an image with its size and alt', async 
 	await approvePopup(page, 'alice.test', () =>
 		page.getByRole('button', {name: t('new_submit')}).click()
 	)
-	await page.waitForURL((url) => url.pathname.startsWith(`/@alice.test/${NSID}/`) && !url.search)
+	await page.waitForURL(opened)
 
 	// The record as written: facets with byte ranges, the image, its size and alt
 	await page

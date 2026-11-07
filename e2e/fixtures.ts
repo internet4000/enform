@@ -69,3 +69,12 @@ export async function approvePopup(page: Page, handle: string, action: () => Pro
 	await authorizeOnPds(popup, handle)
 	await popup.waitForEvent('close')
 }
+
+/** In an app's screen: a form to create open over it */
+export const creating = (url: URL) => url.searchParams.has('new')
+/** In an app's screen: a record open over it (not its form) */
+export const opened = (url: URL) =>
+	url.searchParams.has('record') && !url.searchParams.has('edit') && !url.searchParams.has('new')
+/** In an app's screen: nothing open over it */
+export const closed = (url: URL) =>
+	url.pathname.includes('/apps/') && !url.searchParams.has('record')

@@ -1,5 +1,5 @@
 /** Signed in to the local PDS: create, edit and delete a record, each asking permission */
-import {approvePopup, expect, signIn, t, test} from './fixtures'
+import {approvePopup, closed, creating, expect, opened, signIn, t, test} from './fixtures'
 
 const NSID = 'test.enform.note'
 
@@ -13,23 +13,23 @@ test('create, edit and delete a record of a published lexicon', async ({page}, i
 
 	// Create: /new/<nsid> opens the form beside the collection
 	await page.goto(`/new/${NSID}`)
-	await page.waitForURL(`**/@alice.test/${NSID}?new`)
+	await page.waitForURL(creating)
 	await page.getByRole('textbox', {name: 'text', exact: true}).fill(text)
 	await approvePopup(page, 'alice.test', () =>
 		page.getByRole('button', {name: t('new_submit')}).click()
 	)
-	await page.waitForURL((url) => url.pathname.startsWith(`/@alice.test/${NSID}/`) && !url.search)
-	await expect(page.locator('enform-record').getByText(text)).toBeVisible()
+	await page.waitForURL(opened)
+	await expect(page.locator('enform-sheet enform-value').getByText(text).first()).toBeVisible()
 	const recordUrl = page.url()
 
 	// Edit
-	await page.goto(`${recordUrl}?edit`)
+	await page.goto(`${recordUrl}&edit`)
 	await page.getByRole('textbox', {name: 'text', exact: true}).fill(edited)
 	await approvePopup(page, 'alice.test', () =>
 		page.getByRole('button', {name: t('edit_submit')}).click()
 	)
 	await page.waitForURL((url) => url.href === recordUrl)
-	await expect(page.locator('enform-record').getByText(edited)).toBeVisible()
+	await expect(page.locator('enform-sheet enform-value').getByText(edited).first()).toBeVisible()
 
 	// Delete, confirmed in a dialog
 	await page
@@ -40,6 +40,6 @@ test('create, edit and delete a record of a published lexicon', async ({page}, i
 	await approvePopup(page, 'alice.test', () =>
 		dialog.getByRole('button', {name: t('record_delete')}).click()
 	)
-	await page.waitForURL((url) => url.pathname === `/@alice.test/${NSID}`)
+	await page.waitForURL(closed)
 	await expect(page.getByText(edited)).toHaveCount(0)
 })
