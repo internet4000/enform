@@ -203,5 +203,9 @@
 	"record_menu": "More actions",
 	"related_exists_short": "Already in {type}",
 	"record_copy_link": "Copy at:// link",
-	"record_link_copied": "Copied"
+	"record_link_copied": "Copied",
+	"repo_pane_title": "Repo",
+	"overview_app": "A record type of {app}",
+	"overview_pick": "Open a record from the list to see it here.",
+	"overview_unpublished": "No lexicon is published for this type, so its records are shown as plain data and can't be created here."
 }

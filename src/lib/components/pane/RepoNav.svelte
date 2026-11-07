@@ -67,12 +67,6 @@
 						>
 							<span>{typeLabel(type.nsid)}</span>
 						</a>
-						{#if owner && type.lexicon}
-							<a
-								href={createPath(actor, type.nsid)}
-								aria-label={m.collection_add_to({collection: typeLabel(type.nsid)})}>+</a
-							>
-						{/if}
 					</li>
 				{/each}
 				{#each app.singles.filter((type) => type.used) as type (type.nsid)}

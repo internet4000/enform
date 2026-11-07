@@ -203,5 +203,9 @@
 	"record_menu": "Plus d'actions",
 	"related_exists_short": "Déjà dans {type}",
 	"record_copy_link": "Copier le lien at://",
-	"record_link_copied": "Copié"
+	"record_link_copied": "Copié",
+	"repo_pane_title": "Dépôt",
+	"overview_app": "Un type d'enregistrement de {app}",
+	"overview_pick": "Ouvrez un enregistrement de la liste pour le voir ici.",
+	"overview_unpublished": "Aucun lexique n'est publié pour ce type : ses enregistrements s'affichent comme données brutes et ne peuvent pas être créés ici."
 }

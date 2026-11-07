@@ -31,11 +31,12 @@
 </script>
 
 <enform-panes>
-	<Pane title={`@${actor}`}>
+	<Pane title={m.repo_pane_title()}>
 		<enform-identity verified={!!data.repo.handle || undefined}>
 			{#await who() then card}
 				{#if card?.avatar}<img src={blobUrl(data.repo, card.avatar)} alt="" />{/if}
-				{#if card?.title}<strong>{card.title}</strong>{/if}
+				<strong>{card?.title ?? `@${actor}`}</strong>
+				{#if card?.title}<span>@{actor}</span>{/if}
 			{/await}
 			<details>
 				<summary>{m.repo_details()}</summary>

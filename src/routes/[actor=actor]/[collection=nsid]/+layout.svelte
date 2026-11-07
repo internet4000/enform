@@ -4,7 +4,6 @@
 	import {auth} from '#lib/auth/session.svelte'
 	import {appInfo, typeLabel} from '#lib/apps/directory'
 	import {namespaceOf} from '#lib/apps/names'
-	import LexiconStatus from '#lib/components/LexiconStatus.svelte'
 	import RecordList from '#lib/components/RecordList.svelte'
 	import Pane from '#lib/components/pane/Pane.svelte'
 	import {actorName, createPath, repoPath} from '#lib/paths'
@@ -31,7 +30,6 @@
 			{/await}
 		{/if}
 	{/snippet}
-	<LexiconStatus nsid={data.collection} lexicon={data.lexicon} />
 	{#key data.page}
 		<RecordList
 			repo={data.repo}

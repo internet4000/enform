@@ -1,6 +1,7 @@
 <script lang="ts">
 	// A collection's records, a page at a time, newest first (listRecords' order)
 	import * as m from '#lib/paraglide/messages.js'
+	import app from '#lib/config/app.json' with {type: 'json'}
 	import type {Identity} from '#lib/atproto/identity'
 	import {listRecords, type RepoRecord} from '#lib/atproto/repo'
 	import type {LexiconDoc} from '#lib/lexicons/types'
@@ -23,7 +24,7 @@
 	// svelte-ignore state_referenced_locally (keyed by the page: a new collection remounts)
 	let records = $state(first.records)
 	// svelte-ignore state_referenced_locally
-	let cursor = $state(first.cursor)
+	let cursor = $state(first.records.length >= app.reads.pageSize ? first.cursor : undefined)
 	let loading = $state(false)
 	let actor = $derived(actorName(repo))
 
@@ -32,7 +33,7 @@
 		try {
 			const next = await listRecords(repo, collection, cursor)
 			records = [...records, ...next.records]
-			cursor = next.records.length ? next.cursor : undefined
+			cursor = next.records.length >= app.reads.pageSize ? next.cursor : undefined
 		} finally {
 			loading = false
 		}

@@ -3,6 +3,7 @@
 	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
 	import {typeLabel} from '#lib/apps/directory'
+	import CollectionOverview from '#lib/components/CollectionOverview.svelte'
 	import CreateRecord from '#lib/components/CreateRecord.svelte'
 	import Pane from '#lib/components/pane/Pane.svelte'
 	import {actorName, collectionPath} from '#lib/paths'
@@ -26,7 +27,8 @@
 		{/await}
 	</Pane>
 {:else}
-	<Pane title={m.pane_pick_title()} placeholder>
-		<p>{m.pane_pick_record()}</p>
+	<!-- No record open: on wide screens, what this collection is -->
+	<Pane title={typeLabel(data.collection)} placeholder>
+		<CollectionOverview repo={data.repo} collection={data.collection} lexicon={data.lexicon} />
 	</Pane>
 {/if}

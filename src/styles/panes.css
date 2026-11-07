@@ -98,7 +98,7 @@ enform-identity {
 }
 
 enform-identity > img {
-	grid-row: span 2;
+	grid-row: span 3;
 	width: var(--avatar-size);
 	height: var(--avatar-size);
 	object-fit: cover;
@@ -297,4 +297,44 @@ enform-records > ol > li > a[aria-current='page'] {
 	enform-panes:has(> enform-pane:nth-child(3)) {
 		grid-template-columns: var(--pane-nav) var(--pane-list) minmax(0, 1fr);
 	}
+}
+
+/* A collection's overview, in the space beside its records */
+enform-overview {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-m);
+	max-width: var(--measure-dialog);
+	text-align: start;
+}
+
+enform-overview > header {
+	display: flex;
+	align-items: center;
+	gap: var(--space-s);
+}
+
+enform-overview p {
+	margin: 0;
+	color: var(--color-text);
+}
+
+enform-overview > p:last-child {
+	color: var(--color-muted);
+}
+
+enform-overview menu {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-m);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+enform-identity > span {
+	grid-column: -2;
+	color: var(--color-muted);
+	overflow-wrap: anywhere;
 }
