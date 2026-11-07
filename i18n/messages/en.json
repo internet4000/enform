@@ -185,5 +185,13 @@
 	"permission_hint_all": "Asks your permission first: {action} records in all your collections (this type isn't one enform can ask for alone)",
 	"related_title": "Also fits",
 	"related_reason": "Same type name; shares {fields}",
-	"related_copy": "Copy to {app}"
+	"related_copy": "Copy to {app}",
+	"accounts_title": "Accounts on this browser",
+	"accounts_current": "Current",
+	"accounts_switch": "Switch",
+	"accounts_switch_to": "Switch to {actor}",
+	"accounts_sign_out_of": "Sign out {actor}",
+	"accounts_add": "Add another account",
+	"accounts_add_hint": "Each account signs in with its own server and stays signed in here. Switch between them at any time.",
+	"accounts_add_submit": "Add account"
 }

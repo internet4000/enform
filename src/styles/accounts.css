@@ -1,0 +1,60 @@
+/* Signing in, and the accounts signed in on this browser */
+enform-sign-in,
+enform-accounts {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+}
+
+enform-sign-in > p,
+enform-accounts > p {
+	margin: 0;
+}
+
+enform-accounts > ul {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+enform-account-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-s);
+	min-height: var(--row-min-height);
+	padding: var(--space-xs) var(--space-s);
+	border-radius: var(--radius);
+}
+
+enform-account-item[current] {
+	background: var(--color-selected);
+}
+
+enform-account-item[busy] {
+	opacity: var(--busy-opacity);
+}
+
+enform-account-item > img {
+	width: var(--nav-avatar-size);
+	height: var(--nav-avatar-size);
+	object-fit: cover;
+	border-radius: var(--avatar-radius);
+}
+
+enform-account-item > a {
+	flex: 1 1 var(--account-name-min-width);
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+enform-account-item > a[aria-current] {
+	font-weight: var(--label-weight);
+}
+
+enform-account-item > small {
+	color: var(--color-muted);
+}

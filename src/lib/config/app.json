@@ -11,6 +11,9 @@
 		"pageSize": 25,
 		"timeoutMs": 10000
 	},
+	"storage": {
+		"accounts": "enform:accounts"
+	},
 	"logo": "/favicon.svg",
 	"examples": ["bsky.app", "4000.radio", "atproto.com", "tangled.org"]
 }

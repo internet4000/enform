@@ -15,7 +15,7 @@
 
 	async function save(value: Record<string, unknown>) {
 		await updateFromForm(lexicon, rkey, value, record.cid)
-		await goto(recordPath(actor, lexicon.id, rkey), {invalidateAll: true})
+		await goto(recordPath(actor, lexicon.id, rkey), {refreshAll: true})
 	}
 </script>
 

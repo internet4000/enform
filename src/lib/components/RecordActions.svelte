@@ -20,7 +20,7 @@
 		try {
 			await deleteRecord(collection, rkey, cid)
 			dialog?.close()
-			await goto(collectionPath(actor, collection), {invalidateAll: true})
+			await goto(collectionPath(actor, collection), {refreshAll: true})
 		} catch (err) {
 			failed = (err as Error).message
 		} finally {

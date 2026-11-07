@@ -185,5 +185,13 @@
 	"permission_hint_all": "Demande d'abord votre permission : {action} des enregistrements dans toutes vos collections (enform ne peut pas la demander pour ce seul type)",
 	"related_title": "Convient aussi à",
 	"related_reason": "Même nom de type ; partage {fields}",
-	"related_copy": "Copier vers {app}"
+	"related_copy": "Copier vers {app}",
+	"accounts_title": "Comptes sur ce navigateur",
+	"accounts_current": "Actuel",
+	"accounts_switch": "Utiliser",
+	"accounts_switch_to": "Utiliser {actor}",
+	"accounts_sign_out_of": "Déconnecter {actor}",
+	"accounts_add": "Ajouter un autre compte",
+	"accounts_add_hint": "Chaque compte se connecte auprès de son propre serveur et reste connecté ici. Passez de l'un à l'autre à tout moment.",
+	"accounts_add_submit": "Ajouter le compte"
 }

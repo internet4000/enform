@@ -35,7 +35,7 @@
 		const {uri} = await createFromForm(lexicon, value)
 		const at = new AtUri(uri)
 		const actor = auth.identity ? actorName(auth.identity) : at.host
-		await goto(recordPath(actor, at.collection, at.rkey), {invalidateAll: true})
+		await goto(recordPath(actor, at.collection, at.rkey), {refreshAll: true})
 	}
 </script>
 
