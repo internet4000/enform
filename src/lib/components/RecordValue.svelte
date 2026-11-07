@@ -3,11 +3,15 @@
 	import RecordValue from './RecordValue.svelte'
 	import StringValue from './StringValue.svelte'
 	import BlobValue from './BlobValue.svelte'
+	import IdentityChip from './IdentityChip.svelte'
+	import RecordCard from './RecordCard.svelte'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
 	import {resolveRef} from '#lib/lexicons/refs'
 	import type {LexNode} from '#lib/lexicons/types'
+	import {isRecordUri} from '#lib/records/links'
 	import {objectKeys, shapeOf} from '#lib/records/shape'
+	import {isValidDid} from '@atproto/syntax'
 
 	type Props = {
 		value: unknown
@@ -59,6 +63,12 @@
 			</ol>
 		{/if}
 	</enform-value>
+{:else if shape.type === 'strong-ref'}
+	<RecordCard uri={object.uri as string} cid={object.cid as string} />
+{:else if shape.type === 'string' && shape.format === 'did' && isValidDid(value as string)}
+	<IdentityChip actor={value as string} />
+{:else if shape.type === 'string' && shape.format === 'at-uri' && isRecordUri(value as string)}
+	<RecordCard uri={value as string} />
 {:else if shape.type === 'string'}
 	<StringValue value={value as string} format={shape.format} />
 {:else if shape.type === 'blob'}

@@ -1,0 +1,171 @@
+/* What a record links to: people as chips, records as small cards */
+enform-identity-chip {
+	display: block;
+	min-width: 0;
+}
+
+enform-identity-chip[state='ready'] > a {
+	display: inline-grid;
+	grid-template-areas: 'avatar handle';
+	grid-template-columns: auto minmax(0, 1fr);
+	align-items: center;
+	column-gap: var(--space-s);
+	max-width: 100%;
+	padding: var(--space-xs) var(--space-m) var(--space-xs) var(--space-xs);
+	color: inherit;
+	text-decoration: none;
+	background: var(--color-surface);
+	border-radius: var(--pill-radius);
+}
+
+enform-identity-chip[state='ready'] > a:hover {
+	background: var(--color-selected);
+}
+
+enform-identity-chip > a > strong,
+enform-identity-chip > a > small {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-identity-chip > a > strong {
+	grid-area: name;
+	font-size: var(--font-size-s);
+}
+
+enform-identity-chip > a > small {
+	grid-area: handle;
+	font-size: var(--font-size-s);
+}
+
+enform-identity-chip[named] > a {
+	grid-template-areas: 'avatar name' 'avatar handle';
+}
+
+enform-identity-chip[named] > a > small {
+	font-size: var(--font-size-xs);
+}
+
+enform-avatar {
+	display: grid;
+	grid-area: avatar;
+	place-items: center;
+	width: var(--chip-avatar-size);
+	height: var(--chip-avatar-size);
+	overflow: hidden;
+	font-size: var(--font-size-xs);
+	font-weight: 700;
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+	border-radius: var(--avatar-radius);
+}
+
+enform-avatar > img {
+	width: 100%;
+	height: 100%;
+	max-height: none;
+	object-fit: cover;
+	border-radius: 0;
+}
+
+enform-identity-chip[size='small'] {
+	--chip-avatar-size: var(--chip-avatar-size-small);
+}
+
+enform-identity-chip[size='small'][state='ready'] > a {
+	padding: 0;
+	background: none;
+}
+
+enform-identity-chip[size='small'][named] > a {
+	grid-template-areas: 'avatar name handle';
+	grid-template-columns: auto minmax(0, max-content) minmax(0, 1fr);
+}
+
+enform-record-card {
+	display: block;
+	max-width: var(--record-card-max-width);
+	min-width: 0;
+}
+
+enform-record-card[state='ready'] {
+	display: grid;
+	gap: var(--space-s);
+	padding: var(--space-s) var(--space-m);
+	background: var(--color-surface);
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--radius-large);
+}
+
+enform-record-card > header {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs) var(--space-s);
+	align-items: center;
+	justify-content: space-between;
+	min-width: 0;
+}
+
+enform-record-card > header > small {
+	font-size: var(--font-size-xs);
+}
+
+enform-record-card[state='ready'] > a {
+	display: grid;
+	gap: var(--space-xs);
+	color: inherit;
+	text-decoration: none;
+}
+
+enform-record-card[state='ready'] > a:hover > strong {
+	color: var(--color-accent);
+}
+
+enform-record-card > a > strong,
+enform-record-card > a > p {
+	display: -webkit-box;
+	overflow: hidden;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: var(--record-card-lines);
+	line-clamp: var(--record-card-lines);
+}
+
+enform-record-card > a > strong {
+	font-weight: 400;
+}
+
+enform-record-card > a > p {
+	margin: 0;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-record-card > a > img {
+	width: 100%;
+	max-height: var(--record-card-image-height);
+	object-fit: cover;
+}
+
+enform-record-card > footer {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs) var(--space-m);
+	align-items: baseline;
+	font-size: var(--font-size-xs);
+}
+
+enform-record-card details {
+	min-width: 0;
+	font-size: var(--font-size-xs);
+	color: var(--color-muted);
+}
+
+enform-record-card details > code {
+	display: block;
+	font-size: var(--font-size-xs);
+}
+
+enform-record-card[state='unavailable'] > a {
+	color: var(--color-muted);
+}
