@@ -24,4 +24,27 @@
 	--color-border: light-dark(#dad9d6, #3b3a37);
 	--color-accent: light-dark(#0d74ce, #70b8ff);
 	--color-danger: light-dark(#ce2c31, #ff9592);
+	--color-on-accent: light-dark(#ffffff, #111110);
+	--color-success: light-dark(#18794e, #3dd68c);
+
+	/* Forms generated from lexicons */
+	--form-measure: 42rem;
+	--field-gap: var(--space-xs);
+	--fields-gap: 1.25rem;
+	--label-weight: 600;
+	--textarea-min-height: 5.5rem;
+	--textarea-max-height: 24rem;
+	--number-width: 12rem;
+	--checkbox-size: 1.125rem;
+	--preview-max-height: 10rem;
+	--focus-ring: 2px solid var(--color-accent);
+	--focus-offset: 1px;
+	--disabled-opacity: 0.5;
+	--busy-opacity: 0.6;
+	--icon-up: '↑';
+	--icon-down: '↓';
+	--icon-remove: '×';
+	--icon-add: '+';
+	--visually-hidden-size: 1px;
+	--visually-hidden-clip: inset(50%);
 }
