@@ -153,5 +153,15 @@
 	"collection_new_yours": "En créer un dans votre dépôt",
 	"lexicon_view_short": "Lexique",
 	"home_examples": "Ou jetez un œil :",
-	"home_mine": "Votre dépôt"
+	"home_mine": "Votre dépôt",
+	"nav_following": "Abonnements",
+	"follow_repo": "Suivre",
+	"follow_collection": "Suivre cette collection",
+	"follow_following": "Suivi",
+	"following_sign_in": "Connectez-vous pour suivre des personnes et leurs collections. Les abonnements sont des enregistrements dans votre propre dépôt.",
+	"following_empty": "Vous ne suivez rien pour l'instant. Ouvrez un dépôt ou une de ses collections et suivez-le.",
+	"following_repos": "Personnes",
+	"following_latest": "Derniers ajouts des collections suivies",
+	"following_feed_empty": "Rien de nouveau dans les collections suivies.",
+	"following_collections": "Collections suivies ({count})"
 }

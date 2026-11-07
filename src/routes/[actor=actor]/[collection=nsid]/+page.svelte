@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as m from '#lib/paraglide/messages.js'
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte'
+	import FollowButton from '#lib/components/FollowButton.svelte'
 	import LexiconStatus from '#lib/components/LexiconStatus.svelte'
 	import RecordList from '#lib/components/RecordList.svelte'
 	import {auth} from '#lib/auth/session.svelte'
@@ -14,6 +15,7 @@
 <section>
 	<h2>{data.collection}</h2>
 	<LexiconStatus nsid={data.collection} lexicon={data.lexicon} />
+	<FollowButton subject={data.repo.did} collection={data.collection} />
 	{#if auth.session}
 		{#await data.lexicon then doc}
 			{#if doc}

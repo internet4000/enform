@@ -153,5 +153,15 @@
 	"collection_new_yours": "Create one in your repo",
 	"lexicon_view_short": "Lexicon",
 	"home_examples": "Or look around:",
-	"home_mine": "Your repo"
+	"home_mine": "Your repo",
+	"nav_following": "Following",
+	"follow_repo": "Follow",
+	"follow_collection": "Follow this collection",
+	"follow_following": "Following",
+	"following_sign_in": "Sign in to follow people and their collections. Follows are records in your own repo.",
+	"following_empty": "You follow nothing yet. Open a repo or one of its collections and follow it.",
+	"following_repos": "People",
+	"following_latest": "Latest from collections you follow",
+	"following_feed_empty": "Nothing new in the collections you follow.",
+	"following_collections": "Collections you follow ({count})"
 }

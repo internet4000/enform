@@ -12,7 +12,9 @@
 		"i18n": "paraglide-js compile --project ./i18n/project.inlang --outdir ./src/lib/paraglide",
 		"types": "bun run i18n && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"format": "prettier --write . --log-level=warn",
-		"deploy": "bun run build && wrangler deploy"
+		"deploy": "bun run build && wrangler deploy",
+		"lexicons:lint": "goat lex lint",
+		"lexicons:publish": "goat lex publish --update"
 	},
 	"imports": {
 		"#lib/*": "./src/lib/*"
