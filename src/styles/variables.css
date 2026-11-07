@@ -43,6 +43,14 @@
 	--accent-border: 3px;
 	--menu-width: 22rem;
 	--sticky-bottom-gap: calc(var(--sticky-bottom) + var(--space-s));
+	--launcher-cell: 5.5rem;
+	--measure-wide: 72rem;
+	--record-card-min: 16rem;
+	--record-card-image: 10rem;
+	--fab-height: 3.25rem;
+	--sheet-width: 36rem;
+	--launcher-icon: 3.75rem;
+	--launcher-radius: 1rem;
 	--pane-nav: 20rem;
 	--pane-list: 26rem;
 	--pane-min: 16rem;
@@ -77,6 +85,7 @@
 	--color-bar: light-dark(rgb(253 253 252 / 85%), rgb(17 17 16 / 85%));
 	--color-selected: light-dark(#e6f0fb, #14263a);
 	--shadow-menu: 0 8px 32px light-dark(rgb(0 0 0 / 15%), rgb(0 0 0 / 50%));
+	--shadow-icon: 0 2px 8px light-dark(rgb(0 0 0 / 12%), rgb(0 0 0 / 40%));
 	--color-backdrop: light-dark(rgb(0 0 0 / 30%), rgb(0 0 0 / 60%));
 	--color-on-accent: light-dark(#ffffff, #111110);
 	--color-success: light-dark(#18794e, #3dd68c);

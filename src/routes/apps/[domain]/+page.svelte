@@ -11,7 +11,7 @@
 	import {startType} from '#lib/apps/start'
 	import Account from '#lib/components/Account.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
-	import {actorName, collectionPath, createPath, repoPath} from '#lib/paths'
+	import {actorName, appScreenPath} from '#lib/paths'
 
 	let {data} = $props()
 
@@ -19,7 +19,7 @@
 	async function tryLocally(type: string) {
 		const profile = (await listProfiles())[0] ?? (await createProfile(m.local_default_name()))
 		await auth.useLocal(profile)
-		await goto(createPath(actorName(localIdentity(profile)), type))
+		await goto(appScreenPath(actorName(localIdentity(profile)), info.domain, {type, create: true}))
 	}
 	let info = $derived(data.info)
 	let me = $derived(auth.me)
@@ -68,14 +68,25 @@
 						<p>{m.apps_joined_long({app: info.name})}</p>
 						<ul>
 							{#each collections as nsid (nsid)}
-								<li><a href={collectionPath(actorName(me), nsid)}>{typeLabel(nsid)}</a></li>
+								<li>
+									<a href={appScreenPath(actorName(me), info.domain, {type: nsid})}
+										>{typeLabel(nsid)}</a
+									>
+								</li>
 							{/each}
 						</ul>
-						<p><a href={repoPath(actorName(me))} role="button">{m.apps_open_repo()}</a></p>
+						<p>
+							<a href={appScreenPath(actorName(me), info.domain)} role="button"
+								>{m.apps_open_app({app: info.name})}</a
+							>
+						</p>
 					{:else if start}
 						<p>{m.apps_not_yet({app: info.name})}</p>
 						<p>
-							<a href={createPath(actorName(me), start)} role="button">
+							<a
+								href={appScreenPath(actorName(me), info.domain, {type: start, create: true})}
+								role="button"
+							>
 								{m.apps_start({type: typeLabel(start)})}
 							</a>
 						</p>
@@ -93,7 +104,11 @@
 					<ul>
 						{#each byDirectory( [...(app.profile ? [app.profile] : []), ...app.lists, ...app.singles] ) as type (type.nsid)}
 							<li>
-								<a href={me ? createPath(actorName(me), type.nsid) : `/lexicon/${type.nsid}`}>
+								<a
+									href={me
+										? appScreenPath(actorName(me), info.domain, {type: type.nsid, create: true})
+										: `/lexicon/${type.nsid}`}
+								>
 									<span>{typeLabel(type.nsid)}</span>
 									<small>{type.lexicon?.defs.main?.description ?? type.nsid}</small>
 								</a>

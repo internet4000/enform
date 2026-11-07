@@ -1,0 +1,210 @@
+/*
+ * An app as a person has it, mobile first: its header, its sections as a strip of tabs,
+ * its records as cards (one column, more as the screen grows), a + button in thumb
+ * reach, and records and forms in a sheet over it (a side panel on wide screens).
+ */
+enform-app-screen {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-m);
+	max-width: var(--measure-wide);
+	margin: 0 auto;
+	padding: var(--space-s) var(--gutter) calc(var(--space-l) * 2);
+}
+
+enform-app-screen > header {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+}
+
+enform-app-screen > header > a[rel='up'] {
+	font-size: var(--font-size-s);
+	text-decoration: none;
+}
+
+enform-app-screen > header > a[rel='up']::before {
+	content: '‹ ';
+}
+
+enform-app-screen hgroup {
+	display: flex;
+	align-items: center;
+	gap: var(--space-s);
+}
+
+enform-app-screen hgroup enform-app-icon {
+	--app-icon-size: var(--app-icon-size-large);
+	--app-icon-radius: var(--launcher-radius);
+	font-size: var(--font-size-l);
+}
+
+/* Its sections: a strip that scrolls sideways on phones */
+enform-app-screen > nav ul {
+	display: flex;
+	gap: var(--space-xs);
+	margin: 0 calc(-1 * var(--gutter));
+	padding: 0 var(--gutter) var(--space-xs);
+	overflow-x: auto;
+	list-style: none;
+	scrollbar-width: none;
+}
+
+enform-app-screen > nav a {
+	display: inline-flex;
+	align-items: center;
+	min-height: var(--control-height);
+	padding: 0 var(--space-m);
+	color: inherit;
+	text-decoration: none;
+	white-space: nowrap;
+	background: var(--color-surface);
+	border-radius: var(--pill-radius);
+}
+
+enform-app-screen > nav a[aria-current='page'] {
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+}
+
+/* Records as cards */
+enform-record-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(var(--record-card-min), 1fr));
+	gap: var(--space-s);
+}
+
+enform-record-card-item > a {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	height: 100%;
+	padding: var(--space-m);
+	overflow: hidden;
+	color: inherit;
+	text-decoration: none;
+	background: var(--color-surface);
+	border: var(--border-width) solid transparent;
+	border-radius: var(--radius-large);
+	-webkit-tap-highlight-color: transparent;
+}
+
+enform-record-card-item > a:hover,
+enform-record-card-item[current] > a {
+	border-color: var(--color-accent);
+}
+
+enform-record-card-item img {
+	width: calc(100% + 2 * var(--space-m));
+	max-width: none;
+	height: var(--record-card-image);
+	max-height: none;
+	margin: calc(-1 * var(--space-m)) calc(-1 * var(--space-m)) var(--space-xs);
+	object-fit: cover;
+	border-radius: 0;
+}
+
+enform-record-card-item p {
+	display: -webkit-box;
+	margin: 0;
+	overflow: hidden;
+	font-weight: 600;
+	overflow-wrap: anywhere;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: var(--row-lines);
+	line-clamp: var(--row-lines);
+}
+
+enform-record-card-item > a > span {
+	display: -webkit-box;
+	overflow: hidden;
+	color: var(--color-muted);
+	overflow-wrap: anywhere;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: var(--row-lines);
+	line-clamp: var(--row-lines);
+}
+
+enform-record-card-item small {
+	margin-top: auto;
+	color: var(--color-muted);
+}
+
+/* The + button, in thumb reach above the tab bar */
+enform-fab {
+	position: fixed;
+	inset: auto var(--gutter) calc(var(--sticky-bottom) + var(--space-m)) auto;
+	z-index: 3;
+}
+
+enform-fab a[role='button'] {
+	min-height: var(--fab-height);
+	padding: 0 var(--space-l);
+	font-weight: 600;
+	border-radius: var(--pill-radius);
+	box-shadow: var(--shadow-menu);
+}
+
+/* A record or a form over the app */
+enform-sheet {
+	position: fixed;
+	inset: 0 0 var(--sticky-bottom) 0;
+	z-index: 4;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-m);
+	padding: 0 var(--gutter) var(--space-l);
+	overflow-y: auto;
+	background: var(--color-bg);
+}
+
+enform-sheet > header {
+	position: sticky;
+	inset-block-start: 0;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	gap: var(--space-s);
+	margin-inline: calc(-1 * var(--gutter));
+	padding: var(--space-s) var(--gutter);
+	background: var(--color-bar);
+	backdrop-filter: blur(var(--bar-blur));
+	border-bottom: var(--border-width) solid var(--color-border);
+}
+
+enform-sheet > header h2 {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-sheet > header > a {
+	display: grid;
+	place-items: center;
+	width: var(--control-height);
+	height: var(--control-height);
+	font-size: var(--font-size-l);
+	color: inherit;
+	text-decoration: none;
+	border-radius: var(--pill-radius);
+}
+
+enform-sheet > menu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-s);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+@media (min-width: 48rem) {
+	enform-sheet {
+		inset: var(--header-height) 0 0 auto;
+		width: min(var(--sheet-width), 100vw);
+		border-inline-start: var(--border-width) solid var(--color-border);
+		box-shadow: var(--shadow-menu);
+	}
+}

@@ -6,7 +6,7 @@
 	import {namespaceOf} from '#lib/apps/names'
 	import RecordList from '#lib/components/RecordList.svelte'
 	import Pane from '#lib/components/pane/Pane.svelte'
-	import {actorName, createPath, repoPath} from '#lib/paths'
+	import {actorName, createPath, dataPath} from '#lib/paths'
 
 	let {data, children} = $props()
 	let actor = $derived(actorName(data.repo))
@@ -17,7 +17,7 @@
 <Pane
 	title={typeLabel(data.collection)}
 	subtitle={`${app.name} · ${data.collection}`}
-	back={{href: repoPath(actor), label: `@${actor}`}}
+	back={{href: dataPath(actor), label: `@${actor}`}}
 >
 	{#snippet actions()}
 		{#if owner}

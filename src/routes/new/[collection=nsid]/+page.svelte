@@ -5,13 +5,22 @@
 	import {auth} from '#lib/auth/session.svelte'
 	import {typeLabel} from '#lib/apps/directory'
 	import Account from '#lib/components/Account.svelte'
-	import {actorName, createPath} from '#lib/paths'
+	import {actorName, appScreenPath} from '#lib/paths'
+	import {appOf} from '#lib/apps/names'
 
 	let {data} = $props()
 
 	$effect(() => {
 		if (auth.me) {
-			goto(createPath(actorName(auth.me), data.lexicon.id), {replaceState: true})
+			goto(
+				appScreenPath(actorName(auth.me), appOf(data.lexicon.id), {
+					type: data.lexicon.id,
+					create: true
+				}),
+				{
+					replaceState: true
+				}
+			)
 		}
 	})
 </script>

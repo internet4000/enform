@@ -3,6 +3,7 @@
 	const paths = {
 		explore: 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm9 16-4-4',
 		new: 'M12 5v14M5 12h14',
+		home: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
 		me: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-7 8a7 7 0 0 1 14 0',
 		settings: 'M4 7h10m4 0h2M4 17h4m4 0h8M16 5v4M10 15v4',
 		back: 'M15 5l-7 7 7 7'

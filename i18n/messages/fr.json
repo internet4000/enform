@@ -239,5 +239,20 @@
 	"outbox_send": "Envoyer maintenant",
 	"outbox_empty": "Rien en attente : chaque changement a atteint son compte.",
 	"outbox_waiting": "Pas encore envoyé",
-	"outbox_record_waiting": "Ce changement n'est pas encore envoyé : il le sera quand le serveur de votre compte sera joignable."
+	"outbox_record_waiting": "Ce changement n'est pas encore envoyé : il le sera quand le serveur de votre compte sera joignable.",
+	"person_apps": "Apps",
+	"person_your_apps": "Vos apps",
+	"person_add_app": "Ajouter une app",
+	"person_all_data": "Toutes les données, telles que stockées",
+	"app_tabs": "Sections",
+	"app_screen_empty": "Rien dans {app} ici pour l'instant.",
+	"app_all_fields": "Tous ses champs",
+	"app_new": "Nouveau : {type}",
+	"app_data_view": "Voir comme données stockées",
+	"sheet_close": "Fermer",
+	"nav_home": "Accueil",
+	"home_no_apps": "Aucune app pour l'instant : commencez-en une ci-dessous.",
+	"home_start": "Commencer une app",
+	"home_more_apps": "Plus d'apps",
+	"apps_open_app": "Ouvrir {app}"
 }

@@ -6,8 +6,16 @@
 	import {collectionPath} from '#lib/paths'
 	import PermissionLock from './PermissionLock.svelte'
 
-	type Props = {actor: string; collection: string; rkey: string; cid: string; editHref: string}
-	let {actor, collection, rkey, cid, editHref}: Props = $props()
+	type Props = {
+		actor: string
+		collection: string
+		rkey: string
+		cid: string
+		editHref: string
+		/** Where to go once deleted (by default: its collection, in the data view) */
+		deleted?: string
+	}
+	let {actor, collection, rkey, cid, editHref, deleted}: Props = $props()
 
 	let dialog = $state<HTMLDialogElement>()
 	let pending = $state(false)
@@ -20,7 +28,7 @@
 		try {
 			await deleteRecord(collection, rkey, cid)
 			dialog?.close()
-			await goto(collectionPath(actor, collection), {refreshAll: true})
+			await goto(deleted ?? collectionPath(actor, collection), {refreshAll: true})
 		} catch (err) {
 			failed = (err as Error).message
 		} finally {

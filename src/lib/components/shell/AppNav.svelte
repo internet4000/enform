@@ -8,8 +8,8 @@
 
 	let me = $derived(auth.me ? repoPath(actorName(auth.me)) : undefined)
 	let items = $derived([
-		{href: '/', icon: 'explore', label: m.nav_explore()},
-		{href: '/new', icon: 'new', label: m.nav_new()},
+		{href: '/', icon: 'home', label: m.nav_home()},
+		{href: '/explore', icon: 'explore', label: m.nav_explore()},
 		{href: me ?? '/settings', icon: 'me', label: me ? m.nav_me() : m.session_sign_in()},
 		{href: '/settings', icon: 'settings', label: m.nav_settings()}
 	] as const)

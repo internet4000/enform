@@ -239,5 +239,20 @@
 	"outbox_send": "Send now",
 	"outbox_empty": "Nothing waiting: every change reached its account.",
 	"outbox_waiting": "Not sent yet",
-	"outbox_record_waiting": "This change isn't sent yet: it will be when your account's server can be reached."
+	"outbox_record_waiting": "This change isn't sent yet: it will be when your account's server can be reached.",
+	"person_apps": "Apps",
+	"person_your_apps": "Your apps",
+	"person_add_app": "Add an app",
+	"person_all_data": "All data, as it's stored",
+	"app_tabs": "Sections",
+	"app_screen_empty": "Nothing in {app} here yet.",
+	"app_all_fields": "All its fields",
+	"app_new": "New {type}",
+	"app_data_view": "See this as stored data",
+	"sheet_close": "Close",
+	"nav_home": "Home",
+	"home_no_apps": "No apps yet: start one below.",
+	"home_start": "Start an app",
+	"home_more_apps": "More apps",
+	"apps_open_app": "Open {app}"
 }

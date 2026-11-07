@@ -15,7 +15,14 @@
 	import PermissionLock from './PermissionLock.svelte'
 	import RecordForm from './form/RecordForm.svelte'
 
-	let {lexicon}: {lexicon: LexiconDoc} = $props()
+	type Props = {
+		lexicon: LexiconDoc
+		/** Where to go once created (by default: the record, in the data view) */
+		created?: (collection: string, rkey: string) => string
+		/** Where to edit a profile that exists already (by default: the data view) */
+		editing?: (collection: string, rkey: string) => string
+	}
+	let {lexicon, created, editing}: Props = $props()
 
 	// The keyboard covering a form on arrival is worse than one more tap
 	const autofocus = typeof matchMedia !== 'undefined' && matchMedia('(pointer: fine)').matches
@@ -25,14 +32,19 @@
 		const me = auth.me
 		if (!key || !me) return
 		getRecord(me, lexicon.id, key).then(
-			() => goto(editPath(actorName(me), lexicon.id, key), {replaceState: true}),
+			() =>
+				goto(editing?.(lexicon.id, key) ?? editPath(actorName(me), lexicon.id, key), {
+					replaceState: true
+				}),
 			() => {}
 		)
 	})
 
 	async function create(value: Record<string, unknown>) {
 		const {collection, rkey} = await createFromForm(lexicon, value)
-		if (auth.me) await goto(recordPath(actorName(auth.me), collection, rkey), {refreshAll: true})
+		if (!auth.me) return
+		const to = created?.(collection, rkey) ?? recordPath(actorName(auth.me), collection, rkey)
+		await goto(to, {refreshAll: true})
 	}
 </script>
 

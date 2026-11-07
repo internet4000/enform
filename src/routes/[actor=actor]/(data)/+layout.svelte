@@ -3,7 +3,7 @@
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {blobUrl} from '#lib/atproto/repo'
-	import {recordCard} from '#lib/records/card'
+	import {personCard} from '#lib/apps/person'
 	import Pane from '#lib/components/pane/Pane.svelte'
 	import RepoNav from '#lib/components/pane/RepoNav.svelte'
 	import {actorName} from '#lib/paths'
@@ -12,22 +12,7 @@
 	let actor = $derived(actorName(data.repo))
 	let owner = $derived(auth.owns(data.repo))
 
-	/** Who this is: the first app profile with a name or picture, Bluesky's first */
-	async function who() {
-		const apps = await data.apps
-		const profiles = apps
-			.map((app) => app.profile)
-			.filter((profile) => profile?.record)
-			.sort(
-				(a, b) =>
-					Number(b?.nsid === 'app.bsky.actor.profile') -
-					Number(a?.nsid === 'app.bsky.actor.profile')
-			)
-		const profile = profiles[0]
-		return profile?.record
-			? recordCard(profile.record.value, profile.lexicon?.defs.main?.record)
-			: undefined
-	}
+	const who = async () => personCard(await data.apps)
 </script>
 
 <enform-panes>

@@ -11,12 +11,19 @@
 	import PermissionLock from './PermissionLock.svelte'
 	import RecordForm from './form/RecordForm.svelte'
 
-	type Props = {lexicon: LexiconDoc; actor: string; rkey: string; record: RepoRecord}
-	let {lexicon, actor, rkey, record}: Props = $props()
+	type Props = {
+		lexicon: LexiconDoc
+		actor: string
+		rkey: string
+		record: RepoRecord
+		/** Where to go once saved (by default: the record, in the data view) */
+		saved?: string
+	}
+	let {lexicon, actor, rkey, record, saved}: Props = $props()
 
 	async function save(value: Record<string, unknown>) {
 		await updateFromForm(lexicon, rkey, value, record.cid)
-		await goto(recordPath(actor, lexicon.id, rkey), {refreshAll: true})
+		await goto(saved ?? recordPath(actor, lexicon.id, rkey), {refreshAll: true})
 	}
 </script>
 

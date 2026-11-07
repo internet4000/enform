@@ -1,0 +1,103 @@
+/*
+ * Apps as on a phone's home screen: a grid of icons with their names. A person's
+ * page leads with who they are, then their apps.
+ */
+enform-launcher {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(var(--launcher-cell), 1fr));
+	gap: var(--space-m) var(--space-s);
+}
+
+enform-app-link > a {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--space-xs);
+	padding: var(--space-xs);
+	color: inherit;
+	text-align: center;
+	text-decoration: none;
+	border-radius: var(--radius-large);
+	-webkit-tap-highlight-color: transparent;
+}
+
+enform-app-link > a:hover,
+enform-app-link > a:active {
+	background: var(--color-surface);
+}
+
+enform-app-link enform-app-icon,
+enform-app-link[add] > a > span:first-child {
+	--app-icon-size: var(--launcher-icon);
+	--app-icon-radius: var(--launcher-radius);
+	font-size: var(--font-size-l);
+	box-shadow: var(--shadow-icon);
+}
+
+enform-app-link[add] > a > span:first-child {
+	display: grid;
+	place-items: center;
+	width: var(--launcher-icon);
+	height: var(--launcher-icon);
+	color: var(--color-muted);
+	border: var(--border-width) dashed var(--color-border);
+	border-radius: var(--launcher-radius);
+	box-shadow: none;
+}
+
+enform-app-link > a > span {
+	max-width: 100%;
+	overflow: hidden;
+	font-size: var(--font-size-s);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-app-link small {
+	max-width: 100%;
+	overflow: hidden;
+	color: var(--color-muted);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Who a person is, atop their apps */
+enform-person {
+	display: block;
+	overflow: hidden;
+	border-radius: var(--radius-large);
+}
+
+enform-person > img {
+	width: 100%;
+	max-height: var(--banner-height);
+	object-fit: cover;
+	border-radius: 0;
+}
+
+enform-person figure {
+	display: flex;
+	align-items: center;
+	gap: var(--space-m);
+	margin: 0;
+	padding: var(--space-m) 0;
+}
+
+enform-person figure img {
+	flex: none;
+	width: var(--avatar-size);
+	height: var(--avatar-size);
+	object-fit: cover;
+	border-radius: var(--avatar-radius);
+}
+
+enform-person figcaption {
+	min-width: 0;
+}
+
+enform-person figcaption p {
+	margin: var(--space-2xs) 0 0;
+	color: var(--color-muted);
+	white-space: pre-line;
+	overflow-wrap: anywhere;
+}

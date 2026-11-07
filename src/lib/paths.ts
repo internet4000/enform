@@ -67,3 +67,21 @@ export function createPath(actor: string, collection: string): string {
 export function appPath(domain: string, type?: string): string {
 	return type ? `/apps/${domain}?type=${type}` : `/apps/${domain}`
 }
+
+/** A repo's data, all of it, in panes (the advanced view) */
+export function dataPath(actor: string): string {
+	return `${repoPath(actor)}/data`
+}
+
+export type AppScreen = {type?: string; record?: string; edit?: boolean; create?: boolean}
+
+/** An app as a person has it: its screen, a tab (a type), a record or a form open over it */
+export function appScreenPath(actor: string, domain: string, open: AppScreen = {}): string {
+	const params = new URLSearchParams()
+	if (open.type) params.set('type', open.type)
+	if (open.record) params.set('record', open.record)
+	if (open.edit) params.set('edit', '')
+	if (open.create) params.set('new', '')
+	const query = params.toString().replace(/=(&|$)/g, '$1')
+	return `${repoPath(actor)}/apps/${domain}${query ? `?${query}` : ''}`
+}
