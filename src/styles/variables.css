@@ -17,6 +17,10 @@
 	--measure-dialog: 32rem;
 	--control-height: 2.25rem;
 	--image-max-height: 20rem;
+	--avatar-size: 4.5rem;
+	--avatar-radius: 50%;
+	--avatar-border: 3px;
+	--banner-height: 9rem;
 
 	--color-bg: light-dark(#fdfdfc, #111110);
 	--color-surface: light-dark(#f1f0ef, #1c1b1a);

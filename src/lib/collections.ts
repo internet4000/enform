@@ -1,13 +1,21 @@
-/** A repo's collections, grouped by their NSID authority (who defines them) */
+/**
+ * A repo's collections, grouped by app: the domain their NSIDs come from (the first
+ * two segments, reversed: app.bsky.feed.post → bsky.app).
+ */
 import {NSID} from '@atproto/syntax'
 
-export type CollectionGroup = {authority: string; collections: string[]}
+export type CollectionGroup = {app: string; collections: string[]}
 
-export function groupByAuthority(collections: string[]): CollectionGroup[] {
+export function appOf(nsid: string): string {
+	if (!NSID.isValid(nsid)) return nsid
+	return nsid.split('.').slice(0, 2).reverse().join('.')
+}
+
+export function groupByApp(collections: string[]): CollectionGroup[] {
 	const groups = new Map<string, string[]>()
 	for (const collection of [...collections].sort()) {
-		const authority = NSID.isValid(collection) ? NSID.parse(collection).authority : collection
-		groups.set(authority, [...(groups.get(authority) ?? []), collection])
+		const app = appOf(collection)
+		groups.set(app, [...(groups.get(app) ?? []), collection])
 	}
-	return [...groups].map(([authority, list]) => ({authority, collections: list}))
+	return [...groups].map(([app, list]) => ({app, collections: list}))
 }

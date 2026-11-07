@@ -1,11 +1,10 @@
 import {expect, test} from 'vitest'
-import {groupByAuthority} from './collections'
+import {appOf, groupByApp} from './collections'
 
-test('collections are grouped by the domain that defines them', () => {
-	expect(
-		groupByAuthority(['radio.4000.track', 'app.bsky.feed.post', 'app.bsky.feed.like'])
-	).toEqual([
-		{authority: 'feed.bsky.app', collections: ['app.bsky.feed.like', 'app.bsky.feed.post']},
-		{authority: '4000.radio', collections: ['radio.4000.track']}
+test('collections are grouped by the app (domain) that defines them', () => {
+	expect(groupByApp(['radio.4000.track', 'app.bsky.feed.post', 'app.bsky.actor.profile'])).toEqual([
+		{app: 'bsky.app', collections: ['app.bsky.actor.profile', 'app.bsky.feed.post']},
+		{app: '4000.radio', collections: ['radio.4000.track']}
 	])
+	expect(appOf('com.atproto.lexicon.schema')).toBe('atproto.com')
 })
