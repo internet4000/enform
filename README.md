@@ -17,6 +17,27 @@ bun run types
 bun run build    # static site in dist/
 ```
 
+## End-to-end tests
+
+Against a local atproto network, so signing in (OAuth), permission popups and
+writes run headless without real accounts, and offline.
+
+```sh
+bun run test:e2e     # starts the network and the app, runs e2e/*.spec.ts
+bun run e2e:network  # or only the network, to try by hand (Node 22+)
+```
+
+- `e2e/network.mjs` runs `@atproto/dev-env`: a PLC directory (in memory) and a PDS
+  (SQLite in a temp directory) with its OAuth sign-in pages on `http://localhost`,
+  plus a DNS-over-HTTPS answerer for `_atproto` and `_lexicon` lookups. No Postgres,
+  Redis or Docker. It runs on Node, not Bun (the PDS uses better-sqlite3).
+- `e2e/network.json`: ports, accounts (handles and passwords) and which account
+  publishes each lexicon authority's schemas, from `e2e/lexicons/<authority>/`.
+- The network writes `e2e/.network/app.json`: the app config with its services
+  pointed at the network and `oauth.allowHttp` on. `vite --mode e2e` uses it in place
+  of `src/lib/config/app.json`; other modes and builds are unchanged.
+- Playwright (Chromium, phone and desktop sizes) blocks every request off localhost.
+
 ## Layout
 
 - `src/lib/atproto/`: identity (DNS, DID documents) and public repo reads

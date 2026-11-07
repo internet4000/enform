@@ -10,6 +10,7 @@
 		"preview": "vite preview",
 		"test": "vitest run",
 		"e2e:network": "node e2e/network.mjs",
+		"test:e2e": "playwright test",
 		"i18n": "paraglide-js compile --project ./i18n/project.inlang --outdir ./src/lib/paraglide",
 		"types": "bun run i18n && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"format": "prettier --write . --log-level=warn",
@@ -30,6 +31,7 @@
 	},
 	"devDependencies": {
 		"@atproto/dev-env": "^0.7.5",
+		"@playwright/test": "1.65.0",
 		"@sveltejs/adapter-static": "^4.0.1",
 		"@sveltejs/kit": "^3.1.1",
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",
