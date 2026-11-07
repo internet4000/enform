@@ -65,3 +65,30 @@ button:focus-visible {
 [role='alert'] {
 	color: var(--color-danger);
 }
+
+/* An action that asks for permission first: a lock before its label */
+enform-lock {
+	display: inline-flex;
+	align-items: center;
+	margin-inline-end: var(--space-xs);
+}
+
+enform-lock svg {
+	width: var(--lock-size);
+	height: var(--lock-size);
+	fill: none;
+	stroke: currentColor;
+	stroke-width: var(--icon-stroke);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+/* Said to screen readers, shown to others as the tooltip */
+enform-lock span {
+	position: absolute;
+	width: var(--visually-hidden-size);
+	height: var(--visually-hidden-size);
+	overflow: hidden;
+	clip-path: var(--visually-hidden-clip);
+	white-space: nowrap;
+}

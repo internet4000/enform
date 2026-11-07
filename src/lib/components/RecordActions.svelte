@@ -4,7 +4,7 @@
 	import * as m from '#lib/paraglide/messages.js'
 	import {deleteRecord} from '#lib/atproto/write'
 	import {collectionPath} from '#lib/paths'
-	import PermissionNotice from './PermissionNotice.svelte'
+	import PermissionLock from './PermissionLock.svelte'
 
 	type Props = {actor: string; collection: string; rkey: string; cid: string; editHref: string}
 	let {actor, collection, rkey, cid, editHref}: Props = $props()
@@ -36,11 +36,13 @@
 	<dialog bind:this={dialog} aria-labelledby="delete-title">
 		<h2 id="delete-title">{m.record_delete_confirm_title()}</h2>
 		<p>{m.record_delete_confirm({rkey, collection})}</p>
-		<PermissionNotice {collection} action="delete" />
 		{#if failed}<p role="alert">{failed}</p>{/if}
 		<form onsubmit={remove}>
 			<button type="button" onclick={() => dialog?.close()}>{m.action_cancel()}</button>
-			<button type="submit" disabled={pending} aria-busy={pending}>{m.record_delete()}</button>
+			<button type="submit" disabled={pending} aria-busy={pending}>
+				<PermissionLock {collection} action="delete" />
+				{m.record_delete()}
+			</button>
 		</form>
 	</dialog>
 </li>

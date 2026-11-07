@@ -7,7 +7,7 @@
 	import type {LexiconDoc} from '#lib/lexicons/types'
 	import {updateFromForm} from '#lib/records/save'
 	import {recordPath} from '#lib/paths'
-	import PermissionNotice from './PermissionNotice.svelte'
+	import PermissionLock from './PermissionLock.svelte'
 	import RecordForm from './form/RecordForm.svelte'
 
 	type Props = {lexicon: LexiconDoc; actor: string; rkey: string; record: RepoRecord}
@@ -19,7 +19,6 @@
 	}
 </script>
 
-<PermissionNotice collection={lexicon.id} action="update" />
 {#key record.cid}
 	<RecordForm
 		{lexicon}
@@ -28,5 +27,7 @@
 		onsubmit={save}
 		submitLabel={m.edit_submit()}
 		autofocus={false}
-	/>
+	>
+		{#snippet submitHint()}<PermissionLock collection={lexicon.id} action="update" />{/snippet}
+	</RecordForm>
 {/key}

@@ -12,7 +12,7 @@
 	import {createFromForm} from '#lib/records/save'
 	import {actorName, editPath, recordPath} from '#lib/paths'
 	import Account from './Account.svelte'
-	import PermissionNotice from './PermissionNotice.svelte'
+	import PermissionLock from './PermissionLock.svelte'
 	import RecordForm from './form/RecordForm.svelte'
 
 	let {lexicon}: {lexicon: LexiconDoc} = $props()
@@ -39,9 +39,10 @@
 </script>
 
 {#if auth.session}
-	<PermissionNotice collection={lexicon.id} action="create" />
 	{#key lexicon.id}
-		<RecordForm {lexicon} {uploadBlob} onsubmit={create} submitLabel={m.new_submit()} {autofocus} />
+		<RecordForm {lexicon} {uploadBlob} onsubmit={create} submitLabel={m.new_submit()} {autofocus}>
+			{#snippet submitHint()}<PermissionLock collection={lexicon.id} action="create" />{/snippet}
+		</RecordForm>
 	{/key}
 {:else if auth.ready}
 	<p>{m.new_sign_in({collection: lexicon.id})}</p>

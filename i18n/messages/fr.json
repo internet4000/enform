@@ -37,9 +37,6 @@
 	"action_update": "modifier",
 	"action_delete": "supprimer",
 	"action_cancel": "Annuler",
-	"permission_collection": "enform demandera à votre serveur la permission de {action} des enregistrements dans {collection}, et rien d'autre.",
-	"permission_all_collections": "{collection} ne fait pas partie des collections déclarées par enform : votre serveur ne peut accorder la permission de {action} des enregistrements que dans toutes vos collections à la fois.",
-	"permission_grant": "Accorder la permission",
 	"record_edit": "Modifier",
 	"record_delete": "Supprimer",
 	"record_delete_confirm_title": "Supprimer cet enregistrement ?",
@@ -183,5 +180,7 @@
 	"apps_not_yet": "Vous n'avez encore aucun enregistrement {app}.",
 	"apps_start": "Commencer : créer {type}",
 	"apps_open_repo": "Ouvrir votre dépôt",
-	"apps_types": "Ce que vous pouvez créer ici"
+	"apps_types": "Ce que vous pouvez créer ici",
+	"permission_hint": "Demande d'abord votre permission : {action} des enregistrements {type}",
+	"permission_hint_all": "Demande d'abord votre permission : {action} des enregistrements dans toutes vos collections (enform ne peut pas la demander pour ce seul type)"
 }

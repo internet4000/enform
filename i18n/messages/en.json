@@ -37,9 +37,6 @@
 	"action_update": "edit",
 	"action_delete": "delete",
 	"action_cancel": "Cancel",
-	"permission_collection": "enform will ask your server for permission to {action} records in {collection}, and nothing else.",
-	"permission_all_collections": "{collection} isn't one of the collections enform declares, so your server can only grant permission to {action} records in all your collections at once.",
-	"permission_grant": "Grant permission",
 	"record_edit": "Edit",
 	"record_delete": "Delete",
 	"record_delete_confirm_title": "Delete this record?",
@@ -183,5 +180,7 @@
 	"apps_not_yet": "You have no {app} records yet.",
 	"apps_start": "Start: create your {type}",
 	"apps_open_repo": "Open your repo",
-	"apps_types": "What you can make here"
+	"apps_types": "What you can make here",
+	"permission_hint": "Asks your permission first: {action} {type} records",
+	"permission_hint_all": "Asks your permission first: {action} records in all your collections (this type isn't one enform can ask for alone)"
 }

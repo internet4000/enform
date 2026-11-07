@@ -1,7 +1,7 @@
 <script lang="ts">
 	// A form for a record of a lexicon, producing a valid record value: empty to create
 	// one, or filled with `value` to edit it. Fields not in the lexicon are kept.
-	import {onMount, untrack} from 'svelte'
+	import {onMount, untrack, type Snippet} from 'svelte'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {LexiconDoc} from '#lib/lexicons/types'
 	import {cleanValue} from '#lib/forms/clean'
@@ -20,11 +20,21 @@
 		/** Gets the cleaned record value; what it throws is shown */
 		onsubmit: (value: Record<string, unknown>) => void | Promise<void>
 		submitLabel?: string
+		/** Shown in the submit button, e.g. that it asks for permission first */
+		submitHint?: Snippet
 		/** Focus the first field when the form shows */
 		autofocus?: boolean
 	}
 
-	let {lexicon, value, uploadBlob, onsubmit, submitLabel, autofocus = true}: Props = $props()
+	let {
+		lexicon,
+		value,
+		uploadBlob,
+		onsubmit,
+		submitLabel,
+		submitHint,
+		autofocus = true
+	}: Props = $props()
 
 	const uid = $props.id()
 	const form = setForm(
@@ -115,6 +125,7 @@
 		{/if}
 		<footer>
 			<button type="submit" {disabled} aria-describedby="{form.id}-status">
+				{@render submitHint?.()}
 				{submitting ? m.form_submitting() : (submitLabel ?? m.form_submit())}
 			</button>
 			<output id="{form.id}-status" for={form.id}>
