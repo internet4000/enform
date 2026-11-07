@@ -17,7 +17,13 @@ export default defineConfig(({mode}) => ({
 		sveltekit({
 			preprocess: vitePreprocess(),
 			// Fully static SPA: every repo's own PDS is the backend, there is no server of ours.
-			adapter: adapterStatic({pages: 'dist', assets: 'dist', fallback: 'index.html', strict: true})
+			// The end-to-end build goes apart, so it is never the one deployed.
+			adapter: adapterStatic({
+				pages: mode === 'e2e' ? 'dist-e2e' : 'dist',
+				assets: mode === 'e2e' ? 'dist-e2e' : 'dist',
+				fallback: 'index.html',
+				strict: true
+			})
 		}),
 		paraglideVitePlugin({
 			project: './i18n/project.inlang',

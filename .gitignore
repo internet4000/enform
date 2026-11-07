@@ -18,3 +18,4 @@ i18n/project.inlang/project_id
 e2e/.network/
 test-results/
 playwright-report/
+dist-e2e
