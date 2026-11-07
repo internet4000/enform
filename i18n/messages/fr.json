@@ -186,7 +186,6 @@
 	"apps_types": "Ce que vous pouvez créer ici",
 	"permission_hint": "Demande d'abord votre permission : {action} des enregistrements {type}",
 	"permission_hint_all": "Demande d'abord votre permission : {action} des enregistrements dans toutes vos collections (enform ne peut pas la demander pour ce seul type)",
-	"related_title": "Convient aussi à",
 	"related_reason": "Même nom de type ; partage {fields}",
 	"related_copy": "Copier vers {app}",
 	"accounts_title": "Comptes sur ce navigateur",
@@ -198,9 +197,11 @@
 	"accounts_add_hint": "Chaque compte se connecte auprès de son propre serveur et reste connecté ici. Passez de l'un à l'autre à tout moment.",
 	"accounts_add_submit": "Ajouter le compte",
 	"row_linked_record": "{author} : {title}",
-	"related_exists": "@{actor} l’a déjà dans {type} {app}",
-	"related_exists_yours": "Déjà dans vos {type}",
 	"link_preview_loading": "Recherche du lien…",
 	"apps_not_yet_elsewhere": "Vous n'avez encore aucun enregistrement {app}. Utilisez-la sur {domain} : ce que vous y créez apparaît ici, dans votre dépôt.",
-	"apps_unpublished_long": "enform peut afficher ces enregistrements, mais pas en créer de formulaires tant que {app} n'a pas publié ses lexiques (ses types d'enregistrements, comme atproto les définit)."
+	"apps_unpublished_long": "enform peut afficher ces enregistrements, mais pas en créer de formulaires tant que {app} n'a pas publié ses lexiques (ses types d'enregistrements, comme atproto les définit).",
+	"record_menu": "Plus d'actions",
+	"related_exists_short": "Déjà dans {type}",
+	"record_copy_link": "Copier le lien at://",
+	"record_link_copied": "Copié"
 }

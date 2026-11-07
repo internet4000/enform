@@ -186,7 +186,6 @@
 	"apps_types": "What you can make here",
 	"permission_hint": "Asks your permission first: {action} {type} records",
 	"permission_hint_all": "Asks your permission first: {action} records in all your collections (this type isn't one enform can ask for alone)",
-	"related_title": "Also fits",
 	"related_reason": "Same type name; shares {fields}",
 	"related_copy": "Copy to {app}",
 	"accounts_title": "Accounts on this browser",
@@ -198,9 +197,11 @@
 	"accounts_add_hint": "Each account signs in with its own server and stays signed in here. Switch between them at any time.",
 	"accounts_add_submit": "Add account",
 	"row_linked_record": "{author}: {title}",
-	"related_exists": "@{actor} already has it in {app} {type}",
-	"related_exists_yours": "Already in your {type}",
 	"link_preview_loading": "Looking up the link…",
 	"apps_not_yet_elsewhere": "You have no {app} records yet. Use it on {domain}: what you make there shows up in your repo here.",
-	"apps_unpublished_long": "enform can show these records, but can't make forms for them until {app} publishes its lexicons (their record types, as atproto defines them)."
+	"apps_unpublished_long": "enform can show these records, but can't make forms for them until {app} publishes its lexicons (their record types, as atproto defines them).",
+	"record_menu": "More actions",
+	"related_exists_short": "Already in {type}",
+	"record_copy_link": "Copy at:// link",
+	"record_link_copied": "Copied"
 }

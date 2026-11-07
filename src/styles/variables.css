@@ -40,6 +40,8 @@
 	--app-icon-size-large: 3rem;
 	--radius-large: 0.75rem;
 	--accent-border: 3px;
+	--menu-width: 22rem;
+	--sticky-bottom-gap: calc(var(--sticky-bottom) + var(--space-s));
 	--pane-nav: 20rem;
 	--pane-list: 26rem;
 	--pane-min: 16rem;
@@ -73,6 +75,7 @@
 	--color-danger: light-dark(#ce2c31, #ff9592);
 	--color-bar: light-dark(rgb(253 253 252 / 85%), rgb(17 17 16 / 85%));
 	--color-selected: light-dark(#e6f0fb, #14263a);
+	--shadow-menu: 0 8px 32px light-dark(rgb(0 0 0 / 15%), rgb(0 0 0 / 50%));
 	--color-backdrop: light-dark(rgb(0 0 0 / 30%), rgb(0 0 0 / 60%));
 	--color-on-accent: light-dark(#ffffff, #111110);
 	--color-success: light-dark(#18794e, #3dd68c);
