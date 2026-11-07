@@ -36,3 +36,14 @@ test('object keys follow the lexicon, then extras, never $type', () => {
 	const node = {type: 'object', properties: {b: {type: 'string'}, a: {type: 'string'}}}
 	expect(objectKeys({$type: 't', a: 1, z: 2, b: 3}, node)).toEqual(['b', 'a', 'z'])
 })
+
+test('strong refs are links to records, typed or not', () => {
+	const ref = {uri: 'at://did:plc:x/a.b.c/1', cid: 'bafy'}
+	expect(shapeOf(ref, undefined, 'a.b.c')).toEqual({type: 'strong-ref'})
+	expect(
+		shapeOf({...ref, $type: 'com.atproto.repo.strongRef'}, {type: 'ref', ref: 'x'}, 'a.b.c')
+	).toEqual({type: 'strong-ref'})
+	// more than a strong ref: an object
+	expect(shapeOf({...ref, extra: 1}, undefined, 'a.b.c')).toEqual({type: 'object'})
+	expect(shapeOf({uri: 'https://x', cid: 'bafy'}, undefined, 'a.b.c')).toEqual({type: 'object'})
+})

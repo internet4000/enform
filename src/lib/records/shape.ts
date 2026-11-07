@@ -11,10 +11,26 @@ export type Shape =
 	| {type: 'object'; node?: LexNode}
 	| {type: 'array'; items?: LexNode}
 	| {type: 'string'; format?: string}
+	| {type: 'strong-ref'}
 	| {type: 'blob' | 'cid-link' | 'bytes' | 'integer' | 'boolean' | 'empty' | 'unknown'}
 
 function isObject(value: unknown): value is Record<string, unknown> {
 	return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+const STRONG_REF = 'com.atproto.repo.strongRef'
+
+/** A com.atproto.repo.strongRef: a record's at:// URI and the CID of the version meant */
+export function isStrongRef(value: unknown): value is {uri: string; cid: string} {
+	if (!isObject(value)) return false
+	const {uri, cid, $type, ...rest} = value
+	return (
+		typeof uri === 'string' &&
+		uri.startsWith('at://') &&
+		typeof cid === 'string' &&
+		($type === undefined || $type === STRONG_REF) &&
+		Object.keys(rest).length === 0
+	)
 }
 
 /** A string's format, guessed when no lexicon states it */
@@ -50,6 +66,7 @@ export function shapeOf(
 	typed = true
 ): Shape {
 	if (value === null || value === undefined) return {type: 'empty'}
+	if (isStrongRef(value)) return {type: 'strong-ref'}
 	switch (node?.type) {
 		case 'ref':
 			return node.ref ? {type: 'ref', ref: node.ref} : inferShape(value, typed)
