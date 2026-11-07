@@ -14,14 +14,19 @@ export async function listCollections(repo: Identity): Promise<string[]> {
 	return collections
 }
 
-export function listRecords(repo: Identity, collection: string, cursor?: string) {
+export function listRecords(
+	repo: Identity,
+	collection: string,
+	cursor?: string,
+	limit: number = app.reads.pageSize
+) {
 	return xrpcGet<{records: RepoRecord[]; cursor?: string}>(
 		repo.pds,
 		'com.atproto.repo.listRecords',
 		{
 			repo: repo.did,
 			collection,
-			limit: app.reads.pageSize,
+			limit,
 			cursor
 		}
 	)

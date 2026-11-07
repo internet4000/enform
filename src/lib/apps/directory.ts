@@ -85,3 +85,8 @@ export function byDirectory<T extends {nsid: string}>(types: T[]): T[] {
 	}
 	return [...types].sort((a, b) => order(a.nsid) - order(b.nsid))
 }
+
+/** Whether the directory declares records of `from` to hold the same thing as `to`'s */
+export function declaredRelated(from: string, to: string): boolean {
+	return directory.related.some((pair) => pair.from === from && pair.to === to)
+}

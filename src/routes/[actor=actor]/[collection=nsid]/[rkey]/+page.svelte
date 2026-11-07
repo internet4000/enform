@@ -66,7 +66,7 @@
 			{/await}
 		</enform-record>
 		{#await data.lexicon then lexicon}
-			<RelatedTypes nsid={data.collection} {lexicon} value={data.record.value} />
+			<RelatedTypes repo={data.repo} nsid={data.collection} {lexicon} value={data.record.value} />
 		{/await}
 		<details>
 			<summary>{m.record_raw()}</summary>

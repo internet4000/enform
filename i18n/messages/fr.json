@@ -197,5 +197,7 @@
 	"accounts_add": "Ajouter un autre compte",
 	"accounts_add_hint": "Chaque compte se connecte auprès de son propre serveur et reste connecté ici. Passez de l'un à l'autre à tout moment.",
 	"accounts_add_submit": "Ajouter le compte",
-	"row_linked_record": "{author} : {title}"
+	"row_linked_record": "{author} : {title}",
+	"related_exists": "@{actor} l’a déjà dans {type} {app}",
+	"related_exists_yours": "Déjà dans vos {type}"
 }

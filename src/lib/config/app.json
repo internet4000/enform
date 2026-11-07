@@ -9,7 +9,9 @@
 	},
 	"reads": {
 		"pageSize": 25,
-		"timeoutMs": 10000
+		"timeoutMs": 10000,
+		"scanPages": 50,
+		"scanPageSize": 100
 	},
 	"storage": {
 		"accounts": "enform:accounts"

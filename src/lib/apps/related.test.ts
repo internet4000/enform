@@ -1,6 +1,6 @@
 import {expect, test} from 'vitest'
 import type {LexiconDoc} from '#lib/lexicons/types'
-import {carried, relatedTypes} from './related'
+import {carried, identifying, relatedTypes, sameValues} from './related'
 import type {RepoApp} from './types'
 
 const lexicon = (
@@ -20,7 +20,27 @@ const radioTrack = lexicon('radio.4000.track', {
 	createdAt: {type: 'string', format: 'datetime'}
 })
 
+const bskyFollow = lexicon('app.bsky.graph.follow', {
+	subject: {type: 'string', format: 'did'},
+	createdAt: {type: 'string', format: 'datetime'}
+})
+
 const apps: RepoApp[] = [
+	{
+		app: 'bsky.app',
+		namespace: 'app.bsky',
+		lists: [
+			{
+				nsid: 'app.bsky.graph.follow',
+				name: 'graph follow',
+				kind: 'list',
+				lexicon: bskyFollow,
+				used: false
+			}
+		],
+		singles: [],
+		published: true
+	},
 	{
 		app: '4000.radio',
 		namespace: 'radio.4000',
@@ -53,4 +73,24 @@ test('no suggestion for another name, the same type, or no shared field', () => 
 
 test('kinds must match: a number is not a string', () => {
 	expect(relatedTypes('a.b.track', undefined, {title: 3}, apps)).toEqual([])
+})
+
+test('records sharing only links (a follow, a like) suggest nothing', () => {
+	const follow = {subject: 'did:plc:abc', createdAt: '2026-01-01T00:00:00Z'}
+	expect(relatedTypes('radio.4000.follow', undefined, follow, apps)).toEqual([])
+})
+
+test('declared types are suggested, first', () => {
+	const [related] = relatedTypes('com.radio4000.track', undefined, {url: 'https://x.test'}, apps)
+	expect(related.declared).toBe(true)
+})
+
+test('a copy exists when a record holds the same values', () => {
+	expect(sameValues({url: 'u', title: 't', other: 1}, {url: 'u', title: 't'})).toBe(true)
+	expect(sameValues({url: 'u', title: 'x'}, {url: 'u', title: 't'})).toBe(false)
+})
+
+test('a shared web address identifies the copy, whatever the title', () => {
+	expect(identifying({url: 'https://x.test/a', title: 'A'})).toEqual({url: 'https://x.test/a'})
+	expect(identifying({title: 'A', note: 'b'})).toEqual({title: 'A', note: 'b'})
 })

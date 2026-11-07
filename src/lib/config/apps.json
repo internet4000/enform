@@ -10,27 +10,78 @@
 				"fr": "Réseau social : publications, j'aime, abonnements et listes."
 			},
 			"types": {
-				"app.bsky.actor.profile": {"en": "Profile", "fr": "Profil"},
-				"app.bsky.actor.status": {"en": "Status", "fr": "Statut"},
-				"app.bsky.actor.link": {"en": "Links", "fr": "Liens"},
-				"app.bsky.feed.post": {"en": "Posts", "fr": "Publications"},
-				"app.bsky.feed.like": {"en": "Likes", "fr": "J'aime"},
-				"app.bsky.feed.repost": {"en": "Reposts", "fr": "Republications"},
-				"app.bsky.feed.generator": {"en": "Feeds", "fr": "Fils"},
-				"app.bsky.feed.threadgate": {"en": "Reply settings", "fr": "Réglages des réponses"},
-				"app.bsky.feed.postgate": {"en": "Quote settings", "fr": "Réglages des citations"},
-				"app.bsky.graph.follow": {"en": "Follows", "fr": "Abonnements"},
-				"app.bsky.graph.block": {"en": "Blocks", "fr": "Blocages"},
-				"app.bsky.graph.list": {"en": "Lists", "fr": "Listes"},
-				"app.bsky.graph.listitem": {"en": "List members", "fr": "Membres de listes"},
-				"app.bsky.graph.listblock": {"en": "Blocked lists", "fr": "Listes bloquées"},
-				"app.bsky.graph.starterpack": {"en": "Starter packs", "fr": "Packs de démarrage"},
-				"app.bsky.graph.verification": {"en": "Verifications", "fr": "Vérifications"},
+				"app.bsky.actor.profile": {
+					"en": "Profile",
+					"fr": "Profil"
+				},
+				"app.bsky.actor.status": {
+					"en": "Status",
+					"fr": "Statut"
+				},
+				"app.bsky.actor.link": {
+					"en": "Links",
+					"fr": "Liens"
+				},
+				"app.bsky.feed.post": {
+					"en": "Posts",
+					"fr": "Publications"
+				},
+				"app.bsky.feed.like": {
+					"en": "Likes",
+					"fr": "J'aime"
+				},
+				"app.bsky.feed.repost": {
+					"en": "Reposts",
+					"fr": "Republications"
+				},
+				"app.bsky.feed.generator": {
+					"en": "Feeds",
+					"fr": "Fils"
+				},
+				"app.bsky.feed.threadgate": {
+					"en": "Reply settings",
+					"fr": "Réglages des réponses"
+				},
+				"app.bsky.feed.postgate": {
+					"en": "Quote settings",
+					"fr": "Réglages des citations"
+				},
+				"app.bsky.graph.follow": {
+					"en": "Follows",
+					"fr": "Abonnements"
+				},
+				"app.bsky.graph.block": {
+					"en": "Blocks",
+					"fr": "Blocages"
+				},
+				"app.bsky.graph.list": {
+					"en": "Lists",
+					"fr": "Listes"
+				},
+				"app.bsky.graph.listitem": {
+					"en": "List members",
+					"fr": "Membres de listes"
+				},
+				"app.bsky.graph.listblock": {
+					"en": "Blocked lists",
+					"fr": "Listes bloquées"
+				},
+				"app.bsky.graph.starterpack": {
+					"en": "Starter packs",
+					"fr": "Packs de démarrage"
+				},
+				"app.bsky.graph.verification": {
+					"en": "Verifications",
+					"fr": "Vérifications"
+				},
 				"app.bsky.notification.declaration": {
 					"en": "Notification settings",
 					"fr": "Réglages des notifications"
 				},
-				"app.bsky.labeler.service": {"en": "Labeler", "fr": "Étiqueteur"}
+				"app.bsky.labeler.service": {
+					"en": "Labeler",
+					"fr": "Étiqueteur"
+				}
 			}
 		},
 		{
@@ -42,11 +93,26 @@
 				"fr": "Votre radio : rassemblez des morceaux du web, et écoutez celles des autres."
 			},
 			"types": {
-				"radio.4000.profile": {"en": "Radio", "fr": "Radio"},
-				"radio.4000.track": {"en": "Tracks", "fr": "Morceaux"},
-				"radio.4000.follow": {"en": "Followed radios", "fr": "Radios suivies"},
-				"radio.4000.broadcast": {"en": "Broadcast", "fr": "Diffusion"},
-				"radio.4000.chat.message": {"en": "Chat messages", "fr": "Messages"}
+				"radio.4000.profile": {
+					"en": "Radio",
+					"fr": "Radio"
+				},
+				"radio.4000.track": {
+					"en": "Tracks",
+					"fr": "Morceaux"
+				},
+				"radio.4000.follow": {
+					"en": "Followed radios",
+					"fr": "Radios suivies"
+				},
+				"radio.4000.broadcast": {
+					"en": "Broadcast",
+					"fr": "Diffusion"
+				},
+				"radio.4000.chat.message": {
+					"en": "Chat messages",
+					"fr": "Messages"
+				}
 			}
 		},
 		{
@@ -58,11 +124,26 @@
 				"fr": "Collaboration Git : dépôts, tickets et demandes de fusion."
 			},
 			"types": {
-				"org.tangled.actor.profile": {"en": "Profile", "fr": "Profil"},
-				"org.tangled.repo.declaration": {"en": "Repositories", "fr": "Dépôts"},
-				"org.tangled.feed.star": {"en": "Stars", "fr": "Étoiles"},
-				"org.tangled.graph.follow": {"en": "Follows", "fr": "Abonnements"},
-				"org.tangled.key.sshKey": {"en": "SSH keys", "fr": "Clés SSH"}
+				"org.tangled.actor.profile": {
+					"en": "Profile",
+					"fr": "Profil"
+				},
+				"org.tangled.repo.declaration": {
+					"en": "Repositories",
+					"fr": "Dépôts"
+				},
+				"org.tangled.feed.star": {
+					"en": "Stars",
+					"fr": "Étoiles"
+				},
+				"org.tangled.graph.follow": {
+					"en": "Follows",
+					"fr": "Abonnements"
+				},
+				"org.tangled.key.sshKey": {
+					"en": "SSH keys",
+					"fr": "Clés SSH"
+				}
 			}
 		},
 		{
@@ -74,7 +155,10 @@
 				"fr": "Partagez votre humeur, en un emoji."
 			},
 			"types": {
-				"xyz.statusphere.status": {"en": "Statuses", "fr": "Statuts"}
+				"xyz.statusphere.status": {
+					"en": "Statuses",
+					"fr": "Statuts"
+				}
 			}
 		},
 		{
@@ -86,9 +170,18 @@
 				"fr": "Des entreprises et leurs offres d'emploi."
 			},
 			"types": {
-				"today.joblist.company": {"en": "Companies", "fr": "Entreprises"},
-				"today.joblist.job": {"en": "Jobs", "fr": "Offres"},
-				"today.joblist.list": {"en": "Lists", "fr": "Listes"}
+				"today.joblist.company": {
+					"en": "Companies",
+					"fr": "Entreprises"
+				},
+				"today.joblist.job": {
+					"en": "Jobs",
+					"fr": "Offres"
+				},
+				"today.joblist.list": {
+					"en": "Lists",
+					"fr": "Listes"
+				}
 			}
 		},
 		{
@@ -100,7 +193,10 @@
 				"fr": "Blog : des articles longs en Markdown."
 			},
 			"types": {
-				"com.whtwnd.blog.entry": {"en": "Blog posts", "fr": "Articles"}
+				"com.whtwnd.blog.entry": {
+					"en": "Blog posts",
+					"fr": "Articles"
+				}
 			}
 		},
 		{
@@ -113,8 +209,18 @@
 				"fr": "Le protocole lui-même : lexiques publiés et autre tuyauterie."
 			},
 			"types": {
-				"com.atproto.lexicon.schema": {"en": "Lexicons", "fr": "Lexiques"}
+				"com.atproto.lexicon.schema": {
+					"en": "Lexicons",
+					"fr": "Lexiques"
+				}
 			}
+		}
+	],
+	"$comment_related": "Types declared to hold the same thing (e.g. a namespace that moved). Suggested even when they share only links; otherwise only types sharing content fields are suggested.",
+	"related": [
+		{
+			"from": "com.radio4000.track",
+			"to": "radio.4000.track"
 		}
 	]
 }
