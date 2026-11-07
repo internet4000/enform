@@ -12,3 +12,4 @@ i18n/project.inlang/project_id
 
 # Agent worktrees
 .claude/worktrees/
+.wrangler/

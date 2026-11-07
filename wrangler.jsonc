@@ -1,0 +1,13 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	// Static assets only: enform has no server, every repo is read from its own PDS
+	"name": "enform",
+	"account_id": "46bcc6e9a78b2e839068c0685143e1a2",
+	"compatibility_date": "2026-11-01",
+	"assets": {
+		"directory": "./dist",
+		"not_found_handling": "single-page-application"
+	},
+	"routes": [{"pattern": "enform.internet4000.com", "custom_domain": true}],
+	"workers_dev": false
+}
