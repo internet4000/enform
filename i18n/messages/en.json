@@ -182,5 +182,8 @@
 	"apps_open_repo": "Open your repo",
 	"apps_types": "What you can make here",
 	"permission_hint": "Asks your permission first: {action} {type} records",
-	"permission_hint_all": "Asks your permission first: {action} records in all your collections (this type isn't one enform can ask for alone)"
+	"permission_hint_all": "Asks your permission first: {action} records in all your collections (this type isn't one enform can ask for alone)",
+	"related_title": "Also fits",
+	"related_reason": "Same type name; shares {fields}",
+	"related_copy": "Copy to {app}"
 }

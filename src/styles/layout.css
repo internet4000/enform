@@ -18,7 +18,8 @@
 	enform-type-rows,
 	enform-app-cards,
 	enform-app-card,
-	enform-app-hero
+	enform-app-hero,
+	enform-related
 ) {
 	display: block;
 }
@@ -610,4 +611,40 @@ enform-app-hero hgroup p {
 
 enform-app-hero > a {
 	grid-column: 2;
+}
+
+/* Another app's type a record also fits, previewing the copy */
+enform-related {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+	padding: var(--space-m);
+	background: var(--color-surface);
+	border-radius: var(--radius-large);
+}
+
+enform-related > header {
+	display: flex;
+	align-items: center;
+	gap: var(--space-s);
+}
+
+enform-related p {
+	margin: 0;
+}
+
+enform-related blockquote {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	margin: 0;
+	padding: var(--space-s) var(--space-m);
+	overflow-wrap: anywhere;
+	background: var(--color-bg);
+	border-inline-start: var(--accent-border) solid var(--color-accent);
+	border-radius: var(--radius);
+}
+
+enform-related > button {
+	align-self: start;
 }

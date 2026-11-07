@@ -2,6 +2,7 @@
 	// Create a record in your repo with the form its lexicon makes. A profile (one record
 	// per account) that exists already is edited instead.
 	import {goto} from '$app/navigation'
+	import {page} from '$app/state'
 	import {AtUri} from '@atproto/syntax'
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
@@ -40,7 +41,14 @@
 
 {#if auth.session}
 	{#key lexicon.id}
-		<RecordForm {lexicon} {uploadBlob} onsubmit={create} submitLabel={m.new_submit()} {autofocus}>
+		<RecordForm
+			{lexicon}
+			value={page.state.prefill ? {...page.state.prefill, $type: lexicon.id} : undefined}
+			{uploadBlob}
+			onsubmit={create}
+			submitLabel={m.new_submit()}
+			{autofocus}
+		>
 			{#snippet submitHint()}<PermissionLock collection={lexicon.id} action="create" />{/snippet}
 		</RecordForm>
 	{/key}

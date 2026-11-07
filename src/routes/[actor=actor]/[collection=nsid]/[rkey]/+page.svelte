@@ -7,6 +7,7 @@
 	import EditRecord from '#lib/components/EditRecord.svelte'
 	import RecordActions from '#lib/components/RecordActions.svelte'
 	import RecordValue from '#lib/components/RecordValue.svelte'
+	import RelatedTypes from '#lib/components/RelatedTypes.svelte'
 	import Pane from '#lib/components/pane/Pane.svelte'
 	import {recordSummary} from '#lib/records/summary'
 	import {actorName, collectionPath, editPath, recordPath} from '#lib/paths'
@@ -62,6 +63,9 @@
 				/>
 			{/await}
 		</enform-record>
+		{#await data.lexicon then lexicon}
+			<RelatedTypes nsid={data.collection} {lexicon} value={data.record.value} />
+		{/await}
 		<details>
 			<summary>{m.record_raw()}</summary>
 			<pre>{JSON.stringify(data.record, null, 2)}</pre>

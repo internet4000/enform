@@ -182,5 +182,8 @@
 	"apps_open_repo": "Ouvrir votre dépôt",
 	"apps_types": "Ce que vous pouvez créer ici",
 	"permission_hint": "Demande d'abord votre permission : {action} des enregistrements {type}",
-	"permission_hint_all": "Demande d'abord votre permission : {action} des enregistrements dans toutes vos collections (enform ne peut pas la demander pour ce seul type)"
+	"permission_hint_all": "Demande d'abord votre permission : {action} des enregistrements dans toutes vos collections (enform ne peut pas la demander pour ce seul type)",
+	"related_title": "Convient aussi à",
+	"related_reason": "Même nom de type ; partage {fields}",
+	"related_copy": "Copier vers {app}"
 }
