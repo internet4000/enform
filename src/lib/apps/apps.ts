@@ -98,12 +98,14 @@ export function appDomains(collections: string[]): string[] {
 
 const known = new Map<string, Promise<RepoApp>>()
 
-/** An app of the directory (config/apps.json) as its catalog describes it, none used yet */
-export function knownApp(namespace: string): Promise<RepoApp> {
+/**
+ * An app as its catalog describes it, none used yet: a directory app, or any other
+ * found by one of its types (`seed`)
+ */
+export function knownApp(namespace: string, seed?: string): Promise<RepoApp> {
 	let app = known.get(namespace)
 	if (!app) {
-		const seed = directoryTypes(namespace)[0] ?? `${namespace}.x`
-		app = buildApp(undefined, seed, [])
+		app = buildApp(undefined, seed ?? directoryTypes(namespace)[0] ?? `${namespace}.x`, [])
 		known.set(namespace, app)
 	}
 	return app

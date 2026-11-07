@@ -225,5 +225,10 @@
 	"apps_try_local": "L'essayer sur cet appareil, sans compte",
 	"form_blob_drop": "Déposez ou collez un fichier ici",
 	"form_facets": "Repéré dans le texte",
-	"form_alt_hint": "Décrivez l'image pour qui ne peut pas la voir"
+	"form_alt_hint": "Décrivez l'image pour qui ne peut pas la voir",
+	"discover_title": "Plus d'apps de l'atmosphère",
+	"discover_count": "{count} comptes publient des lexiques. Chaque app s'affiche une fois confirmé que son domaine la publie.",
+	"discover_unavailable": "Le relais est injoignable : impossible de lister plus d'apps.",
+	"apps_types_count": "{count} types d'enregistrements",
+	"apps_types_count_one": "{count} type d'enregistrement"
 }

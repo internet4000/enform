@@ -225,5 +225,10 @@
 	"apps_try_local": "Try it on this device, without an account",
 	"form_blob_drop": "Drop or paste a file here",
 	"form_facets": "Detected in the text",
-	"form_alt_hint": "Describe the image for people who can't see it"
+	"form_alt_hint": "Describe the image for people who can't see it",
+	"discover_title": "More apps in the atmosphere",
+	"discover_count": "{count} accounts publish lexicons. Each app shows once its domain is confirmed to publish it.",
+	"discover_unavailable": "The relay couldn't be reached to list more apps.",
+	"apps_types_count": "{count} record types",
+	"apps_types_count_one": "{count} record type"
 }

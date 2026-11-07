@@ -37,6 +37,7 @@
 	--row-lines: 2;
 	--tile-min-width: 15rem;
 	--card-min-width: 16rem;
+	--card-loading-height: 8rem;
 	--app-icon-size-large: 3rem;
 	--radius-large: 0.75rem;
 	--accent-border: 3px;

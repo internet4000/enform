@@ -7,6 +7,7 @@
 	import {namespaceOf} from '#lib/apps/names'
 	import ActorSearch from '#lib/components/ActorSearch.svelte'
 	import AppCard from '#lib/components/AppCard.svelte'
+	import DiscoveredApps from '#lib/components/DiscoveredApps.svelte'
 	import {actorName, repoPath} from '#lib/paths'
 
 	const apps = directoryApps()
@@ -37,5 +38,10 @@
 				{/each}
 			{/await}
 		</enform-app-cards>
+	</section>
+
+	<section aria-labelledby="discover">
+		<h2 id="discover">{m.discover_title()}</h2>
+		<DiscoveredApps />
 	</section>
 </enform-page>

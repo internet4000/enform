@@ -64,6 +64,6 @@ export function createPath(actor: string, collection: string): string {
 }
 
 /** An app in the directory: what it is, and how to start on it */
-export function appPath(domain: string): string {
-	return `/apps/${domain}`
+export function appPath(domain: string, type?: string): string {
+	return type ? `/apps/${domain}?type=${type}` : `/apps/${domain}`
 }

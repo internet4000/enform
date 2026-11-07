@@ -6,13 +6,15 @@
 		"plcDirectory": "https://plc.directory",
 		"dnsOverHttps": "https://cloudflare-dns.com/dns-query",
 		"handleResolver": "https://public.api.bsky.app",
-		"linkCards": "https://cardyb.bsky.app/v1/extract"
+		"linkCards": "https://cardyb.bsky.app/v1/extract",
+		"relay": "https://relay1.us-east.bsky.network"
 	},
 	"reads": {
 		"pageSize": 25,
 		"timeoutMs": 10000,
 		"scanPages": 50,
-		"scanPageSize": 100
+		"scanPageSize": 100,
+		"discoverPage": 24
 	},
 	"oauth": {
 		"allowHttp": false

@@ -31,17 +31,22 @@ async function listSchemas(did: string): Promise<LexiconDoc[]> {
 
 const catalogs = new Map<string, Promise<LexiconDoc[]>>()
 
-/** The record lexicons published alongside `seed` (an NSID of the app), in its namespace */
-export async function recordTypes(seed: string, namespace: string): Promise<LexiconDoc[]> {
-	const [did] = await txtDids(`_lexicon.${NSID.parse(seed).authority}`).catch(() => [])
-	if (!did) return []
+/** Every lexicon a repo publishes, cached for the session */
+export function schemasOf(did: string): Promise<LexiconDoc[]> {
 	let docs = catalogs.get(did)
 	if (!docs) {
 		docs = listSchemas(did)
 		docs.catch(() => catalogs.delete(did))
 		catalogs.set(did, docs)
 	}
-	return (await docs.catch(() => [])).filter(
+	return docs
+}
+
+/** The record lexicons published alongside `seed` (an NSID of the app), in its namespace */
+export async function recordTypes(seed: string, namespace: string): Promise<LexiconDoc[]> {
+	const [did] = await txtDids(`_lexicon.${NSID.parse(seed).authority}`).catch(() => [])
+	if (!did) return []
+	return (await schemasOf(did).catch(() => [])).filter(
 		(doc) => doc.id.startsWith(`${namespace}.`) && doc.defs.main?.type === 'record'
 	)
 }

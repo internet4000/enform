@@ -575,7 +575,11 @@ enform-app-card enform-app-icon {
 
 enform-app-card strong {
 	grid-area: name;
+	min-width: 0;
+	overflow: hidden;
 	font-size: var(--font-size-l);
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 enform-app-card p {
@@ -671,4 +675,12 @@ enform-menu li > span {
 		inset: calc(var(--header-height) * 2) var(--gutter) auto auto;
 		width: var(--menu-width);
 	}
+}
+
+/* An app card while its publisher is being read */
+enform-app-card[loading] {
+	min-height: var(--card-loading-height);
+	background: var(--color-surface);
+	border-radius: var(--radius-large);
+	opacity: 0.4;
 }
