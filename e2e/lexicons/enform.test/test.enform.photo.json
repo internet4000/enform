@@ -1,0 +1,30 @@
+{
+	"lexicon": 1,
+	"id": "test.enform.photo",
+	"description": "A photo with a caption, for end-to-end tests of the form patterns: rich text facets, an image with alt text and its aspect ratio",
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["text", "image", "createdAt"],
+				"properties": {
+					"text": {"type": "string", "maxLength": 300},
+					"facets": {"type": "array", "items": {"type": "ref", "ref": "app.bsky.richtext.facet"}},
+					"image": {"type": "blob", "accept": ["image/*"], "maxSize": 1000000},
+					"alt": {"type": "string", "maxLength": 1000},
+					"aspectRatio": {
+						"type": "object",
+						"required": ["width", "height"],
+						"properties": {
+							"width": {"type": "integer", "minimum": 1},
+							"height": {"type": "integer", "minimum": 1}
+						}
+					},
+					"createdAt": {"type": "string", "format": "datetime"}
+				}
+			}
+		}
+	}
+}

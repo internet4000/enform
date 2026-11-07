@@ -22,8 +22,14 @@ test('try an app on this device: create, edit and delete a record', async ({page
 	await page.waitForURL((url) => url.href === recordUrl)
 	await expect(page.locator('enform-record').getByText('🎉').first()).toBeVisible()
 
-	await page.getByRole('button', {name: t('record_delete'), exact: true}).first().click()
-	await page.getByRole('dialog').getByRole('button', {name: t('record_delete')}).click()
+	await page
+		.getByRole('button', {name: t('record_delete'), exact: true})
+		.first()
+		.click()
+	await page
+		.getByRole('dialog')
+		.getByRole('button', {name: t('record_delete')})
+		.click()
 	await page.waitForURL((url) => url.pathname.split('/').length === 3)
 	await expect(page.locator('enform-records li a')).toHaveCount(0)
 })

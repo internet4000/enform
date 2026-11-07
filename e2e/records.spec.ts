@@ -32,7 +32,10 @@ test('create, edit and delete a record of a published lexicon', async ({page}, i
 	await expect(page.locator('enform-record').getByText(edited)).toBeVisible()
 
 	// Delete, confirmed in a dialog
-	await page.getByRole('button', {name: t('record_delete'), exact: true}).first().click()
+	await page
+		.getByRole('button', {name: t('record_delete'), exact: true})
+		.first()
+		.click()
 	const dialog = page.getByRole('dialog')
 	await approvePopup(page, 'alice.test', () =>
 		dialog.getByRole('button', {name: t('record_delete')}).click()

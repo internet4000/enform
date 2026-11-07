@@ -9,6 +9,8 @@ const dir = fileURLToPath(new URL('../lexicons', import.meta.url))
 export async function schemas(authority) {
 	const files = (await fs.readdir(path.join(dir, authority))).filter((f) => f.endsWith('.json'))
 	return Promise.all(
-		files.map(async (file) => JSON.parse(await fs.readFile(path.join(dir, authority, file), 'utf8')))
+		files.map(async (file) =>
+			JSON.parse(await fs.readFile(path.join(dir, authority, file), 'utf8'))
+		)
 	)
 }
