@@ -80,3 +80,12 @@ export function appIcon(domain: string): Promise<string | undefined> {
 	}
 	return icon
 }
+
+/** Orders an app's types the directory's way (the usual ones first), others after */
+export function byDirectory<T extends {nsid: string}>(types: T[]): T[] {
+	const order = (nsid: string) => {
+		const index = directoryTypes(namespaceOf(nsid)).indexOf(nsid)
+		return index === -1 ? Number.MAX_SAFE_INTEGER : index
+	}
+	return [...types].sort((a, b) => order(a.nsid) - order(b.nsid))
+}

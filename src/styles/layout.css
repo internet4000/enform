@@ -15,7 +15,10 @@
 	enform-app-tiles,
 	enform-app-tile,
 	enform-app-view,
-	enform-type-rows
+	enform-type-rows,
+	enform-app-cards,
+	enform-app-card,
+	enform-app-hero
 ) {
 	display: block;
 }
@@ -534,4 +537,77 @@ enform-apps details > summary {
 	align-items: center;
 	color: var(--color-muted);
 	cursor: pointer;
+}
+
+/* The apps of the atmosphere, as cards */
+enform-app-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(var(--card-min-width), 1fr));
+	gap: var(--space-m);
+}
+
+enform-app-card > a {
+	display: grid;
+	grid-template-areas: 'icon name' 'text text' 'meta meta';
+	grid-template-columns: auto minmax(0, 1fr);
+	align-items: center;
+	gap: var(--space-s) var(--space-m);
+	height: 100%;
+	padding: var(--space-m);
+	color: inherit;
+	text-decoration: none;
+	background: var(--color-surface);
+	border: var(--border-width) solid transparent;
+	border-radius: var(--radius-large);
+	-webkit-tap-highlight-color: transparent;
+}
+
+enform-app-card > a:hover {
+	border-color: var(--color-border);
+}
+
+enform-app-card enform-app-icon,
+enform-app-hero enform-app-icon {
+	--app-icon-size: var(--app-icon-size-large);
+	--app-icon-radius: var(--radius-large);
+	font-size: var(--font-size-l);
+}
+
+enform-app-card enform-app-icon {
+	grid-area: icon;
+}
+
+enform-app-card strong {
+	grid-area: name;
+	font-size: var(--font-size-l);
+}
+
+enform-app-card p {
+	grid-area: text;
+	margin: 0;
+	color: var(--color-muted);
+}
+
+enform-app-card small {
+	grid-area: meta;
+}
+
+enform-app-card[joined] small {
+	color: var(--color-success);
+}
+
+enform-app-hero {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	align-items: center;
+	gap: var(--space-s) var(--space-m);
+}
+
+enform-app-hero hgroup p {
+	margin: var(--space-xs) 0 0;
+	color: var(--color-muted);
+}
+
+enform-app-hero > a {
+	grid-column: 2;
 }

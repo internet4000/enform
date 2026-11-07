@@ -5,7 +5,7 @@
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
 	import {blobUrl} from '#lib/atproto/repo'
-	import {appInfo, typeLabel} from '#lib/apps/directory'
+	import {appInfo, byDirectory, typeLabel} from '#lib/apps/directory'
 	import type {AppType, RepoApp} from '#lib/apps/types'
 	import {recordCard} from '#lib/records/card'
 	import {collectionPath, createPath, recordPath} from '#lib/paths'
@@ -59,7 +59,7 @@
 						</a>
 					</li>
 				{/if}
-				{#each app.lists.filter((type) => type.used) as type (type.nsid)}
+				{#each byDirectory(app.lists.filter((type) => type.used)) as type (type.nsid)}
 					<li>
 						<a
 							href={collectionPath(actor, type.nsid)}

@@ -1,7 +1,7 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"app_tagline": "Your AT Protocol data, as an app",
-	"app_intro": "Open any account to browse its collections and records. Each record is shown using the lexicon its collection publishes.",
+	"app_intro": "Your data lives in your own repo, and many apps can read and write it. Open any account to see what's in it, or start on an app below.",
 	"actor_search_label": "Handle, DID or at:// URI",
 	"actor_search_placeholder": "alice.bsky.social",
 	"actor_search_submit": "Open",
@@ -153,7 +153,7 @@
 	"collection_new_yours": "Create one in your repo",
 	"lexicon_view_short": "Lexicon",
 	"home_examples": "Or look around:",
-	"home_mine": "Your repo",
+	"home_mine": "Open your repo",
 	"profile_edit": "Edit profile",
 	"collection_add": "Add",
 	"collection_add_to": "Add to {collection}",
@@ -172,5 +172,16 @@
 	"pane_pick_collection": "Open a profile or a list on the left.",
 	"pane_pick_record": "Open a record from the list.",
 	"nav_start_more": "Start more in {app}",
-	"nav_start_type": "Add {type}"
+	"nav_start_type": "Add {type}",
+	"apps_title": "Apps in the atmosphere",
+	"apps_intro": "Each app keeps its records in your repo. Start one here, and take it with you anywhere.",
+	"apps_joined": "You're on it",
+	"apps_joined_long": "You already have {app} records in your repo:",
+	"apps_visit": "Open {domain}",
+	"apps_your_place": "You on this app",
+	"apps_sign_in": "Sign in to see your {app} records, or to start.",
+	"apps_not_yet": "You have no {app} records yet.",
+	"apps_start": "Start: create your {type}",
+	"apps_open_repo": "Open your repo",
+	"apps_types": "What you can make here"
 }

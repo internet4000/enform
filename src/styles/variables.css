@@ -34,6 +34,9 @@
 	--row-min-height: 3.25rem;
 	--row-lines: 2;
 	--tile-min-width: 15rem;
+	--card-min-width: 16rem;
+	--app-icon-size-large: 3rem;
+	--radius-large: 0.75rem;
 	--pane-nav: 20rem;
 	--pane-list: 26rem;
 	--pane-min: 16rem;

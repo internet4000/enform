@@ -1,7 +1,7 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"app_tagline": "Vos données AT Protocol, comme une app",
-	"app_intro": "Ouvrez n'importe quel compte pour parcourir ses collections et ses enregistrements. Chaque enregistrement s'affiche selon le lexique publié pour sa collection.",
+	"app_intro": "Vos données vivent dans votre propre dépôt, et de nombreuses apps peuvent les lire et les écrire. Ouvrez n'importe quel compte pour voir son contenu, ou commencez une app ci-dessous.",
 	"actor_search_label": "Pseudo, DID ou URI at://",
 	"actor_search_placeholder": "alice.bsky.social",
 	"actor_search_submit": "Ouvrir",
@@ -153,7 +153,7 @@
 	"collection_new_yours": "En créer un dans votre dépôt",
 	"lexicon_view_short": "Lexique",
 	"home_examples": "Ou jetez un œil :",
-	"home_mine": "Votre dépôt",
+	"home_mine": "Ouvrir votre dépôt",
 	"profile_edit": "Modifier le profil",
 	"collection_add": "Ajouter",
 	"collection_add_to": "Ajouter à {collection}",
@@ -172,5 +172,16 @@
 	"pane_pick_collection": "Ouvrez un profil ou une liste à gauche.",
 	"pane_pick_record": "Ouvrez un enregistrement de la liste.",
 	"nav_start_more": "Commencer plus dans {app}",
-	"nav_start_type": "Ajouter : {type}"
+	"nav_start_type": "Ajouter : {type}",
+	"apps_title": "Les apps de l'atmosphère",
+	"apps_intro": "Chaque app garde ses enregistrements dans votre dépôt. Commencez-en une ici, et emportez-la partout.",
+	"apps_joined": "Vous y êtes",
+	"apps_joined_long": "Vous avez déjà des enregistrements {app} dans votre dépôt :",
+	"apps_visit": "Ouvrir {domain}",
+	"apps_your_place": "Vous sur cette app",
+	"apps_sign_in": "Connectez-vous pour voir vos enregistrements {app}, ou pour commencer.",
+	"apps_not_yet": "Vous n'avez encore aucun enregistrement {app}.",
+	"apps_start": "Commencer : créer {type}",
+	"apps_open_repo": "Ouvrir votre dépôt",
+	"apps_types": "Ce que vous pouvez créer ici"
 }

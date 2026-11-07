@@ -4,11 +4,11 @@
  */
 import type {Identity} from '#lib/atproto/identity'
 import {getRecord} from '#lib/atproto/repo'
-import permissions from '#lib/config/permissions.json' with {type: 'json'}
 import {recordTypes} from '#lib/lexicons/catalog'
 import {collectionKind, profileKey} from '#lib/lexicons/kind'
 import {resolveLexicon} from '#lib/lexicons/resolve'
 import type {LexiconDoc} from '#lib/lexicons/types'
+import {directoryApps, directoryTypes} from './directory'
 import {appOf, isProfileName, namespaceOf, typeName} from './names'
 import type {AppSingle, AppType, RepoApp} from './types'
 
@@ -96,11 +96,20 @@ export function appDomains(collections: string[]): string[] {
 	return [...byNamespace(collections).keys()].map((namespace) => appOf(namespace + '.x'))
 }
 
-/** Apps enform knows (config/permissions.json), as types to create; none used yet */
+const known = new Map<string, Promise<RepoApp>>()
+
+/** An app of the directory (config/apps.json) as its catalog describes it, none used yet */
+export function knownApp(namespace: string): Promise<RepoApp> {
+	let app = known.get(namespace)
+	if (!app) {
+		const seed = directoryTypes(namespace)[0] ?? `${namespace}.x`
+		app = buildApp(undefined, seed, [])
+		known.set(namespace, app)
+	}
+	return app
+}
+
+/** Every app of the directory, as types to create */
 export function knownApps(): Promise<RepoApp[]> {
-	return Promise.all(
-		[...byNamespace(permissions.collections).values()].map((seeds) =>
-			buildApp(undefined, seeds[0], [])
-		)
-	)
+	return Promise.all(directoryApps().map((app) => knownApp(app.namespace)))
 }
