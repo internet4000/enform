@@ -3,7 +3,7 @@
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {listCollections} from '#lib/atproto/repo'
-	import {byDirectory, typeLabel} from '#lib/apps/directory'
+	import {byDirectory, directoryTypes, typeLabel} from '#lib/apps/directory'
 	import {namespaceOf} from '#lib/apps/names'
 	import {startType} from '#lib/apps/start'
 	import Account from '#lib/components/Account.svelte'
@@ -30,7 +30,7 @@
 			{#if info.description}<p>{info.description}</p>{/if}
 		</hgroup>
 		{#if info.url}
-			<a href={info.url} rel="noopener external" target="_blank"
+			<a href={info.url} rel="noopener external" target="_blank" role="button"
 				>{m.apps_visit({domain: info.domain})}</a
 			>
 		{/if}
@@ -64,6 +64,8 @@
 								{m.apps_start({type: typeLabel(start)})}
 							</a>
 						</p>
+					{:else}
+						<p>{m.apps_not_yet_elsewhere({app: info.name, domain: info.domain})}</p>
 					{/if}
 				{/await}
 			{/if}
@@ -85,7 +87,15 @@
 					</ul>
 				</enform-type-rows>
 			{:else}
-				<p>{m.app_unpublished({app: info.name})}</p>
+				<!-- Known by name only: no lexicon to make a form from -->
+				<enform-type-rows unpublished>
+					<ul>
+						{#each directoryTypes(info.namespace) as nsid (nsid)}
+							<li><span><span>{typeLabel(nsid)}</span><small>{nsid}</small></span></li>
+						{/each}
+					</ul>
+				</enform-type-rows>
+				<p><small>{m.apps_unpublished_long({app: info.name})}</small></p>
 			{/if}
 		</section>
 	{/await}

@@ -607,6 +607,7 @@ enform-app-hero hgroup p {
 
 enform-app-hero > a {
 	grid-column: 2;
+	justify-self: start;
 }
 
 /* Another app's type a record also fits, previewing the copy */
@@ -643,4 +644,15 @@ enform-related blockquote {
 
 enform-related > button {
 	align-self: start;
+}
+
+/* Types known by name only: rows to read, not to open */
+enform-type-rows[unpublished] li > span {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	min-height: var(--row-min-height);
+	padding: var(--space-s) var(--gutter);
+	color: var(--color-muted);
+	border-bottom: var(--border-width) solid var(--color-border);
 }
