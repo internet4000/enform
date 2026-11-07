@@ -16,9 +16,7 @@
 		"today.joblist.list",
 		"com.lpepfinder.want",
 		"com.lpepfinder.profile",
-		"xyz.statusphere.status",
-		"com.internet4000.enform.follow",
-		"com.internet4000.enform.view"
+		"xyz.statusphere.status"
 	],
 	"blobs": ["image/*", "video/*", "audio/*", "*/*"]
 }
