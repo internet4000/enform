@@ -13,3 +13,8 @@ i18n/project.inlang/project_id
 # Agent worktrees
 .claude/worktrees/
 .wrangler/
+
+# Local test network output (e2e/network.mjs) and Playwright results
+e2e/.network/
+test-results/
+playwright-report/

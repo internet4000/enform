@@ -26,6 +26,9 @@ export function oauthClient(): Promise<BrowserOAuthClient> {
 	client ??= BrowserOAuthClient.load({
 		clientId: clientId(),
 		handleResolver: app.services.handleResolver,
+		plcDirectoryUrl: app.services.plcDirectory,
+		// Authorization servers and PDSes over plain HTTP: only a local test network's
+		allowHttp: app.oauth.allowHttp,
 		// Signed out, revoked or expired, here or in another tab
 		onSessionDeleted: (did) => deletedListeners.forEach((listener) => listener(did))
 	})

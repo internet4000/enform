@@ -1,10 +1,18 @@
+import {fileURLToPath} from 'node:url'
 import {sveltekit} from '@sveltejs/kit/vite'
 import {vitePreprocess} from '@sveltejs/vite-plugin-svelte'
 import adapterStatic from '@sveltejs/adapter-static'
 import {defineConfig} from 'vitest/config'
 import {paraglideVitePlugin} from '@inlang/paraglide-js'
 
-export default defineConfig({
+// `--mode e2e`: the app's config pointed at the local test network (written by e2e/network.mjs)
+const e2eConfig = {
+	find: /^#lib\/config\/app\.json$/,
+	replacement: fileURLToPath(new URL('e2e/.network/app.json', import.meta.url))
+}
+
+export default defineConfig(({mode}) => ({
+	resolve: {alias: mode === 'e2e' ? [e2eConfig] : []},
 	plugins: [
 		sveltekit({
 			preprocess: vitePreprocess(),
@@ -29,4 +37,4 @@ export default defineConfig({
 		include: ['src/**/*.test.ts'],
 		reporters: ['dot']
 	}
-})
+}))

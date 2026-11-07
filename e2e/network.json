@@ -1,0 +1,19 @@
+{
+	"$comment": "The local atproto network the end-to-end tests run against (e2e/network.mjs): fixed ports on localhost, its accounts, and which account publishes each lexicon authority's schemas (e2e/lexicons/<authority>/*.json). statusphere.xyz's is a copy of its published schema, so tests run offline.",
+	"ports": {
+		"plc": 2582,
+		"pds": 2583,
+		"dns": 2584,
+		"app": 5174
+	},
+	"accounts": [
+		{"handle": "alice.test", "email": "alice@enform.test", "password": "alice-pass"},
+		{"handle": "bob.test", "email": "bob@enform.test", "password": "bob-pass"},
+		{"handle": "lexicons.test", "email": "lexicons@enform.test", "password": "lexicons-pass"},
+		{"handle": "statusphere.test", "email": "statusphere@enform.test", "password": "statusphere-pass"}
+	],
+	"lexicons": [
+		{"authority": "enform.test", "publisher": "lexicons.test"},
+		{"authority": "statusphere.xyz", "publisher": "statusphere.test"}
+	]
+}
