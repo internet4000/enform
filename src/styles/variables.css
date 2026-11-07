@@ -56,6 +56,13 @@
 	--banner-height: 9rem;
 	--account-name-min-width: 6rem;
 
+	/* Links between records: people as chips, records as cards */
+	--chip-avatar-size: 2rem;
+	--chip-avatar-size-small: 1.25rem;
+	--record-card-max-width: 32rem;
+	--record-card-lines: 4;
+	--record-card-image-height: 12rem;
+
 	--color-bg: light-dark(#fdfdfc, #111110);
 	--color-surface: light-dark(#f1f0ef, #1c1b1a);
 	--color-text: light-dark(#21201c, #eeeeec);
