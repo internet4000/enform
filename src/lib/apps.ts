@@ -7,6 +7,7 @@ import {getRecord, type RepoRecord} from './atproto/repo'
 import {groupByApp} from './collections'
 import {collectionKind, profileKey, type CollectionKind} from './lexicons/kind'
 import {resolveLexicon} from './lexicons/resolve'
+import {recordCard} from './records/card'
 import type {LexiconDoc} from './lexicons/types'
 
 export type AppCollection = {nsid: string; kind: CollectionKind; lexicon?: LexiconDoc}
@@ -22,7 +23,10 @@ async function withProfile(repo: Identity, collection: AppCollection) {
 	const rkey = collection.lexicon && profileKey(collection.lexicon)
 	if (collection.kind !== 'profile' || !rkey) return collection
 	const record = await getRecord(repo, collection.nsid, rkey).catch(() => undefined)
-	return record ? {...collection, rkey, record} : collection
+	if (!record) return collection
+	// Only a record that presents someone (an image, a description) is shown as a card
+	const card = recordCard(record.value, collection.lexicon?.defs.main?.record)
+	return card.avatar || card.banner || card.text ? {...collection, rkey, record} : collection
 }
 
 export async function repoApps(repo: Identity, collections: string[]): Promise<RepoApp[]> {

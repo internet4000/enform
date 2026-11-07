@@ -3,7 +3,8 @@
 	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte'
 	import LexiconStatus from '#lib/components/LexiconStatus.svelte'
 	import RecordList from '#lib/components/RecordList.svelte'
-	import {actorName} from '#lib/paths'
+	import {auth} from '#lib/auth/session.svelte'
+	import {actorName, newPath} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
@@ -13,6 +14,17 @@
 <section>
 	<h2>{data.collection}</h2>
 	<LexiconStatus nsid={data.collection} lexicon={data.lexicon} />
+	{#if auth.session}
+		{#await data.lexicon then doc}
+			{#if doc}
+				<p>
+					<a href={newPath(data.collection)} role="button">
+						{auth.session.did === data.repo.did ? m.collection_new() : m.collection_new_yours()}
+					</a>
+				</p>
+			{/if}
+		{/await}
+	{/if}
 </section>
 {#key data.collection + data.repo.did}
 	<RecordList

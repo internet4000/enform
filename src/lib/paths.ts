@@ -48,3 +48,12 @@ export function searchPath(input: string): string | undefined {
 export function actorParam(param: string): string {
 	return decodeURIComponent(param.slice(1))
 }
+
+/** Where to create a record of a collection, in the signed-in account's repo */
+export function newPath(collection?: string): string {
+	return collection ? `/new/${collection}` : '/new'
+}
+
+export function editPath(actor: string, collection: string, rkey: string): string {
+	return `${recordPath(actor, collection, rkey)}/edit`
+}

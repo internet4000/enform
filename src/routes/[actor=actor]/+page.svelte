@@ -8,6 +8,17 @@
 	let actor = $derived(actorName(data.repo))
 </script>
 
+<enform-repo verified={!!data.repo.handle || undefined}>
+	<h1>@{actor}</h1>
+	<p>
+		<small>
+			<code>{data.repo.did}</code> · {m.repo_pds()}
+			{new URL(data.repo.pds).host}
+			{#if !data.repo.handle}· {m.repo_handle_unverified()}{/if}
+		</small>
+	</p>
+</enform-repo>
+
 <enform-apps>
 	{#await data.apps}
 		<!-- Collections by name until their lexicons say what they are -->

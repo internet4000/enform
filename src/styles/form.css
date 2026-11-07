@@ -376,7 +376,7 @@ enform-field[loading] > p {
 /* Submitting, kept in reach at the bottom */
 enform-form form > footer {
 	position: sticky;
-	inset-block-end: 0;
+	inset-block-end: var(--sticky-bottom);
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-start;

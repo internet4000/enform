@@ -11,5 +11,6 @@
 		"pageSize": 25,
 		"timeoutMs": 10000
 	},
-	"logo": "/favicon.svg"
+	"logo": "/favicon.svg",
+	"examples": ["bsky.app", "4000.radio", "atproto.com", "tangled.org"]
 }

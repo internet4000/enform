@@ -29,6 +29,7 @@
 				autocapitalize="off"
 				autocomplete="off"
 				spellcheck="false"
+				enterkeyhint="go"
 				aria-invalid={invalid}
 				required
 			/>

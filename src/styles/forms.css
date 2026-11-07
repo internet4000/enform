@@ -5,6 +5,11 @@ form {
 	gap: var(--space-s);
 }
 
+/* A label with its control fills the row; its button sits beside it */
+form > label {
+	flex: 1 1 var(--input-min-width);
+}
+
 label {
 	display: flex;
 	flex-direction: column;
@@ -15,7 +20,8 @@ label {
 
 input,
 select,
-button {
+button,
+a[role='button'] {
 	min-height: var(--control-height);
 	padding: 0 var(--space-s);
 	font: inherit;
@@ -27,6 +33,23 @@ button {
 
 input {
 	min-width: 0;
+}
+
+a[role='button'] {
+	display: inline-flex;
+	align-items: center;
+	padding: 0 var(--space-m);
+	color: var(--color-on-accent);
+	text-decoration: none;
+	background: var(--color-accent);
+	border-color: var(--color-accent);
+}
+
+/* Typing in a field smaller than 16px makes mobile browsers zoom in */
+input,
+select,
+textarea {
+	font-size: max(var(--font-size-m), 16px);
 }
 
 button {

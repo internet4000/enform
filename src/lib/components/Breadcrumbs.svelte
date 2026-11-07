@@ -6,16 +6,18 @@
 	let {actor, collection, rkey}: {actor: string; collection?: string; rkey?: string} = $props()
 </script>
 
-<nav aria-label={m.nav_breadcrumb()}>
-	<ol>
-		<li><a href={repoPath(actor)}>@{actor}</a></li>
-		{#if collection}
-			<li>
-				<a href={collectionPath(actor, collection)} aria-current={rkey ? undefined : 'page'}>
-					{collection}
-				</a>
-			</li>
-		{/if}
-		{#if rkey}<li aria-current="page">{rkey}</li>{/if}
-	</ol>
-</nav>
+<enform-breadcrumbs>
+	<nav aria-label={m.nav_breadcrumb()}>
+		<ol>
+			<li><a href={repoPath(actor)}>@{actor}</a></li>
+			{#if collection}
+				<li>
+					<a href={collectionPath(actor, collection)} aria-current={rkey ? undefined : 'page'}>
+						{collection}
+					</a>
+				</li>
+			{/if}
+			{#if rkey}<li aria-current="page">{rkey}</li>{/if}
+		</ol>
+	</nav>
+</enform-breadcrumbs>

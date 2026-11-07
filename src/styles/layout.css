@@ -1,70 +1,56 @@
 /* Custom elements are inline by default; enform's are blocks unless stated */
 :where(
-	enform-app,
-	enform-header,
 	enform-repo,
 	enform-apps,
 	enform-profile,
 	enform-records,
 	enform-record,
 	enform-lexicon,
-	enform-actor-search
+	enform-actor-search,
+	enform-account,
+	enform-home,
+	enform-breadcrumbs,
+	enform-record-actions
 ) {
 	display: block;
 }
 
-enform-app {
-	max-width: var(--measure);
-	margin: 0 auto;
-	padding: var(--space-m);
+enform-repo {
+	overflow-wrap: anywhere;
 }
 
-enform-app > header {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: end;
-	justify-content: space-between;
-	gap: var(--space-m);
-	padding-bottom: var(--space-m);
-	margin-bottom: var(--space-l);
-	border-bottom: var(--border-width) solid var(--color-border);
+enform-repo > p {
+	margin: var(--space-xs) 0 0;
 }
 
-enform-app > header > a {
-	font-weight: 700;
-	color: inherit;
-	text-decoration: none;
-}
-
-enform-app main {
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-l);
-	transition: opacity 0.2s;
-}
-
-enform-app main[aria-busy='true'] {
-	opacity: 0.5;
+enform-repo code {
+	font-size: inherit;
 }
 
 enform-repo > dl {
 	display: flex;
 	flex-wrap: wrap;
+	min-width: 0;
 	gap: var(--space-xs) var(--space-l);
 	margin: var(--space-s) 0 0;
 	font-size: var(--font-size-s);
 }
 
+enform-repo > dl > div {
+	min-width: 0;
+}
+
 enform-repo > dl dd {
 	margin: 0;
 	overflow-wrap: anywhere;
+	word-break: break-all;
 }
 
 enform-repo > dl dt {
 	color: var(--color-muted);
 }
 
-nav[aria-label] ol {
+enform-breadcrumbs ol {
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--space-xs);
@@ -74,7 +60,7 @@ nav[aria-label] ol {
 	font-size: var(--font-size-s);
 }
 
-nav[aria-label] li + li::before {
+enform-breadcrumbs li + li::before {
 	content: '/';
 	margin-inline-end: var(--space-xs);
 	color: var(--color-muted);
@@ -98,10 +84,23 @@ enform-records > ol > li > a {
 	align-items: baseline;
 	justify-content: space-between;
 	gap: var(--space-s);
-	padding: var(--space-s) var(--space-m);
+	min-height: var(--row-min-height);
+	padding: var(--space-s) var(--gutter);
 	color: inherit;
 	text-decoration: none;
 	border-bottom: var(--border-width) solid var(--color-border);
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* Lists run edge to edge on phones, their rows the full width to tap */
+enform-apps ul,
+enform-records > ol {
+	margin-inline: calc(-1 * var(--gutter));
+}
+
+enform-apps li a:active,
+enform-records > ol > li > a:active {
+	background: var(--color-surface);
 }
 
 enform-apps li a:hover,
@@ -109,14 +108,28 @@ enform-records > ol > li > a:hover {
 	background: var(--color-surface);
 }
 
-enform-records > ol > li > a > span {
+enform-records > ol > li > a {
+	flex-direction: column;
+	align-items: stretch;
+	gap: var(--space-2xs);
+}
+
+enform-records > ol > li > a > p {
+	display: -webkit-box;
+	margin: 0;
 	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	flex: 1;
+	overflow-wrap: anywhere;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: var(--row-lines);
+	line-clamp: var(--row-lines);
+}
+
+enform-records > ol > li > a > time {
+	font-size: var(--font-size-s);
 }
 
 enform-records > button {
+	width: 100%;
 	margin-top: var(--space-m);
 }
 
@@ -147,13 +160,30 @@ enform-permission p {
 	margin: 0;
 }
 
+/* A record's actions, kept in reach at the bottom */
+enform-record-actions {
+	position: sticky;
+	inset-block-end: var(--sticky-bottom);
+	margin-inline: calc(-1 * var(--gutter));
+	padding: var(--space-s) var(--gutter);
+	background: var(--color-bar);
+	backdrop-filter: blur(var(--bar-blur));
+	border-top: var(--border-width) solid var(--color-border);
+}
+
 enform-record-actions menu {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-auto-columns: 1fr;
+	grid-auto-flow: column;
 	gap: var(--space-s);
 	padding: 0;
 	margin: 0;
 	list-style: none;
+}
+
+enform-record-actions menu > li > * {
+	width: 100%;
+	justify-content: center;
 }
 
 enform-record-actions dialog {
@@ -295,5 +325,105 @@ enform-validation[valid] {
 
 enform-lexicon-page > details > summary {
 	cursor: pointer;
+	color: var(--color-muted);
+}
+
+enform-account {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-m);
+}
+
+enform-account > p,
+enform-account > ul {
+	margin: 0;
+}
+
+enform-account > ul {
+	padding-inline-start: var(--space-m);
+}
+
+enform-account > h3 {
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-account > button {
+	align-self: start;
+}
+
+enform-home {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-m);
+	padding-top: var(--space-l);
+}
+
+enform-home h1 {
+	font-size: var(--font-size-xl);
+}
+
+enform-home p {
+	margin: 0;
+	color: var(--color-muted);
+}
+
+enform-home ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-s);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+enform-home ul a {
+	display: inline-flex;
+	align-items: center;
+	min-height: var(--control-height);
+	padding: 0 var(--space-m);
+	color: inherit;
+	text-decoration: none;
+	background: var(--color-surface);
+	border-radius: var(--pill-radius);
+}
+
+section {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+}
+
+section > p,
+header > p {
+	margin: 0;
+}
+
+@media (min-width: 48rem) {
+	enform-apps ul,
+	enform-records > ol,
+	enform-record-actions {
+		margin-inline: 0;
+	}
+
+	enform-record-actions {
+		border-radius: var(--radius);
+		border: var(--border-width) solid var(--color-border);
+	}
+
+	enform-record-actions menu {
+		display: flex;
+		justify-content: end;
+	}
+
+	enform-record-actions menu > li > * {
+		width: auto;
+	}
+}
+
+enform-apps h3 {
+	margin-top: var(--space-m);
+	font-size: var(--font-size-s);
+	font-weight: 400;
 	color: var(--color-muted);
 }

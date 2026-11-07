@@ -45,7 +45,7 @@
 				{@const date = recordDate(record.value)}
 				<li>
 					<a href={recordPath(actor, collection, rkey)}>
-						<span>{recordSummary(record.value, doc?.defs.main?.record) ?? rkey}</span>
+						<p>{recordSummary(record.value, doc?.defs.main?.record) ?? rkey}</p>
 						{#if date}<time datetime={date}>{formatDate(date)}</time>{/if}
 					</a>
 				</li>
