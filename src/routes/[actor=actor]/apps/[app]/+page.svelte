@@ -260,6 +260,14 @@
 							deleted={base}
 						/>
 					</menu>
+					<!-- Keep going: the next one, without closing this one first -->
+					{#if selected.lexicon}
+						<p>
+							<a href={at(selected.nsid, {create: true})} role="button">
+								+ {m.app_new({type: typeLabel(selected.nsid)})}
+							</a>
+						</p>
+					{/if}
 				{/if}
 				{#if record.pending}
 					<p role="status"><a href={inApp('/more#waiting')}>{m.outbox_record_waiting()}</a></p>

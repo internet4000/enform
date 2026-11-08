@@ -22,6 +22,11 @@ test('create, edit and delete a record of a published lexicon', async ({page}, i
 	await expect(page.locator('enform-sheet enform-kind-view').getByText(text).first()).toBeVisible()
 	const recordUrl = page.url()
 
+	// The next one is offered right there, then back to this one
+	await page.locator('enform-sheet').getByRole('button', {name: /^\+ /}).click()
+	await page.waitForURL(creating)
+	await page.goto(recordUrl)
+
 	// Edit
 	await page.goto(`${recordUrl}&edit`)
 	await page.getByRole('textbox', {name: t('field_text'), exact: true}).fill(edited)
