@@ -16,7 +16,10 @@
 		status: 'M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM9 10h.01M15 10h.01M9 14.5a4 4 0 0 0 6 0',
 		event: 'M5 6h14v13H5zM5 10h14M9 4v4m6-4v4',
 		list: 'M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01',
-		thing: 'M12 3l8 4.5v9L12 21l-8-4.5v-9z'
+		thing: 'M12 3l8 4.5v9L12 21l-8-4.5v-9z',
+		small: 'M4 15h16v4H4z',
+		docked: 'M4 5h16v14H4zM14 5v14',
+		full: 'M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5'
 	}
 
 	let {name}: {name: keyof typeof paths} = $props()

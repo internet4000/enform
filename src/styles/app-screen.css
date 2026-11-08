@@ -134,11 +134,12 @@ enform-record-card-item small {
 	color: var(--color-muted);
 }
 
-/* The + button, in thumb reach above the tab bar */
+/* The + button, in thumb reach above the tab bar and the reader, never under them */
 enform-fab {
 	position: fixed;
-	inset: auto var(--gutter) calc(var(--sticky-bottom) + var(--space-m)) auto;
-	z-index: 3;
+	inset: auto var(--gutter) calc(var(--sticky-bottom) + var(--reader-space, 0px) + var(--space-m))
+		auto;
+	z-index: 6;
 }
 
 enform-fab a[role='button'] {

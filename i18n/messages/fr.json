@@ -318,6 +318,9 @@
 	"about_source": "Code source",
 	"about_self_host": "Héberger votre propre copie",
 	"session_handle_placeholder": "alice.bsky.social",
-	"reader_minimize": "Continuer dans une barre",
-	"reader_expand": "Ouvrir le lecteur"
+	"reader_mode": "Taille du lecteur",
+	"reader_small": "Petit",
+	"reader_docked": "Ancré",
+	"reader_full": "Plein écran",
+	"reader_queue": "À suivre"
 }

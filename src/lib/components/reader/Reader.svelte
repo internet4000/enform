@@ -1,43 +1,46 @@
 <script lang="ts">
-	// The reader, over every page: full screen while reading, a bar while you browse (its
-	// media keep playing). Prev, next, and autoplay on to the next record when one is done.
+	// The reader, over every page and always at hand, in three modes (like Radio4000's
+	// decks): small, a bar whose media play out of sight; docked, beside the page on wide
+	// screens and below it on phones; full screen. Prev, next, what's up next, and autoplay
+	// on to the next record when one is done. Its record stays mounted in every mode.
 	import * as m from '#lib/paraglide/messages.js'
 	import {typeLabel} from '#lib/apps/directory'
-	import {reader} from '#lib/reader/reader.svelte'
+	import {reader, type ReaderItem, type ReaderMode} from '#lib/reader/reader.svelte'
 	import {recordSummary} from '#lib/records/summary'
+	import Icon from '../shell/Icon.svelte'
 	import Present from '../present/Present.svelte'
 
 	let item = $derived(reader.current)
-	let title = $derived(
-		item
-			? (recordSummary(item.record.value, item.lexicon?.defs.main?.record) ?? item.record.rkey)
-			: ''
-	)
+	const titleOf = (entry: ReaderItem) =>
+		recordSummary(entry.record.value, entry.lexicon?.defs.main?.record) ?? entry.record.rkey
+	let title = $derived(item ? titleOf(item) : '')
+
+	const modes: {mode: ReaderMode; label: () => string}[] = [
+		{mode: 'small', label: m.reader_small},
+		{mode: 'docked', label: m.reader_docked},
+		{mode: 'full', label: m.reader_full}
+	]
 
 	function keys(event: KeyboardEvent) {
-		if (!reader.expanded || !reader.active) return
+		if (reader.mode !== 'full' || !reader.active) return
 		if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)
 			return
 		if (event.key === 'ArrowRight') void reader.next()
 		if (event.key === 'ArrowLeft') reader.prev()
-		if (event.key === 'Escape') reader.expanded = false
+		if (event.key === 'Escape') reader.mode = 'docked'
 	}
 </script>
 
 <svelte:window onkeydown={keys} />
 
 {#if item}
-	<enform-reader
-		expanded={reader.expanded || undefined}
-		role="region"
-		aria-label={m.reader_label()}
-	>
+	<enform-reader mode={reader.mode} role="region" aria-label={m.reader_label()}>
 		<header>
+			<!-- The small bar opens the reader where it was docked -->
 			<button
 				type="button"
-				onclick={() => (reader.expanded = !reader.expanded)}
-				aria-label={reader.expanded ? m.reader_minimize() : m.reader_expand()}
-				aria-expanded={reader.expanded}
+				onclick={() => (reader.mode = reader.mode === 'small' ? 'docked' : reader.mode)}
+				disabled={reader.mode !== 'small'}
 			>
 				<hgroup>
 					<strong>{title}</strong>
@@ -50,7 +53,26 @@
 					</small>
 				</hgroup>
 			</button>
-			<button type="button" onclick={() => reader.close()} aria-label={m.reader_close()}>×</button>
+			<menu aria-label={m.reader_mode()}>
+				{#each modes as { mode, label } (mode)}
+					<li>
+						<button
+							type="button"
+							aria-label={label()}
+							title={label()}
+							aria-pressed={reader.mode === mode}
+							onclick={() => (reader.mode = mode)}
+						>
+							<Icon name={mode} />
+						</button>
+					</li>
+				{/each}
+				<li>
+					<button type="button" onclick={() => reader.close()} aria-label={m.reader_close()}
+						>×</button
+					>
+				</li>
+			</menu>
 		</header>
 		{#key `${item.repo.did}/${item.record.collection}/${item.record.rkey}`}
 			<Present
@@ -80,7 +102,12 @@
 					</button>
 				</li>
 				<li>
-					<a href={item.href} onclick={() => (reader.expanded = false)}>{m.reader_open()}</a>
+					<a
+						href={item.href}
+						onclick={() => {
+							if (reader.mode === 'full') reader.mode = 'docked'
+						}}>{m.reader_open()}</a
+					>
 				</li>
 				<li>
 					<button
@@ -92,5 +119,21 @@
 				</li>
 			</menu>
 		</footer>
+		{#if reader.items.length > 1}
+			<section aria-labelledby="reader-queue">
+				<h2 id="reader-queue">{m.reader_queue()}</h2>
+				<ol>
+					{#each reader.items as entry, index (`${entry.repo.did}/${entry.record.uri}`)}
+						<li>
+							<button
+								type="button"
+								aria-current={index === reader.index || undefined}
+								onclick={() => reader.go(index)}>{titleOf(entry)}</button
+							>
+						</li>
+					{/each}
+				</ol>
+			</section>
+		{/if}
 	</enform-reader>
 {/if}

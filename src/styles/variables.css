@@ -54,6 +54,8 @@
 	--sheet-width: 36rem;
 	--map-height: 16rem;
 	--reader-bar-height: 7rem;
+	--reader-docked-height: 45dvh;
+	--reader-width: 24rem;
 	--post-lines: 5;
 	--kind-image-height: 24rem;
 	--launcher-icon: 3.75rem;

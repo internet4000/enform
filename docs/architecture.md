@@ -28,7 +28,9 @@ inferred is shown, and another view is always one tap away.
 Any list of records can be read one after another, in a reader: prev and next for
 everything, and each presenter says when its record is done (a track ended, a photo
 shown for a while, text when you move on). Autoplay goes on to the next record when
-one is done. Media keep playing in a bar while you browse.
+one is done. Like Radio4000's decks, it is always at hand in one of three modes: small
+(a bar, its media playing out of sight), docked (beside the page from 64rem, below it
+on phones, with what's up next) and full screen.
 
 ## Extending
 
