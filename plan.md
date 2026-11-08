@@ -21,6 +21,10 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
 
 ## Data and ecosystem
 
+- **Your own types** (to design together first): make a type (a lexicon) on this
+  device, then create, browse and play its records like any app's; publish it later.
+  Needs a lexicon editor, local lexicons resolved like published ones, and publishing.
+
 6. **View switcher**: show which view was inferred for a type (kind, presenter) and let
    people pick another, remembered per type. Nothing decided for good.
 7. **App descriptions as data**: what `apps.json` says about an app (labels, related
