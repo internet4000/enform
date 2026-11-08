@@ -14,8 +14,14 @@
 	import IdentityChip from '../IdentityChip.svelte'
 	import RecordCard from '../RecordCard.svelte'
 
-	type Props = {repo: Identity; record: RepoRecord; lexicon?: LexiconDoc}
-	let {repo, record, lexicon}: Props = $props()
+	type Props = {
+		repo: Identity
+		record: RepoRecord
+		lexicon?: LexiconDoc
+		/** Its media or images are shown already (by a presenter): only the rest */
+		beside?: boolean
+	}
+	let {repo, record, lexicon, beside = false}: Props = $props()
 
 	let shape = $derived(kindOf(lexicon))
 	let value = $derived(record.value)
@@ -30,7 +36,9 @@
 </script>
 
 <enform-kind-view kind={shape.kind}>
-	{#if shape.kind === 'link' && isWebLink(url)}
+	{#if beside}
+		<!-- shown beside its media or images -->
+	{:else if shape.kind === 'link' && isWebLink(url)}
 		{#await linkDetails(url) then found}
 			<a href={url} rel="noopener noreferrer external" target="_blank">
 				{#if found?.image}<img src={found.image} alt="" />{/if}

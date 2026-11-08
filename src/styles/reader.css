@@ -1,0 +1,155 @@
+/*
+ * The reader: full screen while reading (over the tab bar), a bar above the tab bar
+ * while browsing. Its record stays mounted when it's a bar, so media keep playing.
+ */
+enform-reader {
+	position: fixed;
+	inset: auto var(--space-s) calc(var(--sticky-bottom) + var(--space-s)) var(--space-s);
+	z-index: 5;
+	display: grid;
+	grid-template-areas: 'header' 'footer';
+	gap: var(--space-xs);
+	padding: var(--space-xs) var(--space-s);
+	background: var(--color-bar);
+	backdrop-filter: blur(var(--bar-blur));
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--radius-large);
+	box-shadow: var(--shadow-menu);
+}
+
+enform-reader > header {
+	grid-area: header;
+	display: flex;
+	align-items: center;
+	gap: var(--space-s);
+}
+
+enform-reader > header > button:first-child {
+	flex: 1;
+	min-width: 0;
+	justify-content: flex-start;
+	padding: 0;
+	text-align: start;
+	background: none;
+	border: 0;
+}
+
+enform-reader hgroup {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+enform-reader hgroup > * {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-reader hgroup small {
+	color: var(--color-muted);
+}
+
+enform-reader > footer {
+	grid-area: footer;
+}
+
+enform-reader menu {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-s);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+enform-reader button[aria-pressed='true'] {
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+	border-color: var(--color-accent);
+}
+
+/* As a bar: the record is there but out of sight (its media go on playing) */
+enform-reader:not([expanded]) > enform-present {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* Full screen */
+enform-reader[expanded] {
+	inset: 0;
+	grid-template-areas: 'header' 'record' 'footer';
+	grid-template-rows: auto minmax(0, 1fr) auto;
+	padding: var(--space-s) var(--gutter) calc(var(--space-s) + env(safe-area-inset-bottom));
+	background: var(--color-bg);
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+}
+
+enform-reader[expanded] > enform-present {
+	grid-area: record;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-m);
+	width: 100%;
+	max-width: var(--measure);
+	margin: 0 auto;
+	overflow-y: auto;
+}
+
+enform-media {
+	display: block;
+}
+
+enform-media :is(youtube-video, vimeo-video, video, iframe) {
+	display: block;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	border: 0;
+	border-radius: var(--radius-large);
+}
+
+enform-media :is(spotify-audio, audio) {
+	display: block;
+	width: 100%;
+}
+
+enform-images {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+}
+
+enform-images img {
+	width: 100%;
+	max-height: var(--kind-image-height);
+	object-fit: contain;
+}
+
+enform-images menu {
+	justify-content: center;
+}
+
+enform-place {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+}
+
+/* Room for the bar under the page's end */
+enform-app:has(enform-reader:not([expanded])) > main {
+	padding-bottom: var(--reader-bar-height);
+}
+
+@media (min-width: 48rem) {
+	enform-reader:not([expanded]) {
+		inset: auto var(--gutter) var(--gutter) auto;
+		width: var(--sheet-width);
+	}
+}

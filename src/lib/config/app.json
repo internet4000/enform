@@ -7,7 +7,13 @@
 		"dnsOverHttps": "https://cloudflare-dns.com/dns-query",
 		"handleResolver": "https://public.api.bsky.app",
 		"linkCards": "https://cardyb.bsky.app/v1/extract",
-		"relay": "https://relay1.us-east.bsky.network"
+		"relay": "https://relay1.us-east.bsky.network",
+		"mapLink": "https://www.openstreetmap.org/?mlat={lat}&mlon={lon}#map=15/{lat}/{lon}",
+		"geocoder": "https://nominatim.openstreetmap.org/search",
+		"mapStyle": {
+			"tiles": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+			"attribution": "\u00a9 OpenStreetMap contributors"
+		}
 	},
 	"reads": {
 		"pageSize": 25,
@@ -24,5 +30,19 @@
 		"local": "enform:local"
 	},
 	"logo": "/favicon.svg",
-	"examples": ["bsky.app", "4000.radio", "atproto.com", "tangled.org"]
+	"examples": ["bsky.app", "4000.radio", "atproto.com", "tangled.org"],
+	"reader": {
+		"slideSeconds": 6
+	},
+	"csp": {
+		"$comment": "Content Security Policy sources beyond enform itself: the media providers' player scripts and frames (docs/architecture.md \u203a Security). Connections go to any HTTPS host, as repos live anywhere.",
+		"scripts": ["https://www.youtube.com", "https://player.vimeo.com", "https://open.spotify.com"],
+		"frames": [
+			"https://www.youtube.com",
+			"https://www.youtube-nocookie.com",
+			"https://player.vimeo.com",
+			"https://open.spotify.com",
+			"https://w.soundcloud.com"
+		]
+	}
 }

@@ -472,3 +472,52 @@ enform-blob[dragging] {
 	outline-offset: var(--space-xs);
 	border-radius: var(--radius);
 }
+
+/* Picking a place: your location, an address, a map */
+enform-place-field {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+}
+
+enform-place-field menu,
+enform-place-field ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+enform-place-field ul {
+	flex-direction: column;
+}
+
+enform-place-field ul button {
+	width: 100%;
+	text-align: start;
+	white-space: normal;
+}
+
+enform-place-field[busy] {
+	opacity: var(--busy-opacity);
+}
+
+enform-map {
+	display: block;
+	height: var(--map-height);
+	overflow: hidden;
+	border-radius: var(--radius-large);
+}
+
+enform-place-search {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
+	gap: var(--space-s);
+}
+
+enform-place-search > label {
+	flex: 1 1 var(--input-min-width);
+}

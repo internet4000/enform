@@ -27,7 +27,11 @@
 		"@atproto/oauth-types": "^0.7.7",
 		"@atproto/syntax": "^0.7.7",
 		"@inlang/paraglide-js": "^2.29.3",
-		"media-now": "^2.2.3"
+		"maplibre-gl": "^5.9.0",
+		"media-now": "^2.2.3",
+		"spotify-audio-element": "^1.0.5",
+		"vimeo-video-element": "^1.7.4",
+		"youtube-video-element": "^1.9.1"
 	},
 	"devDependencies": {
 		"@atproto/dev-env": "^0.7.5",

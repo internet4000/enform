@@ -8,6 +8,7 @@
 	import {sendWaiting} from '#lib/atproto/write'
 	import {outbox} from '#lib/outbox/outbox.svelte'
 	import AppNav from '#lib/components/shell/AppNav.svelte'
+	import Reader from '#lib/components/reader/Reader.svelte'
 	import app from '#lib/config/app.json' with {type: 'json'}
 
 	let {children} = $props()
@@ -44,5 +45,6 @@
 	<main aria-busy={!!navigating.to}>
 		{@render children()}
 	</main>
+	<Reader />
 	<AppNav />
 </enform-app>

@@ -5,6 +5,8 @@
 	import type {Identity} from '#lib/atproto/identity'
 	import {listRecords, type RepoRecord} from '#lib/atproto/repo'
 	import type {LexiconDoc} from '#lib/lexicons/types'
+	import {capabilitiesOf, plays} from '#lib/capabilities/detect'
+	import {reader, type ReaderItem} from '#lib/reader/reader.svelte'
 	import AppRecordCard from './AppRecordCard.svelte'
 
 	type Props = {
@@ -31,6 +33,22 @@
 		}
 	}
 
+	const toItems = (list: RepoRecord[]): ReaderItem[] =>
+		list.map((record) => ({repo, record, lexicon, href: href(record.rkey)}))
+
+	/** Read (or play) the list from a record on, its next pages as the reader gets there */
+	function read(index = 0) {
+		let next = cursor
+		reader.start(toItems(records), index, async () => {
+			if (!next) return []
+			const page = await listRecords(repo, collection, next)
+			next = page.records.length >= app.reads.pageSize ? page.cursor : undefined
+			return toItems(page.records)
+		})
+	}
+
+	let playable = $derived(records.some((record) => plays(capabilitiesOf(record.value, lexicon))))
+
 	$effect(() => {
 		void collection
 		void repo.did
@@ -38,6 +56,13 @@
 	})
 </script>
 
+{#if records.length}
+	<p>
+		<button type="button" onclick={() => read()}>
+			{playable ? m.reader_play_all() : m.reader_read_all()}
+		</button>
+	</p>
+{/if}
 <enform-record-grid>
 	{#each records as record (record.rkey)}
 		<AppRecordCard
