@@ -5,7 +5,8 @@ records, shown through the lexicons their collections publish; create, edit and 
 your own with forms generated from those lexicons, signed in or in a local profile.
 
 A static SvelteKit app with no backend: every repo is read from its own PDS.
-See [docs/principles.md](docs/principles.md) for how enform keeps to the atproto specs.
+See [docs/principles.md](docs/principles.md) for how enform keeps to the atproto specs,
+and [docs/self-host.md](docs/self-host.md) to serve your own instance, anywhere.
 
 ## Develop
 

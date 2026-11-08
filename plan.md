@@ -32,11 +32,11 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
 
 ## Delivery
 
-9. **Deploys from CI** (`hosting`): a workflow that runs `bun run verify` and the
-   end-to-end suite, then deploys on `main`. Needs a Cloudflare API token as a
-   repository secret (owner).
-10. **Soft 404**: unknown paths fall back to the SPA, which shows "not found"; the
-    worker should answer 404 for paths no route matches.
+9. **enform.internet4000.com on GitHub Pages**: set it as the repository's Pages
+   custom domain and point its DNS (`CNAME` to `internet4000.github.io`); the workflow
+   then builds for it on its own. Then remove `wrangler.jsonc` and `bun run deploy`.
+10. **End-to-end suite in CI**: the local atproto network on Node, Playwright's
+    Chromium, before publishing.
 
 ## Waiting on the owner
 

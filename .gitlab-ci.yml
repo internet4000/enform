@@ -1,0 +1,13 @@
+# Builds and publishes enform on GitLab Pages, at this project's Pages address
+# (docs/self-host.md). Its origin and folder come from CI_PAGES_URL.
+pages:
+  image: oven/bun:1
+  script:
+    - bun install --frozen-lockfile
+    - export ORIGIN="$(echo "$CI_PAGES_URL" | sed -E 's#^(https?://[^/]+).*#\1#')"
+    - export BASE_PATH="$(echo "$CI_PAGES_URL" | sed -E 's#^https?://[^/]+##; s#/$##')"
+    - bun run verify
+  pages:
+    publish: dist
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

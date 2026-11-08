@@ -16,13 +16,12 @@ managing their own records; a developer checking what their lexicon looks like.
 
 Follows https://hwww.gitlab.io/savoir/agents.md (local: ~/src/hwww/savoir). Exceptions, on purpose:
 
-- hosting: Cloudflare Workers static assets with Wrangler (wrangler.jsonc), because the
-  cf CLI doesn't build SvelteKit yet.
 - data-models-in-cms: the app directory and config are JSON in `src/lib/config`, not
   yet in Sveltia CMS.
 
 Read docs/principles.md (atproto rules, writing and permissions), docs/architecture.md
-(data → capabilities → kinds → presenters → descriptions) and docs/local-first.md.
+(data → capabilities → kinds → presenters → descriptions), docs/local-first.md and
+docs/self-host.md (any host, any folder: no instance of ours to trust).
 Larger work in plan.md.
 
 ## Commands
@@ -30,7 +29,8 @@ Larger work in plan.md.
     bun run dev        # http://127.0.0.1:5173
     bun run verify     # formatting, types, unit tests, build: before every commit
     bun run test:e2e   # local atproto network, Playwright, the UI quality gate
-    bun run deploy     # build and wrangler deploy to enform.internet4000.com
+    git push           # main: GitHub Pages builds and publishes (docs/self-host.md)
+    bun run deploy     # Cloudflare, serving enform.internet4000.com until its DNS moves
 
 ## Git
 
