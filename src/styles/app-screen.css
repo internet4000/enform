@@ -173,7 +173,6 @@ enform-sheet > header {
 }
 
 enform-sheet > header h2 {
-	flex: 1;
 	min-width: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -404,4 +403,34 @@ enform-whose {
 enform-whose[mine] {
 	color: var(--color-on-accent);
 	background: var(--color-success);
+}
+
+enform-sheet > header > hgroup {
+	flex: 1;
+	min-width: 0;
+}
+
+enform-sheet > header hgroup p {
+	margin: 0;
+	overflow: hidden;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-actions + details {
+	margin-top: var(--space-s);
+}
+
+enform-actions + details > summary {
+	min-height: var(--control-height);
+	display: flex;
+	align-items: center;
+	color: var(--color-accent);
+	cursor: pointer;
+}
+
+enform-actions + details > enform-actions {
+	margin-top: var(--space-s);
 }

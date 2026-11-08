@@ -13,7 +13,9 @@ test('a photo: facets from its text, and an image with its size and alt', async 
 	await page.waitForURL(creating)
 
 	// Rich text: chips for what will be linked
-	await page.getByRole('textbox', {name: 'text', exact: true}).fill('New #photo for @bob.test')
+	await page
+		.getByRole('textbox', {name: t('field_text'), exact: true})
+		.fill('New #photo for @bob.test')
 	await expect(page.locator('enform-facets data')).toHaveText(['#photo', '@bob.test'])
 
 	// An image, dropped on its field: uploaded (asking permission), then its size and alt
@@ -27,9 +29,9 @@ test('a photo: facets from its text, and an image with its size and alt', async 
 	await approvePopup(page, 'alice.test', async () => {
 		await page.locator('enform-blob').dispatchEvent('drop', {dataTransfer: await drop})
 	})
-	await expect(page.getByRole('spinbutton', {name: 'width'})).toHaveValue('30')
-	await expect(page.getByRole('spinbutton', {name: 'height'})).toHaveValue('20')
-	const alt = page.getByRole('textbox', {name: /^alt/})
+	await expect(page.getByRole('spinbutton', {name: 'Width'})).toHaveValue('30')
+	await expect(page.getByRole('spinbutton', {name: 'Height'})).toHaveValue('20')
+	const alt = page.getByRole('textbox', {name: new RegExp(`^${t('field_alt')}`)})
 	await expect(alt).toBeFocused()
 	await alt.fill('A blank test image')
 

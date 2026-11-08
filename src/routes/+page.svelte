@@ -5,7 +5,6 @@
 	import {listCollections} from '#lib/atproto/repo'
 	import {repoApps} from '#lib/apps/apps'
 	import {appInfo, directoryApps} from '#lib/apps/directory'
-	import ActorSearch from '#lib/components/ActorSearch.svelte'
 	import AppIconLink from '#lib/components/launcher/AppIconLink.svelte'
 	import {actorName, appPath, appScreenPath} from '#lib/paths'
 
@@ -62,10 +61,7 @@
 				<AppIconLink href={appPath(info.domain)} domain={info.domain} name={info.name} />
 			{/each}
 		</enform-launcher>
-		<p>
-			<a href="/settings" role="button">{m.session_sign_in()}</a>
-			<a href="/explore">{m.home_more_apps()}</a>
-		</p>
-		<ActorSearch />
+		<p><a href="/explore">{m.home_more_apps()}</a></p>
+		<p>{m.home_have_account()} <a href="/settings" role="button">{m.session_sign_in()}</a></p>
 	{/if}
 </enform-page>

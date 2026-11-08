@@ -11,6 +11,7 @@
 	import {recordCard} from '#lib/records/card'
 	import {recordSummary} from '#lib/records/summary'
 	import {kindOf} from '#lib/records/kinds'
+	import {kindVerb} from '#lib/records/kind-words'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import AppActions from '#lib/components/app/AppActions.svelte'
 	import KindView from '#lib/components/app/KindView.svelte'
@@ -77,6 +78,12 @@
 	let creating = $derived(owner && params.has('new'))
 	let editing = $derived(owner && params.has('edit'))
 	let base = $derived(selected ? appScreenPath(actor, app.app, {type: selected.nsid}) : '')
+	/** Which app and whose data, for sheets that cover the app's header on phones */
+	let context = $derived(
+		`${info.name}${info.name.toLowerCase() === info.domain ? '' : ` · ${info.domain}`} · ${
+			owner ? m.whose_yours() : m.whose_theirs({actor: `@${actor}`})
+		}`
+	)
 	const at = (type: string, open: {record?: string; edit?: boolean; create?: boolean} = {}) =>
 		appScreenPath(actor, app.app, {type, ...open})
 </script>
@@ -205,7 +212,11 @@
 </enform-app-screen>
 
 {#if selected && creating}
-	<RecordSheet title={m.new_record_title({collection: typeLabel(selected.nsid)})} close={base}>
+	<RecordSheet
+		title={kindVerb(kindOf(selected.lexicon).kind, typeLabel(selected.nsid)).verb}
+		subtitle={context}
+		close={base}
+	>
 		{#await lexicon then doc}
 			{#if doc}
 				<CreateRecord
@@ -219,7 +230,11 @@
 {:else if selected && open}
 	{#await Promise.all([getRecord(data.repo, selected.nsid, open), lexicon]) then [record, doc]}
 		{#if editing && doc}
-			<RecordSheet title={m.edit_title()} close={at(selected.nsid, {record: open})}>
+			<RecordSheet
+				title={m.edit_title()}
+				subtitle={`${typeLabel(selected.nsid)} · ${context}`}
+				close={at(selected.nsid, {record: open})}
+			>
 				<EditRecord
 					lexicon={doc}
 					{actor}
@@ -231,6 +246,7 @@
 		{:else}
 			<RecordSheet
 				title={recordSummary(record.value, doc?.defs.main?.record) ?? typeLabel(selected.nsid)}
+				subtitle={`${typeLabel(selected.nsid)} · ${context}`}
 				close={base}
 			>
 				{#if owner}

@@ -9,7 +9,7 @@ const NSID = 'test.enform.note'
 test('a record created offline is sent once back online', async ({page, context}, info) => {
 	const online = `Online ${info.project.name} ${Date.now()}`
 	const offline = `Offline ${info.project.name} ${Date.now()}`
-	const text = page.getByRole('textbox', {name: 'text', exact: true})
+	const text = page.getByRole('textbox', {name: t('field_text'), exact: true})
 	const create = page.getByRole('button', {name: t('new_submit')})
 
 	// Online first: the permission to create is granted

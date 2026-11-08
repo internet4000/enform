@@ -14,7 +14,7 @@ test('create, edit and delete a record of a published lexicon', async ({page}, i
 	// Create: /new/<nsid> opens the form beside the collection
 	await page.goto(`/new/${NSID}`)
 	await page.waitForURL(creating)
-	await page.getByRole('textbox', {name: 'text', exact: true}).fill(text)
+	await page.getByRole('textbox', {name: t('field_text'), exact: true}).fill(text)
 	await approvePopup(page, 'alice.test', () =>
 		page.getByRole('button', {name: t('new_submit')}).click()
 	)
@@ -24,7 +24,7 @@ test('create, edit and delete a record of a published lexicon', async ({page}, i
 
 	// Edit
 	await page.goto(`${recordUrl}&edit`)
-	await page.getByRole('textbox', {name: 'text', exact: true}).fill(edited)
+	await page.getByRole('textbox', {name: t('field_text'), exact: true}).fill(edited)
 	await approvePopup(page, 'alice.test', () =>
 		page.getByRole('button', {name: t('edit_submit')}).click()
 	)

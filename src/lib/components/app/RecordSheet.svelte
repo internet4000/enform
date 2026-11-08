@@ -4,12 +4,16 @@
 	import type {Snippet} from 'svelte'
 	import * as m from '#lib/paraglide/messages.js'
 
-	let {title, close, children}: {title: string; close: string; children: Snippet} = $props()
+	type Props = {title: string; subtitle?: string; close: string; children: Snippet}
+	let {title, subtitle, close, children}: Props = $props()
 </script>
 
 <enform-sheet role="complementary" aria-labelledby="sheet-title">
 	<header>
-		<h2 id="sheet-title">{title}</h2>
+		<hgroup>
+			<h2 id="sheet-title">{title}</h2>
+			{#if subtitle}<p>{subtitle}</p>{/if}
+		</hgroup>
 		<a href={close} aria-label={m.sheet_close()}>×</a>
 	</header>
 	{@render children()}
