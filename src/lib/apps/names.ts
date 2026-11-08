@@ -18,3 +18,8 @@ export function typeName(nsid: string): string {
 export function isProfileName(nsid: string): boolean {
 	return nsid.split('.').at(-1) === 'profile'
 }
+
+/** An app's namespace from its domain: the domain reversed (4000.radio → radio.4000) */
+export function namespaceOfDomain(domain: string): string {
+	return domain.split('.').reverse().slice(0, 2).join('.')
+}

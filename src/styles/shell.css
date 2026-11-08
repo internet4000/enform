@@ -81,26 +81,33 @@ enform-pane > *,
 	min-width: 0;
 }
 
-/* The tab bar */
+/* The tab bar: its places in one row (the rail's groups melt into it) */
 enform-app > nav {
 	position: fixed;
 	inset: auto 0 0;
 	z-index: 2;
+	display: grid;
+	grid-auto-columns: minmax(0, 1fr);
+	grid-auto-flow: column;
 	padding-bottom: env(safe-area-inset-bottom);
 	background: var(--color-bar);
 	backdrop-filter: blur(var(--bar-blur));
 	border-top: var(--border-width) solid var(--color-border);
 }
 
-/* The app's name tops the rail; on phones, Home is the first tab */
-enform-app > nav > a[rel='home'] {
+/* The app's name, your apps and the account menu are the rail's; on phones, Home is the
+   first tab, your apps are on Home and you are the Me tab */
+enform-app > nav > a[rel='home'],
+enform-app > nav > section,
+enform-app > nav > enform-account-menu {
 	display: none;
 }
 
+enform-app > nav > ul {
+	display: contents;
+}
+
 enform-app > nav ul {
-	display: grid;
-	grid-auto-columns: minmax(0, 1fr);
-	grid-auto-flow: column;
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -134,7 +141,7 @@ enform-app > nav svg {
 }
 
 /* You, in the tab bar: your avatar and handle */
-enform-app > nav img {
+enform-app > nav :not(enform-app-icon) > img {
 	width: var(--icon-size);
 	height: var(--icon-size);
 	object-fit: cover;
@@ -183,9 +190,103 @@ enform-app > nav li a > span {
 	}
 
 	enform-app > nav ul {
-		grid-auto-flow: row;
-		grid-auto-columns: auto;
+		display: flex;
+		flex-direction: column;
 		gap: var(--space-2xs);
+	}
+
+	/* You are at the rail's bottom, in the account menu */
+	enform-app > nav li:has(> a[rel='me']) {
+		display: none;
+	}
+
+	/* Your apps fill the middle, scrolling when there are many; More and you at the end */
+	enform-app > nav > section {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: var(--space-2xs);
+		min-height: 0;
+		overflow-y: auto;
+	}
+
+	enform-app > nav > section h2 {
+		margin: var(--space-s) 0 0;
+		padding: 0 var(--space-s);
+		font-size: var(--font-size-s);
+		color: var(--color-muted);
+	}
+
+	enform-app > nav > section p {
+		margin: 0;
+		padding: 0 var(--space-s);
+		color: var(--color-muted);
+	}
+
+	enform-app > nav > section > a[rel='search'] {
+		display: flex;
+		align-items: center;
+		min-height: var(--control-height);
+		padding: 0 var(--space-s);
+		font-size: var(--font-size-s);
+		color: var(--color-muted);
+		text-decoration: none;
+	}
+
+	enform-app > nav > section > a[rel='search']:hover {
+		color: var(--color-text);
+	}
+
+	enform-app > nav enform-app-icon {
+		--app-icon-size: var(--icon-size);
+	}
+
+	enform-app > nav > enform-account-menu {
+		display: block;
+		padding-top: var(--space-s);
+		border-top: var(--border-width) solid var(--color-border);
+	}
+
+	enform-account-menu > :is(button, a) {
+		display: flex;
+		align-items: center;
+		justify-content: start;
+		gap: var(--space-s);
+		width: 100%;
+		min-height: var(--control-height);
+		padding: 0 var(--space-s);
+		color: inherit;
+		text-decoration: none;
+		background: none;
+		border: 0;
+		border-radius: var(--radius);
+	}
+
+	enform-account-menu > a {
+		justify-content: center;
+		color: var(--color-on-accent);
+		background: var(--color-accent);
+	}
+
+	enform-account-menu > button:hover {
+		background: var(--color-surface);
+	}
+
+	enform-account-menu > button > span {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	enform-account-menu svg {
+		flex: none;
+		width: var(--icon-size);
+		height: var(--icon-size);
+	}
+
+	/* Its menu opens above it, at the rail's bottom */
+	enform-account-menu > enform-menu[popover] {
+		inset: auto auto var(--space-xl) var(--space-s);
 	}
 
 	enform-app > nav li a {

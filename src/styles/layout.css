@@ -582,9 +582,32 @@ enform-app-hero hgroup p {
 	color: var(--color-muted);
 }
 
-enform-app-hero > a {
+enform-app-hero > menu {
 	grid-column: 2;
-	justify-self: start;
+}
+
+/* An app's actions by its name: pin it, open it, and the like, quiet beside the page's */
+:is(enform-app-hero, enform-app-screen > header) > menu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+:is(enform-app-hero, enform-app-screen > header) > menu > li > :is(a, button) {
+	padding: 0 var(--space-m);
+	font-size: var(--font-size-s);
+	color: var(--color-text);
+	background: var(--color-surface);
+	border-color: transparent;
+	border-radius: var(--pill-radius);
+}
+
+:is(enform-app-hero, enform-app-screen > header) > menu > li > [aria-pressed='true'] {
+	color: var(--color-on-accent);
+	background: var(--color-accent);
 }
 
 /* Types known by name only: rows to read, not to open */

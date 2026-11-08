@@ -4,13 +4,12 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
 
 ## Shell and screens
 
-1. **One app shell** (`app-shell`): search alone at the top (a handle, an app domain or
-   an NSID: it already knows all three), tabs at the bottom on phones and a rail on the
-   left from 64rem, a More tab for Settings and the rest, the account control in one
-   place (Me). The reader bar stays outside the page, as it is now.
-2. **Sheets and the reader as native `<dialog>`** (`native-dialogs`): the record sheet is
-   a `role="complementary"` panel today. As a dialog it gets focus trapping, Escape and
-   the backdrop for free; its URL stays (`?record=`), so back still closes it.
+1. **Pins in your repo**: an opt-in "keep my pins in my repo", as records of a
+   `com.internet4000.enform` lexicon (published at enform.internet4000.com), asking
+   for write permission to that one collection when first used. Pins follow you to
+   any device and instance; on this device only stays the default.
+2. **Unsaved forms**: a sheet with a form being filled asks before closing (Escape, the
+   backdrop, back), so nothing typed is lost.
 3. **Full width** (`radical-mobile-first`): pages are capped at `--measure` (60rem) and
    `--measure-wide` (72rem). Let grids use the screen; keep a measure only for text and
    forms.

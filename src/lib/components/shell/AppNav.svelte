@@ -1,6 +1,7 @@
 <script lang="ts">
-	// The app's main places: in thumb reach at the bottom on phones, a rail on the left on
-	// wide screens, with the app's name at its top
+	// The app's main places: in thumb reach at the bottom on phones; on wide screens a
+	// rail on the left, the app's name at its top, your apps under the places, and More
+	// and who you act as at its bottom
 	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
 	import app from '#lib/config/app.json' with {type: 'json'}
@@ -8,6 +9,8 @@
 	import {actorName, inApp, repoPath} from '#lib/paths'
 	import {profileAvatar} from '#lib/atproto/profile'
 	import Icon from './Icon.svelte'
+	import AccountMenu from './AccountMenu.svelte'
+	import PinnedApps from './PinnedApps.svelte'
 
 	let me = $derived(auth.me ? repoPath(actorName(auth.me)) : undefined)
 	let items = $derived([
@@ -38,20 +41,31 @@
 
 <nav aria-label={m.nav_main()}>
 	<a href={inApp('/')} rel="home">{app.name}</a>
-	<ul>
-		{#each items as item, index (index)}
-			<li>
-				<a href={item.href} aria-current={current(item.href, index) ? 'page' : undefined}>
-					{#if index === 2 && avatar}
-						{#await avatar then src}
-							{#if src}<img {src} alt="" />{:else}<Icon name={item.icon} />{/if}
-						{/await}
-					{:else}
-						<Icon name={item.icon} />
-					{/if}
-					<span>{item.label}</span>
-				</a>
-			</li>
-		{/each}
-	</ul>
+	{#snippet places(from: number, to: number)}
+		<ul>
+			{#each items.slice(from, to) as item, at (at)}
+				{@const index = from + at}
+				<li>
+					<a
+						href={item.href}
+						rel={index === 2 ? 'me' : undefined}
+						aria-current={current(item.href, index) ? 'page' : undefined}
+					>
+						{#if index === 2 && avatar}
+							{#await avatar then src}
+								{#if src}<img {src} alt="" />{:else}<Icon name={item.icon} />{/if}
+							{/await}
+						{:else}
+							<Icon name={item.icon} />
+						{/if}
+						<span>{item.label}</span>
+					</a>
+				</li>
+			{/each}
+		</ul>
+	{/snippet}
+	{@render places(0, 3)}
+	<PinnedApps />
+	{@render places(3, 4)}
+	<AccountMenu />
 </nav>

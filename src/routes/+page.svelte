@@ -1,10 +1,13 @@
 <script lang="ts">
-	// Home: your apps, opened like on a phone, and apps to start; signed out, the way in
+	// Home: your apps (the pinned ones first, in your order), opened like on a phone, and
+	// apps to start; signed out, the way in
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {listCollections} from '#lib/atproto/repo'
 	import {repoApps} from '#lib/apps/apps'
 	import {appInfo, directoryApps} from '#lib/apps/directory'
+	import {namespaceOfDomain} from '#lib/apps/names'
+	import {pins} from '#lib/apps/pins.svelte'
 	import AppIconLink from '#lib/components/launcher/AppIconLink.svelte'
 	import {actorName, appPath, appScreenPath, inApp} from '#lib/paths'
 
@@ -14,6 +17,7 @@
 			: undefined
 	)
 	const directory = directoryApps()
+	let pinned = $derived(pins.domains.map((domain) => appInfo(namespaceOfDomain(domain))))
 </script>
 
 <enform-page>
@@ -24,22 +28,24 @@
 			{#await mine}
 				<p><small>{m.collection_loading()}</small></p>
 			{:then apps}
-				{@const used = (apps ?? []).filter((app) => !appInfo(app.namespace).protocol)}
+				{@const used = (apps ?? [])
+					.map((app) => appInfo(app.namespace))
+					.filter((info) => !info.protocol && !pins.has(info.domain))}
+				{@const yours = [...pinned, ...used]}
 				<enform-launcher>
-					{#each used as app (app.namespace)}
-						{@const info = appInfo(app.namespace)}
+					{#each yours as info (info.namespace)}
 						<AppIconLink
-							href={appScreenPath(actor, app.app)}
+							href={appScreenPath(actor, info.domain)}
 							domain={info.domain}
 							name={info.name}
 						/>
 					{/each}
 				</enform-launcher>
-				{#if used.length === 0}<p>{m.home_no_apps()}</p>{/if}
+				{#if yours.length === 0}<p>{m.home_no_apps()}</p>{/if}
 				<section aria-labelledby="start">
 					<h2 id="start">{m.home_start()}</h2>
 					<enform-launcher>
-						{#each directory.filter((info) => !used.some((app) => app.namespace === info.namespace)) as info (info.namespace)}
+						{#each directory.filter((info) => !yours.some((app) => app.namespace === info.namespace)) as info (info.namespace)}
 							<AppIconLink href={appPath(info.domain)} domain={info.domain} name={info.name} />
 						{/each}
 						<enform-app-link add>
@@ -57,7 +63,7 @@
 			<p>{m.app_intro()}</p>
 		</enform-home>
 		<enform-launcher>
-			{#each directory as info (info.namespace)}
+			{#each [...pinned, ...directory.filter((info) => !pins.has(info.domain))] as info (info.namespace)}
 				<AppIconLink href={appPath(info.domain)} domain={info.domain} name={info.name} />
 			{/each}
 		</enform-launcher>

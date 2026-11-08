@@ -14,6 +14,8 @@
 	import {kindVerb} from '#lib/records/kind-words'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import AppActions from '#lib/components/app/AppActions.svelte'
+	import AppMenu from '#lib/components/app/AppMenu.svelte'
+	import PinButton from '#lib/components/PinButton.svelte'
 	import KindView from '#lib/components/app/KindView.svelte'
 	import RecordGrid from '#lib/components/app/RecordGrid.svelte'
 	import RecordSheet from '#lib/components/app/RecordSheet.svelte'
@@ -102,6 +104,14 @@
 				</enform-whose>
 			</p>
 		</hgroup>
+		<!-- The app at hand: pin it; open it, read what it is, see its data, in its menu -->
+		<menu>
+			<li><PinButton domain={info.domain} name={info.name} /></li>
+			<li>
+				<AppMenu {info} data={selected ? collectionPath(actor, selected.nsid) : dataPath(actor)} />
+			</li>
+		</menu>
+		{#if info.description}<p>{info.description}</p>{/if}
 	</header>
 
 	{#if tabs.length}
@@ -201,14 +211,6 @@
 			title={owner ? m.actions_more({app: info.name}) : m.actions_title({app: info.name})}
 		/>
 	{/if}
-
-	<p>
-		<small
-			><a href={selected ? collectionPath(actor, selected.nsid) : dataPath(actor)}
-				>{m.app_data_view()}</a
-			></small
-		>
-	</p>
 </enform-app-screen>
 
 {#if selected && creating}

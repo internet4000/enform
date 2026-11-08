@@ -12,6 +12,7 @@
 	import Account from '#lib/components/Account.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import AppActions from '#lib/components/app/AppActions.svelte'
+	import PinButton from '#lib/components/PinButton.svelte'
 	import {actorName, appScreenPath, lexiconPath} from '#lib/paths'
 
 	let {data} = $props()
@@ -40,11 +41,16 @@
 			<h1>{info.name}</h1>
 			{#if info.description}<p>{info.description}</p>{/if}
 		</hgroup>
-		{#if info.url}
-			<a href={info.url} rel="noopener external" target="_blank" role="button"
-				>{m.apps_visit({domain: info.domain})}</a
-			>
-		{/if}
+		<menu>
+			<li><PinButton domain={info.domain} name={info.name} /></li>
+			{#if info.url}
+				<li>
+					<a href={info.url} rel="noopener external" target="_blank" role="button"
+						>{m.apps_visit({domain: info.domain})} ↗</a
+					>
+				</li>
+			{/if}
+		</menu>
 	</enform-app-hero>
 
 	{#await data.app}
