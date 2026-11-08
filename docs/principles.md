@@ -41,6 +41,14 @@ We don't hack the protocol.
   `validate: false`, and with `swapRecord` against lost updates.
 - Records whose lexicon can't be resolved are read-only.
 
+## The interface follows the data
+
+- What a record type is (a profile, a post, a photo, a link, a follow, a reaction,
+  a status, an event, a list) is read from its lexicon's shape
+  (`src/lib/records/kinds.ts`), for every app. From it come the actions offered in
+  plain words, and how records show as cards and in detail; the lexicon's own
+  description explains each type.
+
 ## Forms
 
 - Every form is generated from its lexicon, and improved through patterns keyed on
