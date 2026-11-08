@@ -111,11 +111,6 @@
 			{/each}
 		</ul>
 	{/if}
-	{#if auth.local}
-		<p>
-			<button type="button" onclick={() => auth.useLocal(undefined)}>{m.local_stop()}</button>
-		</p>
-	{/if}
 	<form onsubmit={create}>
 		<label>
 			{m.local_name_label()}

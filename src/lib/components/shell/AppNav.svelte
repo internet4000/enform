@@ -1,39 +1,35 @@
 <script lang="ts">
 	// The app's main places: in thumb reach at the bottom on phones; on wide screens a
-	// rail on the left, the app's name at its top, your apps under the places, and More
-	// and who you act as at its bottom
+	// rail on the left, the app's name at its top, your apps under the places, and who
+	// you act as at its bottom. Who you are opens Settings: your profiles, switching,
+	// signing in, and the rest.
 	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
 	import app from '#lib/config/app.json' with {type: 'json'}
 	import {auth} from '#lib/auth/session.svelte'
-	import {actorName, inApp, repoPath} from '#lib/paths'
+	import {actorName, inApp} from '#lib/paths'
 	import {profileAvatar} from '#lib/atproto/profile'
 	import Icon from './Icon.svelte'
-	import AccountMenu from './AccountMenu.svelte'
 	import PinnedApps from './PinnedApps.svelte'
 
-	let me = $derived(auth.me ? repoPath(actorName(auth.me)) : undefined)
-	let items = $derived([
-		{href: inApp('/'), icon: 'home', label: m.nav_home()},
-		{href: inApp('/explore'), icon: 'explore', label: m.nav_explore()},
-		{
-			href: me ?? inApp('/more'),
-			icon: 'me',
-			// Who you are acting as, always in sight: your handle, or your local profile's name
-			label: auth.me
-				? auth.me.local
-					? (auth.me.name ?? m.nav_me())
-					: `@${actorName(auth.me)}`
-				: m.session_sign_in()
-		},
-		{href: inApp('/more'), icon: 'more', label: m.nav_more()}
-	] as const)
+	const places = [
+		{href: inApp('/'), icon: 'home', label: m.nav_home},
+		{href: inApp('/explore'), icon: 'explore', label: m.nav_explore}
+	] as const
+	const settings = inApp('/settings')
 
+	/** Who you act as, always in sight: your handle, your local profile's name, or nobody yet */
+	let me = $derived(
+		auth.me
+			? auth.me.local
+				? (auth.me.name ?? m.local_on_device())
+				: `@${actorName(auth.me)}`
+			: m.nav_settings()
+	)
 	let avatar = $derived(auth.me && !auth.me.local ? profileAvatar(auth.me) : undefined)
 
-	function current(href: string, index: number) {
+	function current(href: string) {
 		const path = page.url.pathname
-		if (index === 2 && !me) return false
 		if (href === inApp('/')) return path === href
 		return path === href || path.startsWith(`${href}/`)
 	}
@@ -41,31 +37,25 @@
 
 <nav aria-label={m.nav_main()}>
 	<a href={inApp('/')} rel="home">{app.name}</a>
-	{#snippet places(from: number, to: number)}
-		<ul>
-			{#each items.slice(from, to) as item, at (at)}
-				{@const index = from + at}
-				<li>
-					<a
-						href={item.href}
-						rel={index === 2 ? 'me' : undefined}
-						aria-current={current(item.href, index) ? 'page' : undefined}
-					>
-						{#if index === 2 && avatar}
-							{#await avatar then src}
-								{#if src}<img {src} alt="" />{:else}<Icon name={item.icon} />{/if}
-							{/await}
-						{:else}
-							<Icon name={item.icon} />
-						{/if}
-						<span>{item.label}</span>
-					</a>
-				</li>
-			{/each}
-		</ul>
-	{/snippet}
-	{@render places(0, 3)}
+	<ul>
+		{#each places as place (place.href)}
+			<li>
+				<a href={place.href} aria-current={current(place.href) ? 'page' : undefined}>
+					<Icon name={place.icon} />
+					<span>{place.label()}</span>
+				</a>
+			</li>
+		{/each}
+	</ul>
 	<PinnedApps />
-	{@render places(3, 4)}
-	<AccountMenu />
+	<ul>
+		<li>
+			<a href={settings} rel="me" aria-current={current(settings) ? 'page' : undefined}>
+				{#await avatar then src}
+					{#if src}<img {src} alt="" />{:else}<Icon name="me" />{/if}
+				{/await}
+				<span>{me}</span>
+			</a>
+		</li>
+	</ul>
 </nav>

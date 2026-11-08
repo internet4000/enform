@@ -11,7 +11,7 @@ test('pick a place by address, then by location', async ({page, context}) => {
 		route.fulfill({json: [{display_name: 'Berlin, Germany', lat: '52.52', lon: '13.405'}]})
 	)
 	await page.goto('/apps/statusphere.xyz')
-	await page.getByRole('button', {name: t('apps_try_local')}).click()
+	await page.getByRole('button', {name: t('start_device_button')}).click()
 	await page.waitForURL(creating)
 	const local = new URL(page.url()).pathname.split('/apps/')[0]
 	await page.goto(`${local}/apps/enform.test?type=test.enform.place&new`)

@@ -5,14 +5,15 @@
 	import * as m from '#lib/paraglide/messages.js'
 	import {goto} from '$app/navigation'
 	import {localIdentity} from '#lib/atproto/identity'
-	import {createProfile, listProfiles} from '#lib/local/store'
+	import {startOnDevice} from '#lib/local/start'
 	import {auth} from '#lib/auth/session.svelte'
 	import {listCollections} from '#lib/atproto/repo'
 	import {repoApps} from '#lib/apps/apps'
 	import {byDirectory, directoryTypes, typeLabel} from '#lib/apps/directory'
 	import type {RepoApp} from '#lib/apps/types'
 	import {startType} from '#lib/apps/start'
-	import Account from '#lib/components/Account.svelte'
+	import SignIn from '#lib/components/SignIn.svelte'
+	import StartChoice from '#lib/components/StartChoice.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import AppActions from '#lib/components/app/AppActions.svelte'
 	import AppProfile from '#lib/components/app/AppProfile.svelte'
@@ -21,10 +22,9 @@
 
 	let {data} = $props()
 
-	/** Starts on the app in a local profile (the first one, else a new one) */
+	/** Starts on the app on this device (the first local profile, else a new one) */
 	async function tryLocally(type: string) {
-		const profile = (await listProfiles())[0] ?? (await createProfile(m.local_default_name()))
-		await auth.useLocal(profile)
+		const profile = await startOnDevice(m.local_default_name())
 		await goto(appScreenPath(actorName(localIdentity(profile)), info.domain, {type, create: true}))
 	}
 	let info = $derived(data.info)
@@ -124,17 +124,15 @@
 		<!-- Not on it yet: how to start (once you are, you on it comes first, above) -->
 		{#if !mine}
 			<section aria-labelledby="start">
-				<h2 id="start">{m.apps_your_place()}</h2>
+				<h2 id="start">{auth.me ? m.apps_your_place() : m.start_title()}</h2>
 				{#if !auth.me}
 					{#if auth.ready}
 						{#if start}
-							<p>
-								<button type="button" onclick={() => tryLocally(start)}>{m.apps_try_local()}</button
-								>
-							</p>
+							<StartChoice start={() => tryLocally(start)} />
+						{:else}
+							<p>{m.apps_sign_in({app: info.name})}</p>
+							<SignIn />
 						{/if}
-						<p>{m.apps_sign_in({app: info.name})}</p>
-						<Account />
 					{/if}
 				{:else if me && start}
 					<p>{m.apps_not_yet({app: info.name})}</p>

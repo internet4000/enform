@@ -27,7 +27,7 @@ test('pin apps, find them first, reorder and unpin them', async ({page}, info) =
 	}
 
 	// Reordered, then unpinned, in More; kept across a reload (on this device)
-	await page.goto('/more')
+	await page.goto('/settings')
 	await page.getByRole('button', {name: t('pins_move_up', {app: 'Radio4000'})}).click()
 	await page.reload()
 	const pins = page.locator('enform-pins').getByRole('link')

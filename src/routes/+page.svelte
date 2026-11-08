@@ -9,6 +9,8 @@
 	import {namespaceOfDomain} from '#lib/apps/names'
 	import {pins} from '#lib/apps/pins.svelte'
 	import AppIconLink from '#lib/components/launcher/AppIconLink.svelte'
+	import StartChoice from '#lib/components/StartChoice.svelte'
+	import {startOnDevice} from '#lib/local/start'
 	import {actorName, appPath, appScreenPath, inApp} from '#lib/paths'
 
 	let mine = $derived(
@@ -68,8 +70,9 @@
 			{/each}
 		</enform-launcher>
 		<p><a href={inApp('/explore')}>{m.home_more_apps()}</a></p>
-		<p>
-			{m.home_have_account()} <a href={inApp('/more')} role="button">{m.session_sign_in()}</a>
-		</p>
+		<section aria-labelledby="where">
+			<h2 id="where">{m.start_title()}</h2>
+			<StartChoice start={() => startOnDevice(m.local_default_name()).then(() => {})} />
+		</section>
 	{/if}
 </enform-page>

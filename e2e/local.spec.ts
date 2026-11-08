@@ -6,7 +6,7 @@ import {closed, creating, expect, opened, t, test} from './fixtures'
 
 test('try an app on this device: create, edit and delete a record', async ({page}) => {
 	await page.goto('/apps/statusphere.xyz')
-	await page.getByRole('button', {name: t('apps_try_local')}).click()
+	await page.getByRole('button', {name: t('start_device_button')}).click()
 	await page.waitForURL(creating)
 
 	const form = page.locator('enform-form')

@@ -14,8 +14,14 @@ test('search from the top: someone by handle, then their page', async ({page}) =
 	await page.waitForURL((url) => url.pathname === '/@alice.test')
 })
 
-test('settings moved to More, old links still land', async ({page}) => {
-	await page.goto('/settings')
-	await page.waitForURL((url) => url.pathname === '/more')
-	await expect(page.getByRole('heading', {level: 1, name: t('nav_more')})).toBeVisible()
+test('Settings opens from who you are; old More links still land', async ({page}) => {
+	await page.goto('/more')
+	await page.waitForURL((url) => url.pathname === '/settings')
+	await expect(page.getByRole('heading', {level: 1, name: t('nav_settings')})).toBeVisible()
+	await page.goto('/')
+	await page
+		.getByRole('navigation', {name: t('nav_main')})
+		.getByRole('link', {name: t('nav_settings')})
+		.click()
+	await page.waitForURL((url) => url.pathname === '/settings')
 })

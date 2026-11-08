@@ -41,7 +41,7 @@
 	<header>
 		<Search />
 		{#if outbox.writes.length}
-			<a href={inApp('/more#waiting')} rel="status"
+			<a href={inApp('/settings#waiting')} rel="status"
 				>{m.outbox_count({count: String(outbox.writes.length)})}</a
 			>
 		{/if}

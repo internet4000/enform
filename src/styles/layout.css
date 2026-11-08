@@ -702,3 +702,16 @@ enform-pending {
 enform-pending[state='conflict'] {
 	color: var(--color-danger);
 }
+
+/* A part of a page's section (Settings › Profiles › On this device): under its heading */
+enform-page section section {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	margin-top: var(--space-s);
+}
+
+enform-page section section > h3 {
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}

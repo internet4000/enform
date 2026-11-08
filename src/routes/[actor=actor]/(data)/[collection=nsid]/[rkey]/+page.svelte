@@ -57,7 +57,7 @@
 			{/if}
 		{/snippet}
 		{#if data.record.pending}
-			<p role="status"><a href={inApp('/more#waiting')}>{m.outbox_record_waiting()}</a></p>
+			<p role="status"><a href={inApp('/settings#waiting')}>{m.outbox_record_waiting()}</a></p>
 		{/if}
 		<enform-record>
 			{#await data.lexicon}
