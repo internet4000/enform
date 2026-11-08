@@ -1,12 +1,13 @@
 <script lang="ts">
-	// A person of the atmosphere: who they are, and their apps, to open like on a phone
+	// A person of the atmosphere: who they are, and their apps as cards, each with what they
+	// have in it (its record types, named from the directory or their NSID)
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {blobUrl} from '#lib/atproto/repo'
-	import {appInfo} from '#lib/apps/directory'
+	import {appInfo, byDirectory, typeLabel} from '#lib/apps/directory'
 	import {personCard} from '#lib/apps/person'
 	import type {RepoApp} from '#lib/apps/types'
-	import AppIconLink from '#lib/components/launcher/AppIconLink.svelte'
+	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import {actorName, appScreenPath, dataPath, inApp} from '#lib/paths'
 
 	let {data} = $props()
@@ -22,6 +23,15 @@
 				(a, b) =>
 					Number(b.info.known) - Number(a.info.known) || a.info.name.localeCompare(b.info.name)
 			)
+	/** What they have in an app: its types with records */
+	const had = (app: RepoApp) =>
+		byDirectory(
+			[...(app.profile?.record ? [app.profile] : []), ...app.lists, ...app.singles].filter(
+				(type) => type.used || type === app.profile
+			)
+		)
+			.map((type) => typeLabel(type.nsid))
+			.join(' · ')
 </script>
 
 <enform-page>
@@ -45,18 +55,26 @@
 		{#await data.apps}
 			<p><small>{m.collection_loading()}</small></p>
 		{:then apps}
-			<enform-launcher>
+			<enform-app-cards>
 				{#each shown(apps) as { app, info } (app.namespace)}
-					<AppIconLink href={appScreenPath(actor, app.app)} domain={info.domain} name={info.name} />
+					<enform-app-card>
+						<a href={appScreenPath(actor, app.app)}>
+							<AppIcon domain={info.domain} name={info.name} />
+							<strong>{info.name}</strong>
+							<p>{had(app)}</p>
+							{#if info.name.toLowerCase() !== info.domain}<small>{info.domain}</small>{/if}
+						</a>
+					</enform-app-card>
 				{/each}
 				{#if owner}
-					<enform-app-link add>
-						<a href={inApp('/explore')}
-							><span aria-hidden="true">+</span><span>{m.person_add_app()}</span></a
-						>
-					</enform-app-link>
+					<enform-app-card add>
+						<a href={inApp('/explore')}>
+							<span aria-hidden="true">+</span>
+							<strong>{m.person_add_app()}</strong>
+						</a>
+					</enform-app-card>
 				{/if}
-			</enform-launcher>
+			</enform-app-cards>
 			{#if shown(apps).length === 0}<p>{m.repo_collections_empty()}</p>{/if}
 		{/await}
 	</section>

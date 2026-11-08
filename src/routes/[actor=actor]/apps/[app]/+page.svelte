@@ -1,6 +1,7 @@
 <script lang="ts">
 	// An app as a person has it: its types as tabs (Radio · Tracks · Followed radios), their
-	// records as cards, and, over it, a record or a form. The owner adds with the + button.
+	// records as cards under a toolbar (how many, play all, + New and what else to make),
+	// and, over it, a record or a form. On phones, + New is also a button in thumb reach.
 	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
@@ -18,6 +19,7 @@
 	import AppProfile from '#lib/components/app/AppProfile.svelte'
 	import PinButton from '#lib/components/PinButton.svelte'
 	import KindView from '#lib/components/app/KindView.svelte'
+	import NewMenu from '#lib/components/app/NewMenu.svelte'
 	import RecordGrid from '#lib/components/app/RecordGrid.svelte'
 	import RecordSheet from '#lib/components/app/RecordSheet.svelte'
 	import CreateRecord from '#lib/components/CreateRecord.svelte'
@@ -57,6 +59,14 @@
 						(type) => type.lexicon
 					)
 				)
+	)
+	/** What one can make here, from the app's lexicons: its profile until one has it, and
+	    every list type (what one has only one of is edited from its tab) */
+	let makeable = $derived(
+		byDirectory([
+			...(app.profile && !app.profile.record && app.profile.lexicon ? [app.profile] : []),
+			...app.lists.filter((type) => type.lexicon)
+		])
 	)
 	let me = $derived(auth.me ? actorName(auth.me) : undefined)
 	/** Starting a type: here for the owner, else in your own repo's screen of this app */
@@ -188,14 +198,25 @@
 			{/if}
 		{/await}
 	{:else}
+		{@const type = selected}
 		{#await lexicon then doc}
 			<RecordGrid
 				repo={data.repo}
-				collection={selected.nsid}
+				collection={type.nsid}
 				lexicon={doc}
-				href={(rkey) => at(selected.nsid, {record: rkey})}
+				href={(rkey) => at(type.nsid, {record: rkey})}
 				{open}
-			/>
+			>
+				{#snippet actions()}
+					{#if start}
+						<NewMenu
+							current={type.lexicon ? type : undefined}
+							others={makeable.filter((other) => other.nsid !== type.nsid)}
+							href={start}
+						/>
+					{/if}
+				{/snippet}
+			</RecordGrid>
 		{/await}
 		{#if owner && selected.lexicon}
 			<enform-fab>
@@ -206,12 +227,8 @@
 		{/if}
 	{/if}
 
-	{#if selected && doable.length}
-		<AppActions
-			types={doable.filter((type) => type.nsid !== selected.nsid)}
-			href={start}
-			title={owner ? m.actions_more({app: info.name}) : m.actions_title({app: info.name})}
-		/>
+	{#if selected && !start}
+		<p><small>{m.actions_view_only({app: info.name})}</small></p>
 	{/if}
 </enform-app-screen>
 

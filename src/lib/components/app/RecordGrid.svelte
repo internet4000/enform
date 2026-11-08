@@ -1,5 +1,7 @@
 <script lang="ts">
-	// An app's records of one type, as cards, a page at a time, newest first
+	// An app's records of one type, as cards, a page at a time, newest first; over them, a
+	// toolbar: how many are shown, read or play them all, and what the page adds (+ New)
+	import type {Snippet} from 'svelte'
 	import * as m from '#lib/paraglide/messages.js'
 	import app from '#lib/config/app.json' with {type: 'json'}
 	import type {Identity} from '#lib/atproto/identity'
@@ -15,8 +17,10 @@
 		lexicon?: LexiconDoc
 		href: (rkey: string) => string
 		open?: string
+		/** The page's own actions, at the toolbar's end */
+		actions?: Snippet
 	}
-	let {repo, collection, lexicon, href, open}: Props = $props()
+	let {repo, collection, lexicon, href, open, actions}: Props = $props()
 
 	let records = $state<RepoRecord[]>([])
 	let cursor = $state<string>()
@@ -56,13 +60,25 @@
 	})
 </script>
 
-{#if records.length}
+<enform-toolbar>
 	<p>
-		<button type="button" onclick={() => read()}>
-			{playable ? m.reader_play_all() : m.reader_read_all()}
-		</button>
+		{#if records.length}
+			{cursor
+				? m.records_count_more({count: String(records.length)})
+				: m.records_count({count: String(records.length)})}
+		{/if}
 	</p>
-{/if}
+	<menu>
+		{#if records.length}
+			<li>
+				<button type="button" onclick={() => read()}>
+					{playable ? m.reader_play_all() : m.reader_read_all()}
+				</button>
+			</li>
+		{/if}
+		{@render actions?.()}
+	</menu>
+</enform-toolbar>
 <enform-record-grid>
 	{#each records as record (record.rkey)}
 		<AppRecordCard

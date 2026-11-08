@@ -50,7 +50,7 @@
 		<AppIcon domain={info.domain} name={info.name} />
 		<hgroup>
 			<h1>{info.name}</h1>
-			{#if info.description}<p>{info.description}</p>{/if}
+			{#if info.name.toLowerCase() !== info.domain}<p>{info.domain}</p>{/if}
 		</hgroup>
 		<menu>
 			<li><PinButton domain={info.domain} name={info.name} /></li>
@@ -62,6 +62,7 @@
 				</li>
 			{/if}
 		</menu>
+		{#if info.description}<p>{info.description}</p>{/if}
 	</enform-app-hero>
 
 	{#await yours then app}

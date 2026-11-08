@@ -570,20 +570,46 @@ enform-app-card[joined] small {
 	color: var(--color-success);
 }
 
+/* An app: its icon and name, its actions at the row's end, what it is under them */
 enform-app-hero {
 	display: grid;
 	grid-template-columns: auto minmax(0, 1fr);
+	grid-template-areas: 'icon name' 'text text' 'menu menu';
 	align-items: center;
 	gap: var(--space-s) var(--space-m);
 }
 
+@media (min-width: 48rem) {
+	enform-app-hero {
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		grid-template-areas: 'icon name menu' 'text text text';
+	}
+}
+
+enform-app-hero > enform-app-icon {
+	grid-area: icon;
+}
+
+enform-app-hero > hgroup {
+	grid-area: name;
+	min-width: 0;
+}
+
 enform-app-hero hgroup p {
-	margin: var(--space-xs) 0 0;
+	margin: 0;
+	font-size: var(--font-size-s);
 	color: var(--color-muted);
 }
 
 enform-app-hero > menu {
-	grid-column: 2;
+	grid-area: menu;
+}
+
+enform-app-hero > p {
+	grid-area: text;
+	max-width: var(--form-measure);
+	margin: 0;
+	color: var(--color-muted);
 }
 
 /* An app's actions by its name: pin it, open it, and the like, quiet beside the page's */
@@ -713,5 +739,21 @@ enform-page section section {
 
 enform-page section section > h3 {
 	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+/* Adding an app, last among them: a dashed card */
+enform-app-card[add] > a {
+	background: none;
+	border: var(--border-width) dashed var(--color-border);
+}
+
+enform-app-card[add] > a > span {
+	grid-area: icon;
+	display: grid;
+	place-items: center;
+	width: var(--app-icon-size-large);
+	height: var(--app-icon-size-large);
+	font-size: var(--font-size-l);
 	color: var(--color-muted);
 }

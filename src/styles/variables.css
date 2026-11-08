@@ -18,7 +18,7 @@
 	--pill-radius: 999px;
 	--input-min-width: 14rem;
 	--border-width: 1px;
-	--measure: 60rem;
+	--measure: 72rem;
 	--measure-dialog: 32rem;
 	--measure-settings: 36rem;
 	--control-height: 2.75rem;
@@ -48,7 +48,7 @@
 	--menu-width: 22rem;
 	--sticky-bottom-gap: calc(var(--sticky-bottom) + var(--space-s));
 	--launcher-cell: 5.5rem;
-	--measure-wide: 72rem;
+	--measure-wide: 120rem;
 	--record-card-min: 16rem;
 	--record-card-image: 10rem;
 	--fab-height: 3.25rem;

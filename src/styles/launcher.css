@@ -96,6 +96,7 @@ enform-person figcaption {
 }
 
 enform-person figcaption p {
+	max-width: var(--form-measure);
 	margin: var(--space-2xs) 0 0;
 	color: var(--color-muted);
 	white-space: pre-line;

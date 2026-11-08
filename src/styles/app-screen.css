@@ -396,3 +396,54 @@ enform-app-profile span {
 enform-app-profile small {
 	color: var(--color-muted);
 }
+
+/* Over the records: how many are shown, then reading them all and making one, at the end
+   (as joblist's list toolbar); filters will join it */
+enform-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-s);
+}
+
+enform-toolbar > p {
+	margin: 0;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-toolbar > menu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+enform-toolbar enform-new > a[role='button'] {
+	font-weight: 600;
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+	border-color: var(--color-accent);
+}
+
+enform-menu li > a > small {
+	color: var(--color-muted);
+}
+
+/* On phones, + New is the button in thumb reach; on wide screens, in the toolbar */
+enform-toolbar enform-new {
+	display: none;
+}
+
+@media (min-width: 64rem) {
+	enform-toolbar enform-new {
+		display: contents;
+	}
+
+	enform-app-screen enform-fab {
+		display: none;
+	}
+}
