@@ -54,7 +54,8 @@ export default defineConfig(({mode, command}) => ({
 				strict: true
 			}),
 			paths: {
-				base: BASE_PATH,
+				// Unit tests check the app's paths at the root, wherever it is built for
+				base: mode === 'test' ? '' : BASE_PATH,
 				// The built metadata names the instance; in dev it follows whatever serves it
 				...(command === 'build' ? {origin: ORIGIN} : {})
 			},
