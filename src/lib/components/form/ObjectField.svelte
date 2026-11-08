@@ -131,6 +131,12 @@
 
 {#snippet all()}
 	{@render fields(order.fields)}
+	{#if order.automatic.length}
+		<details>
+			<summary>{m.form_more_options()}</summary>
+			{@render fields(order.automatic)}
+		</details>
+	{/if}
 	{#if order.deprecated.length}
 		<details>
 			<summary>{m.form_deprecated()}</summary>

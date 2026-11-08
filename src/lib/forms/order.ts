@@ -7,7 +7,11 @@
 import type {LexNode} from '#lib/lexicons/types'
 import {TITLE_KEYS} from '#lib/records/summary'
 
-export type FieldOrder = {fields: string[]; deprecated: string[]}
+/** Fields to ask, timestamps a record keeps of itself (asked apart), deprecated ones */
+export type FieldOrder = {fields: string[]; automatic: string[]; deprecated: string[]}
+
+/** A record's own timestamps: they fill themselves (now), so they are asked apart */
+const AUTOMATIC = ['createdAt', 'updatedAt', 'indexedAt']
 
 export function isDeprecated(node: LexNode): boolean {
 	return /^\s*deprecated\b/i.test(node.description ?? '')
@@ -47,5 +51,10 @@ export function fieldOrder(node: LexNode): FieldOrder {
 		...required.filter((key) => live(key) && isDatetime(properties[key])),
 		...keys.filter((key) => live(key) && !required.includes(key) && isDatetime(properties[key]))
 	]
-	return {fields: [...first, ...optional, ...dates], deprecated}
+	const automatic = dates.filter((key) => AUTOMATIC.includes(key))
+	return {
+		fields: [...first, ...optional, ...dates.filter((key) => !automatic.includes(key))],
+		automatic,
+		deprecated
+	}
 }

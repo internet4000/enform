@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {fieldLabel} from '#lib/forms/labels'
 	// A field's frame: its label (or legend), hint and errors around the control.
 	// Errors show once the field was left, or when the form reveals them all.
 	import type {Snippet} from 'svelte'
@@ -78,7 +79,7 @@
 </script>
 
 {#snippet title()}
-	{label}
+	{fieldLabel(label)}
 	{#if !required && !item}<small>{m.form_optional()}</small>{/if}
 {/snippet}
 

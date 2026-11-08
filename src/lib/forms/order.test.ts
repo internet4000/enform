@@ -1,7 +1,7 @@
 import {expect, test} from 'vitest'
 import {fieldOrder} from './order'
 
-test('required first, titles before the rest, timestamps last, deprecated apart', () => {
+test('required first, titles before the rest, own timestamps apart, deprecated apart', () => {
 	const order = fieldOrder({
 		type: 'object',
 		required: ['url', 'title', 'createdAt'],
@@ -18,7 +18,20 @@ test('required first, titles before the rest, timestamps last, deprecated apart'
 		}
 	})
 	expect(order).toEqual({
-		fields: ['url', 'title', 'description', 'duration', 'links', 'embed', 'createdAt', 'updatedAt'],
+		fields: ['url', 'title', 'description', 'duration', 'links', 'embed'],
+		automatic: ['createdAt', 'updatedAt'],
 		deprecated: ['website']
 	})
+})
+
+test('content dates (an event start) stay with the fields', () => {
+	const order = fieldOrder({
+		type: 'object',
+		properties: {
+			startsAt: {type: 'string', format: 'datetime'},
+			createdAt: {type: 'string', format: 'datetime'}
+		}
+	})
+	expect(order.fields).toEqual(['startsAt'])
+	expect(order.automatic).toEqual(['createdAt'])
 })
