@@ -1,14 +1,16 @@
 <script lang="ts">
 	// The reader, over every page and always at hand, in three modes (like Radio4000's
 	// decks): small, a bar whose media play out of sight; docked, beside the page on wide
-	// screens and below it on phones; full screen. Prev, next, what's up next, and autoplay
-	// on to the next record when one is done. Its record stays mounted in every mode.
+	// screens and below it on phones; full screen. Prev, next, what's up next (each with its
+	// menu), and autoplay on to the next record when one is done. Its record stays mounted
+	// in every mode.
 	import * as m from '#lib/paraglide/messages.js'
 	import {typeLabel} from '#lib/apps/directory'
 	import {reader, type ReaderItem, type ReaderMode} from '#lib/reader/reader.svelte'
 	import {recordSummary} from '#lib/records/summary'
 	import Icon from '../shell/Icon.svelte'
 	import Present from '../present/Present.svelte'
+	import ReaderItemMenu from './ReaderItemMenu.svelte'
 
 	let item = $derived(reader.current)
 	const titleOf = (entry: ReaderItem) =>
@@ -27,7 +29,8 @@
 			return
 		if (event.key === 'ArrowRight') void reader.next()
 		if (event.key === 'ArrowLeft') reader.prev()
-		if (event.key === 'Escape') reader.mode = 'docked'
+		// Escape closes an open menu first; then it leaves full screen
+		if (event.key === 'Escape' && !document.querySelector(':popover-open')) reader.mode = 'docked'
 	}
 </script>
 
@@ -109,6 +112,7 @@
 						}}>{m.reader_open()}</a
 					>
 				</li>
+				<li><ReaderItemMenu entry={item} index={reader.index} {title} /></li>
 				<li>
 					<button
 						type="button"
@@ -124,12 +128,14 @@
 				<h2 id="reader-queue">{m.reader_queue()}</h2>
 				<ol>
 					{#each reader.items as entry, index (`${entry.repo.did}/${entry.record.uri}`)}
+						{@const name = titleOf(entry)}
 						<li>
 							<button
 								type="button"
 								aria-current={index === reader.index || undefined}
-								onclick={() => reader.go(index)}>{titleOf(entry)}</button
+								onclick={() => reader.go(index)}>{name}</button
 							>
+							<ReaderItemMenu {entry} {index} title={name} />
 						</li>
 					{/each}
 				</ol>

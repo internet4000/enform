@@ -42,6 +42,16 @@ class Reader {
 		if (index >= 0 && index < this.items.length) this.index = index
 	}
 
+	/** Takes the list's record at `index` out; the next one takes its place */
+	remove(index: number) {
+		if (index < 0 || index >= this.items.length) return
+		const items = this.items.filter((_, at) => at !== index)
+		if (!items.length) return this.close()
+		if (index < this.index) this.index--
+		this.index = Math.min(this.index, items.length - 1)
+		this.items = items
+	}
+
 	get hasPrev() {
 		return this.index > 0
 	}

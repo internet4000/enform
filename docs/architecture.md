@@ -30,7 +30,17 @@ everything, and each presenter says when its record is done (a track ended, a ph
 shown for a while, text when you move on). Autoplay goes on to the next record when
 one is done. Like Radio4000's decks, it is always at hand in one of three modes: small
 (a bar, its media playing out of sight), docked (beside the page from 64rem, below it
-on phones, with what's up next) and full screen.
+on phones, with what's up next) and full screen. Docked or full, its controls and
+media stay in place while the record's text and the list scroll; each record of the
+list has its menu (open, edit yours, share, copy its at:// link, take it out).
+
+## Pins
+
+The apps someone keeps at hand, by domain, in their order: in the rail from 64rem and
+first on Home. Kept on this device (`localStorage`), so pinning asks for no permission.
+Until something is pinned, the rail suggests the apps you have records in; it never
+decides for you. Keeping pins in your own repo, as records of an enform lexicon, would
+make them follow you to any device and any instance: planned, not done.
 
 ## Extending
 

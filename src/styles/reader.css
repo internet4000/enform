@@ -2,7 +2,8 @@
  * The reader, always at hand in three modes (Radio4000's decks): small, a bar above the
  * tab bar; docked, a panel above the tab bar on phones and a column beside the page from
  * the shell's switch (64rem); full screen. Its record stays mounted in every mode, so
- * media keep playing; the page keeps room for it (--reader-space).
+ * media keep playing; the page keeps room for it (--reader-space). Docked or full, its
+ * controls and media stay in place: the record's text and what's up next scroll.
  */
 enform-reader {
 	position: fixed;
@@ -87,7 +88,7 @@ enform-reader button[aria-pressed='true'] {
 	border-color: var(--color-accent);
 }
 
-/* The reader scrolls as a whole: its parts keep their size */
+/* Its controls keep their size; the record and the list scroll, each on its own */
 enform-reader > * {
 	flex: none;
 }
@@ -96,6 +97,32 @@ enform-reader > enform-present {
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-m);
+}
+
+enform-reader:is([mode='docked'], [mode='full']) {
+	overflow: hidden;
+}
+
+enform-reader:is([mode='docked'], [mode='full']) > enform-present {
+	flex: 0 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
+
+enform-reader:is([mode='docked'], [mode='full']) > section {
+	flex: 1 1 0;
+	min-height: var(--reader-queue-min-height);
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
+
+/* The media on top, the record's text scrolling under it */
+enform-reader enform-media {
+	position: sticky;
+	inset-block-start: 0;
+	z-index: 1;
+	background: var(--color-bg);
 }
 
 /* What's up next: the list, the current one marked */
@@ -117,13 +144,29 @@ enform-reader ol {
 	list-style: none;
 }
 
-enform-reader ol button {
-	width: 100%;
+enform-reader ol > li {
+	display: flex;
+	align-items: center;
+}
+
+/* Each record of the list, and its menu */
+enform-reader ol > li > button:first-child {
+	flex: 1;
+	min-width: 0;
 	justify-content: flex-start;
 	overflow: hidden;
 	text-align: start;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	background: none;
+	border-color: transparent;
+}
+
+enform-reader ol > li > button:not(:first-child) {
+	flex: none;
+	width: var(--control-height);
+	padding: 0;
+	color: var(--color-muted);
 	background: none;
 	border-color: transparent;
 }
@@ -153,9 +196,7 @@ enform-reader[mode='small'] > enform-present {
 enform-reader[mode='docked'] {
 	inset: auto 0 var(--sticky-bottom) 0;
 	height: var(--reader-docked-height);
-	overflow-y: auto;
 	background: var(--color-bg);
-	overscroll-behavior: contain;
 	border-width: var(--border-width) 0 0;
 }
 
@@ -163,7 +204,6 @@ enform-reader[mode='docked'] {
 enform-reader[mode='full'] {
 	inset: 0;
 	padding: var(--space-s) var(--gutter) calc(var(--space-s) + env(safe-area-inset-bottom));
-	overflow-y: auto;
 	background: var(--color-bg);
 	border: 0;
 }
@@ -223,8 +263,9 @@ enform-app > main {
 		display: block;
 	}
 
-	enform-app:has(> enform-reader[mode='small']) {
-		--reader-space: 0px;
+	/* The + button stays beside the docked reader, not over it */
+	enform-app:has(> enform-reader[mode='docked']) enform-fab {
+		inset-inline-end: calc(var(--reader-width) + var(--gutter));
 	}
 }
 
