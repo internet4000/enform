@@ -1,8 +1,8 @@
 # enform
 
-Your AT Protocol data, as an app. Open any account to browse its collections and
-records, shown through the lexicons their collections publish. Creating, editing and
-deleting records with forms generated from those lexicons comes next.
+Your AT Protocol data, as an app. Open any account to see the apps it uses and its
+records, shown through the lexicons their collections publish; create, edit and delete
+your own with forms generated from those lexicons, signed in or in a local profile.
 
 A static SvelteKit app with no backend: every repo is read from its own PDS.
 See [docs/principles.md](docs/principles.md) for how enform keeps to the atproto specs.
@@ -15,6 +15,7 @@ bun run dev      # http://127.0.0.1:5173
 bun run test
 bun run types
 bun run build    # static site in dist/
+bun run verify   # all of the above and formatting: before every commit
 ```
 
 ## End-to-end tests

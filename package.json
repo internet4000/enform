@@ -14,6 +14,7 @@
 		"i18n": "paraglide-js compile --project ./i18n/project.inlang --outdir ./src/lib/paraglide",
 		"types": "bun run i18n && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"format": "prettier --write . --log-level=warn",
+		"verify": "prettier --check . --log-level=warn && bun run types && bun run test && bun run build",
 		"deploy": "bun run build && wrangler deploy"
 	},
 	"imports": {
