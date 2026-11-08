@@ -51,7 +51,7 @@
 
 <li>
 	<button type="button" popovertarget="{id}-menu" aria-label={m.record_menu()}>⋯</button>
-	<enform-menu id="{id}-menu" popover bind:this={menu}>
+	<enform-menu id="{id}-menu" popover="auto" bind:this={menu}>
 		<ul>
 			{#await related then list}
 				{#each list as { app, type, fields } (type.nsid)}
