@@ -65,7 +65,9 @@
 		{#if records.length}
 			{cursor
 				? m.records_count_more({count: String(records.length)})
-				: m.records_count({count: String(records.length)})}
+				: records.length === 1
+					? m.records_count_one()
+					: m.records_count({count: String(records.length)})}
 		{/if}
 	</p>
 	<menu>

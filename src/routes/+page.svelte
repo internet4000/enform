@@ -1,14 +1,19 @@
 <script lang="ts">
-	// Home: your apps (the pinned ones first, in your order), opened like on a phone, and
-	// apps to start; signed out, the way in
+	// Home: your apps (the pinned ones first, in your order), opened like on a phone, what
+	// you make most in them (quick actions, from their lexicons), and apps to start;
+	// signed out, the way in
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {listCollections} from '#lib/atproto/repo'
 	import {repoApps} from '#lib/apps/apps'
-	import {appInfo, directoryApps} from '#lib/apps/directory'
+	import {appInfo, directoryApps, typeLabel} from '#lib/apps/directory'
+	import {quickActions} from '#lib/apps/quick'
+	import type {RepoApp} from '#lib/apps/types'
+	import {kindVerb} from '#lib/records/kind-words'
 	import {namespaceOfDomain} from '#lib/apps/names'
 	import {pins} from '#lib/apps/pins.svelte'
 	import AppIconLink from '#lib/components/launcher/AppIconLink.svelte'
+	import QuickLinks, {type QuickLink} from '#lib/components/QuickLinks.svelte'
 	import StartChoice from '#lib/components/StartChoice.svelte'
 	import {startOnDevice} from '#lib/local/start'
 	import {actorName, appPath, appScreenPath, inApp} from '#lib/paths'
@@ -20,6 +25,29 @@
 	)
 	const directory = directoryApps()
 	let pinned = $derived(pins.domains.map((domain) => appInfo(namespaceOfDomain(domain))))
+
+	/** What you make most in your apps, the pinned ones first */
+	function quick(actor: string, apps: RepoApp[]): QuickLink[] {
+		const rank = (app: RepoApp) => {
+			const index = pins.domains.indexOf(appInfo(app.namespace).domain)
+			return index < 0 ? pins.domains.length : index
+		}
+		const sorted = apps
+			.filter((app) => !appInfo(app.namespace).protocol)
+			.sort((a, b) => rank(a) - rank(b))
+		return quickActions(sorted)
+			.slice(0, 8)
+			.map(({app, type, kind}) => {
+				const info = appInfo(app.namespace)
+				return {
+					href: appScreenPath(actor, info.domain, {type: type.nsid, create: true}),
+					domain: info.domain,
+					app: info.name,
+					verb: kindVerb(kind, typeLabel(type.nsid)).verb,
+					detail: typeLabel(type.nsid)
+				}
+			})
+	}
 </script>
 
 <enform-page>
@@ -44,6 +72,7 @@
 					{/each}
 				</enform-launcher>
 				{#if yours.length === 0}<p>{m.home_no_apps()}</p>{/if}
+				<QuickLinks title={m.quick_title()} items={quick(actor, apps ?? [])} />
 				<section aria-labelledby="start">
 					<h2 id="start">{m.home_start()}</h2>
 					<enform-launcher>

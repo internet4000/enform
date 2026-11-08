@@ -1,12 +1,15 @@
 <script lang="ts">
-	// A person of the atmosphere: who they are, and their apps as cards, each with what they
-	// have in it (its record types, named from the directory or their NSID)
+	// A person of the atmosphere: who they are, how you can reach them in their apps (follow,
+	// write to, mention: wherever a type points at an account), and their apps as cards,
+	// each with what they have in it
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {blobUrl} from '#lib/atproto/repo'
 	import {appInfo, byDirectory, typeLabel} from '#lib/apps/directory'
 	import {personCard} from '#lib/apps/person'
 	import type {RepoApp} from '#lib/apps/types'
+	import {contactActions, contactPrefill, type ContactWay} from '#lib/apps/quick'
+	import QuickLinks, {type QuickLink} from '#lib/components/QuickLinks.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import {actorName, appScreenPath, dataPath, inApp} from '#lib/paths'
 
@@ -23,6 +26,28 @@
 				(a, b) =>
 					Number(b.info.known) - Number(a.info.known) || a.info.name.localeCompare(b.info.name)
 			)
+	const ways: Record<ContactWay, (args: {actor: string}) => string> = {
+		follow: m.contact_follow,
+		message: m.contact_message,
+		mention: m.contact_mention
+	}
+	/** Reaching them from your own repo, in the apps they use (never on a local profile) */
+	function contacts(apps: RepoApp[]): QuickLink[] {
+		const me = auth.me
+		if (!me || owner || data.repo.local) return []
+		return contactActions(shown(apps).map(({app}) => app)).map((action) => {
+			const info = appInfo(action.app.namespace)
+			return {
+				href: appScreenPath(actorName(me), info.domain, {type: action.type.nsid, create: true}),
+				domain: info.domain,
+				app: info.name,
+				verb: ways[action.way]({actor: `@${actor}`}),
+				detail: typeLabel(action.type.nsid),
+				prefill: contactPrefill(action, data.repo)
+			}
+		})
+	}
+
 	/** What they have in an app: its types with records */
 	const had = (app: RepoApp) =>
 		byDirectory(
@@ -49,6 +74,10 @@
 			</figure>
 		{/await}
 	</enform-person>
+
+	{#await data.apps then apps}
+		<QuickLinks title={m.contact_title({actor: `@${actor}`})} items={contacts(apps)} />
+	{/await}
 
 	<section aria-labelledby="apps">
 		<h2 id="apps">{owner ? m.person_your_apps() : m.person_apps()}</h2>

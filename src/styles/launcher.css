@@ -171,3 +171,53 @@ enform-app-yours menu a {
 enform-app-yours p {
 	margin: 0;
 }
+
+/* Quick actions: a row each, its app's icon, what it does, and where; side by side
+   when there is room */
+enform-quick ul {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(var(--card-min-width), 1fr));
+	gap: var(--space-xs);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+enform-quick a {
+	display: grid;
+	grid-template-areas: 'icon verb' 'icon where';
+	grid-template-columns: auto minmax(0, 1fr);
+	align-items: center;
+	gap: 0 var(--space-s);
+	min-height: var(--control-height);
+	padding: var(--space-xs) var(--space-s);
+	color: inherit;
+	text-decoration: none;
+	background: var(--color-surface);
+	border: var(--border-width) solid transparent;
+	border-radius: var(--radius-large);
+}
+
+enform-quick a:hover {
+	border-color: var(--color-accent);
+}
+
+enform-quick enform-app-icon {
+	grid-area: icon;
+	--app-icon-size: var(--quick-icon);
+}
+
+enform-quick strong {
+	grid-area: verb;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-quick small {
+	grid-area: where;
+	overflow: hidden;
+	color: var(--color-muted);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

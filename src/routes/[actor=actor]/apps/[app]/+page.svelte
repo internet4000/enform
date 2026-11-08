@@ -16,7 +16,7 @@
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import AppActions from '#lib/components/app/AppActions.svelte'
 	import AppMenu from '#lib/components/app/AppMenu.svelte'
-	import AppProfile from '#lib/components/app/AppProfile.svelte'
+	import AppOwner from '#lib/components/app/AppOwner.svelte'
 	import PinButton from '#lib/components/PinButton.svelte'
 	import KindView from '#lib/components/app/KindView.svelte'
 	import NewMenu from '#lib/components/app/NewMenu.svelte'
@@ -26,7 +26,7 @@
 	import EditRecord from '#lib/components/EditRecord.svelte'
 	import RecordActions from '#lib/components/RecordActions.svelte'
 	import RecordValue from '#lib/components/RecordValue.svelte'
-	import {actorName, appScreenPath, collectionPath, dataPath, inApp, repoPath} from '#lib/paths'
+	import {actorName, appPath, appScreenPath, collectionPath, dataPath, inApp} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
@@ -103,19 +103,18 @@
 
 <enform-app-screen>
 	<header>
-		<!-- Whose profile: as this app shows it (their radio, their display name) -->
-		<AppProfile repo={data.repo} {app} href={repoPath(actor)} rel="up" />
-		<hgroup>
-			<AppIcon domain={info.domain} name={info.name} />
-			<h1>{info.name}</h1>
-			<!-- Which app (its domain) and whose data: never in doubt -->
-			<p>
-				{#if info.name.toLowerCase() !== info.domain}<span>{info.domain}</span>{/if}
-				<enform-whose mine={owner || undefined}>
-					{owner ? m.whose_yours() : m.whose_theirs({actor: `@${actor}`})}
-				</enform-whose>
-			</p>
-		</hgroup>
+		<!-- Whose it is first, as this app shows them; then in which app, and whose data -->
+		<AppOwner repo={data.repo} {app} />
+		<enform-app-line>
+			<a href={appPath(info.domain)}>
+				<AppIcon domain={info.domain} name={info.name} />
+				<strong>{info.name}</strong>
+			</a>
+			{#if info.name.toLowerCase() !== info.domain}<span>{info.domain}</span>{/if}
+			<enform-whose mine={owner || undefined}>
+				{owner ? m.whose_yours() : m.whose_theirs({actor: `@${actor}`})}
+			</enform-whose>
+		</enform-app-line>
 		<!-- The app at hand: pin it; open it, read what it is, see its data, in its menu -->
 		<menu>
 			<li><PinButton domain={info.domain} name={info.name} /></li>
@@ -123,7 +122,6 @@
 				<AppMenu {info} data={selected ? collectionPath(actor, selected.nsid) : dataPath(actor)} />
 			</li>
 		</menu>
-		{#if info.description}<p>{info.description}</p>{/if}
 	</header>
 
 	{#if tabs.length}

@@ -12,49 +12,6 @@ enform-app-screen {
 	padding: var(--space-s) var(--gutter) calc(var(--space-l) * 2);
 }
 
-/* Its name, whose it is, its actions beside it, and what it is under them */
-enform-app-screen > header {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr) auto;
-	align-items: center;
-	gap: var(--space-s);
-}
-
-enform-app-screen > header > :is(enform-app-profile, p) {
-	grid-column: 1 / -1;
-}
-
-enform-app-screen > header > p {
-	max-width: var(--form-measure);
-	margin: 0;
-	color: var(--color-muted);
-}
-
-enform-app-screen > header > enform-app-profile {
-	min-width: 0;
-	font-size: var(--font-size-s);
-}
-
-enform-app-screen > header > enform-app-profile > a {
-	color: var(--color-accent);
-}
-
-enform-app-screen > header > enform-app-profile > a::before {
-	content: '‹';
-}
-
-enform-app-screen hgroup {
-	display: flex;
-	align-items: center;
-	gap: var(--space-s);
-}
-
-enform-app-screen hgroup enform-app-icon {
-	--app-icon-size: var(--app-icon-size-large);
-	--app-icon-radius: var(--launcher-radius);
-	font-size: var(--font-size-l);
-}
-
 /* Its sections: a strip that scrolls sideways on phones */
 enform-app-screen > nav ul {
 	display: flex;
@@ -313,33 +270,7 @@ enform-kind-view > time {
 	color: var(--color-accent);
 }
 
-/* Which app (its domain) and whose data, under the app's name */
-enform-app-screen hgroup {
-	display: grid;
-	grid-template-columns: auto minmax(0, 1fr);
-	grid-template-areas: 'icon name' 'icon where';
-	gap: 0 var(--space-s);
-}
-
-enform-app-screen hgroup enform-app-icon {
-	grid-area: icon;
-}
-
-enform-app-screen hgroup h1 {
-	grid-area: name;
-}
-
-enform-app-screen hgroup p {
-	grid-area: where;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: var(--space-xs) var(--space-s);
-	margin: 0;
-	font-size: var(--font-size-s);
-	color: var(--color-muted);
-}
-
+/* Whose data, beside the app's name */
 enform-whose {
 	padding: 0 var(--space-s);
 	color: var(--color-text);
@@ -446,4 +377,100 @@ enform-toolbar enform-new {
 	enform-app-screen enform-fab {
 		display: none;
 	}
+}
+
+/* Whose it is, first and large; in which app, a line under; the app's actions beside */
+enform-app-screen > header {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	grid-template-areas: 'owner menu' 'app app';
+	align-items: start;
+	gap: var(--space-s);
+}
+
+enform-app-screen > header > menu {
+	grid-area: menu;
+}
+
+enform-app-owner {
+	grid-area: owner;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	min-width: 0;
+}
+
+enform-app-owner > a {
+	display: flex;
+	align-items: center;
+	gap: var(--space-m);
+	min-height: var(--control-height);
+	min-width: 0;
+	color: inherit;
+	text-decoration: none;
+}
+
+enform-app-owner img {
+	flex: none;
+	width: var(--app-icon-size-large);
+	height: var(--app-icon-size-large);
+	object-fit: cover;
+	border-radius: var(--avatar-radius);
+}
+
+enform-app-owner hgroup {
+	min-width: 0;
+}
+
+enform-app-owner h1 {
+	margin: 0;
+	overflow-wrap: break-word;
+}
+
+@media (min-width: 48rem) {
+	enform-app-owner img {
+		width: var(--avatar-size);
+		height: var(--avatar-size);
+	}
+}
+
+enform-app-owner hgroup p {
+	margin: 0;
+	color: var(--color-muted);
+}
+
+enform-app-owner > p {
+	display: -webkit-box;
+	max-width: var(--form-measure);
+	margin: 0;
+	overflow: hidden;
+	color: var(--color-muted);
+	white-space: pre-line;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
+}
+
+enform-app-line {
+	grid-area: app;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-xs) var(--space-s);
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-app-line > a {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-xs);
+	min-height: var(--control-height);
+	color: var(--color-text);
+	text-decoration: none;
+}
+
+enform-app-line enform-app-icon {
+	--app-icon-size: var(--icon-size);
+	font-size: var(--font-size-xs);
 }

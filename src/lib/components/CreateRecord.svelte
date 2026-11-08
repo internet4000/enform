@@ -1,6 +1,7 @@
 <script lang="ts">
 	// Create a record in your repo with the form its lexicon makes. A profile (one record
 	// per account) that exists already is edited instead.
+	import {initialValue} from '#lib/forms/initial'
 	import {goto} from '$app/navigation'
 	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
@@ -52,7 +53,13 @@
 	{#key lexicon.id}
 		<RecordForm
 			{lexicon}
-			value={page.state.prefill ? {...page.state.prefill, $type: lexicon.id} : undefined}
+			value={page.state.prefill
+				? {
+						...(initialValue(lexicon.defs.main, lexicon.id) as object),
+						...page.state.prefill,
+						$type: lexicon.id
+					}
+				: undefined}
 			uploadBlob={auth.local ? undefined : uploadBlob}
 			onsubmit={create}
 			submitLabel={m.new_submit()}
