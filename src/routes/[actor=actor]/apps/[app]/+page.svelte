@@ -87,6 +87,13 @@
 		<hgroup>
 			<AppIcon domain={info.domain} name={info.name} />
 			<h1>{info.name}</h1>
+			<!-- Which app (its domain) and whose data: never in doubt -->
+			<p>
+				{#if info.name.toLowerCase() !== info.domain}<span>{info.domain}</span>{/if}
+				<enform-whose mine={owner || undefined}>
+					{owner ? m.whose_yours() : m.whose_theirs({actor: `@${actor}`})}
+				</enform-whose>
+			</p>
 		</hgroup>
 	</header>
 

@@ -366,3 +366,42 @@ enform-kind-view > time {
 		margin-inline-end: var(--sheet-width);
 	}
 }
+
+/* Which app (its domain) and whose data, under the app's name */
+enform-app-screen hgroup {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	grid-template-areas: 'icon name' 'icon where';
+	gap: 0 var(--space-s);
+}
+
+enform-app-screen hgroup enform-app-icon {
+	grid-area: icon;
+}
+
+enform-app-screen hgroup h1 {
+	grid-area: name;
+}
+
+enform-app-screen hgroup p {
+	grid-area: where;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-xs) var(--space-s);
+	margin: 0;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-whose {
+	padding: 0 var(--space-s);
+	color: var(--color-text);
+	background: var(--color-surface);
+	border-radius: var(--pill-radius);
+}
+
+enform-whose[mine] {
+	color: var(--color-on-accent);
+	background: var(--color-success);
+}

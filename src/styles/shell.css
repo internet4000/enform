@@ -152,3 +152,29 @@ enform-app > header > a[rel='status'] {
 	background: var(--color-accent);
 	border-radius: var(--pill-radius);
 }
+
+/* You, in the tab bar: your avatar and handle */
+enform-app > nav img {
+	width: var(--icon-size);
+	height: var(--icon-size);
+	object-fit: cover;
+	border-radius: var(--avatar-radius);
+}
+
+enform-app > nav a > span {
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+@media (min-width: 48rem) {
+	enform-app > nav img {
+		width: var(--icon-size-small);
+		height: var(--icon-size-small);
+	}
+
+	enform-app > nav a > span {
+		max-width: var(--nav-label-max);
+	}
+}

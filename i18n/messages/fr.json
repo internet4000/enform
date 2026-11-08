@@ -268,5 +268,7 @@
 	"actions_title": "Ce que vous pouvez faire dans {app}",
 	"actions_more": "Plus à faire dans {app}",
 	"actions_view_only": "Voici ce que {app} conserve. Connectez-vous, ou essayez sur cet appareil, pour créer les vôtres.",
-	"kind_open_link": "Ouvrir sur {site}"
+	"kind_open_link": "Ouvrir sur {site}",
+	"whose_yours": "À vous",
+	"whose_theirs": "De {actor}"
 }

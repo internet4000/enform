@@ -4,15 +4,27 @@
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {actorName, repoPath} from '#lib/paths'
+	import {profileAvatar} from '#lib/atproto/profile'
 	import Icon from './Icon.svelte'
 
 	let me = $derived(auth.me ? repoPath(actorName(auth.me)) : undefined)
 	let items = $derived([
 		{href: '/', icon: 'home', label: m.nav_home()},
 		{href: '/explore', icon: 'explore', label: m.nav_explore()},
-		{href: me ?? '/settings', icon: 'me', label: me ? m.nav_me() : m.session_sign_in()},
+		{
+			href: me ?? '/settings',
+			icon: 'me',
+			// Who you are acting as, always in sight: your handle, or your local profile's name
+			label: auth.me
+				? auth.me.local
+					? (auth.me.name ?? m.nav_me())
+					: `@${actorName(auth.me)}`
+				: m.session_sign_in()
+		},
 		{href: '/settings', icon: 'settings', label: m.nav_settings()}
 	] as const)
+
+	let avatar = $derived(auth.me && !auth.me.local ? profileAvatar(auth.me) : undefined)
 
 	function current(href: string, index: number) {
 		const path = page.url.pathname
@@ -27,7 +39,13 @@
 		{#each items as item, index (index)}
 			<li>
 				<a href={item.href} aria-current={current(item.href, index) ? 'page' : undefined}>
-					<Icon name={item.icon} />
+					{#if index === 2 && avatar}
+						{#await avatar then src}
+							{#if src}<img {src} alt="" />{:else}<Icon name={item.icon} />{/if}
+						{/await}
+					{:else}
+						<Icon name={item.icon} />
+					{/if}
 					<span>{item.label}</span>
 				</a>
 			</li>
