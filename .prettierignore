@@ -6,3 +6,4 @@ i18n/project.inlang/README.md
 i18n/project.inlang/.gitignore
 e2e/.network
 dist-e2e
+e2e/quality.js
