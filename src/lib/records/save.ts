@@ -12,10 +12,15 @@ async function validate(lexicon: LexiconDoc, value: Record<string, unknown>) {
 	if (!result.success) throw new Error(result.error)
 }
 
-export async function createFromForm(lexicon: LexiconDoc, value: Record<string, unknown>) {
+export async function createFromForm(
+	lexicon: LexiconDoc,
+	value: Record<string, unknown>,
+	rkey?: string
+) {
 	await validate(lexicon, value)
-	// A profile's record has its one key (literal:self → self); others get a TID from the PDS
-	return createRecord(lexicon.id, value, profileKey(lexicon))
+	// A profile's record has its one key (literal:self → self); a key chosen where the
+	// lexicon allows any; else a TID
+	return createRecord(lexicon.id, value, profileKey(lexicon) ?? rkey)
 }
 
 export async function updateFromForm(

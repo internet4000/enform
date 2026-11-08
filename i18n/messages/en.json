@@ -350,5 +350,8 @@
 	"start_device_button": "Start on this device",
 	"start_account_title": "An atproto account",
 	"start_account": "On your account's server (Bluesky or another), where other apps can read them.",
-	"start_later": "Records made on this device can be published to an account later, from Settings."
+	"start_later": "Records made on this device can be published to an account later, from Settings.",
+	"form_key_label": "Record key",
+	"form_key_hint": "Part of its link, and some apps read it (the lexicon's description says what it should be). Leave empty to have one made.",
+	"form_key_invalid": "Not a record key: letters, digits and . - _ : ~ only, up to 512 characters."
 }

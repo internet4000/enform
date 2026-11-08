@@ -1,0 +1,18 @@
+{
+	"lexicon": 1,
+	"id": "test.enform.org",
+	"description": "An organization, for end-to-end tests. Its record key is its domain.",
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "any",
+			"record": {
+				"type": "object",
+				"required": ["name"],
+				"properties": {
+					"name": {"type": "string", "maxLength": 300}
+				}
+			}
+		}
+	}
+}

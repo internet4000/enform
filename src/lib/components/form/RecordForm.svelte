@@ -2,6 +2,7 @@
 	// A form for a record of a lexicon, producing a valid record value: empty to create
 	// one, or filled with `value` to edit it. Fields not in the lexicon are kept.
 	import {onMount, untrack, type Snippet} from 'svelte'
+	import {isValidRecordKey} from '@atproto/syntax'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {LexiconDoc} from '#lib/lexicons/types'
 	import {cleanValue} from '#lib/forms/clean'
@@ -18,7 +19,9 @@
 		/** Uploads a file to the repo, returning its blob ref; without it, blobs can't be set */
 		uploadBlob?: UploadBlob
 		/** Gets the cleaned record value; what it throws is shown */
-		onsubmit: (value: Record<string, unknown>) => void | Promise<void>
+		onsubmit: (value: Record<string, unknown>, rkey?: string) => void | Promise<void>
+		/** Ask for the record's key (a lexicon whose key is `any`): empty, one is made */
+		chooseKey?: boolean
 		submitLabel?: string
 		/** Shown in the submit button, e.g. that it asks for permission first */
 		submitHint?: Snippet
@@ -33,7 +36,8 @@
 		onsubmit,
 		submitLabel,
 		submitHint,
-		autofocus = true
+		autofocus = true,
+		chooseKey = false
 	}: Props = $props()
 
 	const uid = $props.id()
@@ -57,6 +61,8 @@
 	let checking = $state(true)
 	let submitting = $state(false)
 	let failure = $state<string>()
+	let rkey = $state('')
+	let badKey = $derived(chooseKey && rkey.trim() !== '' && !isValidRecordKey(rkey.trim()))
 
 	let issues = $derived([
 		...errors.map(({path}) => path),
@@ -64,7 +70,7 @@
 			(path) => !errors.some((error) => error.path.join() === path.join())
 		)
 	])
-	let invalid = $derived(issues.length > 0)
+	let invalid = $derived(issues.length > 0 || badKey)
 	let disabled = $derived(submitting || checking || invalid || form.busy.size > 0)
 
 	// Check the whole record (through refs, which may load) whenever it changes
@@ -96,7 +102,7 @@
 		failure = undefined
 		try {
 			const record = await cleanValue(main, $state.snapshot(draft), base)
-			await onsubmit(record as Record<string, unknown>)
+			await onsubmit(record as Record<string, unknown>, (chooseKey && rkey.trim()) || undefined)
 		} catch (err) {
 			failure = m.form_server_error({message: err instanceof Error ? err.message : String(err)})
 		} finally {
@@ -112,6 +118,22 @@
 >
 	<form id={form.id} novalidate onsubmit={submit} aria-busy={submitting}>
 		{#if description}<p>{description}</p>{/if}
+		{#if chooseKey}
+			<!-- Its key, when the lexicon lets you choose it (part of its link; apps may read it) -->
+			<enform-field>
+				<label for="{form.id}-rkey">{m.form_key_label()}</label>
+				<input
+					id="{form.id}-rkey"
+					type="text"
+					bind:value={rkey}
+					autocapitalize="off"
+					spellcheck="false"
+					aria-invalid={badKey || undefined}
+					aria-describedby="{form.id}-rkey-hint"
+				/>
+				<small id="{form.id}-rkey-hint">{badKey ? m.form_key_invalid() : m.form_key_hint()}</small>
+			</enform-field>
+		{/if}
 		{#if main.type === 'record' && main.record}
 			<ObjectField
 				bind:value={draft}

@@ -350,5 +350,8 @@
 	"start_device_button": "Commencer sur cet appareil",
 	"start_account_title": "Un compte atproto",
 	"start_account": "Sur le serveur de votre compte (Bluesky ou un autre), où d'autres apps peuvent les lire.",
-	"start_later": "Les données créées sur cet appareil peuvent être publiées sur un compte plus tard, depuis les Réglages."
+	"start_later": "Les données créées sur cet appareil peuvent être publiées sur un compte plus tard, depuis les Réglages.",
+	"form_key_label": "Clé de l'enregistrement",
+	"form_key_hint": "Elle fait partie de son lien, et certaines apps la lisent (la description du lexique dit ce qu'elle doit être). Laissez vide pour en créer une.",
+	"form_key_invalid": "Ce n'est pas une clé : lettres, chiffres et . - _ : ~ seulement, 512 caractères au plus."
 }

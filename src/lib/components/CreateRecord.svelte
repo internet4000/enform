@@ -40,8 +40,8 @@
 		)
 	})
 
-	async function create(value: Record<string, unknown>) {
-		const {collection, rkey} = await createFromForm(lexicon, value)
+	async function create(value: Record<string, unknown>, key?: string) {
+		const {collection, rkey} = await createFromForm(lexicon, value, key)
 		if (!auth.me) return
 		const to = created?.(collection, rkey) ?? recordPath(actorName(auth.me), collection, rkey)
 		await goto(to, {refreshAll: true})
@@ -56,6 +56,7 @@
 			uploadBlob={auth.local ? undefined : uploadBlob}
 			onsubmit={create}
 			submitLabel={m.new_submit()}
+			chooseKey={lexicon.defs.main?.type === 'record' && lexicon.defs.main.key === 'any'}
 			{autofocus}
 		>
 			{#snippet submitHint()}<PermissionLock collection={lexicon.id} action="create" />{/snippet}
