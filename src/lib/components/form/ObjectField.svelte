@@ -11,7 +11,8 @@
 	import {tick, untrack} from 'svelte'
 	import {enrichment, linkFields} from '#lib/forms/enrich'
 	import {isWebLink, linkDetails} from '#lib/links/details'
-	import {imageFields, richTextFields} from '#lib/forms/patterns'
+	import {imageFields, placeFields, richTextFields} from '#lib/forms/patterns'
+	import PlaceField from './PlaceField.svelte'
 	import {detect, facets as findFacets} from '#lib/forms/richtext'
 	import {resolveHandle} from '#lib/atproto/identity'
 
@@ -130,6 +131,8 @@
 {/snippet}
 
 {#snippet all()}
+	{@const place = placeFields(node)}
+	{#if place}<PlaceField {node} {object} fields={place} />{/if}
 	{@render fields(order.fields)}
 	{#if order.automatic.length}
 		<details>

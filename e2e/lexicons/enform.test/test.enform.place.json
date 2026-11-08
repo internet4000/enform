@@ -1,0 +1,27 @@
+{
+	"lexicon": 1,
+	"id": "test.enform.place",
+	"description": "A place, for end-to-end tests of the place picker (the shape of community.lexicon.location.geo)",
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["location", "createdAt"],
+				"properties": {
+					"location": {
+						"type": "object",
+						"required": ["latitude", "longitude"],
+						"properties": {
+							"latitude": {"type": "string"},
+							"longitude": {"type": "string"},
+							"name": {"type": "string"}
+						}
+					},
+					"createdAt": {"type": "string", "format": "datetime"}
+				}
+			}
+		}
+	}
+}

@@ -38,3 +38,17 @@ export function richTextFields(node: LexNode): RichTextFields | undefined {
 	)
 	return facets && text ? {text, facets} : undefined
 }
+
+/** A place: latitude and longitude fields (as in community.lexicon.location.geo), and a name */
+export type PlaceFields = {latitude: string; longitude: string; name?: string}
+
+export function placeFields(node: LexNode): PlaceFields | undefined {
+	const properties = node.properties ?? {}
+	const pick = (...keys: string[]) =>
+		keys.find((key) => ['string', 'integer'].includes(properties[key]?.type ?? ''))
+	const latitude = pick('latitude', 'lat')
+	const longitude = pick('longitude', 'lon', 'lng')
+	if (!latitude || !longitude) return undefined
+	const name = properties.name?.type === 'string' ? 'name' : undefined
+	return {latitude, longitude, name}
+}

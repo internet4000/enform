@@ -1,6 +1,6 @@
 import {expect, test} from 'vitest'
 import type {LexNode} from '#lib/lexicons/types'
-import {imageFields, richTextFields} from './patterns'
+import {imageFields, placeFields, richTextFields} from './patterns'
 
 test('an image with alt text and an aspect ratio (Bluesky embed image shape)', () => {
 	const node: LexNode = {
@@ -24,4 +24,13 @@ test('a text with facets', () => {
 	}
 	expect(richTextFields(node)).toEqual({text: 'text', facets: 'facets'})
 	expect(richTextFields({type: 'object', properties: {text: {type: 'string'}}})).toBeUndefined()
+})
+
+test('a place (community.lexicon.location.geo shape)', () => {
+	const geo: LexNode = {
+		type: 'object',
+		properties: {latitude: {type: 'string'}, longitude: {type: 'string'}, name: {type: 'string'}}
+	}
+	expect(placeFields(geo)).toEqual({latitude: 'latitude', longitude: 'longitude', name: 'name'})
+	expect(placeFields({type: 'object', properties: {lat: {type: 'string'}}})).toBeUndefined()
 })
