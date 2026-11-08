@@ -19,8 +19,9 @@ Upload `dist/` to any static host. It contains:
   (`ORIGIN` + `BASE_PATH` + `/client-metadata.json`) is the instance's client ID: each
   instance is its own client, and PDSes show its address when you approve a write.
   Keep that address stable, or people approve it again.
-- `404.html` and `_redirects`: so any page opens at its URL (GitHub Pages uses the
-  first; GitLab Pages, Netlify and Cloudflare Pages the second).
+- `404.html`: the app again, which static hosts serve for paths they have no file for,
+  so any page opens at its URL (with a 404 status; hosts with a single-page-app mode,
+  like Cloudflare's `not_found_handling`, answer 200).
 
 ## Deploy from a fork
 

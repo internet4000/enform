@@ -1,4 +1,4 @@
-import {copyFileSync, writeFileSync} from 'node:fs'
+import {copyFileSync} from 'node:fs'
 import {fileURLToPath} from 'node:url'
 import {sveltekit} from '@sveltejs/kit/vite'
 import {vitePreprocess} from '@sveltejs/vite-plugin-svelte'
@@ -24,9 +24,9 @@ const ORIGIN = process.env.ORIGIN || `https://${app.domain}`
 const BASE_PATH = (process.env.BASE_PATH ?? '').replace(/\/$/, '') as '' | `/${string}`
 
 /**
- * adapter-static, plus the fallbacks static hosts look for, so any page opens at its
- * URL: `404.html` (GitHub Pages and most hosts) and `_redirects` (GitLab Pages, Netlify,
- * Cloudflare Pages) serving the app for every path.
+ * adapter-static, plus `404.html`: the page static hosts serve for a path they have no
+ * file for (GitHub and GitLab Pages, Netlify…), so any page of the app opens at its URL.
+ * Not `_redirects`: on some hosts its rules apply before files (Cloudflare).
  */
 function staticHost(options: Parameters<typeof adapterStatic>[0] & {pages: string}) {
 	const adapter = adapterStatic(options)
@@ -35,7 +35,6 @@ function staticHost(options: Parameters<typeof adapterStatic>[0] & {pages: strin
 		async adapt(builder: Parameters<typeof adapter.adapt>[0]) {
 			await adapter.adapt(builder)
 			copyFileSync(`${options.pages}/index.html`, `${options.pages}/404.html`)
-			writeFileSync(`${options.pages}/_redirects`, `${BASE_PATH}/* ${BASE_PATH}/index.html 200\n`)
 		}
 	}
 }
