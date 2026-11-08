@@ -166,8 +166,8 @@
 			"name": "Joblist",
 			"url": "https://joblist.today",
 			"description": {
-				"en": "Companies and their job offers.",
-				"fr": "Des entreprises et leurs offres d'emploi."
+				"en": "Organizations that hire, their open jobs, and lists curated by people.",
+				"fr": "Des organisations qui recrutent, leurs offres, et des listes faites par des gens."
 			},
 			"types": {
 				"today.joblist.company": {
@@ -181,6 +181,10 @@
 				"today.joblist.list": {
 					"en": "Lists",
 					"fr": "Listes"
+				},
+				"today.joblist.suggestion": {
+					"en": "Suggestions",
+					"fr": "Suggestions"
 				}
 			}
 		},
