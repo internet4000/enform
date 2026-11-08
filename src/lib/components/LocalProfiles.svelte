@@ -49,13 +49,26 @@
 			published = {id: profile.id, result: await publishProfile(profile.id, auth.identity)}
 		})
 
-	const remove = (profile: LocalProfile) =>
-		run(profile.id, async () => {
-			if (!confirm(m.local_remove_confirm({name: profile.name}))) return
+	/** Removing asks first, in a native dialog */
+	let removing = $state<LocalProfile>()
+	let dialog = $state<HTMLDialogElement>()
+
+	function ask(profile: LocalProfile) {
+		removing = profile
+		dialog?.showModal()
+	}
+
+	async function remove(event: SubmitEvent) {
+		event.preventDefault()
+		const profile = removing
+		dialog?.close()
+		if (!profile) return
+		await run(profile.id, async () => {
 			if (auth.local?.id === profile.id) await auth.useLocal(undefined)
 			await removeProfile(profile.id)
 			await load()
 		})
+	}
 </script>
 
 <enform-accounts local>
@@ -81,7 +94,7 @@
 								{m.local_publish({handle: `@${auth.identity.handle ?? auth.identity.did}`})}
 							</button>
 						{/if}
-						<button type="button" onclick={() => remove(profile)}>{m.local_remove()}</button>
+						<button type="button" onclick={() => ask(profile)}>{m.local_remove()}</button>
 					</enform-account-item>
 					{#if published?.id === profile.id}
 						<p role="status">
@@ -111,4 +124,12 @@
 		<button type="submit" disabled={busy === 'new'}>{m.local_create()}</button>
 	</form>
 	{#if failed}<p role="alert">{failed}</p>{/if}
+	<dialog bind:this={dialog} aria-labelledby="remove-local-title">
+		<h2 id="remove-local-title">{m.local_remove()}</h2>
+		<p>{m.local_remove_confirm({name: removing?.name ?? ''})}</p>
+		<form onsubmit={remove}>
+			<button type="button" onclick={() => dialog?.close()}>{m.action_cancel()}</button>
+			<button type="submit">{m.local_remove()}</button>
+		</form>
+	</dialog>
 </enform-accounts>

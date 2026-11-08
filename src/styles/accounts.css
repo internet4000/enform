@@ -58,3 +58,20 @@ enform-account-item > a[aria-current] {
 enform-account-item > small {
 	color: var(--color-muted);
 }
+
+enform-accounts dialog {
+	max-width: min(var(--measure-dialog), calc(100vw - 2 * var(--space-m)));
+	padding: var(--space-l);
+	color: inherit;
+	background: var(--color-bg);
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--radius);
+}
+
+enform-accounts dialog::backdrop {
+	background: var(--color-backdrop);
+}
+
+enform-accounts dialog form {
+	justify-content: end;
+}
