@@ -10,7 +10,10 @@
 	import {resolveLexicon} from '#lib/lexicons/resolve'
 	import {recordCard} from '#lib/records/card'
 	import {recordSummary} from '#lib/records/summary'
+	import {kindOf} from '#lib/records/kinds'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
+	import AppActions from '#lib/components/app/AppActions.svelte'
+	import KindView from '#lib/components/app/KindView.svelte'
 	import RecordGrid from '#lib/components/app/RecordGrid.svelte'
 	import RecordSheet from '#lib/components/app/RecordSheet.svelte'
 	import CreateRecord from '#lib/components/CreateRecord.svelte'
@@ -34,13 +37,36 @@
 		const used = byDirectory([...app.lists, ...app.singles].filter((type) => type.used))
 		return [...profile, ...used]
 	})
-	let more = $derived(
-		owner ? byDirectory(app.lists.filter((type) => !type.used && type.lexicon)) : []
+	/** What can be started here: the types with a lexicon this repo has nothing of */
+	let startable = $derived(
+		byDirectory([
+			...(app.profile && !app.profile.record && app.profile.lexicon ? [app.profile] : []),
+			...app.lists.filter((type) => !type.used && type.lexicon)
+		])
+	)
+	/** What the panel offers: for the owner, what to start; for others, all the app does */
+	let doable = $derived(
+		owner
+			? startable
+			: byDirectory(
+					[...(app.profile?.lexicon ? [app.profile] : []), ...app.lists].filter(
+						(type) => type.lexicon
+					)
+				)
+	)
+	let me = $derived(auth.me ? actorName(auth.me) : undefined)
+	/** Starting a type: here for the owner, else in your own repo's screen of this app */
+	let start = $derived(
+		owner
+			? (type: string) => appScreenPath(actor, app.app, {type, create: true})
+			: me
+				? (type: string) => appScreenPath(me as string, app.app, {type, create: true})
+				: undefined
 	)
 
 	let params = $derived(page.url.searchParams)
 	let selected = $derived(
-		[...tabs, ...more].find((type) => type.nsid === params.get('type')) ??
+		[...tabs, ...startable].find((type) => type.nsid === params.get('type')) ??
 			tabs.find((type) => !single(type)) ??
 			tabs[0]
 	)
@@ -64,7 +90,7 @@
 		</hgroup>
 	</header>
 
-	{#if tabs.length || more.length}
+	{#if tabs.length}
 		<nav aria-label={m.app_tabs()}>
 			<ul>
 				{#each tabs as type (type.nsid)}
@@ -77,22 +103,14 @@
 						</a>
 					</li>
 				{/each}
-				{#each more as type (type.nsid)}
-					<li>
-						<a
-							href={at(type.nsid)}
-							aria-current={selected?.nsid === type.nsid ? 'page' : undefined}
-						>
-							+ {typeLabel(type.nsid)}
-						</a>
-					</li>
-				{/each}
 			</ul>
 		</nav>
 	{/if}
 
 	{#if !selected}
-		<p>{m.app_screen_empty({app: info.name})}</p>
+		{#if !owner}<p>{m.app_screen_empty({app: info.name})}</p>{/if}
+		<AppActions types={doable} href={start} title={m.actions_title({app: info.name})} />
+		{#if !owner && !me}<p><small>{m.actions_view_only({app: info.name})}</small></p>{/if}
 	{:else if single(selected)}
 		<!-- One record per account: shown whole -->
 		{#await getRecord(data.repo, selected.nsid, selected.rkey)}
@@ -162,6 +180,14 @@
 		{/if}
 	{/if}
 
+	{#if selected && doable.length}
+		<AppActions
+			types={doable.filter((type) => type.nsid !== selected.nsid)}
+			href={start}
+			title={owner ? m.actions_more({app: info.name}) : m.actions_title({app: info.name})}
+		/>
+	{/if}
+
 	<p>
 		<small
 			><a href={selected ? collectionPath(actor, selected.nsid) : dataPath(actor)}
@@ -215,13 +241,17 @@
 				{#if record.pending}
 					<p role="status"><a href="/settings#waiting">{m.outbox_record_waiting()}</a></p>
 				{/if}
-				<RecordValue
-					value={record.value}
-					node={doc?.defs.main?.record}
-					base={selected.nsid}
-					repo={data.repo}
-					typed={false}
-				/>
+				<KindView repo={data.repo} {record} lexicon={doc} />
+				<details open={kindOf(doc).kind === 'thing' || undefined}>
+					<summary>{m.app_all_fields()}</summary>
+					<RecordValue
+						value={record.value}
+						node={doc?.defs.main?.record}
+						base={selected.nsid}
+						repo={data.repo}
+						typed={false}
+					/>
+				</details>
 				<details>
 					<summary>{m.record_raw()}</summary>
 					<pre>{JSON.stringify(record, null, 2)}</pre>

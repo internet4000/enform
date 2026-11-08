@@ -19,7 +19,7 @@ test('create, edit and delete a record of a published lexicon', async ({page}, i
 		page.getByRole('button', {name: t('new_submit')}).click()
 	)
 	await page.waitForURL(opened)
-	await expect(page.locator('enform-sheet enform-value').getByText(text).first()).toBeVisible()
+	await expect(page.locator('enform-sheet enform-kind-view').getByText(text).first()).toBeVisible()
 	const recordUrl = page.url()
 
 	// Edit
@@ -29,7 +29,9 @@ test('create, edit and delete a record of a published lexicon', async ({page}, i
 		page.getByRole('button', {name: t('edit_submit')}).click()
 	)
 	await page.waitForURL((url) => url.href === recordUrl)
-	await expect(page.locator('enform-sheet enform-value').getByText(edited).first()).toBeVisible()
+	await expect(
+		page.locator('enform-sheet enform-kind-view').getByText(edited).first()
+	).toBeVisible()
 
 	// Delete, confirmed in a dialog
 	await page

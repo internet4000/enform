@@ -11,6 +11,7 @@
 	import {startType} from '#lib/apps/start'
 	import Account from '#lib/components/Account.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
+	import AppActions from '#lib/components/app/AppActions.svelte'
 	import {actorName, appScreenPath} from '#lib/paths'
 
 	let {data} = $props()
@@ -50,6 +51,32 @@
 		<p>{m.collection_loading()}</p>
 	{:then app}
 		{@const start = startType(app)}
+		<section aria-labelledby="types">
+			{#if app.published}
+				<AppActions
+					types={byDirectory(
+						[...(app.profile ? [app.profile] : []), ...app.lists, ...app.singles].filter(
+							(type) => type.lexicon
+						)
+					)}
+					href={me
+						? (type) => appScreenPath(actorName(me), info.domain, {type, create: true})
+						: (type) => `/lexicon/${type}`}
+					title={m.apps_types()}
+				/>
+			{:else}
+				<!-- Known by name only: no lexicon to make a form from -->
+				<enform-type-rows unpublished>
+					<ul>
+						{#each directoryTypes(info.namespace) as nsid (nsid)}
+							<li><span><span>{typeLabel(nsid)}</span><small>{nsid}</small></span></li>
+						{/each}
+					</ul>
+				</enform-type-rows>
+				<p><small>{m.apps_unpublished_long({app: info.name})}</small></p>
+			{/if}
+		</section>
+
 		<section aria-labelledby="start">
 			<h2 id="start">{m.apps_your_place()}</h2>
 			{#if !auth.me}
@@ -94,38 +121,6 @@
 						<p>{m.apps_not_yet_elsewhere({app: info.name, domain: info.domain})}</p>
 					{/if}
 				{/await}
-			{/if}
-		</section>
-
-		<section aria-labelledby="types">
-			<h2 id="types">{m.apps_types()}</h2>
-			{#if app.published}
-				<enform-type-rows>
-					<ul>
-						{#each byDirectory( [...(app.profile ? [app.profile] : []), ...app.lists, ...app.singles] ) as type (type.nsid)}
-							<li>
-								<a
-									href={me
-										? appScreenPath(actorName(me), info.domain, {type: type.nsid, create: true})
-										: `/lexicon/${type.nsid}`}
-								>
-									<span>{typeLabel(type.nsid)}</span>
-									<small>{type.lexicon?.defs.main?.description ?? type.nsid}</small>
-								</a>
-							</li>
-						{/each}
-					</ul>
-				</enform-type-rows>
-			{:else}
-				<!-- Known by name only: no lexicon to make a form from -->
-				<enform-type-rows unpublished>
-					<ul>
-						{#each directoryTypes(info.namespace) as nsid (nsid)}
-							<li><span><span>{typeLabel(nsid)}</span><small>{nsid}</small></span></li>
-						{/each}
-					</ul>
-				</enform-type-rows>
-				<p><small>{m.apps_unpublished_long({app: info.name})}</small></p>
 			{/if}
 		</section>
 	{/await}

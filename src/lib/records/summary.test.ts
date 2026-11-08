@@ -29,3 +29,7 @@ test('dates only when valid', () => {
 test('the record type is not a summary', () => {
 	expect(recordSummary({$type: 'xyz.statusphere.status', status: '🙂'})).toBe('🙂')
 })
+
+test('a timestamp is not a summary', () => {
+	expect(recordSummary({createdAt: '2026-01-31T17:40:44.409Z'})).toBeUndefined()
+})

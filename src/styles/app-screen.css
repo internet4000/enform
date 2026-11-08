@@ -208,3 +208,161 @@ enform-sheet > menu {
 		box-shadow: var(--shadow-menu);
 	}
 }
+
+/* What one can do in an app: a card per type, its kind's icon and verb */
+enform-actions {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(var(--record-card-min), 1fr));
+	gap: var(--space-s);
+}
+
+enform-action > :is(a, div) {
+	display: grid;
+	grid-template-areas: 'icon verb' 'icon type' 'text text';
+	grid-template-columns: auto minmax(0, 1fr);
+	align-items: center;
+	gap: var(--space-2xs) var(--space-s);
+	height: 100%;
+	padding: var(--space-m);
+	color: inherit;
+	text-decoration: none;
+	background: var(--color-surface);
+	border: var(--border-width) solid transparent;
+	border-radius: var(--radius-large);
+}
+
+enform-action > a:hover {
+	border-color: var(--color-accent);
+}
+
+enform-action svg {
+	grid-area: icon;
+	width: var(--icon-size);
+	height: var(--icon-size);
+	fill: none;
+	stroke: var(--color-accent);
+	stroke-width: var(--icon-stroke);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+enform-action strong {
+	grid-area: verb;
+}
+
+enform-action span {
+	grid-area: type;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-action small {
+	grid-area: text;
+	display: -webkit-box;
+	overflow: hidden;
+	color: var(--color-muted);
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
+}
+
+/* Cards by kind: a status in big, a post's text longer */
+enform-record-card-item[kind='status'] p {
+	font-size: var(--font-size-xl);
+	font-weight: 400;
+}
+
+enform-record-card-item[kind='post'] p {
+	font-weight: 400;
+	-webkit-line-clamp: var(--post-lines);
+	line-clamp: var(--post-lines);
+}
+
+enform-record-card-item[kind='event'] time {
+	font-weight: 600;
+	color: var(--color-accent);
+}
+
+enform-link-thumb {
+	display: block;
+	width: calc(100% + 2 * var(--space-m));
+	margin: calc(-1 * var(--space-m)) calc(-1 * var(--space-m)) var(--space-xs);
+}
+
+enform-link-thumb img {
+	width: 100%;
+	max-width: none;
+	height: var(--record-card-image);
+	max-height: none;
+	object-fit: cover;
+	border-radius: 0;
+}
+
+/* What a record is, atop its sheet */
+enform-kind-view {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-m);
+}
+
+enform-kind-view:empty {
+	display: none;
+}
+
+enform-kind-view > a {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	padding-bottom: var(--space-m);
+	overflow: hidden;
+	color: inherit;
+	text-decoration: none;
+	background: var(--color-surface);
+	border-radius: var(--radius-large);
+}
+
+enform-kind-view > a > :not(img) {
+	padding: 0 var(--space-m);
+}
+
+enform-kind-view > a > img,
+enform-kind-view > img {
+	width: 100%;
+	max-height: var(--kind-image-height);
+	object-fit: cover;
+	border-radius: var(--radius-large);
+}
+
+enform-kind-view > a > img {
+	border-radius: 0;
+	margin-bottom: var(--space-xs);
+}
+
+enform-kind-view > a > small {
+	color: var(--color-accent);
+}
+
+enform-kind-view > p {
+	margin: 0;
+	font-size: var(--font-size-l);
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+enform-kind-view[kind='status'] > p {
+	font-size: calc(var(--font-size-xl) * 2);
+	text-align: center;
+}
+
+enform-kind-view > time {
+	font-size: var(--font-size-l);
+	font-weight: 600;
+	color: var(--color-accent);
+}
+
+/* Wide screens: the cards make room for an open sheet */
+@media (min-width: 48rem) {
+	enform-app-screen:has(~ enform-sheet) {
+		margin-inline-end: var(--sheet-width);
+	}
+}

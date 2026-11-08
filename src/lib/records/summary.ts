@@ -4,8 +4,11 @@ import type {LexNode} from '#lib/lexicons/types'
 /** Property names that usually say what a record is, most telling first */
 export const TITLE_KEYS = ['title', 'name', 'displayName', 'text', 'description', 'url', 'subject']
 
+/** A timestamp isn't what a record is about */
+const TIMESTAMP = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/
+
 function text(value: unknown): string | undefined {
-	if (typeof value === 'string' && value.trim()) return value.trim()
+	if (typeof value === 'string' && value.trim() && !TIMESTAMP.test(value)) return value.trim()
 	if (value && typeof value === 'object' && 'uri' in value) return text(value.uri)
 	return undefined
 }

@@ -254,5 +254,19 @@
 	"home_no_apps": "Aucune app pour l'instant : commencez-en une ci-dessous.",
 	"home_start": "Commencer une app",
 	"home_more_apps": "Plus d'apps",
-	"apps_open_app": "Ouvrir {app}"
+	"apps_open_app": "Ouvrir {app}",
+	"kind_profile": "Créer votre profil",
+	"kind_post": "Écrire quelque chose",
+	"kind_link": "Partager un lien",
+	"kind_photo": "Partager une photo",
+	"kind_follow": "Suivre quelqu'un",
+	"kind_reaction": "Réagir à quelque chose",
+	"kind_status": "Donner votre statut",
+	"kind_event": "Créer un événement",
+	"kind_list": "En créer un",
+	"kind_thing": "En ajouter un",
+	"actions_title": "Ce que vous pouvez faire dans {app}",
+	"actions_more": "Plus à faire dans {app}",
+	"actions_view_only": "Voici ce que {app} conserve. Connectez-vous, ou essayez sur cet appareil, pour créer les vôtres.",
+	"kind_open_link": "Ouvrir sur {site}"
 }

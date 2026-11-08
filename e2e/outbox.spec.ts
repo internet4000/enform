@@ -27,7 +27,9 @@ test('a record created offline is sent once back online', async ({page, context}
 	await text.fill(offline)
 	await create.click()
 	await page.waitForURL(opened)
-	await expect(page.locator('enform-sheet enform-value').getByText(offline).first()).toBeVisible()
+	await expect(
+		page.locator('enform-sheet enform-kind-view').getByText(offline).first()
+	).toBeVisible()
 	await expect(page.getByText(t('outbox_record_waiting'))).toBeVisible()
 	await expect(page.getByRole('link', {name: t('outbox_count', {count: '1'})})).toBeVisible()
 	const recordUrl = page.url()
@@ -36,6 +38,8 @@ test('a record created offline is sent once back online', async ({page, context}
 	await context.setOffline(false)
 	await expect(page.getByRole('link', {name: t('outbox_count', {count: '1'})})).toHaveCount(0)
 	await page.goto(recordUrl)
-	await expect(page.locator('enform-sheet enform-value').getByText(offline).first()).toBeVisible()
+	await expect(
+		page.locator('enform-sheet enform-kind-view').getByText(offline).first()
+	).toBeVisible()
 	await expect(page.getByText(t('outbox_record_waiting'))).toHaveCount(0)
 })

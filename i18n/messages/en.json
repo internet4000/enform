@@ -254,5 +254,19 @@
 	"home_no_apps": "No apps yet: start one below.",
 	"home_start": "Start an app",
 	"home_more_apps": "More apps",
-	"apps_open_app": "Open {app}"
+	"apps_open_app": "Open {app}",
+	"kind_profile": "Set up your profile",
+	"kind_post": "Write something",
+	"kind_link": "Share a link",
+	"kind_photo": "Share a photo",
+	"kind_follow": "Follow someone",
+	"kind_reaction": "React to something",
+	"kind_status": "Set your status",
+	"kind_event": "Create an event",
+	"kind_list": "Make one",
+	"kind_thing": "Add one",
+	"actions_title": "What you can do in {app}",
+	"actions_more": "More you can do in {app}",
+	"actions_view_only": "This is what {app} keeps. Sign in, or try it on this device, to make your own.",
+	"kind_open_link": "Open on {site}"
 }
