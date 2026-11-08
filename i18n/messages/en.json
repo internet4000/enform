@@ -249,7 +249,6 @@
 	"home_no_apps": "No apps yet: start one below.",
 	"home_start": "Start an app",
 	"home_more_apps": "More apps",
-	"apps_open_app": "Open {app}",
 	"kind_profile": "Set up your profile",
 	"kind_post": "Write something",
 	"kind_link": "Share a link",
@@ -341,5 +340,7 @@
 	"reader_item_menu": "Actions for {title}",
 	"reader_remove": "Remove from the list",
 	"app_about": "About {app}",
-	"app_stored_data": "Stored data"
+	"app_stored_data": "Stored data",
+	"apps_open_yours": "Open your {app}",
+	"actions_edit": "Edit your {type}"
 }

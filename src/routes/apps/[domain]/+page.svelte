@@ -1,17 +1,21 @@
 <script lang="ts">
-	// An app of the atmosphere: what it is, what you can make there, and starting on it
+	// An app of the atmosphere: what it is, you on it when you are (your profile there and
+	// what you have), what you can make there (editing what you can have only one of),
+	// and starting on it
 	import * as m from '#lib/paraglide/messages.js'
 	import {goto} from '$app/navigation'
 	import {localIdentity} from '#lib/atproto/identity'
 	import {createProfile, listProfiles} from '#lib/local/store'
 	import {auth} from '#lib/auth/session.svelte'
 	import {listCollections} from '#lib/atproto/repo'
+	import {repoApps} from '#lib/apps/apps'
 	import {byDirectory, directoryTypes, typeLabel} from '#lib/apps/directory'
-	import {namespaceOf} from '#lib/apps/names'
+	import type {RepoApp} from '#lib/apps/types'
 	import {startType} from '#lib/apps/start'
 	import Account from '#lib/components/Account.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import AppActions from '#lib/components/app/AppActions.svelte'
+	import AppProfile from '#lib/components/app/AppProfile.svelte'
 	import PinButton from '#lib/components/PinButton.svelte'
 	import {actorName, appScreenPath, lexiconPath} from '#lib/paths'
 
@@ -25,13 +29,20 @@
 	}
 	let info = $derived(data.info)
 	let me = $derived(auth.me)
-	let mine = $derived(
+	/** This app as your repo has it, when you have records in it */
+	let yours = $derived(
 		me
-			? listCollections(me).then((all) =>
-					all.filter((nsid) => namespaceOf(nsid) === info.namespace)
-				)
-			: Promise.resolve([])
+			? listCollections(me)
+					.then((all) => repoApps(me, all))
+					.then((apps) => apps.find((app) => app.namespace === info.namespace))
+					.catch(() => undefined)
+			: Promise.resolve(undefined)
 	)
+	const typesOf = (app: RepoApp) => [
+		...(app.profile ? [app.profile] : []),
+		...app.lists,
+		...app.singles
+	]
 </script>
 
 <enform-page>
@@ -53,21 +64,48 @@
 		</menu>
 	</enform-app-hero>
 
-	{#await data.app}
+	{#await yours then app}
+		{#if app && me}
+			{@const actor = actorName(me)}
+			<section aria-labelledby="yours">
+				<h2 id="yours">{m.apps_your_place()}</h2>
+				<enform-app-yours>
+					<AppProfile repo={me} {app} href={appScreenPath(actor, info.domain)} />
+					<menu aria-label={m.apps_joined_long({app: info.name})}>
+						{#each byDirectory(typesOf(app).filter((type) => type.used)) as type (type.nsid)}
+							<li>
+								<a href={appScreenPath(actor, info.domain, {type: type.nsid})}
+									>{typeLabel(type.nsid)}</a
+								>
+							</li>
+						{/each}
+					</menu>
+					<p>
+						<a href={appScreenPath(actor, info.domain)} role="button"
+							>{m.apps_open_yours({app: info.name})}</a
+						>
+					</p>
+				</enform-app-yours>
+			</section>
+		{/if}
+	{/await}
+
+	{#await Promise.all([data.app, yours])}
 		<p>{m.collection_loading()}</p>
-	{:then app}
+	{:then [app, mine]}
 		{@const start = startType(app)}
 		<section aria-labelledby="types">
 			{#if app.published}
+				<!-- Your app's types when you have it: what you have one of is edited, not made -->
 				<AppActions
-					types={byDirectory(
-						[...(app.profile ? [app.profile] : []), ...app.lists, ...app.singles].filter(
-							(type) => type.lexicon
-						)
-					)}
+					types={byDirectory(typesOf(mine ?? app).filter((type) => type.lexicon))}
 					href={me
 						? (type) => appScreenPath(actorName(me), info.domain, {type, create: true})
 						: (type) => lexiconPath(type)}
+					edit={me && mine
+						? (type, rkey) =>
+								appScreenPath(actorName(me), info.domain, {type, record: rkey, edit: true})
+						: undefined}
 					title={m.apps_types()}
 				/>
 			{:else}
@@ -83,51 +121,35 @@
 			{/if}
 		</section>
 
-		<section aria-labelledby="start">
-			<h2 id="start">{m.apps_your_place()}</h2>
-			{#if !auth.me}
-				{#if auth.ready}
-					{#if start}
-						<p>
-							<button type="button" onclick={() => tryLocally(start)}>{m.apps_try_local()}</button>
-						</p>
+		<!-- Not on it yet: how to start (once you are, you on it comes first, above) -->
+		{#if !mine}
+			<section aria-labelledby="start">
+				<h2 id="start">{m.apps_your_place()}</h2>
+				{#if !auth.me}
+					{#if auth.ready}
+						{#if start}
+							<p>
+								<button type="button" onclick={() => tryLocally(start)}>{m.apps_try_local()}</button
+								>
+							</p>
+						{/if}
+						<p>{m.apps_sign_in({app: info.name})}</p>
+						<Account />
 					{/if}
-					<p>{m.apps_sign_in({app: info.name})}</p>
-					<Account />
+				{:else if me && start}
+					<p>{m.apps_not_yet({app: info.name})}</p>
+					<p>
+						<a
+							href={appScreenPath(actorName(me), info.domain, {type: start, create: true})}
+							role="button"
+						>
+							{m.apps_start({type: typeLabel(start)})}
+						</a>
+					</p>
+				{:else if me}
+					<p>{m.apps_not_yet_elsewhere({app: info.name, domain: info.domain})}</p>
 				{/if}
-			{:else if me}
-				{#await mine then collections}
-					{#if collections.length}
-						<p>{m.apps_joined_long({app: info.name})}</p>
-						<ul>
-							{#each collections as nsid (nsid)}
-								<li>
-									<a href={appScreenPath(actorName(me), info.domain, {type: nsid})}
-										>{typeLabel(nsid)}</a
-									>
-								</li>
-							{/each}
-						</ul>
-						<p>
-							<a href={appScreenPath(actorName(me), info.domain)} role="button"
-								>{m.apps_open_app({app: info.name})}</a
-							>
-						</p>
-					{:else if start}
-						<p>{m.apps_not_yet({app: info.name})}</p>
-						<p>
-							<a
-								href={appScreenPath(actorName(me), info.domain, {type: start, create: true})}
-								role="button"
-							>
-								{m.apps_start({type: typeLabel(start)})}
-							</a>
-						</p>
-					{:else}
-						<p>{m.apps_not_yet_elsewhere({app: info.name, domain: info.domain})}</p>
-					{/if}
-				{/await}
-			{/if}
-		</section>
+			</section>
+		{/if}
 	{/await}
 </enform-page>

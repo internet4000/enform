@@ -134,3 +134,39 @@ enform-pins li > a > span {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+/* You on an app: your profile there, what you have, and opening it */
+enform-app-yours {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+}
+
+enform-app-yours enform-app-profile img {
+	width: var(--app-icon-size-large);
+	height: var(--app-icon-size-large);
+}
+
+enform-app-yours menu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+enform-app-yours menu a {
+	display: inline-flex;
+	align-items: center;
+	min-height: var(--control-height);
+	padding: 0 var(--space-m);
+	color: inherit;
+	text-decoration: none;
+	background: var(--color-surface);
+	border-radius: var(--pill-radius);
+}
+
+enform-app-yours p {
+	margin: 0;
+}

@@ -20,7 +20,7 @@ enform-app-screen > header {
 	gap: var(--space-s);
 }
 
-enform-app-screen > header > :is(a[rel='up'], p) {
+enform-app-screen > header > :is(enform-app-profile, p) {
 	grid-column: 1 / -1;
 }
 
@@ -30,17 +30,17 @@ enform-app-screen > header > p {
 	color: var(--color-muted);
 }
 
-enform-app-screen > header > a[rel='up'] {
-	display: inline-flex;
-	align-items: center;
-	align-self: start;
-	min-height: var(--control-height);
+enform-app-screen > header > enform-app-profile {
+	min-width: 0;
 	font-size: var(--font-size-s);
-	text-decoration: none;
 }
 
-enform-app-screen > header > a[rel='up']::before {
-	content: '‹ ';
+enform-app-screen > header > enform-app-profile > a {
+	color: var(--color-accent);
+}
+
+enform-app-screen > header > enform-app-profile > a::before {
+	content: '‹';
 }
 
 enform-app-screen hgroup {
@@ -366,4 +366,33 @@ enform-actions + details > summary {
 
 enform-actions + details > enform-actions {
 	margin-top: var(--space-s);
+}
+
+/* Whose profile: their avatar and name in this app, and their handle */
+enform-app-profile > a {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-xs);
+	max-width: 100%;
+	min-height: var(--control-height);
+	color: inherit;
+	text-decoration: none;
+}
+
+enform-app-profile img {
+	flex: none;
+	width: var(--icon-size);
+	height: var(--icon-size);
+	object-fit: cover;
+	border-radius: var(--avatar-radius);
+}
+
+enform-app-profile span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-app-profile small {
+	color: var(--color-muted);
 }

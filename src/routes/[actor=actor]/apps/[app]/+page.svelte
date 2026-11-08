@@ -15,6 +15,7 @@
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import AppActions from '#lib/components/app/AppActions.svelte'
 	import AppMenu from '#lib/components/app/AppMenu.svelte'
+	import AppProfile from '#lib/components/app/AppProfile.svelte'
 	import PinButton from '#lib/components/PinButton.svelte'
 	import KindView from '#lib/components/app/KindView.svelte'
 	import RecordGrid from '#lib/components/app/RecordGrid.svelte'
@@ -92,7 +93,8 @@
 
 <enform-app-screen>
 	<header>
-		<a href={repoPath(actor)} rel="up">@{actor}</a>
+		<!-- Whose profile: as this app shows it (their radio, their display name) -->
+		<AppProfile repo={data.repo} {app} href={repoPath(actor)} rel="up" />
 		<hgroup>
 			<AppIcon domain={info.domain} name={info.name} />
 			<h1>{info.name}</h1>
