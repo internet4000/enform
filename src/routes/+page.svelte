@@ -6,7 +6,7 @@
 	import {repoApps} from '#lib/apps/apps'
 	import {appInfo, directoryApps} from '#lib/apps/directory'
 	import AppIconLink from '#lib/components/launcher/AppIconLink.svelte'
-	import {actorName, appPath, appScreenPath} from '#lib/paths'
+	import {actorName, appPath, appScreenPath, inApp} from '#lib/paths'
 
 	let mine = $derived(
 		auth.me
@@ -43,7 +43,7 @@
 							<AppIconLink href={appPath(info.domain)} domain={info.domain} name={info.name} />
 						{/each}
 						<enform-app-link add>
-							<a href="/explore"
+							<a href={inApp('/explore')}
 								><span aria-hidden="true">…</span><span>{m.home_more_apps()}</span></a
 							>
 						</enform-app-link>
@@ -61,7 +61,9 @@
 				<AppIconLink href={appPath(info.domain)} domain={info.domain} name={info.name} />
 			{/each}
 		</enform-launcher>
-		<p><a href="/explore">{m.home_more_apps()}</a></p>
-		<p>{m.home_have_account()} <a href="/settings" role="button">{m.session_sign_in()}</a></p>
+		<p><a href={inApp('/explore')}>{m.home_more_apps()}</a></p>
+		<p>
+			{m.home_have_account()} <a href={inApp('/settings')} role="button">{m.session_sign_in()}</a>
+		</p>
 	{/if}
 </enform-page>

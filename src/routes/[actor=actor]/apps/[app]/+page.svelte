@@ -21,7 +21,7 @@
 	import EditRecord from '#lib/components/EditRecord.svelte'
 	import RecordActions from '#lib/components/RecordActions.svelte'
 	import RecordValue from '#lib/components/RecordValue.svelte'
-	import {actorName, appScreenPath, collectionPath, dataPath, repoPath} from '#lib/paths'
+	import {actorName, appScreenPath, collectionPath, dataPath, inApp, repoPath} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
@@ -262,7 +262,7 @@
 					</menu>
 				{/if}
 				{#if record.pending}
-					<p role="status"><a href="/settings#waiting">{m.outbox_record_waiting()}</a></p>
+					<p role="status"><a href={inApp('/settings#waiting')}>{m.outbox_record_waiting()}</a></p>
 				{/if}
 				<KindView repo={data.repo} {record} lexicon={doc} />
 				<details open={kindOf(doc).kind === 'thing' || undefined}>

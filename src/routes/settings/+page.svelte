@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as m from '#lib/paraglide/messages.js'
 	import {getLocale, locales, setLocale, type Locale} from '#lib/paraglide/runtime.js'
+	import {inApp} from '#lib/paths'
 	import Account from '#lib/components/Account.svelte'
 	import LocalProfiles from '#lib/components/LocalProfiles.svelte'
 	import Outbox from '#lib/components/Outbox.svelte'
@@ -12,7 +13,7 @@
 	<h1>{m.nav_settings()}</h1>
 	<section aria-labelledby="account">
 		<h2 id="account">{m.account_title()}</h2>
-		<Account returnTo="/settings" />
+		<Account returnTo={inApp('/settings')} />
 	</section>
 	<section aria-labelledby="waiting-title" id="waiting">
 		<h2 id="waiting-title">{m.outbox_title()}</h2>

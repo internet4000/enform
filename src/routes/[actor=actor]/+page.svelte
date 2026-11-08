@@ -7,7 +7,7 @@
 	import {personCard} from '#lib/apps/person'
 	import type {RepoApp} from '#lib/apps/types'
 	import AppIconLink from '#lib/components/launcher/AppIconLink.svelte'
-	import {actorName, appScreenPath, dataPath} from '#lib/paths'
+	import {actorName, appScreenPath, dataPath, inApp} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
@@ -51,7 +51,8 @@
 				{/each}
 				{#if owner}
 					<enform-app-link add>
-						<a href="/explore"><span aria-hidden="true">+</span><span>{m.person_add_app()}</span></a
+						<a href={inApp('/explore')}
+							><span aria-hidden="true">+</span><span>{m.person_add_app()}</span></a
 						>
 					</enform-app-link>
 				{/if}

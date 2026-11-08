@@ -6,7 +6,8 @@
 import {BrowserOAuthClient, type OAuthSession} from '@atproto/oauth-client-browser'
 import {buildAtprotoLoopbackClientId} from '@atproto/oauth-types'
 import app from '#lib/config/app.json' with {type: 'json'}
-import {CLIENT_METADATA_PATH, CLIENT_SCOPE} from './metadata'
+import {resolve} from '$app/paths'
+import {CLIENT_SCOPE, clientMetadataPath} from './metadata'
 import {BASE_SCOPE} from './scopes'
 
 let client: Promise<BrowserOAuthClient> | undefined
@@ -15,10 +16,10 @@ const deletedListeners = new Set<(did: string) => void>()
 
 function clientId(): string {
 	const {protocol, origin, port} = window.location
-	if (protocol === 'https:') return `${origin}${CLIENT_METADATA_PATH}`
+	if (protocol === 'https:') return `${origin}${clientMetadataPath()}`
 	return buildAtprotoLoopbackClientId({
 		scope: CLIENT_SCOPE,
-		redirect_uris: [`http://127.0.0.1${port ? `:${port}` : ''}/`]
+		redirect_uris: [`http://127.0.0.1${port ? `:${port}` : ''}${resolve('')}`]
 	})
 }
 

@@ -3,7 +3,6 @@
 	import {onMount} from 'svelte'
 	import {goto, refreshAll} from '$app/navigation'
 	import {navigating, page} from '$app/state'
-	import {APP_ORIGIN} from '#lib/auth/metadata'
 	import * as m from '#lib/paraglide/messages.js'
 	import {startAuth} from '#lib/auth/session.svelte'
 	import {sendWaiting} from '#lib/atproto/write'
@@ -11,6 +10,7 @@
 	import AppNav from '#lib/components/shell/AppNav.svelte'
 	import Reader from '#lib/components/reader/Reader.svelte'
 	import app from '#lib/config/app.json' with {type: 'json'}
+	import {inApp} from '#lib/paths'
 
 	let {children} = $props()
 
@@ -33,14 +33,14 @@
 <svelte:head>
 	<title>{app.name}</title>
 	<meta name="description" content={m.app_intro()} />
-	<link rel="canonical" href={`${APP_ORIGIN}${page.url.pathname}`} />
+	<link rel="canonical" href={`${page.url.origin}${page.url.pathname}`} />
 </svelte:head>
 
 <enform-app>
 	<header>
-		<a href="/">{app.name}</a>
+		<a href={inApp('/')}>{app.name}</a>
 		{#if outbox.writes.length}
-			<a href="/settings#waiting" rel="status"
+			<a href={inApp('/settings#waiting')} rel="status"
 				>{m.outbox_count({count: String(outbox.writes.length)})}</a
 			>
 		{/if}

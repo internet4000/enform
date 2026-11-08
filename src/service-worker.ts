@@ -13,12 +13,12 @@ import {assets, immutable} from '$app/manifest'
 import {version} from '$app/env'
 
 const CACHE = `enform-${version}`
+/** Where the app is served: a domain's root or a folder of it */
+const SCOPE = worker.registration.scope
 /** The app's built files and static ones, as paths from the site's root */
-const APP = [...immutable, ...assets].map(
-	({path}) => new URL(path, worker.location.origin + '/').pathname
-)
+const APP = [...immutable, ...assets].map(({path}) => new URL(path, SCOPE).pathname)
 /** The single-page app's entry, for any page opened offline */
-const SHELL = '/'
+const SHELL = new URL(SCOPE).pathname
 
 worker.addEventListener('install', (event) => {
 	event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll([...APP, SHELL])))

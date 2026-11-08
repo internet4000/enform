@@ -10,7 +10,7 @@
 	import RecordMenu from '#lib/components/RecordMenu.svelte'
 	import Pane from '#lib/components/pane/Pane.svelte'
 	import {recordSummary} from '#lib/records/summary'
-	import {actorName, collectionPath, editPath, recordPath} from '#lib/paths'
+	import {actorName, collectionPath, editPath, inApp, recordPath} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
@@ -57,7 +57,7 @@
 			{/if}
 		{/snippet}
 		{#if data.record.pending}
-			<p role="status"><a href="/settings#waiting">{m.outbox_record_waiting()}</a></p>
+			<p role="status"><a href={inApp('/settings#waiting')}>{m.outbox_record_waiting()}</a></p>
 		{/if}
 		<enform-record>
 			{#await data.lexicon}

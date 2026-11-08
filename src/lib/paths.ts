@@ -1,6 +1,15 @@
 /** The app's URLs for repos, collections and records, and parsing what people type */
 import {AtUri, isValidDid, isValidHandle} from '@atproto/syntax'
+import {resolve} from '$app/paths'
 import type {Identity} from './atproto/identity'
+
+/**
+ * A path in the app, under the folder it is served from: an instance can live at a
+ * domain's root or in any folder of it (docs/self-host.md)
+ */
+export function inApp(path: string): string {
+	return resolve(path.replace(/^\//, ''))
+}
 
 /** A repo's name in URLs: its verified handle, else its DID */
 export function actorName(repo: Pick<Identity, 'did' | 'handle'>): string {
@@ -8,7 +17,7 @@ export function actorName(repo: Pick<Identity, 'did' | 'handle'>): string {
 }
 
 export function repoPath(actor: string): string {
-	return `/@${actor}`
+	return inApp(`/@${actor}`)
 }
 
 export function collectionPath(actor: string, collection: string): string {
@@ -21,7 +30,7 @@ export function recordPath(actor: string, collection: string, rkey: string): str
 
 /** A lexicon's page: what it defines, and its form */
 export function lexiconPath(nsid: string): string {
-	return `/lexicon/${nsid}`
+	return inApp(`/lexicon/${nsid}`)
 }
 
 /** An at:// URI's page in the app */
@@ -51,7 +60,7 @@ export function actorParam(param: string): string {
 
 /** Where to create a record of a collection, in the signed-in account's repo */
 export function newPath(collection?: string): string {
-	return collection ? `/new/${collection}` : '/new'
+	return inApp(collection ? `/new/${collection}` : '/new')
 }
 
 export function editPath(actor: string, collection: string, rkey: string): string {
@@ -65,7 +74,7 @@ export function createPath(actor: string, collection: string): string {
 
 /** An app in the directory: what it is, and how to start on it */
 export function appPath(domain: string, type?: string): string {
-	return type ? `/apps/${domain}?type=${type}` : `/apps/${domain}`
+	return inApp(type ? `/apps/${domain}?type=${type}` : `/apps/${domain}`)
 }
 
 /** A repo's data, all of it, in panes (the advanced view) */

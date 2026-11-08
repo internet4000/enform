@@ -1,8 +1,8 @@
 import {json} from '@sveltejs/kit'
-import {dev} from '$app/env'
-import {APP_ORIGIN, clientMetadata} from '#lib/auth/metadata'
+import {clientMetadata} from '#lib/auth/metadata'
 
 export const prerender = true
 
-// In dev (e.g. behind an HTTPS tunnel) the metadata follows whatever origin serves it
-export const GET = ({url}) => json(clientMetadata(dev ? url.origin : APP_ORIGIN))
+// At the instance's own address: `paths.origin` and `paths.base` when built
+// (vite.config.ts), wherever it is served in dev
+export const GET = ({url}) => json(clientMetadata(url))

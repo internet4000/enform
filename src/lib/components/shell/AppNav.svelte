@@ -3,16 +3,16 @@
 	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
-	import {actorName, repoPath} from '#lib/paths'
+	import {actorName, inApp, repoPath} from '#lib/paths'
 	import {profileAvatar} from '#lib/atproto/profile'
 	import Icon from './Icon.svelte'
 
 	let me = $derived(auth.me ? repoPath(actorName(auth.me)) : undefined)
 	let items = $derived([
-		{href: '/', icon: 'home', label: m.nav_home()},
-		{href: '/explore', icon: 'explore', label: m.nav_explore()},
+		{href: inApp('/'), icon: 'home', label: m.nav_home()},
+		{href: inApp('/explore'), icon: 'explore', label: m.nav_explore()},
 		{
-			href: me ?? '/settings',
+			href: me ?? inApp('/settings'),
 			icon: 'me',
 			// Who you are acting as, always in sight: your handle, or your local profile's name
 			label: auth.me
@@ -21,7 +21,7 @@
 					: `@${actorName(auth.me)}`
 				: m.session_sign_in()
 		},
-		{href: '/settings', icon: 'settings', label: m.nav_settings()}
+		{href: inApp('/settings'), icon: 'settings', label: m.nav_settings()}
 	] as const)
 
 	let avatar = $derived(auth.me && !auth.me.local ? profileAvatar(auth.me) : undefined)
@@ -29,7 +29,7 @@
 	function current(href: string, index: number) {
 		const path = page.url.pathname
 		if (index === 2 && !me) return false
-		if (href === '/') return path === '/'
+		if (href === inApp('/')) return path === href
 		return path === href || path.startsWith(`${href}/`)
 	}
 </script>

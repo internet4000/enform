@@ -12,7 +12,7 @@
 	import Account from '#lib/components/Account.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import AppActions from '#lib/components/app/AppActions.svelte'
-	import {actorName, appScreenPath} from '#lib/paths'
+	import {actorName, appScreenPath, lexiconPath} from '#lib/paths'
 
 	let {data} = $props()
 
@@ -61,7 +61,7 @@
 					)}
 					href={me
 						? (type) => appScreenPath(actorName(me), info.domain, {type, create: true})
-						: (type) => `/lexicon/${type}`}
+						: (type) => lexiconPath(type)}
 					title={m.apps_types()}
 				/>
 			{:else}
