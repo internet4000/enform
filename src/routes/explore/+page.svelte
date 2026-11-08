@@ -1,11 +1,10 @@
 <script lang="ts">
-	// Explore: open any repo, or discover the apps of the atmosphere
+	// Explore: the apps of the atmosphere, known and discovered (search is on top)
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {listCollections} from '#lib/atproto/repo'
 	import {directoryApps} from '#lib/apps/directory'
 	import {namespaceOf} from '#lib/apps/names'
-	import ActorSearch from '#lib/components/ActorSearch.svelte'
 	import AppCard from '#lib/components/AppCard.svelte'
 	import DiscoveredApps from '#lib/components/DiscoveredApps.svelte'
 	import {actorName, repoPath} from '#lib/paths'
@@ -22,7 +21,6 @@
 	<enform-home>
 		<h1>{m.app_tagline()}</h1>
 		<p>{m.app_intro()}</p>
-		<ActorSearch />
 		{#if auth.me}
 			<p><a href={repoPath(actorName(auth.me))} role="button">{m.home_mine()}</a></p>
 		{/if}

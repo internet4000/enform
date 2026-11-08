@@ -63,7 +63,7 @@
 		</enform-launcher>
 		<p><a href={inApp('/explore')}>{m.home_more_apps()}</a></p>
 		<p>
-			{m.home_have_account()} <a href={inApp('/settings')} role="button">{m.session_sign_in()}</a>
+			{m.home_have_account()} <a href={inApp('/more')} role="button">{m.session_sign_in()}</a>
 		</p>
 	{/if}
 </enform-page>

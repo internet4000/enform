@@ -32,7 +32,7 @@
 			<input
 				type="text"
 				bind:value={handle}
-				placeholder={m.actor_search_placeholder()}
+				placeholder={m.session_handle_placeholder()}
 				autocapitalize="off"
 				autocomplete="username"
 				spellcheck="false"

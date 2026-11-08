@@ -262,7 +262,7 @@
 					</menu>
 				{/if}
 				{#if record.pending}
-					<p role="status"><a href={inApp('/settings#waiting')}>{m.outbox_record_waiting()}</a></p>
+					<p role="status"><a href={inApp('/more#waiting')}>{m.outbox_record_waiting()}</a></p>
 				{/if}
 				<KindView repo={data.repo} {record} lexicon={doc} />
 				<details open={kindOf(doc).kind === 'thing' || undefined}>

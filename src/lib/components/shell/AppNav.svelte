@@ -1,7 +1,9 @@
 <script lang="ts">
-	// The app's main places: in thumb reach at the bottom on phones, in the header on wide screens
+	// The app's main places: in thumb reach at the bottom on phones, a rail on the left on
+	// wide screens, with the app's name at its top
 	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
+	import app from '#lib/config/app.json' with {type: 'json'}
 	import {auth} from '#lib/auth/session.svelte'
 	import {actorName, inApp, repoPath} from '#lib/paths'
 	import {profileAvatar} from '#lib/atproto/profile'
@@ -12,7 +14,7 @@
 		{href: inApp('/'), icon: 'home', label: m.nav_home()},
 		{href: inApp('/explore'), icon: 'explore', label: m.nav_explore()},
 		{
-			href: me ?? inApp('/settings'),
+			href: me ?? inApp('/more'),
 			icon: 'me',
 			// Who you are acting as, always in sight: your handle, or your local profile's name
 			label: auth.me
@@ -21,7 +23,7 @@
 					: `@${actorName(auth.me)}`
 				: m.session_sign_in()
 		},
-		{href: inApp('/settings'), icon: 'settings', label: m.nav_settings()}
+		{href: inApp('/more'), icon: 'more', label: m.nav_more()}
 	] as const)
 
 	let avatar = $derived(auth.me && !auth.me.local ? profileAvatar(auth.me) : undefined)
@@ -35,6 +37,7 @@
 </script>
 
 <nav aria-label={m.nav_main()}>
+	<a href={inApp('/')} rel="home">{app.name}</a>
 	<ul>
 		{#each items as item, index (index)}
 			<li>

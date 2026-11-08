@@ -24,7 +24,7 @@ enform-pane {
 
 enform-pane > header {
 	position: sticky;
-	inset-block-start: 0;
+	inset-block-start: var(--sticky-top);
 	z-index: 1;
 	display: grid;
 	grid-template-areas: 'back back' 'title actions';
@@ -273,6 +273,11 @@ enform-records > ol > li > a[aria-current='page'] {
 		overflow-y: auto;
 		overscroll-behavior: contain;
 		border-inline-end: var(--border-width) solid var(--color-border);
+	}
+
+	/* Each pane scrolls on its own: its header sticks to its top */
+	enform-pane > header {
+		inset-block-start: 0;
 	}
 
 	enform-pane > header > a[rel='up'] {

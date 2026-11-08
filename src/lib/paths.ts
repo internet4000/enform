@@ -53,6 +53,11 @@ export function searchPath(input: string): string | undefined {
 	return undefined
 }
 
+/** What matches a search: people, apps and lexicons */
+export function searchResultsPath(query: string): string {
+	return inApp(`/search?${new URLSearchParams({q: query})}`)
+}
+
 /** The actor in a route's `@actor` segment */
 export function actorParam(param: string): string {
 	return decodeURIComponent(param.slice(1))

@@ -14,7 +14,8 @@ const loaded = (path: string) => async (page: Page) => {
 qualityTests([
 	{name: 'home', open: loaded('/'), touch: 44},
 	{name: 'explore', open: loaded('/explore'), touch: 44},
-	{name: 'settings', open: loaded('/settings'), touch: 44},
+	{name: 'more', open: loaded('/more'), touch: 44},
+	{name: 'search', open: loaded('/search?q=alice.test'), touch: 44},
 	{name: 'app page', open: loaded('/apps/statusphere.xyz'), touch: 44},
 	{name: 'person', open: loaded('/@alice.test'), touch: 44},
 	{

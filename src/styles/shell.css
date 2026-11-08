@@ -1,6 +1,7 @@
 /*
- * The app shell, mobile first: a slim header, the page, and the main places in a
- * tab bar in thumb reach. On wide screens the tab bar moves up into the header.
+ * The app shell (savoir-faire app-shell), mobile first: the search field alone at the
+ * top, the page, and the main places in a tab bar in thumb reach. From 64rem the tab bar
+ * becomes a rail on the left, with the app's name at its top. One switch, for all three.
  */
 enform-app {
 	display: grid;
@@ -11,23 +12,46 @@ enform-app {
 	padding-bottom: var(--sticky-bottom);
 }
 
+/* The search field, alone, sticky */
 enform-app > header {
 	grid-area: header;
+	position: sticky;
+	inset-block-start: 0;
+	z-index: 3;
 	display: flex;
 	align-items: center;
+	gap: var(--space-s);
 	min-height: var(--header-height);
-	padding: 0 var(--gutter);
-	padding-top: env(safe-area-inset-top);
+	padding: calc(env(safe-area-inset-top) + var(--space-2xs)) var(--gutter) var(--space-2xs);
+	background: var(--color-bar);
+	backdrop-filter: blur(var(--bar-blur));
+	border-bottom: var(--border-width) solid var(--color-border);
 }
 
-enform-app > header > a:first-child {
+enform-app > header > form {
+	flex: 1;
+	min-width: 0;
+	max-width: var(--measure);
+}
+
+enform-app > header input[type='search'] {
+	width: 100%;
+	min-height: var(--control-height);
+	border-radius: var(--pill-radius);
+}
+
+/* Writes waiting to be sent, said in the header */
+enform-app > header > a[rel='status'] {
 	display: inline-flex;
 	align-items: center;
+	flex: none;
 	min-height: var(--control-height);
-	font-weight: 700;
-	font-size: var(--font-size-m);
-	color: inherit;
+	padding: 0 var(--space-s);
+	font-size: var(--font-size-s);
+	color: var(--color-on-accent);
 	text-decoration: none;
+	background: var(--color-accent);
+	border-radius: var(--pill-radius);
 }
 
 enform-app > main {
@@ -36,7 +60,11 @@ enform-app > main {
 	transition: opacity var(--duration);
 }
 
-/* A page that isn't panes: one centered column */
+enform-app > main[aria-busy='true'] {
+	opacity: 0.5;
+}
+
+/* A page that isn't panes: one column */
 enform-page {
 	display: flex;
 	flex-direction: column;
@@ -53,10 +81,6 @@ enform-pane > *,
 	min-width: 0;
 }
 
-enform-app > main[aria-busy='true'] {
-	opacity: 0.5;
-}
-
 /* The tab bar */
 enform-app > nav {
 	position: fixed;
@@ -68,17 +92,21 @@ enform-app > nav {
 	border-top: var(--border-width) solid var(--color-border);
 }
 
+/* The app's name tops the rail; on phones, Home is the first tab */
+enform-app > nav > a[rel='home'] {
+	display: none;
+}
+
 enform-app > nav ul {
 	display: grid;
-	grid-auto-columns: 1fr;
+	grid-auto-columns: minmax(0, 1fr);
 	grid-auto-flow: column;
-	max-width: var(--measure);
-	margin: 0 auto;
+	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-enform-app > nav a {
+enform-app > nav li a {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -105,57 +133,6 @@ enform-app > nav svg {
 	stroke-linejoin: round;
 }
 
-@media (min-width: 48rem) {
-	enform-app {
-		grid-template-areas: 'header nav' 'main main';
-		grid-template-columns: minmax(0, 1fr) auto;
-		padding-bottom: 0;
-		--sticky-bottom: 0px;
-	}
-
-	enform-app > header,
-	enform-app > nav {
-		border-bottom: var(--border-width) solid var(--color-border);
-	}
-
-	enform-page {
-		padding-top: var(--space-l);
-	}
-
-	enform-app > nav {
-		grid-area: nav;
-		position: static;
-		padding: 0;
-		background: none;
-		backdrop-filter: none;
-		border-top: 0;
-	}
-
-	enform-app > nav a {
-		flex-direction: row;
-		gap: var(--space-xs);
-		padding: 0 var(--space-m);
-		min-height: var(--header-height);
-		font-size: var(--font-size-s);
-	}
-
-	enform-app > nav svg {
-		width: var(--icon-size-small);
-		height: var(--icon-size-small);
-	}
-}
-
-/* Writes waiting to be sent, said in the header */
-enform-app > header > a[rel='status'] {
-	margin-inline-start: auto;
-	padding: var(--space-2xs) var(--space-s);
-	font-size: var(--font-size-s);
-	color: var(--color-on-accent);
-	text-decoration: none;
-	background: var(--color-accent);
-	border-radius: var(--pill-radius);
-}
-
 /* You, in the tab bar: your avatar and handle */
 enform-app > nav img {
 	width: var(--icon-size);
@@ -164,20 +141,78 @@ enform-app > nav img {
 	border-radius: var(--avatar-radius);
 }
 
-enform-app > nav a > span {
+enform-app > nav li a > span {
 	max-width: 100%;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-@media (min-width: 48rem) {
-	enform-app > nav img {
-		width: var(--icon-size-small);
-		height: var(--icon-size-small);
+/* The shell's one switch (savoir-faire app-shell): media queries can't read tokens */
+@media (min-width: 64rem) {
+	enform-app {
+		grid-template-areas: 'nav header' 'nav main';
+		grid-template-columns: var(--rail-width) minmax(0, 1fr);
+		padding-bottom: 0;
+		--sticky-bottom: 0px;
 	}
 
-	enform-app > nav a > span {
-		max-width: var(--nav-label-max);
+	enform-app > nav {
+		grid-area: nav;
+		position: sticky;
+		inset: 0 auto auto;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-s);
+		height: 100dvh;
+		padding: var(--space-s);
+		background: none;
+		backdrop-filter: none;
+		border-top: 0;
+		border-inline-end: var(--border-width) solid var(--color-border);
+	}
+
+	enform-app > nav > a[rel='home'] {
+		display: flex;
+		align-items: center;
+		min-height: var(--header-height);
+		padding: 0 var(--space-s);
+		font-weight: 700;
+		color: inherit;
+		text-decoration: none;
+	}
+
+	enform-app > nav ul {
+		grid-auto-flow: row;
+		grid-auto-columns: auto;
+		gap: var(--space-2xs);
+	}
+
+	enform-app > nav li a {
+		flex-direction: row;
+		justify-content: start;
+		gap: var(--space-s);
+		min-height: var(--control-height);
+		padding: 0 var(--space-s);
+		font-size: var(--font-size-m);
+		border-radius: var(--radius);
+	}
+
+	enform-app > nav li a:hover,
+	enform-app > nav a[aria-current='page'] {
+		background: var(--color-surface);
+	}
+
+	/* On the rail's highlight, text in the text color (contrast), the icon in the accent */
+	enform-app > nav a[aria-current='page'] {
+		color: var(--color-text);
+	}
+
+	enform-app > nav a[aria-current='page'] svg {
+		color: var(--color-accent);
+	}
+
+	enform-page {
+		padding-top: var(--space-l);
 	}
 }
