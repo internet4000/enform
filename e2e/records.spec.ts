@@ -38,7 +38,7 @@ test('create, edit and delete a record of a published lexicon', async ({page}, i
 		.getByRole('button', {name: t('record_delete'), exact: true})
 		.first()
 		.click()
-	const dialog = page.getByRole('dialog')
+	const dialog = page.getByRole('dialog', {name: t('record_delete_confirm_title')})
 	await approvePopup(page, 'alice.test', () =>
 		dialog.getByRole('button', {name: t('record_delete')}).click()
 	)

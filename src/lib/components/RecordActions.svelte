@@ -41,7 +41,7 @@
 <li><a href={editHref} role="button">{m.record_edit()}</a></li>
 <li>
 	<button type="button" onclick={() => dialog?.showModal()}>{m.record_delete()}</button>
-	<dialog bind:this={dialog} aria-labelledby="delete-title">
+	<dialog bind:this={dialog} aria-labelledby="delete-title" data-danger>
 		<h2 id="delete-title">{m.record_delete_confirm_title()}</h2>
 		<p>{m.record_delete_confirm({rkey, collection})}</p>
 		{#if failed}<p role="alert">{failed}</p>{/if}

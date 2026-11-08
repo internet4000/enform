@@ -149,69 +149,6 @@ enform-fab a[role='button'] {
 	box-shadow: var(--shadow-menu);
 }
 
-/* A record or a form over the app */
-enform-sheet {
-	position: fixed;
-	inset: 0 0 var(--sticky-bottom) 0;
-	z-index: 4;
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-m);
-	padding: 0 var(--gutter) var(--space-l);
-	overflow-y: auto;
-	background: var(--color-bg);
-}
-
-enform-sheet > header {
-	position: sticky;
-	inset-block-start: 0;
-	z-index: 1;
-	display: flex;
-	align-items: center;
-	gap: var(--space-s);
-	margin-inline: calc(-1 * var(--gutter));
-	padding: var(--space-s) var(--gutter);
-	background: var(--color-bar);
-	backdrop-filter: blur(var(--bar-blur));
-	border-bottom: var(--border-width) solid var(--color-border);
-}
-
-enform-sheet > header h2 {
-	min-width: 0;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-enform-sheet > header > a {
-	display: grid;
-	place-items: center;
-	width: var(--control-height);
-	height: var(--control-height);
-	font-size: var(--font-size-l);
-	color: inherit;
-	text-decoration: none;
-	border-radius: var(--pill-radius);
-}
-
-enform-sheet > menu {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--space-s);
-	padding: 0;
-	margin: 0;
-	list-style: none;
-}
-
-@media (min-width: 48rem) {
-	enform-sheet {
-		inset: var(--header-height) 0 0 auto;
-		width: min(var(--sheet-width), 100vw);
-		border-inline-start: var(--border-width) solid var(--color-border);
-		box-shadow: var(--shadow-menu);
-	}
-}
-
 /* What one can do in an app: a card per type, its kind's icon and verb */
 enform-actions {
 	display: grid;
@@ -363,13 +300,6 @@ enform-kind-view > time {
 	color: var(--color-accent);
 }
 
-/* Wide screens: the cards make room for an open sheet */
-@media (min-width: 48rem) {
-	enform-app-screen:has(~ enform-sheet) {
-		margin-inline-end: var(--sheet-width);
-	}
-}
-
 /* Which app (its domain) and whose data, under the app's name */
 enform-app-screen hgroup {
 	display: grid;
@@ -407,20 +337,6 @@ enform-whose {
 enform-whose[mine] {
 	color: var(--color-on-accent);
 	background: var(--color-success);
-}
-
-enform-sheet > header > hgroup {
-	flex: 1;
-	min-width: 0;
-}
-
-enform-sheet > header hgroup p {
-	margin: 0;
-	overflow: hidden;
-	font-size: var(--font-size-s);
-	color: var(--color-muted);
-	text-overflow: ellipsis;
-	white-space: nowrap;
 }
 
 enform-actions + details {

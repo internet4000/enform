@@ -27,7 +27,7 @@ test('try an app on this device: create, edit and delete a record', async ({page
 		.first()
 		.click()
 	await page
-		.getByRole('dialog')
+		.getByRole('dialog', {name: t('record_delete_confirm_title')})
 		.getByRole('button', {name: t('record_delete')})
 		.click()
 	await page.waitForURL(closed)

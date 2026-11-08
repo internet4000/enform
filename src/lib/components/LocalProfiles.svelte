@@ -124,7 +124,7 @@
 		<button type="submit" disabled={busy === 'new'}>{m.local_create()}</button>
 	</form>
 	{#if failed}<p role="alert">{failed}</p>{/if}
-	<dialog bind:this={dialog} aria-labelledby="remove-local-title">
+	<dialog bind:this={dialog} aria-labelledby="remove-local-title" data-danger>
 		<h2 id="remove-local-title">{m.local_remove()}</h2>
 		<p>{m.local_remove_confirm({name: removing?.name ?? ''})}</p>
 		<form onsubmit={remove}>

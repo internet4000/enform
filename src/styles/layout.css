@@ -195,32 +195,6 @@ enform-action-bar menu > li > * {
 	justify-content: center;
 }
 
-enform-record-actions dialog {
-	max-width: min(var(--measure-dialog), calc(100vw - 2 * var(--space-m)));
-	padding: var(--space-l);
-	color: inherit;
-	background: var(--color-bg);
-	border: var(--border-width) solid var(--color-border);
-	border-radius: var(--radius);
-}
-
-enform-record-actions dialog::backdrop {
-	background: var(--color-backdrop);
-}
-
-enform-record-actions dialog > * + * {
-	margin-top: var(--space-m);
-}
-
-enform-record-actions dialog form {
-	justify-content: end;
-}
-
-enform-record-actions dialog button[type='submit'] {
-	color: var(--color-danger);
-	border-color: var(--color-danger);
-}
-
 enform-apps > section {
 	display: flex;
 	flex-direction: column;

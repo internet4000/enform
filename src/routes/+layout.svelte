@@ -21,7 +21,7 @@
 
 	onMount(() => {
 		startAuth().then(async (returnTo) => {
-			if (returnTo) await goto(returnTo, {replaceState: true})
+			if (returnTo) await goto(returnTo, {replace: true})
 			await outbox.refresh()
 			await send()
 		})

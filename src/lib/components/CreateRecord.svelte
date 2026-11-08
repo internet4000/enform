@@ -34,7 +34,7 @@
 		getRecord(me, lexicon.id, key).then(
 			() =>
 				goto(editing?.(lexicon.id, key) ?? editPath(actorName(me), lexicon.id, key), {
-					replaceState: true
+					replace: true
 				}),
 			() => {}
 		)

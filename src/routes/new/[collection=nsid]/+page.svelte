@@ -18,7 +18,7 @@
 					create: true
 				}),
 				{
-					replaceState: true
+					replace: true
 				}
 			)
 		}
