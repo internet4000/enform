@@ -20,7 +20,10 @@ enform-app > header {
 	padding-top: env(safe-area-inset-top);
 }
 
-enform-app > header > a {
+enform-app > header > a:first-child {
+	display: inline-flex;
+	align-items: center;
+	min-height: var(--control-height);
 	font-weight: 700;
 	font-size: var(--font-size-m);
 	color: inherit;

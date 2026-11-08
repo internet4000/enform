@@ -19,6 +19,10 @@ enform-app-screen > header {
 }
 
 enform-app-screen > header > a[rel='up'] {
+	display: inline-flex;
+	align-items: center;
+	align-self: start;
+	min-height: var(--control-height);
 	font-size: var(--font-size-s);
 	text-decoration: none;
 }

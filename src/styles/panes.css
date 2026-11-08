@@ -43,7 +43,7 @@ enform-pane > header > a[rel='up'] {
 	justify-self: start;
 	display: inline-flex;
 	align-items: center;
-	min-height: var(--control-height-small);
+	min-height: var(--control-height);
 	font-size: var(--font-size-s);
 	text-decoration: none;
 }
@@ -60,7 +60,7 @@ enform-pane > header > hgroup {
 	min-width: 0;
 }
 
-enform-pane > header h1 {
+enform-pane > header :is(h1, h2) {
 	overflow: hidden;
 	font-size: var(--font-size-pane-title);
 	text-overflow: ellipsis;
@@ -110,6 +110,13 @@ enform-identity > strong {
 	line-height: 1.2;
 }
 
+enform-identity > details > summary {
+	display: flex;
+	align-items: center;
+	min-height: var(--control-height);
+	cursor: pointer;
+}
+
 enform-identity > details {
 	grid-column: -2;
 	font-size: var(--font-size-s);
@@ -147,8 +154,6 @@ enform-repo-nav h2 {
 	font-size: var(--font-size-s);
 	font-weight: 600;
 	color: var(--color-muted);
-	text-transform: uppercase;
-	letter-spacing: var(--caps-spacing);
 }
 
 enform-app-icon {
