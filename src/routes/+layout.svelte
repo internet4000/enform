@@ -2,7 +2,8 @@
 	import '../styles/index.css'
 	import {onMount} from 'svelte'
 	import {goto, refreshAll} from '$app/navigation'
-	import {navigating} from '$app/state'
+	import {navigating, page} from '$app/state'
+	import {APP_ORIGIN} from '#lib/auth/metadata'
 	import * as m from '#lib/paraglide/messages.js'
 	import {startAuth} from '#lib/auth/session.svelte'
 	import {sendWaiting} from '#lib/atproto/write'
@@ -31,6 +32,8 @@
 
 <svelte:head>
 	<title>{app.name}</title>
+	<meta name="description" content={m.app_intro()} />
+	<link rel="canonical" href={`${APP_ORIGIN}${page.url.pathname}`} />
 </svelte:head>
 
 <enform-app>
