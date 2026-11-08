@@ -343,6 +343,7 @@
 	"you_local": "Your records stay in this browser: they work offline and only you see them.",
 	"you_account": "Your records are stored on {server}, your account's server, where other atproto apps can read them.",
 	"you_use_account": "Use {actor} again",
+	"settings_browser": "In this browser",
 	"profiles_title": "Profiles",
 	"profiles_accounts": "atproto accounts",
 	"start_title": "Where your records are kept",

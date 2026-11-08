@@ -343,6 +343,7 @@
 	"you_local": "Vos données restent dans ce navigateur : elles fonctionnent hors ligne et vous seul les voyez.",
 	"you_account": "Vos données sont stockées sur {server}, le serveur de votre compte, où les autres apps atproto peuvent les lire.",
 	"you_use_account": "Utiliser {actor} à nouveau",
+	"settings_browser": "Dans ce navigateur",
 	"profiles_title": "Profils",
 	"profiles_accounts": "Comptes atproto",
 	"start_title": "Où vos données sont gardées",

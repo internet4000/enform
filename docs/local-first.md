@@ -29,7 +29,7 @@ Nothing local pretends to be atproto:
 - Opened like any repo, at `/@local:<id>`: the same panes, apps, lists and forms.
   Reads and writes go through the same modules as remote repos
   (`src/lib/atproto/repo.ts`, `write.ts`), which dispatch on the repo.
-- **Who you are** is the current account _or_ local profile: Settings lists both,
+- **Who you are** is the current account _or_ local profile: Settings › Profiles lists both,
   to switch to, add or remove. Owner actions (Add, Edit, Delete) follow it.
 - **Publishing** copies a local profile's records into a signed-in account in one
   batch (`com.atproto.repo.applyWrites`), after one permission request covering all
@@ -46,7 +46,7 @@ Nothing local pretends to be atproto:
   what was last read (this visit) while it can't be reached.
 - The outbox is sent in order on start and when the network is back; a write that
   waited on another swaps against the version that one made. A conflict (the record
-  changed elsewhere) or a refusal stops that write, kept in Settings to give up;
+  changed elsewhere) or a refusal stops that write, kept in Settings › Waiting to be sent, to give up;
   nothing is overwritten silently.
 - The app itself works offline: a service worker keeps its built files.
 - Not yet: a lasting local copy of read collections (only this visit's reads).

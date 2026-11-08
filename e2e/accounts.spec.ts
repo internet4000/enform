@@ -22,4 +22,10 @@ test('add a second account and switch between them', async ({page}) => {
 		.getByRole('link', {name: '@alice.test'})
 		.click()
 	await page.waitForURL((url) => url.pathname === '/settings')
+	// Settings: your page first, then your profiles, where your records are kept
+	const you = page.getByRole('region', {name: t('you_title')})
+	await expect(you.getByRole('link', {name: /@alice\.test/})).toBeVisible()
+	await you.getByRole('link', {name: new RegExp(`^${t('profiles_title')}`)}).click()
+	await page.waitForURL((url) => url.pathname === '/settings/profiles')
+	await expect(page.locator('enform-you').getByText('@alice.test')).toBeVisible()
 })

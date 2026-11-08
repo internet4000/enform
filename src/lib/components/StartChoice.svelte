@@ -29,7 +29,7 @@
 		<li>
 			<h3>{m.start_account_title()}</h3>
 			<p>{m.start_account()}</p>
-			<a href={`${inApp('/settings')}#profiles`} role="button">{m.session_sign_in()}</a>
+			<a href={inApp('/settings/profiles')} role="button">{m.session_sign_in()}</a>
 		</li>
 	</ul>
 	<p><small>{m.start_later()}</small></p>

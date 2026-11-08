@@ -66,43 +66,14 @@ enform-you {
 	gap: var(--space-s);
 }
 
-enform-you > a {
-	display: flex;
-	align-items: center;
-	gap: var(--space-s);
-	color: inherit;
-	text-decoration: none;
-}
-
-enform-you > a img {
-	width: var(--app-icon-size-large);
-	height: var(--app-icon-size-large);
-	object-fit: cover;
-	border-radius: var(--avatar-radius);
-}
-
-enform-you > a span {
-	display: flex;
-	flex-direction: column;
-	min-width: 0;
-}
-
-enform-you > a small {
-	color: var(--color-accent);
-}
-
 enform-you > p {
 	margin: 0;
 	color: var(--color-muted);
 }
 
-enform-you menu {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--space-xs);
-	padding: 0;
-	margin: 0;
-	list-style: none;
+enform-you > p > strong {
+	display: block;
+	color: var(--color-text);
 }
 
 /* Where records can be kept, side by side when there is room */

@@ -1,0 +1,162 @@
+/*
+ * Settings (as 4000.radio's and joblist's menus): groups of rows, each with its icon,
+ * what it is, its value, small, and a chevron to its own page; each page with the way
+ * back before its title.
+ */
+/* One column to scan, as narrow as a phone's even on a desktop */
+enform-page:has(> enform-settings-links, > enform-settings-header) {
+	max-width: var(--measure-settings);
+}
+
+enform-settings-links h2 {
+	margin: 0 0 var(--space-xs);
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-settings-links menu {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--radius-large);
+	overflow: hidden;
+}
+
+enform-settings-links li + li {
+	border-top: var(--border-width) solid var(--color-border);
+}
+
+enform-settings-links li > a,
+enform-settings-links li > button {
+	display: flex;
+	align-items: center;
+	gap: var(--space-s);
+	width: 100%;
+	min-height: var(--control-height);
+	padding: var(--space-xs) var(--space-s);
+	font: inherit;
+	color: var(--color-text);
+	text-align: start;
+	text-decoration: none;
+	background: none;
+	border: 0;
+	border-radius: 0;
+}
+
+enform-settings-links li > a:hover,
+enform-settings-links li > button:hover {
+	background: var(--color-surface);
+}
+
+enform-settings-links svg {
+	flex: none;
+	width: var(--icon-size);
+	height: var(--icon-size);
+	fill: none;
+	stroke: currentColor;
+	stroke-width: var(--icon-stroke);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+enform-settings-links img {
+	flex: none;
+	width: var(--icon-size);
+	height: var(--icon-size);
+	object-fit: cover;
+	border-radius: var(--avatar-radius);
+}
+
+enform-settings-links span {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-settings-links small,
+enform-settings-links li > a > svg:last-child {
+	flex: none;
+	color: var(--color-muted);
+}
+
+enform-settings-links small {
+	max-width: 50%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+enform-settings-header {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2xs);
+}
+
+enform-settings-header h1 {
+	margin: 0;
+}
+
+enform-settings-header > a[rel='up'] {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: none;
+	width: var(--control-height);
+	height: var(--control-height);
+	margin-inline-start: calc(var(--space-s) * -1);
+	color: var(--color-muted);
+	border-radius: var(--pill-radius);
+}
+
+enform-settings-header > a[rel='up']:hover {
+	color: var(--color-text);
+	background: var(--color-surface);
+}
+
+enform-settings-header svg {
+	width: var(--icon-size);
+	height: var(--icon-size);
+	fill: none;
+	stroke: currentColor;
+	stroke-width: var(--icon-stroke);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+/* Languages, each named in itself, one tap each */
+enform-page > fieldset {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+enform-page > fieldset > legend {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+}
+
+enform-page > fieldset > label {
+	flex-direction: row;
+	align-items: center;
+	gap: var(--space-s);
+	min-height: var(--control-height);
+	font-size: var(--font-size-m);
+	color: var(--color-text);
+}
+
+enform-page > fieldset > label > input {
+	inline-size: var(--checkbox-size);
+	block-size: var(--checkbox-size);
+	min-height: 0;
+	margin: 0;
+	accent-color: var(--color-accent);
+}

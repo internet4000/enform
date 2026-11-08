@@ -1,14 +1,12 @@
 <script lang="ts">
 	// Who you act as and where your records are kept: on this device, or on your account's
-	// server (with what enform may do there); your page; going back or signing out
+	// server (with what enform may do there). Your page and signing out are Settings' rows
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {grants} from '#lib/auth/describe'
-	import {profileAvatar} from '#lib/atproto/profile'
-	import {actorName, repoPath} from '#lib/paths'
+	import {actorName} from '#lib/paths'
 
 	let me = $derived(auth.me)
-	let avatar = $derived(me && !me.local ? profileAvatar(me) : undefined)
 	let server = $derived(me?.pds ? new URL(me.pds).host : undefined)
 	let granted = $derived(grants(auth.scope))
 
@@ -23,30 +21,10 @@
 	{#if !me}
 		<p>{m.you_nobody()}</p>
 	{:else}
-		{@const actor = actorName(me)}
-		<a href={repoPath(actor)}>
-			{#await avatar then src}
-				{#if src}<img {src} alt="" />{/if}
-			{/await}
-			<span>
-				<strong>{me.local ? (me.name ?? m.local_on_device()) : `@${actor}`}</strong>
-				<small>{m.account_your_page()}</small>
-			</span>
-		</a>
-		<p>{me.local ? m.you_local() : m.you_account({server: server ?? ''})}</p>
-		<menu>
-			{#if me.local && auth.identity}
-				<li>
-					<button type="button" onclick={() => auth.useLocal(undefined)}
-						>{m.you_use_account({actor: `@${actorName(auth.identity)}`})}</button
-					>
-				</li>
-			{:else if !me.local}
-				<li>
-					<button type="button" onclick={() => auth.signOut()}>{m.session_sign_out()}</button>
-				</li>
-			{/if}
-		</menu>
+		<p>
+			<strong>{me.local ? (me.name ?? m.local_on_device()) : `@${actorName(me)}`}</strong>
+			{me.local ? m.you_local() : m.you_account({server: server ?? ''})}
+		</p>
 		{#if !me.local && auth.session}
 			<details>
 				<summary>{m.account_permissions()}</summary>

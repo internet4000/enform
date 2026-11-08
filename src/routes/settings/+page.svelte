@@ -1,72 +1,80 @@
 <script lang="ts">
-	// Settings, opened from who you are: you, your profiles (on this device or atproto
-	// accounts) to switch between or add, your pinned apps, writes waiting, language, and
-	// what enform is
+	// Settings, opened from who you are: only where to go, in groups of rows (as 4000.radio's
+	// and joblist's menus), each to its own page. You (your page, your profiles and
+	// accounts, signing out), this browser (pins, writes waiting, language), and enform
 	import * as m from '#lib/paraglide/messages.js'
-	import {getLocale, locales, setLocale, type Locale} from '#lib/paraglide/runtime.js'
-	import {inApp} from '#lib/paths'
+	import {getLocale} from '#lib/paraglide/runtime.js'
+	import {inApp, actorName, repoPath} from '#lib/paths'
 	import app from '#lib/config/app.json' with {type: 'json'}
 	import {auth} from '#lib/auth/session.svelte'
-	import AccountList from '#lib/components/AccountList.svelte'
-	import LocalProfiles from '#lib/components/LocalProfiles.svelte'
-	import Outbox from '#lib/components/Outbox.svelte'
-	import PinList from '#lib/components/PinList.svelte'
-	import SignIn from '#lib/components/SignIn.svelte'
-	import You from '#lib/components/You.svelte'
+	import {profileAvatar} from '#lib/atproto/profile'
+	import {pins} from '#lib/apps/pins.svelte'
+	import {outbox} from '#lib/outbox/outbox.svelte'
+	import SettingsLinks, {type SettingsLink} from '#lib/components/SettingsLinks.svelte'
 
-	const names = new Intl.DisplayNames([getLocale()], {type: 'language'})
+	const language = new Intl.DisplayNames([getLocale()], {type: 'language'}).of(getLocale())
+
+	let me = $derived(auth.me)
+	let you = $derived.by((): SettingsLink[] => {
+		const profiles: SettingsLink = {
+			href: inApp('/settings/profiles'),
+			icon: 'profile',
+			label: m.profiles_title(),
+			value: me ? (me.local ? m.local_on_device() : me.pds && new URL(me.pds).host) : undefined
+		}
+		if (!me) return [profiles]
+		const actor = actorName(me)
+		const page: SettingsLink = {
+			href: repoPath(actor),
+			icon: 'me',
+			label: me.local ? (me.name ?? m.local_on_device()) : `@${actor}`,
+			value: m.account_your_page(),
+			image: me.local ? undefined : profileAvatar(me)
+		}
+		const leave: SettingsLink[] = me.local
+			? auth.identity
+				? [
+						{
+							icon: 'me',
+							label: m.you_use_account({actor: `@${actorName(auth.identity)}`}),
+							onclick: () => auth.useLocal(undefined)
+						}
+					]
+				: []
+			: [{icon: 'signout', label: m.session_sign_out(), onclick: () => auth.signOut()}]
+		return [page, profiles, ...leave]
+	})
+	let browser = $derived<SettingsLink[]>([
+		{
+			href: inApp('/settings/pins'),
+			icon: 'pin',
+			label: m.pins_title(),
+			value: pins.domains.length ? String(pins.domains.length) : undefined
+		},
+		{
+			href: inApp('/settings/waiting'),
+			icon: 'waiting',
+			label: m.outbox_title(),
+			value: outbox.writes.length ? String(outbox.writes.length) : undefined
+		},
+		{href: inApp('/settings/language'), icon: 'language', label: m.locale_label(), value: language}
+	])
+	const about: SettingsLink[] = [
+		{href: app.source, icon: 'source', label: m.about_source(), external: true},
+		{
+			href: `${app.source}/blob/main/docs/self-host.md`,
+			icon: 'home',
+			label: m.about_self_host(),
+			external: true
+		}
+	]
 </script>
 
 <enform-page>
 	<h1>{m.nav_settings()}</h1>
-	<section aria-labelledby="you">
-		<h2 id="you">{m.you_title()}</h2>
-		<You />
-	</section>
-	<section aria-labelledby="profiles-title" id="profiles">
-		<h2 id="profiles-title">{m.profiles_title()}</h2>
-		<section aria-labelledby="on-device">
-			<h3 id="on-device">{m.local_on_device()}</h3>
-			<LocalProfiles />
-		</section>
-		<section aria-labelledby="accounts">
-			<h3 id="accounts">{m.profiles_accounts()}</h3>
-			{#if auth.accounts.length}<AccountList />{/if}
-			{#if auth.ready}
-				<SignIn returnTo={inApp('/settings')} adding={!!auth.session} />
-			{/if}
-		</section>
-	</section>
-	<section aria-labelledby="pins">
-		<h2 id="pins">{m.pins_title()}</h2>
-		<PinList />
-	</section>
-	<section aria-labelledby="waiting-title" id="waiting">
-		<h2 id="waiting-title">{m.outbox_title()}</h2>
-		<Outbox />
-	</section>
-	<section aria-labelledby="language">
-		<h2 id="language">{m.locale_label()}</h2>
-		<select
-			aria-labelledby="language"
-			value={getLocale()}
-			onchange={(event) => setLocale(event.currentTarget.value as Locale)}
-		>
-			{#each locales as locale (locale)}
-				<option value={locale}>{names.of(locale)}</option>
-			{/each}
-		</select>
-	</section>
-	<section aria-labelledby="about">
-		<h2 id="about">{m.about_title()}</h2>
-		<p>{m.app_intro()}</p>
-		<ul>
-			<li><a href={app.source} rel="noopener noreferrer">{m.about_source()}</a></li>
-			<li>
-				<a href={`${app.source}/blob/main/docs/self-host.md`} rel="noopener noreferrer"
-					>{m.about_self_host()}</a
-				>
-			</li>
-		</ul>
-	</section>
+	<SettingsLinks title={m.you_title()} items={you} />
+	{#if !me && auth.ready}<p><small>{m.you_nobody()}</small></p>{/if}
+	<SettingsLinks title={m.settings_browser()} items={browser} />
+	<SettingsLinks title={m.about_title()} items={about} />
+	<p><small>{m.app_intro()}</small></p>
 </enform-page>
