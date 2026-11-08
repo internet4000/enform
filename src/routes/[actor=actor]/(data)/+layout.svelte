@@ -16,7 +16,7 @@
 </script>
 
 <enform-panes>
-	<Pane title={m.repo_pane_title()}>
+	<Pane title={m.repo_pane_title()} level={1}>
 		<enform-identity verified={!!data.repo.handle || undefined}>
 			{#await who() then card}
 				{#if card?.avatar}<img src={blobUrl(data.repo, card.avatar)} alt="" />{/if}

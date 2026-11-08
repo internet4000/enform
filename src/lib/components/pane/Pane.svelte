@@ -11,16 +11,18 @@
 		/** Holds the space of a level not chosen yet; phones skip it */
 		placeholder?: boolean
 		actions?: Snippet
+		/** The heading level: 1 for the first pane (the page's title), 2 for the others */
+		level?: 1 | 2
 		children?: Snippet
 	}
-	let {title, subtitle, back, placeholder = false, actions, children}: Props = $props()
+	let {title, subtitle, back, placeholder = false, actions, children, level = 2}: Props = $props()
 </script>
 
 <enform-pane placeholder={placeholder || undefined}>
 	<header>
 		{#if back}<a href={back.href} rel="up">{back.label}</a>{/if}
 		<hgroup>
-			<h1>{title}</h1>
+			<svelte:element this={`h${level}`}>{title}</svelte:element>
 			{#if subtitle}<p>{subtitle}</p>{/if}
 		</hgroup>
 		{#if actions}<menu>{@render actions()}</menu>{/if}
