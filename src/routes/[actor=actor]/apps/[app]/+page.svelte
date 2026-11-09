@@ -14,7 +14,6 @@
 	import {filterParams} from '#lib/records/filters'
 	import {kindOf} from '#lib/records/kinds'
 	import {kindVerb} from '#lib/records/kind-words'
-	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import AppActions from '#lib/components/app/AppActions.svelte'
 	import AppMenu from '#lib/components/app/AppMenu.svelte'
 	import AppOwner from '#lib/components/app/AppOwner.svelte'
@@ -27,7 +26,7 @@
 	import EditRecord from '#lib/components/EditRecord.svelte'
 	import RecordActions from '#lib/components/RecordActions.svelte'
 	import RecordValue from '#lib/components/RecordValue.svelte'
-	import {actorName, appPath, appScreenPath, collectionPath, dataPath, inApp} from '#lib/paths'
+	import {actorName, appScreenPath, collectionPath, dataPath, inApp} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
@@ -107,18 +106,8 @@
 
 <enform-app-screen>
 	<header>
-		<!-- Whose it is first, as this app shows them; then in which app, and whose data -->
-		<AppOwner repo={data.repo} {app} />
-		<enform-app-line>
-			<a href={appPath(info.domain)}>
-				<AppIcon domain={info.domain} name={info.name} />
-				<strong>{info.name}</strong>
-			</a>
-			{#if info.name.toLowerCase() !== info.domain}<span>{info.domain}</span>{/if}
-			<enform-whose mine={owner || undefined}>
-				{owner ? m.whose_yours() : m.whose_theirs({actor: `@${actor}`})}
-			</enform-whose>
-		</enform-app-line>
+		<!-- Where one is: the app, then whose profile in it, as this app shows them -->
+		<AppOwner repo={data.repo} {app} {info} mine={owner} />
 		<!-- The app at hand: pin it; open it, read what it is, see its data, in its menu -->
 		<menu>
 			<li><PinButton domain={info.domain} name={info.name} /></li>

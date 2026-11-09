@@ -468,11 +468,12 @@ enform-toolbar enform-new {
 	}
 }
 
-/* Whose it is, first and large; in which app, a line under; the app's actions beside */
+/* Where one is, as a breadcrumb: the app, then whose profile in it (the page, larger);
+   the app's actions beside, their bio under */
 enform-app-screen > header {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) auto;
-	grid-template-areas: 'owner menu' 'app app';
+	grid-template-areas: 'owner menu';
 	align-items: start;
 	gap: var(--space-s);
 }
@@ -489,14 +490,59 @@ enform-app-owner {
 	min-width: 0;
 }
 
-enform-app-owner > a {
+enform-app-owner ol {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-2xs) var(--space-xs);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+enform-app-owner li {
 	display: flex;
 	align-items: center;
-	gap: var(--space-m);
-	min-height: var(--control-height);
+	gap: var(--space-xs);
 	min-width: 0;
-	color: inherit;
+}
+
+enform-app-owner li:first-child::after {
+	content: '/';
+	color: var(--color-muted);
+}
+
+/* The app: small, a step back */
+enform-app-owner li:first-child {
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-app-owner li:first-child > a {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-xs);
+	min-height: var(--control-height);
+	color: var(--color-text);
 	text-decoration: none;
+}
+
+enform-app-owner li:first-child enform-app-icon {
+	--app-icon-size: var(--icon-size);
+	font-size: var(--font-size-xs);
+}
+
+/* Whose profile: the page itself */
+enform-app-owner li + li > a {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: var(--app-icon-size-large);
+	height: var(--app-icon-size-large);
+	color: var(--color-muted);
+	text-decoration: none;
+	background: var(--color-surface);
+	border-radius: var(--avatar-radius);
 }
 
 enform-app-owner img {
@@ -513,18 +559,21 @@ enform-app-owner hgroup {
 
 enform-app-owner h1 {
 	margin: 0;
+	font-size: var(--font-size-l);
+	line-height: 1.2;
 	overflow-wrap: break-word;
 }
 
-@media (min-width: 48rem) {
-	enform-app-owner img {
-		width: var(--avatar-size);
-		height: var(--avatar-size);
-	}
+enform-app-owner hgroup p {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-xs);
+	margin: 0;
+	font-size: var(--font-size-s);
 }
 
 enform-app-owner hgroup p {
-	margin: 0;
 	color: var(--color-muted);
 }
 
@@ -538,28 +587,4 @@ enform-app-owner > p {
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 3;
 	line-clamp: 3;
-}
-
-enform-app-line {
-	grid-area: app;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: var(--space-xs) var(--space-s);
-	font-size: var(--font-size-s);
-	color: var(--color-muted);
-}
-
-enform-app-line > a {
-	display: inline-flex;
-	align-items: center;
-	gap: var(--space-xs);
-	min-height: var(--control-height);
-	color: var(--color-text);
-	text-decoration: none;
-}
-
-enform-app-line enform-app-icon {
-	--app-icon-size: var(--icon-size);
-	font-size: var(--font-size-xs);
 }

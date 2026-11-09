@@ -143,6 +143,12 @@ enform-repo-app {
 	display: block;
 }
 
+/* Each app apart from the one before: where one app's records end */
+enform-repo-app + enform-repo-app {
+	padding-top: var(--space-l);
+	border-top: var(--border-width) solid var(--color-border);
+}
+
 enform-repo-app[protocol] {
 	opacity: 0.7;
 }
