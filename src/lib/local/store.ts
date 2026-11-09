@@ -1,13 +1,32 @@
 /**
  * Local profiles: repos that live in this browser only, named by their person, with
- * no DID or handle. Their records are valid records of their lexicons, keyed the way
+ * no DID; their handle is their name's, under .local (local/handle.ts). Their records are valid records of their lexicons, keyed the way
  * atproto keys them (TIDs, or the lexicon's literal key), so they can be published
  * to an account later as they are. See docs/local-first.md.
  */
 import {TID} from '@atproto/common-web'
 import {BY_COLLECTION, PROFILES, RECORDS, run} from './db'
+import {slugify, uniqueSlug} from './handle'
 
-export type LocalProfile = {id: string; name: string; createdAt: string}
+export type LocalProfile = {
+	id: string
+	name: string
+	createdAt: string
+	/** Its handle's label (my-radio → @my-radio.local), unique on the device; kept when
+	    renamed. Profiles made before had none: their name's is used */
+	slug?: string
+}
+
+/** A local profile's handle label */
+export const slugOf = (profile: LocalProfile) => profile.slug ?? slugify(profile.name)
+
+/** The local profile a handle label names (the first made, if older ones share it) */
+export async function profileBySlug(slug: string): Promise<LocalProfile | undefined> {
+	const profiles = await listProfiles()
+	return profiles
+		.sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+		.find((profile) => slugOf(profile) === slug)
+}
 
 export type LocalRecord = {
 	profile: string
@@ -37,7 +56,13 @@ export function getProfile(id: string): Promise<LocalProfile | undefined> {
 }
 
 export async function createProfile(name: string): Promise<LocalProfile> {
-	const profile = {id: TID.nextStr(), name, createdAt: new Date().toISOString()}
+	const taken = (await listProfiles()).map(slugOf)
+	const profile = {
+		id: TID.nextStr(),
+		name,
+		createdAt: new Date().toISOString(),
+		slug: uniqueSlug(name, taken)
+	}
 	await run(PROFILES, 'readwrite', (store) => store.put(profile))
 	return profile
 }

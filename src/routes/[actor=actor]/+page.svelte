@@ -71,7 +71,10 @@
 				{#if card?.avatar}<img src={blobUrl(data.repo, card.avatar)} alt="" />{/if}
 				<figcaption>
 					<h1>{card?.title ?? data.repo.name ?? `@${actor}`}</h1>
-					<p>{data.repo.local ? m.local_on_device() : `@${actor}`}</p>
+					<p>
+						@{actorName(data.repo)}{#if data.repo.local}
+							· {m.local_on_device()}{/if}
+					</p>
 					{#if card?.text}<p>{card.text}</p>{/if}
 				</figcaption>
 			</figure>

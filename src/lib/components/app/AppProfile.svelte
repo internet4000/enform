@@ -11,7 +11,7 @@
 	type Props = {repo: Identity; app?: RepoApp; href: string; rel?: string}
 	let {repo, app, href, rel}: Props = $props()
 
-	let handle = $derived(repo.local ? (repo.name ?? actorName(repo)) : `@${actorName(repo)}`)
+	let handle = $derived(`@${actorName(repo)}`)
 	let card = $derived(
 		app?.profile?.record
 			? recordCard(app.profile.record.value, app.profile.lexicon?.defs.main?.record)

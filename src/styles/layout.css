@@ -622,20 +622,6 @@ enform-app-hero > p {
 	list-style: none;
 }
 
-:is(enform-app-hero, enform-app-screen > header) > menu > li > :is(a, button) {
-	padding: 0 var(--space-m);
-	font-size: var(--font-size-s);
-	color: var(--color-text);
-	background: var(--color-surface);
-	border-color: transparent;
-	border-radius: var(--pill-radius);
-}
-
-:is(enform-app-hero, enform-app-screen > header) > menu > li > [aria-pressed='true'] {
-	color: var(--color-on-accent);
-	background: var(--color-accent);
-}
-
 /* Types known by name only: rows to read, not to open */
 enform-type-rows[unpublished] li > span {
 	display: flex;
@@ -756,4 +742,22 @@ enform-app-card[add] > a > span {
 	height: var(--app-icon-size-large);
 	font-size: var(--font-size-l);
 	color: var(--color-muted);
+}
+
+/* A pin: its icon, filled when pinned, quiet beside what it pins */
+button[data-pin],
+button[data-pin][aria-pressed='true'] {
+	min-height: var(--control-height);
+	min-width: var(--control-height);
+	color: var(--color-muted);
+	background: none;
+	border-color: transparent;
+}
+
+button[data-pin][aria-pressed='true'] {
+	color: var(--color-accent-text);
+}
+
+button[data-pin][aria-pressed='true'] > svg {
+	fill: currentColor;
 }

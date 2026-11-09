@@ -2,8 +2,15 @@
 	// An app as on a phone's home screen: its icon, its name and its domain, opening it
 	import AppIcon from '../pane/AppIcon.svelte'
 
-	type Props = {href: string; domain: string; name: string; note?: string}
-	let {href, domain, name, note}: Props = $props()
+	type Props = {
+		href: string
+		domain: string
+		name: string
+		note?: string
+		/** What it opens, when not the app itself (a profile in it): under the app's icon */
+		label?: string
+	}
+	let {href, domain, name, note, label}: Props = $props()
 	// An app is its domain: two apps may share a name or an icon, never a domain
 	let detail = $derived(note ?? (name.toLowerCase() === domain ? undefined : domain))
 </script>
@@ -11,7 +18,7 @@
 <enform-app-link>
 	<a {href}>
 		<AppIcon {domain} {name} />
-		<span>{name}</span>
+		<span>{label ?? name}</span>
 		{#if detail}<small>{detail}</small>{/if}
 	</a>
 </enform-app-link>

@@ -82,12 +82,6 @@ enform-reader svg {
 	stroke-linejoin: round;
 }
 
-enform-reader button[aria-pressed='true'] {
-	color: var(--color-on-accent);
-	background: var(--color-accent);
-	border-color: var(--color-accent);
-}
-
 /* Its controls keep their size; the record and the list scroll, each on its own */
 enform-reader > * {
 	flex: none;

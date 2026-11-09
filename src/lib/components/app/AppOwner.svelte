@@ -2,7 +2,7 @@
 	// Where one is, as a breadcrumb: the app (its icon, name and domain), then whose profile
 	// in it, the page itself: their avatar and name as this app shows them (its profile
 	// record: a radio's name and image, a display name), else their account's; their
-	// handle, to their page across apps; under it, what they say about themselves there
+	// handle, to their page across apps; each pinnable; under it, what they say about themselves there
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
 	import {blobUrl} from '#lib/atproto/repo'
@@ -12,11 +12,12 @@
 	import {actorName, appPath, repoPath} from '#lib/paths'
 	import {recordCard} from '#lib/records/card'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
+	import PinButton from '#lib/components/PinButton.svelte'
 
 	let {repo, app, info, mine}: {repo: Identity; app: RepoApp; info: AppInfo; mine: boolean} =
 		$props()
 
-	let handle = $derived(repo.local ? (repo.name ?? m.local_on_device()) : `@${actorName(repo)}`)
+	let handle = $derived(`@${actorName(repo)}`)
 	let card = $derived(
 		app.profile?.record
 			? recordCard(app.profile.record.value, app.profile.lexicon?.defs.main?.record)
@@ -41,6 +42,7 @@
 					<strong>{info.name}</strong>
 				</a>
 				{#if info.name.toLowerCase() !== info.domain}<small>{info.domain}</small>{/if}
+				<PinButton domain={info.domain} name={info.name} />
 			</li>
 			<li aria-current="page">
 				<!-- Their avatar, to their page across apps -->
@@ -52,12 +54,18 @@
 				<hgroup>
 					<h1>{name ?? handle}</h1>
 					{#if name || mine}
+						<!-- Yours: said in words, after who it is -->
 						<p>
-							{#if name}<span>{handle}</span>{/if}
-							{#if mine}<enform-whose mine>{m.whose_yours()}</enform-whose>{/if}
+							{#if name}{handle}{#if mine}
+									· <strong>{m.whose_you()}</strong>{/if}{:else}<strong
+									>{m.whose_this_is_you()}</strong
+								>{/if}
 						</p>
 					{/if}
 				</hgroup>
+				{#if !repo.local}
+					<PinButton domain={info.domain} name={info.name} did={repo.did} actor={handle} />
+				{/if}
 			</li>
 		</ol>
 	</nav>

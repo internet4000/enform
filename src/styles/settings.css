@@ -277,19 +277,6 @@ enform-handle p[data-check='you'] {
 	color: var(--color-accent);
 }
 
-/* Saving is what the form is for; cancelling, a way out */
-enform-handle menu a[role='button'] {
-	color: var(--color-text);
-	background: var(--color-surface);
-	border-color: var(--color-border);
-}
-
-enform-handle menu button[type='submit']:not(:disabled) {
-	color: var(--color-on-accent);
-	background: var(--color-accent);
-	border-color: var(--color-accent);
-}
-
 enform-handle menu {
 	display: flex;
 	flex-wrap: wrap;

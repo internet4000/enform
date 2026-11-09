@@ -36,8 +36,9 @@ enform-app-screen > nav a {
 }
 
 enform-app-screen > nav a[aria-current='page'] {
-	color: var(--color-on-accent);
-	background: var(--color-accent);
+	color: var(--color-accent-text);
+	box-shadow: inset 0 0 0 var(--border-width)
+		color-mix(in oklch, var(--color-accent) 45%, var(--color-border));
 }
 
 /* Records as cards */
@@ -76,20 +77,12 @@ enform-record-card-item:has(> enform-record-actions) > a > small {
 }
 
 enform-record-card-item > enform-record-actions :is(a[role='button'], button) {
-	min-height: var(--control-height);
-	padding: 0 var(--space-s);
 	font-size: var(--font-size-s);
-	color: var(--color-text);
-	background: var(--color-surface);
-	border: var(--border-width) solid var(--color-border);
-	border-radius: var(--pill-radius);
 }
 
 enform-record-actions :is(a, button)[data-verb='play'] {
-	font-weight: 600;
-	color: var(--color-on-accent);
-	background: var(--color-accent);
-	border-color: var(--color-accent);
+	font-weight: var(--label-weight);
+	color: var(--color-accent-text);
 }
 
 enform-record-card-item > a {
@@ -160,6 +153,9 @@ enform-fab a[role='button'] {
 	min-height: var(--fab-height);
 	padding: 0 var(--space-l);
 	font-weight: 600;
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+	border-color: var(--color-accent);
 	border-radius: var(--pill-radius);
 	box-shadow: var(--shadow-menu);
 }
@@ -315,19 +311,6 @@ enform-kind-view > time {
 	color: var(--color-accent);
 }
 
-/* Whose data, beside the app's name */
-enform-whose {
-	padding: 0 var(--space-s);
-	color: var(--color-text);
-	background: var(--color-surface);
-	border-radius: var(--pill-radius);
-}
-
-enform-whose[mine] {
-	color: var(--color-on-accent);
-	background: var(--color-success);
-}
-
 enform-actions + details {
 	margin-top: var(--space-s);
 }
@@ -471,9 +454,8 @@ enform-facet a small {
 }
 
 enform-facet a[aria-current] {
-	color: var(--color-on-accent);
-	background: var(--color-accent);
-	border-color: var(--color-accent);
+	color: var(--color-accent-text);
+	border-color: color-mix(in oklch, var(--color-accent) 45%, var(--color-border));
 }
 
 enform-facet a[aria-current] small {
@@ -632,4 +614,57 @@ enform-app-owner > p {
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 3;
 	line-clamp: 3;
+}
+
+/* A profile's home in an app: a shelf per type it has, its first records under its name */
+enform-type-shelf {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-s);
+	padding-top: var(--space-m);
+	border-top: var(--border-width) solid var(--color-border);
+}
+
+enform-type-shelf > header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--space-xs) var(--space-s);
+}
+
+enform-type-shelf h2 {
+	margin: 0;
+	font-size: var(--font-size-l);
+}
+
+enform-type-shelf h2 a {
+	color: inherit;
+	text-decoration: none;
+}
+
+enform-type-shelf h2 a:hover {
+	text-decoration: underline;
+}
+
+enform-type-shelf > header > small {
+	color: var(--color-muted);
+}
+
+enform-type-shelf > header > menu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
+	margin: 0 0 0 auto;
+	padding: 0;
+	list-style: none;
+}
+
+enform-type-shelf > p {
+	margin: 0;
+}
+
+/* Yours: in words, in the accent, after who it is */
+enform-app-owner hgroup p strong {
+	font-weight: var(--label-weight);
+	color: var(--color-accent-text);
 }

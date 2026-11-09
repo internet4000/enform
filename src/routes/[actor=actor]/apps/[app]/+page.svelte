@@ -17,9 +17,9 @@
 	import AppActions from '#lib/components/app/AppActions.svelte'
 	import AppMenu from '#lib/components/app/AppMenu.svelte'
 	import AppOwner from '#lib/components/app/AppOwner.svelte'
-	import PinButton from '#lib/components/PinButton.svelte'
 	import NewMenu from '#lib/components/app/NewMenu.svelte'
 	import RecordGrid from '#lib/components/app/RecordGrid.svelte'
+	import TypeShelf from '#lib/components/app/TypeShelf.svelte'
 	import RecordSheet from '#lib/components/app/RecordSheet.svelte'
 	import RecordActionsMenu from '#lib/components/app/RecordActionsMenu.svelte'
 	import RecordViews from '#lib/components/app/RecordViews.svelte'
@@ -80,9 +80,17 @@
 				: undefined
 	)
 
+	/** What the profile has in this app: its repo's lists of the app's types, as the tabs
+	    order them */
+	let shelves = $derived(tabs.filter((type) => !single(type)))
+	/** For the owner, what the profile could have and has none of yet */
+	let toStart = $derived(startable.filter((type) => type !== app.profile))
+
 	let params = $derived(shownUrl().searchParams)
+	/** The profile, home of what it has, when there is one; else its first list */
 	let selected = $derived(
 		[...tabs, ...startable].find((type) => type.nsid === params.get('type')) ??
+			(app.profile?.record ? app.profile : undefined) ??
 			tabs.find((type) => !single(type)) ??
 			tabs[0]
 	)
@@ -112,7 +120,6 @@
 		<AppOwner repo={data.repo} {app} {info} mine={owner} />
 		<!-- The app at hand: pin it; open it, read what it is, see its data, in its menu -->
 		<menu>
-			<li><PinButton domain={info.domain} name={info.name} /></li>
 			<li>
 				<AppMenu {info} data={selected ? collectionPath(actor, selected.nsid) : dataPath(actor)} />
 			</li>
@@ -146,22 +153,10 @@
 			<p><small>{m.collection_loading()}</small></p>
 		{:then record}
 			{@const card = recordCard(record.value, selected.lexicon?.defs.main?.record)}
-			<enform-person>
-				{#if card.banner && !data.repo.local}<img
-						src={blobUrl(data.repo, card.banner)}
-						alt=""
-					/>{/if}
-				<figure>
-					{#if card.avatar && !data.repo.local}<img
-							src={blobUrl(data.repo, card.avatar)}
-							alt=""
-						/>{/if}
-					<figcaption>
-						<h2>{card.title ?? typeLabel(selected.nsid)}</h2>
-						{#if card.text}<p>{card.text}</p>{/if}
-					</figcaption>
-				</figure>
-			</enform-person>
+			<!-- Its name, picture and words are in the header: here, its banner -->
+			{#if card.banner && !data.repo.local}
+				<enform-person><img src={blobUrl(data.repo, card.banner)} alt="" /></enform-person>
+			{/if}
 			{#if owner}
 				<p>
 					<a href={at(selected.nsid, {record: selected.rkey, edit: true})} role="button"
@@ -190,6 +185,21 @@
 				<p>{m.collection_records_empty()}</p>
 			{/if}
 		{/await}
+		{#if selected === app.profile}
+			<!-- Home: what this profile has here, a shelf per type -->
+			{#each shelves as type (type.nsid)}
+				<TypeShelf
+					repo={data.repo}
+					{type}
+					all={at(type.nsid)}
+					href={(rkey) => at(type.nsid, {record: rkey})}
+					add={owner && type.lexicon ? at(type.nsid, {create: true}) : undefined}
+				/>
+			{/each}
+			{#if owner && toStart.length}
+				<AppActions types={toStart} href={start} title={m.actions_title({app: info.name})} />
+			{/if}
+		{/if}
 	{:else}
 		{@const type = selected}
 		{#await lexicon then doc}

@@ -35,16 +35,6 @@ input {
 	min-width: 0;
 }
 
-a[role='button'] {
-	display: inline-flex;
-	align-items: center;
-	padding: 0 var(--space-m);
-	color: var(--color-on-accent);
-	text-decoration: none;
-	background: var(--color-accent);
-	border-color: var(--color-accent);
-}
-
 /* Typing in a field smaller than 16px makes mobile browsers zoom in */
 input,
 select,
@@ -52,14 +42,75 @@ textarea {
 	font-size: max(var(--font-size-m), 16px);
 }
 
-button {
+/*
+ * One look for every button, and every link laid out as one (as 4000.radio's): quiet, on
+ * the surface, its icon before its words. A toggle that is on keeps that look, marked by
+ * the accent; only a form's one call to action (its submit) is filled with it.
+ */
+button,
+a[role='button'] {
+	display: inline-flex;
+	min-width: var(--control-height);
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2xs);
+	white-space: nowrap;
+	color: var(--color-text);
+	text-decoration: none;
 	cursor: pointer;
 	background: var(--color-surface);
+	transition-property: border-color, background-color, color, scale;
+	transition-duration: var(--duration);
 }
 
-button:hover,
-button:focus-visible {
+:is(button, a[role='button']):is(:hover, :focus-visible) {
 	border-color: var(--color-accent);
+}
+
+:is(button, a[role='button']):active {
+	scale: 0.97;
+}
+
+:is(button, a[role='button']) > svg {
+	flex: none;
+	width: var(--icon-size);
+	height: var(--icon-size);
+	fill: none;
+	stroke: currentColor;
+	stroke-width: var(--icon-stroke);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+/* An icon alone: square */
+button:has(> svg:only-child) {
+	min-width: var(--control-height);
+	padding: 0;
+}
+
+button[aria-pressed='true'] {
+	color: var(--color-accent-text);
+	border-color: color-mix(in oklch, var(--color-accent) 45%, var(--color-border));
+}
+
+button[type='submit']:not(form[method='dialog'] *) {
+	padding-inline: var(--space-m);
+	font-weight: var(--label-weight);
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+	border-color: var(--color-accent);
+}
+
+button:disabled {
+	cursor: default;
+	opacity: var(--disabled-opacity);
+	scale: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:is(button, a[role='button']):active {
+		scale: none;
+	}
 }
 
 [role='alert'] {

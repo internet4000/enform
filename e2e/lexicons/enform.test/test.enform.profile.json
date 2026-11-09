@@ -1,0 +1,18 @@
+{
+	"lexicon": 1,
+	"id": "test.enform.profile",
+	"description": "Someone's profile in the test app: one per account, for end-to-end tests",
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "literal:self",
+			"record": {
+				"type": "object",
+				"properties": {
+					"displayName": {"type": "string", "maxLength": 64},
+					"description": {"type": "string", "maxLength": 256}
+				}
+			}
+		}
+	}
+}

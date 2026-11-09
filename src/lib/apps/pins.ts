@@ -1,27 +1,40 @@
 /**
- * Pinned apps: the apps someone keeps at hand, by domain, in their order. Kept on this
- * device (localStorage): pinning needs no permission. Pure helpers, tested; the state
- * that uses them is in pins.svelte.ts.
+ * Pins: the apps someone keeps at hand, and the profiles in them (a radio on Radio4000),
+ * in their order. An app is pinned by its domain ("4000.radio"); a profile in an app by
+ * its account's DID and the app's domain ("did:plc:…/4000.radio"), so it stays pinned
+ * when its handle changes. Kept on this device (localStorage): pinning needs no
+ * permission. Pure helpers, tested; the state that uses them is in pins.svelte.ts.
  */
-import {isValidHandle} from '@atproto/syntax'
+import {isValidDid, isValidHandle} from '@atproto/syntax'
 
-/** An app's domain, as pinned: a valid domain name, lowercased */
-const isDomain = (value: unknown): value is string =>
-	typeof value === 'string' && isValidHandle(value)
+export type Pin = {domain: string; did?: string}
 
-/** The stored list, without duplicates or anything that isn't a domain */
+/** A pin as stored */
+export const pinKey = ({domain, did}: Pin): string => (did ? `${did}/${domain}` : domain)
+
+/** A stored pin, if it is one: a domain, or a DID and a domain */
+export function readPin(value: unknown): Pin | undefined {
+	if (typeof value !== 'string') return undefined
+	const at = value.lastIndexOf('/')
+	const domain = value.slice(at + 1).toLowerCase()
+	const did = at < 0 ? undefined : value.slice(0, at)
+	if (!isValidHandle(domain) || (did !== undefined && !isValidDid(did))) return undefined
+	return {domain, did}
+}
+
+/** The stored list, without duplicates or anything that isn't a pin */
 export function parsePins(raw: string | null | undefined): string[] {
 	try {
 		const value: unknown = JSON.parse(raw ?? '[]')
-		return Array.isArray(value)
-			? [...new Set(value.filter(isDomain).map((domain) => domain.toLowerCase()))]
-			: []
+		if (!Array.isArray(value)) return []
+		const pins = value.map(readPin).filter((pin) => pin !== undefined)
+		return [...new Set(pins.map(pinKey))]
 	} catch {
 		return []
 	}
 }
 
-/** Pins it at the end, or unpins it */
+/** Pins it at the end, or unpins it (an app's domain, or a profile's pin key) */
 export function togglePin(pins: string[], domain: string): string[] {
 	return pins.includes(domain) ? pins.filter((pin) => pin !== domain) : [...pins, domain]
 }

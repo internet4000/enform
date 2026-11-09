@@ -22,7 +22,7 @@
 		<p>{m.you_nobody()}</p>
 	{:else}
 		<p>
-			<strong>{me.local ? (me.name ?? m.local_on_device()) : `@${actorName(me)}`}</strong>
+			<strong>@{actorName(me)}</strong>
 			{me.local ? m.you_local() : m.you_account({server: server ?? ''})}
 		</p>
 		{#if !me.local && auth.session}

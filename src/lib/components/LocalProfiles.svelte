@@ -82,8 +82,10 @@
 						current={current || undefined}
 						busy={busy === profile.id || undefined}
 					>
-						<a href={repoPath(actorName(localIdentity(profile)))}>{profile.name}</a>
-						<small>{current ? m.accounts_current() : m.local_on_device()}</small>
+						<a href={repoPath(actorName(localIdentity(profile)))}
+							>{profile.name} <small>@{actorName(localIdentity(profile))}</small></a
+						>
+						{#if current}<small>{m.accounts_current()}</small>{/if}
 						{#if !current}
 							<button type="button" onclick={() => run(profile.id, () => auth.useLocal(profile))}>
 								{m.local_use()}

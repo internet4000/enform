@@ -366,7 +366,7 @@
 	"pins_suggested": "Les apps où vous avez des données. Épinglez celles que vous voulez ici.",
 	"pins_add": "Trouver une app à épingler",
 	"pins_hint": "Épinglées sur cet appareil, dans cet ordre.",
-	"pins_none": "Rien d'épinglé pour l'instant : épinglez une app depuis sa page.",
+	"pins_none": "Rien d'épinglé pour l'instant : épinglez une app, ou le profil de quelqu'un dedans, depuis sa page.",
 	"pin": "Épingler",
 	"unpin": "Désépingler",
 	"pin_app": "Épingler {app}",
@@ -422,5 +422,12 @@
 	"handle_cancel": "Annuler",
 	"handle_save": "Enregistrer",
 	"handle_done": "Votre pseudo est maintenant {handle}.",
-	"handle_hint": "Votre pseudo est la façon dont on vous trouve, dans toutes les apps atproto. Votre compte et vos enregistrements restent les mêmes : les liens vers l'ancien pseudo ne fonctionnent plus."
+	"handle_hint": "Votre pseudo est la façon dont on vous trouve, dans toutes les apps atproto. Votre compte et vos enregistrements restent les mêmes : les liens vers l'ancien pseudo ne fonctionnent plus.",
+	"pin_profile": "Épingler {actor} sur {app}",
+	"unpin_profile": "Désépingler {actor} sur {app}",
+	"pin_profile_name": "{actor} sur {app}",
+	"shelf_all": "Tout voir",
+	"shelf_count_more": "{count}+ enregistrements",
+	"whose_you": "vous",
+	"whose_this_is_you": "C'est vous"
 }

@@ -75,7 +75,7 @@
 	function read(index = 0) {
 		const list = {
 			key: `${repo.did}/${collection}`,
-			name: `${typeLabel(collection)} · ${repo.local ? (repo.name ?? '') : `@${actorName(repo)}`}`
+			name: `${typeLabel(collection)} · @${actorName(repo)}`
 		}
 		let next = cursor
 		// Filtered or reordered: what is shown, no further page

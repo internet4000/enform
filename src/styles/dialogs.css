@@ -26,6 +26,7 @@ dialog:not(:has(> enform-sheet)) form {
 /* Destructive confirmations: the button says it */
 dialog[data-danger] button[type='submit'] {
 	color: var(--color-danger);
+	background: var(--color-surface);
 	border-color: var(--color-danger);
 }
 
@@ -146,15 +147,7 @@ enform-record-views > menu {
 }
 
 enform-record-views > menu button {
-	min-height: var(--control-height);
 	font-size: var(--font-size-s);
-	border-radius: var(--pill-radius);
-}
-
-enform-record-views > menu button[aria-pressed='true'] {
-	color: var(--color-on-accent);
-	background: var(--color-accent);
-	border-color: var(--color-accent);
 }
 
 enform-record-views > pre {

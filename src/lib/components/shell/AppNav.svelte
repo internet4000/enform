@@ -19,13 +19,7 @@
 	const settings = inApp('/settings')
 
 	/** Who you act as, always in sight: your handle, your local profile's name, or nobody yet */
-	let me = $derived(
-		auth.me
-			? auth.me.local
-				? (auth.me.name ?? m.local_on_device())
-				: `@${actorName(auth.me)}`
-			: m.nav_settings()
-	)
+	let me = $derived(auth.me ? `@${actorName(auth.me)}` : m.nav_settings())
 	let avatar = $derived(auth.me && !auth.me.local ? profileAvatar(auth.me) : undefined)
 
 	function current(href: string) {

@@ -44,10 +44,20 @@ their place; starting a list again comes back to its deck. This is libli's idea 
 actions per event type and a player per type, with no registry: the record's data and
 its lexicon say what it can do.
 
+## A profile's home in an app
+
+What a profile has in an app is written nowhere: a radio's tracks don't point at the
+radio. They are in the same repo, in the same app's namespace, and that is the link.
+So an app's screen opens on the profile (its one-record type, a `literal:` key), and
+under it a shelf for each of the app's other types the repo has: how many, its first
+records, read or play them all, add one when it's yours. Bluesky's posts, a radio's
+tracks, someone's Tangled repos: the same, from the repo alone.
+
 ## Pins
 
-The apps someone keeps at hand, by domain, in their order: in the rail from 64rem and
-first on Home. Kept on this device (`localStorage`), so pinning asks for no permission.
+The apps someone keeps at hand, by domain, and the profiles in them (someone's radio),
+by their DID and the app's domain, so a new handle keeps them: in their order, in the
+rail from 64rem and first on Home. Kept on this device (`localStorage`), so pinning asks for no permission.
 Until something is pinned, the rail suggests the apps you have records in; it never
 decides for you. Keeping pins in your own repo, as records of an enform lexicon, would
 make them follow you to any device and any instance: planned, not done.

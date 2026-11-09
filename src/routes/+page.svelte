@@ -12,6 +12,7 @@
 	import {kindVerb} from '#lib/records/kind-words'
 	import {namespaceOfDomain} from '#lib/apps/names'
 	import {pins} from '#lib/apps/pins.svelte'
+	import {pinnedProfile} from '#lib/apps/pinned'
 	import AppIconLink from '#lib/components/launcher/AppIconLink.svelte'
 	import QuickLinks, {type QuickLink} from '#lib/components/QuickLinks.svelte'
 	import StartChoice from '#lib/components/StartChoice.svelte'
@@ -50,6 +51,21 @@
 	}
 </script>
 
+{#snippet profiles()}
+	<!-- The profiles pinned in apps: someone's radio, their posts -->
+	{#each pins.profiles as pin (`${pin.did}/${pin.domain}`)}
+		{#await pinnedProfile(pin) then profile}
+			<AppIconLink
+				href={profile.href}
+				domain={pin.domain}
+				name={profile.app}
+				label={profile.actor}
+				note={profile.app}
+			/>
+		{/await}
+	{/each}
+{/snippet}
+
 <enform-page>
 	{#if auth.me}
 		{@const actor = actorName(auth.me)}
@@ -70,8 +86,9 @@
 							name={info.name}
 						/>
 					{/each}
+					{@render profiles()}
 				</enform-launcher>
-				{#if yours.length === 0}<p>{m.home_no_apps()}</p>{/if}
+				{#if yours.length === 0 && !pins.profiles.length}<p>{m.home_no_apps()}</p>{/if}
 				<QuickLinks title={m.quick_title()} items={quick(actor, apps ?? [])} />
 				<section aria-labelledby="start">
 					<h2 id="start">{m.home_start()}</h2>
@@ -97,6 +114,7 @@
 			{#each [...pinned, ...directory.filter((info) => !pins.has(info.domain))] as info (info.namespace)}
 				<AppIconLink href={appPath(info.domain)} domain={info.domain} name={info.name} />
 			{/each}
+			{@render profiles()}
 		</enform-launcher>
 		<p><a href={inApp('/explore')}>{m.home_more_apps()}</a></p>
 		<section aria-labelledby="where">

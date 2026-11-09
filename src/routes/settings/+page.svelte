@@ -27,7 +27,7 @@
 		const page: SettingsLink = {
 			href: repoPath(actor),
 			icon: 'me',
-			label: me.local ? (me.name ?? m.local_on_device()) : `@${actor}`,
+			label: `@${actor}`,
 			value: m.account_your_page(),
 			image: me.local ? undefined : profileAvatar(me)
 		}
@@ -52,7 +52,7 @@
 			href: inApp('/settings/pins'),
 			icon: 'pin',
 			label: m.pins_title(),
-			value: pins.domains.length ? String(pins.domains.length) : undefined
+			value: pins.keys.length ? String(pins.keys.length) : undefined
 		},
 		{
 			href: inApp('/settings/waiting'),

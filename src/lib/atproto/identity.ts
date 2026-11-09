@@ -8,6 +8,8 @@ import app from '#lib/config/app.json' with {type: 'json'}
 import {txtDids} from './dns'
 import {claimedHandle, didDocument, forgetDocument, pdsEndpoint} from './did'
 import {xrpcGet} from './xrpc'
+import {slugOf, type LocalProfile} from '#lib/local/store'
+import {LOCAL_TLD} from '#lib/local/handle'
 
 export type Identity = {
 	/** The account's DID, or `local:<id>` for a local profile (never sent anywhere) */
@@ -23,8 +25,15 @@ export type Identity = {
 
 export const LOCAL_PREFIX = 'local:'
 
-export function localIdentity(profile: {id: string; name: string}): Identity {
-	return {did: `${LOCAL_PREFIX}${profile.id}`, pds: '', local: profile.id, name: profile.name}
+/** A local profile as a repo: its handle is its name's, under .local, on this device */
+export function localIdentity(profile: LocalProfile): Identity {
+	return {
+		did: `${LOCAL_PREFIX}${profile.id}`,
+		handle: `${slugOf(profile)}${LOCAL_TLD}`,
+		pds: '',
+		local: profile.id,
+		name: profile.name
+	}
 }
 
 async function wellKnownDid(handle: string): Promise<string | undefined> {

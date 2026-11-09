@@ -29,7 +29,7 @@
 		}
 		if (id === '/[actor=actor]' && data.repo)
 			return m.search_scope_person({
-				actor: data.repo.local ? (data.repo.name ?? '') : `@${actorName(data.repo)}`
+				actor: `@${actorName(data.repo)}`
 			})
 		if (id === '/explore') return m.search_scope_apps()
 		return undefined
