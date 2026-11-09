@@ -160,3 +160,15 @@ enform-page > fieldset > label > input {
 	margin: 0;
 	accent-color: var(--color-accent);
 }
+
+/* feedbai's form (/settings/feedback), in enform's colors and font */
+feedbai-button {
+	--accent: var(--color-accent);
+	--accent-ink: var(--color-on-accent);
+	--bg: var(--color-bg);
+	--ink: var(--color-text);
+	--muted: var(--color-muted);
+	--line: var(--color-border);
+	--soft: var(--color-surface);
+	font-family: inherit;
+}

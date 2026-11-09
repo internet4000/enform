@@ -1,0 +1,28 @@
+{
+	"$schema": "https://raw.githubusercontent.com/internet4000/feedbai/main/schemas/config.schema.json",
+	"projects": [
+		{
+			"id": "enform",
+			"repository": "https://github.com/internet4000/enform",
+			"sources": [
+				{
+					"id": "matrix",
+					"type": "matrix",
+					"room": "#enform:matrix.org"
+				},
+				{
+					"id": "bluesky-search",
+					"type": "bluesky",
+					"mode": "search",
+					"query": "domain:enform.internet4000.com"
+				},
+				{
+					"id": "atproto",
+					"type": "atproto",
+					"project": "https://github.com/internet4000/enform"
+				}
+			],
+			"maintainers": ["@4www:hwww.org"]
+		}
+	]
+}

@@ -352,6 +352,8 @@
 	"about_title": "À propos",
 	"about_source": "Code source",
 	"about_self_host": "Héberger votre propre copie",
+	"feedback_title": "Donner votre avis",
+	"feedback_intro": "Ce qui marche, ce qui manque, ce qui coince : écrivez-le ici, puis envoyez-le depuis votre propre compte, dans notre salon, sur Bluesky ou en ticket GitHub. Rien ne passe par nous, et la réponse vient là où vous l'avez dit.",
 	"session_handle_placeholder": "alice.bsky.social",
 	"reader_mode": "Taille du lecteur",
 	"reader_small": "Petit",
