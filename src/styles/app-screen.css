@@ -47,6 +47,51 @@ enform-record-grid {
 	gap: var(--space-s);
 }
 
+enform-record-card-item {
+	position: relative;
+}
+
+/* Its first action, in the card's corner, over its date line */
+enform-record-card-item > enform-record-actions {
+	position: absolute;
+	inset-block-end: var(--space-xs);
+	inset-inline-end: var(--space-xs);
+}
+
+enform-record-actions menu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* The date line leaves the action its room, on the same row */
+enform-record-card-item:has(> enform-record-actions) > a > small {
+	display: flex;
+	align-items: center;
+	min-height: var(--control-height);
+	padding-inline-end: 8rem;
+}
+
+enform-record-card-item > enform-record-actions :is(a[role='button'], button) {
+	min-height: var(--control-height);
+	padding: 0 var(--space-s);
+	font-size: var(--font-size-s);
+	color: var(--color-text);
+	background: var(--color-surface);
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--pill-radius);
+}
+
+enform-record-actions :is(a, button)[data-verb='play'] {
+	font-weight: 600;
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+	border-color: var(--color-accent);
+}
+
 enform-record-card-item > a {
 	display: flex;
 	flex-direction: column;

@@ -13,6 +13,7 @@
 	import {recordDate, recordSummary} from '#lib/records/summary'
 	import RowSummary from '../RowSummary.svelte'
 	import LinkThumb from './LinkThumb.svelte'
+	import RecordActionsMenu from './RecordActionsMenu.svelte'
 
 	type Props = {
 		repo: Identity
@@ -20,8 +21,10 @@
 		lexicon?: LexiconDoc
 		href: string
 		current?: boolean
+		/** Starts the reader on it, with its list */
+		play?: () => void
 	}
-	let {repo, record, lexicon, href, current = false}: Props = $props()
+	let {repo, record, lexicon, href, current = false, play}: Props = $props()
 
 	let node = $derived(lexicon?.defs.main?.record)
 	let shape = $derived(kindOf(lexicon))
@@ -61,4 +64,7 @@
 			{/if}
 		</small>
 	</a>
+	{#if play}
+		<RecordActionsMenu value={record.value} {lexicon} title={summary} start={play} first />
+	{/if}
 </enform-record-card-item>

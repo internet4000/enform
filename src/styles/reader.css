@@ -307,3 +307,47 @@ enform-place {
 	flex-direction: column;
 	gap: var(--space-xs);
 }
+
+/* Decks: a tab per list at hand, the one in front marked; each can be put away */
+enform-reader > nav ul {
+	display: flex;
+	gap: var(--space-2xs);
+	margin: 0;
+	padding: 0;
+	overflow-x: auto;
+	list-style: none;
+	scrollbar-width: none;
+}
+
+enform-reader > nav li {
+	display: flex;
+	flex: none;
+	align-items: center;
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--pill-radius);
+}
+
+enform-reader > nav li:has([aria-current]) {
+	border-color: var(--color-accent);
+}
+
+enform-reader > nav button {
+	min-height: var(--control-height);
+	max-width: 14rem;
+	padding: 0 var(--space-s);
+	overflow: hidden;
+	font-size: var(--font-size-s);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	background: none;
+	border: 0;
+}
+
+enform-reader > nav button[aria-current] {
+	font-weight: 600;
+	color: var(--color-accent);
+}
+
+enform-reader[mode='small'] > nav {
+	display: none;
+}

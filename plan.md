@@ -23,8 +23,9 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
   device, then create, browse and play its records like any app's; publish it later.
   Needs a lexicon editor, local lexicons resolved like published ones, and publishing.
 
-5. **View switcher**: show which view was inferred for a type (kind, presenter) and let
-   people pick another, remembered per type. Nothing decided for good.
+5. **View switcher, further**: a record shows rendered, as fields or as JSON,
+   remembered per type. Still to do: the same for a list (cards, rows, a table) and
+   picking another kind or presenter than the one inferred.
 6. **App descriptions as data**: what `apps.json` says about an app (labels, related
    types, views) read from the app's own repo once a shared lexicon for it exists;
    until then, the directory stays the fallback.

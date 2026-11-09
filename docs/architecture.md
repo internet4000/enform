@@ -34,6 +34,16 @@ on phones, with what's up next) and full screen. Docked or full, its controls an
 media stay in place while the record's text and the list scroll; each record of the
 list has its menu (open, edit yours, share, copy its at:// link, take it out).
 
+Every record a list shows has its own actions, found like everything else
+(`src/lib/records/actions.ts`): play its media, view its images, see its place, read
+its text (in the reader, from it on with its list), or go to what its lexicon says it
+points at (an account by a `did` field, a record by an `at-uri` or a strongRef). A
+card shows the first; a record, all of them. Several lists can be at hand at once, a
+deck each (a radio's tracks, someone's posts): the one in front plays, the others keep
+their place; starting a list again comes back to its deck. This is libli's idea of
+actions per event type and a player per type, with no registry: the record's data and
+its lexicon say what it can do.
+
 ## Pins
 
 The apps someone keeps at hand, by domain, in their order: in the rail from 64rem and

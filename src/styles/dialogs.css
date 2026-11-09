@@ -105,11 +105,58 @@ enform-sheet > menu {
 	list-style: none;
 }
 
+enform-sheet > header > a {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	min-height: var(--control-height);
+	font-size: var(--font-size-s);
+}
+
+/* On wide screens, a dialog over the page, its list still in sight around it */
 @media (min-width: 48rem) {
 	dialog:has(> enform-sheet) {
-		width: min(var(--sheet-width), 100vw);
-		margin-inline-start: auto;
-		border-inline-start: var(--border-width) solid var(--color-border);
+		width: min(var(--dialog-width), calc(100vw - 2 * var(--gutter)));
+		height: auto;
+		max-height: calc(100dvh - 4rem);
+		margin: auto;
+		border: var(--border-width) solid var(--color-border);
+		border-radius: var(--radius-large);
 		box-shadow: var(--shadow-menu);
 	}
+
+	enform-sheet {
+		min-height: 0;
+	}
+}
+
+/* A record's views: rendered, its fields, its JSON */
+enform-record-views {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-m);
+}
+
+enform-record-views > menu {
+	display: flex;
+	gap: var(--space-2xs);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+enform-record-views > menu button {
+	min-height: var(--control-height);
+	font-size: var(--font-size-s);
+	border-radius: var(--pill-radius);
+}
+
+enform-record-views > menu button[aria-pressed='true'] {
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+	border-color: var(--color-accent);
+}
+
+enform-record-views > pre {
+	overflow-x: auto;
 }

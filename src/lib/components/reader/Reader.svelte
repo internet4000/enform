@@ -3,7 +3,8 @@
 	// decks): small, a bar whose media play out of sight; docked, beside the page on wide
 	// screens and below it on phones; full screen. Prev, next, what's up next (each with its
 	// menu), and autoplay on to the next record when one is done. Its record stays mounted
-	// in every mode.
+	// in every mode. With several lists at hand, a deck each, as tabs: the one in front
+	// plays, the others keep their place.
 	import * as m from '#lib/paraglide/messages.js'
 	import {typeLabel} from '#lib/apps/directory'
 	import {reader, type ReaderItem, type ReaderMode} from '#lib/reader/reader.svelte'
@@ -77,7 +78,28 @@
 				</li>
 			</menu>
 		</header>
-		{#key `${item.repo.did}/${item.record.collection}/${item.record.rkey}`}
+		{#if reader.decks.length > 1}
+			<nav aria-label={m.reader_decks()}>
+				<ul>
+					{#each reader.decks as deck, at (deck.list.key)}
+						{@const name = deck.list.name || titleOf(deck.items[deck.index] ?? deck.items[0])}
+						<li>
+							<button
+								type="button"
+								aria-current={at === reader.at || undefined}
+								onclick={() => reader.show(at)}>{name}</button
+							>
+							<button
+								type="button"
+								aria-label={m.reader_deck_close({name})}
+								onclick={() => reader.closeDeck(at)}>×</button
+							>
+						</li>
+					{/each}
+				</ul>
+			</nav>
+		{/if}
+		{#key `${reader.at}/${item.repo.did}/${item.record.collection}/${item.record.rkey}`}
 			<Present
 				repo={item.repo}
 				record={item.record}

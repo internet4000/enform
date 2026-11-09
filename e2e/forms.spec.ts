@@ -41,12 +41,8 @@ test('a photo: facets from its text, and an image with its size and alt', async 
 	await page.waitForURL(opened)
 
 	// The record as written: facets with byte ranges, the image, its size and alt
-	await page
-		.locator('details')
-		.filter({hasText: t('record_raw')})
-		.locator('summary')
-		.click()
-	const record = JSON.parse(await page.locator('details pre').innerText()).value
+	await page.getByRole('button', {name: t('view_json')}).click()
+	const record = JSON.parse(await page.locator('enform-record-views pre').innerText()).value
 	expect(
 		record.facets.map((facet: {features: {$type: string}[]}) => facet.features[0].$type)
 	).toEqual(['app.bsky.richtext.facet#tag', 'app.bsky.richtext.facet#mention'])

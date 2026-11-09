@@ -18,15 +18,17 @@
 	import AppMenu from '#lib/components/app/AppMenu.svelte'
 	import AppOwner from '#lib/components/app/AppOwner.svelte'
 	import PinButton from '#lib/components/PinButton.svelte'
-	import KindView from '#lib/components/app/KindView.svelte'
 	import NewMenu from '#lib/components/app/NewMenu.svelte'
 	import RecordGrid from '#lib/components/app/RecordGrid.svelte'
 	import RecordSheet from '#lib/components/app/RecordSheet.svelte'
+	import RecordActionsMenu from '#lib/components/app/RecordActionsMenu.svelte'
+	import RecordViews from '#lib/components/app/RecordViews.svelte'
+	import {reader} from '#lib/reader/reader.svelte'
 	import CreateRecord from '#lib/components/CreateRecord.svelte'
 	import EditRecord from '#lib/components/EditRecord.svelte'
 	import RecordActions from '#lib/components/RecordActions.svelte'
 	import RecordValue from '#lib/components/RecordValue.svelte'
-	import {actorName, appScreenPath, collectionPath, dataPath, inApp} from '#lib/paths'
+	import {actorName, appScreenPath, collectionPath, dataPath, inApp, recordPath} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
@@ -260,6 +262,7 @@
 				title={recordSummary(record.value, doc?.defs.main?.record) ?? typeLabel(selected.nsid)}
 				subtitle={`${typeLabel(selected.nsid)} · ${context}`}
 				close={base}
+				page={recordPath(actor, selected.nsid, open)}
 			>
 				{#if owner}
 					<menu>
@@ -284,21 +287,15 @@
 				{#if record.pending}
 					<p role="status"><a href={inApp('/settings/waiting')}>{m.outbox_record_waiting()}</a></p>
 				{/if}
-				<KindView repo={data.repo} {record} lexicon={doc} />
-				<details open={kindOf(doc).kind === 'thing' || undefined}>
-					<summary>{m.app_all_fields()}</summary>
-					<RecordValue
-						value={record.value}
-						node={doc?.defs.main?.record}
-						base={selected.nsid}
-						repo={data.repo}
-						typed={false}
-					/>
-				</details>
-				<details>
-					<summary>{m.record_raw()}</summary>
-					<pre>{JSON.stringify(record, null, 2)}</pre>
-				</details>
+				<!-- What one can do with it: play, read, view, go to what it points at -->
+				<RecordActionsMenu
+					value={record.value}
+					lexicon={doc}
+					title={recordSummary(record.value, doc?.defs.main?.record) ?? typeLabel(selected.nsid)}
+					start={() =>
+						reader.start([{repo: data.repo, record, lexicon: doc, href: shownUrl().href}])}
+				/>
+				<RecordViews repo={data.repo} {record} lexicon={doc} collection={selected.nsid} />
 			</RecordSheet>
 		{/if}
 	{:catch}

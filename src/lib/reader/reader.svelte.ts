@@ -4,6 +4,9 @@
  * shown), and autoplay goes on to the next. Always at hand, in one of three modes, like
  * Radio4000's decks: a small bar, docked beside the page (below it on phones), or full
  * screen. (docs/architecture.md › The reader)
+ *
+ * Several lists can be at hand at once, each in its deck (a radio's tracks, someone's
+ * posts): each keeps its place, the one in front plays, the others wait where they were.
  */
 import type {Identity} from '#lib/atproto/identity'
 import type {RepoRecord} from '#lib/atproto/repo'
@@ -14,13 +17,55 @@ export type ReaderMode = 'small' | 'docked' | 'full'
 
 export type ReaderItem = {repo: Identity; record: RepoRecord; lexicon?: LexiconDoc; href: string}
 
-class Reader {
+/** Which list a deck reads: the same list started again comes back to its deck */
+export type ReaderList = {key: string; name: string}
+
+/** Decks kept at once; starting one more lets the oldest go */
+const MAX_DECKS = 4
+
+class Deck {
 	items = $state.raw<ReaderItem[]>([])
 	index = $state(0)
+	/** More items, when the list has more pages */
+	more?: () => Promise<ReaderItem[]>
+
+	readonly list: ReaderList
+
+	constructor(
+		list: ReaderList,
+		items: ReaderItem[],
+		index: number,
+		more?: () => Promise<ReaderItem[]>
+	) {
+		this.list = list
+		this.set(items, index, more)
+	}
+
+	set(items: ReaderItem[], index: number, more?: () => Promise<ReaderItem[]>) {
+		this.items = items
+		this.index = Math.max(0, Math.min(index, items.length - 1))
+		this.more = more
+	}
+}
+
+class Reader {
+	decks = $state.raw<Deck[]>([])
+	/** The deck in front */
+	at = $state(0)
 	mode = $state<ReaderMode>('docked')
 	autoplay = $state(true)
-	/** More items, when the list has more pages */
-	#more?: () => Promise<ReaderItem[]>
+
+	get deck(): Deck | undefined {
+		return this.decks[this.at]
+	}
+
+	get items(): ReaderItem[] {
+		return this.deck?.items ?? []
+	}
+
+	get index(): number {
+		return this.deck?.index ?? 0
+	}
 
 	get current(): ReaderItem | undefined {
 		return this.items[this.index]
@@ -30,26 +75,53 @@ class Reader {
 		return this.items.length > 0
 	}
 
-	start(items: ReaderItem[], index = 0, more?: () => Promise<ReaderItem[]>) {
-		this.items = items
-		this.index = Math.max(0, Math.min(index, items.length - 1))
-		this.#more = more
+	/** Reads a list from `index`, in its own deck (the one it had, if started before) */
+	start(
+		items: ReaderItem[],
+		index = 0,
+		more?: () => Promise<ReaderItem[]>,
+		list: ReaderList = {key: items[0]?.href ?? '', name: ''}
+	) {
+		if (!items.length) return
+		const found = this.decks.findIndex((deck) => deck.list.key === list.key)
+		if (found >= 0) {
+			this.decks[found].set(items, index, more)
+			this.at = found
+		} else {
+			const decks = [...this.decks, new Deck(list, items, index, more)]
+			this.decks = decks.slice(-MAX_DECKS)
+			this.at = this.decks.length - 1
+		}
 		this.mode = 'docked'
+	}
+
+	/** Brings a deck to the front: it goes on where it was */
+	show(at: number) {
+		if (at >= 0 && at < this.decks.length) this.at = at
+	}
+
+	/** Puts a deck away; the reader closes with the last one */
+	closeDeck(at: number) {
+		const decks = this.decks.filter((_, index) => index !== at)
+		if (at < this.at || this.at >= decks.length) this.at = Math.max(0, this.at - 1)
+		this.decks = decks
 	}
 
 	/** Reads the list's record at `index` */
 	go(index: number) {
-		if (index >= 0 && index < this.items.length) this.index = index
+		const deck = this.deck
+		if (deck && index >= 0 && index < deck.items.length) deck.index = index
 	}
 
 	/** Takes the list's record at `index` out; the next one takes its place */
 	remove(index: number) {
-		if (index < 0 || index >= this.items.length) return
-		const items = this.items.filter((_, at) => at !== index)
-		if (!items.length) return this.close()
-		if (index < this.index) this.index--
-		this.index = Math.min(this.index, items.length - 1)
-		this.items = items
+		const deck = this.deck
+		if (!deck || index < 0 || index >= deck.items.length) return
+		const items = deck.items.filter((_, at) => at !== index)
+		if (!items.length) return this.closeDeck(this.at)
+		if (index < deck.index) deck.index--
+		deck.index = Math.min(deck.index, items.length - 1)
+		deck.items = items
 	}
 
 	get hasPrev() {
@@ -57,24 +129,26 @@ class Reader {
 	}
 
 	get hasNext() {
-		return this.index < this.items.length - 1 || !!this.#more
+		return this.index < this.items.length - 1 || !!this.deck?.more
 	}
 
 	prev() {
-		if (this.hasPrev) this.index--
+		if (this.deck && this.hasPrev) this.deck.index--
 	}
 
 	async next() {
-		if (this.index < this.items.length - 1) {
-			this.index++
+		const deck = this.deck
+		if (!deck) return
+		if (deck.index < deck.items.length - 1) {
+			deck.index++
 			return
 		}
-		const more = this.#more ? await this.#more() : []
+		const more = deck.more ? await deck.more() : []
 		if (more.length) {
-			this.items = [...this.items, ...more]
-			this.index++
+			deck.items = [...deck.items, ...more]
+			deck.index++
 		} else {
-			this.#more = undefined
+			deck.more = undefined
 		}
 	}
 
@@ -83,11 +157,11 @@ class Reader {
 		if (this.autoplay && this.hasNext) void this.next()
 	}
 
+	/** Stops reading: every deck put away */
 	close() {
-		this.items = []
-		this.index = 0
+		this.decks = []
+		this.at = 0
 		this.mode = 'docked'
-		this.#more = undefined
 	}
 }
 

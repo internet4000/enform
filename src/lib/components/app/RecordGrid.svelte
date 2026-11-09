@@ -16,7 +16,8 @@
 	import {reader, type ReaderItem} from '#lib/reader/reader.svelte'
 	import {fieldLabel} from '#lib/forms/labels'
 	import {applyFilters, cleared, facetsOf, readFilters, sorted, sortsOf} from '#lib/records/filters'
-	import {searchResultsPath} from '#lib/paths'
+	import {typeLabel} from '#lib/apps/directory'
+	import {actorName, searchResultsPath} from '#lib/paths'
 	import AppRecordCard from './AppRecordCard.svelte'
 	import RecordFilters from './RecordFilters.svelte'
 
@@ -69,16 +70,26 @@
 	const toItems = (list: RepoRecord[]): ReaderItem[] =>
 		list.map((record) => ({repo, record, lexicon, href: href(record.rkey)}))
 
-	/** Read (or play) the list from a record on, its next pages as the reader gets there */
+	/** Read (or play) the list from a record on, its next pages as the reader gets there,
+	    in its own deck: this type of this repo */
 	function read(index = 0) {
+		const list = {
+			key: `${repo.did}/${collection}`,
+			name: `${typeLabel(collection)} · ${repo.local ? (repo.name ?? '') : `@${actorName(repo)}`}`
+		}
 		let next = cursor
 		// Filtered or reordered: what is shown, no further page
-		reader.start(toItems(shown), index, async () => {
-			if (!next || changed) return []
-			const page = await listRecords(repo, collection, next)
-			next = page.records.length >= app.reads.pageSize ? page.cursor : undefined
-			return toItems(page.records)
-		})
+		reader.start(
+			toItems(shown),
+			index,
+			async () => {
+				if (!next || changed) return []
+				const page = await listRecords(repo, collection, next)
+				next = page.records.length >= app.reads.pageSize ? page.cursor : undefined
+				return toItems(page.records)
+			},
+			list
+		)
 	}
 
 	let playable = $derived(shown.some((record) => plays(capabilitiesOf(record.value, lexicon))))
@@ -133,8 +144,9 @@
 </enform-toolbar>
 <RecordFilters {facets} active={filters.is} />
 <enform-record-grid>
-	{#each shown as record (record.rkey)}
+	{#each shown as record, index (record.rkey)}
 		<AppRecordCard
+			play={() => read(index)}
 			{repo}
 			{record}
 			{lexicon}
