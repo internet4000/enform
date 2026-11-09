@@ -20,6 +20,9 @@ export const repoScope = (collection: string, action: RepoAction) =>
 
 export const blobScope = (accept: string) => `blob:${accept}`
 
+/** Changing your handle: an identity permission, apart from any repo's */
+export const HANDLE_SCOPE = 'identity:handle'
+
 /** Every scope enform may ask for, as its client metadata declares them */
 export const DECLARED_SCOPES: string[] = [
 	BASE_SCOPE,
@@ -27,7 +30,8 @@ export const DECLARED_SCOPES: string[] = [
 	...permissions.collections.flatMap((collection) =>
 		ACTIONS.map((action) => repoScope(collection, action))
 	),
-	...permissions.blobs.map(blobScope)
+	...permissions.blobs.map(blobScope),
+	HANDLE_SCOPE
 ]
 
 export function allowsRepo(granted: string | undefined, collection: string, action: RepoAction) {
@@ -36,6 +40,10 @@ export function allowsRepo(granted: string | undefined, collection: string, acti
 
 export function allowsBlob(granted: string | undefined, mime: string) {
 	return new ScopePermissions(granted).allowsBlob({mime})
+}
+
+export function allowsHandle(granted: string | undefined) {
+	return new ScopePermissions(granted).allowsIdentity({attr: 'handle'})
 }
 
 /** Whether writing to this collection can be authorized for it alone */

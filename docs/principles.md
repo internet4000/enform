@@ -34,7 +34,10 @@ We don't hack the protocol.
   - `repo:<nsid>?action=<action>` for the collections listed in
     `src/lib/config/permissions.json`, one collection and action at a time;
   - `repo:*?action=<action>` for any other collection. The app says plainly that
-    this covers every collection.
+    this covers every collection;
+  - `identity:handle` to change your handle (`com.atproto.identity.updateHandle`):
+    a name under one of your server's domains (`describeServer`), or your own
+    domain once it resolves to you, by DNS TXT or `/.well-known/atproto-did`.
 - Each step-up requests everything already granted plus what's new, since a new
   authorization replaces the session's scope.
 - Records are written only to the signed-in user's repo, never with

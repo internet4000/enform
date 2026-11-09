@@ -42,7 +42,10 @@
 					]
 				: []
 			: [{icon: 'signout', label: m.session_sign_out(), onclick: () => auth.signOut()}]
-		return [page, profiles, ...leave]
+		const handle: SettingsLink[] = me.local
+			? []
+			: [{href: inApp('/settings/handle'), icon: 'handle', label: m.handle_title()}]
+		return [page, ...handle, profiles, ...leave]
 	})
 	let browser = $derived<SettingsLink[]>([
 		{

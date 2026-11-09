@@ -6,7 +6,7 @@
 import {isValidDid, isValidHandle, normalizeHandle} from '@atproto/syntax'
 import app from '#lib/config/app.json' with {type: 'json'}
 import {txtDids} from './dns'
-import {claimedHandle, didDocument, pdsEndpoint} from './did'
+import {claimedHandle, didDocument, forgetDocument, pdsEndpoint} from './did'
 import {xrpcGet} from './xrpc'
 
 export type Identity = {
@@ -75,4 +75,11 @@ export function resolveIdentity(actor: string): Promise<Identity> {
 		identities.set(key, identity)
 	}
 	return identity
+}
+
+/** Forgets what was resolved for this account (its handle changed) */
+export function forgetIdentity(did: string, handle?: string) {
+	identities.delete(did)
+	forgetDocument(did)
+	if (handle) identities.delete(normalizeHandle(handle))
 }

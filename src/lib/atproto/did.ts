@@ -20,18 +20,25 @@ function documentUrl(did: string): string {
 export function didDocument(did: string): Promise<DidDocument> {
 	let doc = documents.get(did)
 	if (!doc) {
-		doc = fetch(documentUrl(did), {signal: AbortSignal.timeout(app.reads.timeoutMs)}).then(
-			async (res) => {
-				if (!res.ok) throw new Error(`Could not resolve ${did} (${res.status})`)
-				const json = (await res.json()) as DidDocument
-				if (json.id !== did) throw new Error(`DID document for ${did} names ${json.id}`)
-				return json
-			}
-		)
+		// Checked with its server each time it's read again: a handle may have just changed
+		doc = fetch(documentUrl(did), {
+			cache: 'no-cache',
+			signal: AbortSignal.timeout(app.reads.timeoutMs)
+		}).then(async (res) => {
+			if (!res.ok) throw new Error(`Could not resolve ${did} (${res.status})`)
+			const json = (await res.json()) as DidDocument
+			if (json.id !== did) throw new Error(`DID document for ${did} names ${json.id}`)
+			return json
+		})
 		doc.catch(() => documents.delete(did))
 		documents.set(did, doc)
 	}
 	return doc
+}
+
+/** Reads this DID's document again next time (its handle changed) */
+export function forgetDocument(did: string) {
+	documents.delete(did)
 }
 
 /** The handle a DID document claims (still to be verified the other way) */

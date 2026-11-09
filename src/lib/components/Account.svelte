@@ -33,6 +33,8 @@
 						{grant.collections.includes('*')
 							? m.account_permission_repo_all({actions})
 							: m.account_permission_repo({actions, collections: grant.collections.join(', ')})}
+					{:else if grant.kind === 'identity'}
+						{m.account_permission_handle()}
 					{:else}
 						{m.account_permission_blob({accept: grant.accept.join(', ')})}
 					{/if}

@@ -31,6 +31,11 @@
 			"handle": "facets.test",
 			"email": "facets@enform.test",
 			"password": "facets-pass"
+		},
+		{
+			"handle": "handles.test",
+			"email": "handles@enform.test",
+			"password": "handles-pass"
 		}
 	],
 	"lexicons": [
