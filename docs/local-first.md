@@ -16,8 +16,9 @@ is enough: no CRDT is needed, those matter when several people edit one document
 
 Nothing local pretends to be atproto:
 
-- A local profile has **no DID and no handle**. It is named by its person, marked
-  "on this device", and its records never leave the browser until published.
+- A local profile has **no DID**, and a handle only this device knows: its name,
+  slugified, under `.local` (`@my-radio.local`), which no atproto handle can be. It
+  is named by its person, marked "on this device", and its records never leave the browser until published.
 - Its records are **valid records of their lexicons**: same forms, same validation,
   record keys as atproto makes them (TIDs, or the lexicon's literal key), so
   publishing keeps them.
@@ -26,7 +27,7 @@ Nothing local pretends to be atproto:
 
 - Stored in the browser's IndexedDB: profiles, and records keyed by
   `[profile, collection, rkey]` with their value and a version (a hash of the value).
-- Opened like any repo, at `/@local:<id>`: the same panes, apps, lists and forms.
+- Opened like any repo, at `/@<name>.local` (links to `/@local:<id>` still open): the same panes, apps, lists and forms.
   Reads and writes go through the same modules as remote repos
   (`src/lib/atproto/repo.ts`, `write.ts`), which dispatch on the repo.
 - **Who you are** is the current account _or_ local profile: Settings › Profiles lists both,
