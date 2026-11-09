@@ -2,8 +2,8 @@
 	// An app as a person has it: its types as tabs (Radio · Tracks · Followed radios), their
 	// records as cards under a toolbar (how many, play all, + New and what else to make),
 	// and, over it, a record or a form. On phones, + New is also a button in thumb reach.
-	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
+	import {shownUrl} from '#lib/where.svelte'
 	import {auth} from '#lib/auth/session.svelte'
 	import {blobUrl, getRecord} from '#lib/atproto/repo'
 	import {appInfo, byDirectory, typeLabel} from '#lib/apps/directory'
@@ -11,6 +11,7 @@
 	import {resolveLexicon} from '#lib/lexicons/resolve'
 	import {recordCard} from '#lib/records/card'
 	import {recordSummary} from '#lib/records/summary'
+	import {filterParams} from '#lib/records/filters'
 	import {kindOf} from '#lib/records/kinds'
 	import {kindVerb} from '#lib/records/kind-words'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
@@ -78,7 +79,7 @@
 				: undefined
 	)
 
-	let params = $derived(page.url.searchParams)
+	let params = $derived(shownUrl().searchParams)
 	let selected = $derived(
 		[...tabs, ...startable].find((type) => type.nsid === params.get('type')) ??
 			tabs.find((type) => !single(type)) ??
@@ -90,7 +91,10 @@
 	let open = $derived(params.get('record') ?? undefined)
 	let creating = $derived(owner && params.has('new'))
 	let editing = $derived(owner && params.has('edit'))
-	let base = $derived(selected ? appScreenPath(actor, app.app, {type: selected.nsid}) : '')
+	/** The list's search and filters, kept on the way to one of its records and back */
+	let kept = $derived(new URLSearchParams(filterParams(params)).toString())
+	const keep = (url: string) => (kept ? `${url}${url.includes('?') ? '&' : '?'}${kept}` : url)
+	let base = $derived(selected ? keep(appScreenPath(actor, app.app, {type: selected.nsid})) : '')
 	/** Which app and whose data, for sheets that cover the app's header on phones */
 	let context = $derived(
 		`${info.name}${info.name.toLowerCase() === info.domain ? '' : ` · ${info.domain}`} · ${
@@ -202,7 +206,7 @@
 				repo={data.repo}
 				collection={type.nsid}
 				lexicon={doc}
-				href={(rkey) => at(type.nsid, {record: rkey})}
+				href={(rkey) => keep(at(type.nsid, {record: rkey}))}
 				{open}
 			>
 				{#snippet actions()}
@@ -252,14 +256,14 @@
 			<RecordSheet
 				title={m.edit_title()}
 				subtitle={`${typeLabel(selected.nsid)} · ${context}`}
-				close={at(selected.nsid, {record: open})}
+				close={keep(at(selected.nsid, {record: open}))}
 			>
 				<EditRecord
 					lexicon={doc}
 					{actor}
 					rkey={open}
 					{record}
-					saved={at(selected.nsid, {record: open})}
+					saved={keep(at(selected.nsid, {record: open}))}
 				/>
 			</RecordSheet>
 		{:else}

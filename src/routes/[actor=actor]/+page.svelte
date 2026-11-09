@@ -1,21 +1,24 @@
 <script lang="ts">
 	// A person of the atmosphere: who they are, how you can reach them in their apps (follow,
 	// write to, mention: wherever a type points at an account), and their apps as cards,
-	// each with what they have in it
+	// each with what they have in it. The search field narrows them here (?q=)
 	import * as m from '#lib/paraglide/messages.js'
+	import {shownUrl} from '#lib/where.svelte'
 	import {auth} from '#lib/auth/session.svelte'
 	import {blobUrl} from '#lib/atproto/repo'
 	import {appInfo, byDirectory, typeLabel} from '#lib/apps/directory'
 	import {personCard} from '#lib/apps/person'
 	import type {RepoApp} from '#lib/apps/types'
+	import {matchesWords} from '#lib/records/filters'
 	import {contactActions, contactPrefill, type ContactWay} from '#lib/apps/quick'
 	import QuickLinks, {type QuickLink} from '#lib/components/QuickLinks.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
-	import {actorName, appScreenPath, dataPath, inApp} from '#lib/paths'
+	import {actorName, appScreenPath, dataPath, inApp, searchResultsPath} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
 	let owner = $derived(auth.owns(data.repo))
+	let query = $derived(shownUrl().searchParams.get('q')?.trim() ?? '')
 
 	/** The apps people use: the protocol's own plumbing apart */
 	const shown = (apps: RepoApp[]) =>
@@ -84,8 +87,11 @@
 		{#await data.apps}
 			<p><small>{m.collection_loading()}</small></p>
 		{:then apps}
+			{@const found = shown(apps).filter(
+				({app, info}) => !query || matchesWords(query, info.name, info.domain, had(app))
+			)}
 			<enform-app-cards>
-				{#each shown(apps) as { app, info } (app.namespace)}
+				{#each found as { app, info } (app.namespace)}
 					<enform-app-card>
 						<a href={appScreenPath(actor, app.app)}>
 							<AppIcon domain={info.domain} name={info.name} />
@@ -95,7 +101,7 @@
 						</a>
 					</enform-app-card>
 				{/each}
-				{#if owner}
+				{#if owner && !query}
 					<enform-app-card add>
 						<a href={inApp('/explore')}>
 							<span aria-hidden="true">+</span>
@@ -104,7 +110,14 @@
 					</enform-app-card>
 				{/if}
 			</enform-app-cards>
-			{#if shown(apps).length === 0}<p>{m.repo_collections_empty()}</p>{/if}
+			{#if shown(apps).length === 0}
+				<p>{m.repo_collections_empty()}</p>
+			{:else if found.length === 0}
+				<p>
+					{m.records_filtered_none()}
+					<a href={searchResultsPath(query)}>{m.search_everywhere_for({query})}</a>
+				</p>
+			{/if}
 		{/await}
 	</section>
 

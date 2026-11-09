@@ -34,10 +34,37 @@ enform-app > header > form {
 	max-width: var(--measure);
 }
 
+enform-app > header > form {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2xs);
+}
+
 enform-app > header input[type='search'] {
+	flex: 1;
+	min-width: 0;
 	width: 100%;
 	min-height: var(--control-height);
 	border-radius: var(--pill-radius);
+}
+
+/* Where the field searches, when it searches the page: removed, it searches everywhere */
+enform-app > header > form > button {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-2xs);
+	flex: none;
+	max-width: 45%;
+	min-height: var(--control-height);
+	padding: 0 var(--space-s);
+	font-size: var(--font-size-s);
+	border-radius: var(--pill-radius);
+}
+
+enform-app > header > form > button > span:first-child {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 /* Writes waiting to be sent, said in the header */

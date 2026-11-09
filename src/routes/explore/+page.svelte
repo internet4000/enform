@@ -1,15 +1,24 @@
 <script lang="ts">
-	// Explore: the apps of the atmosphere, known and discovered (search is on top)
+	// Explore: the apps of the atmosphere, known and discovered; the search field narrows
+	// them here as one types (?q=), and searches everywhere once its chip is removed
 	import * as m from '#lib/paraglide/messages.js'
+	import {shownUrl} from '#lib/where.svelte'
 	import {auth} from '#lib/auth/session.svelte'
 	import {listCollections} from '#lib/atproto/repo'
 	import {directoryApps} from '#lib/apps/directory'
 	import {namespaceOf} from '#lib/apps/names'
 	import AppCard from '#lib/components/AppCard.svelte'
 	import DiscoveredApps from '#lib/components/DiscoveredApps.svelte'
-	import {actorName, repoPath} from '#lib/paths'
+	import {matchesWords} from '#lib/records/filters'
+	import {actorName, repoPath, searchResultsPath} from '#lib/paths'
 
-	const apps = directoryApps()
+	const all = directoryApps()
+	let query = $derived(shownUrl().searchParams.get('q')?.trim() ?? '')
+	let apps = $derived(
+		query
+			? all.filter((app) => matchesWords(query, app.name, app.domain, app.description ?? ''))
+			: all
+	)
 	let joined = $derived(
 		auth.me
 			? listCollections(auth.me).then((all) => new Set(all.map(namespaceOf)))
@@ -36,6 +45,12 @@
 				{/each}
 			{/await}
 		</enform-app-cards>
+		{#if !apps.length}
+			<p>
+				{m.records_filtered_none()}
+				<a href={searchResultsPath(query)}>{m.search_everywhere_for({query})}</a>
+			</p>
+		{/if}
 	</section>
 
 	<section aria-labelledby="discover">
