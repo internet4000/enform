@@ -60,6 +60,7 @@
 		{href: inApp('/settings/language'), icon: 'language', label: m.locale_label(), value: language}
 	])
 	const about: SettingsLink[] = [
+		{href: inApp('/settings/feedback'), icon: 'post', label: m.feedback_title()},
 		{href: app.source, icon: 'source', label: m.about_source(), external: true},
 		{
 			href: `${app.source}/blob/main/docs/self-host.md`,

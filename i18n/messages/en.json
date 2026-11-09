@@ -352,6 +352,8 @@
 	"about_title": "About",
 	"about_source": "Source code",
 	"about_self_host": "Serve your own copy",
+	"feedback_title": "Send feedback",
+	"feedback_intro": "What works, what doesn't, what you miss: write it here, then send it from your own account, in our chat room, on Bluesky or as a GitHub issue. Nothing goes through us, and you'll hear back where you said it.",
 	"session_handle_placeholder": "alice.bsky.social",
 	"reader_mode": "Reader size",
 	"reader_small": "Small",

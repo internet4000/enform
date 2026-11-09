@@ -1,6 +1,11 @@
 {
 	"name": "enform",
 	"source": "https://github.com/internet4000/enform",
+	"feedback": {
+		"$comment": "Where people can tell us what they think, from their own accounts (feedbai: static/feedbai.js, /settings/feedback, static/.well-known/feedbai.json).",
+		"matrix": "#enform:matrix.org",
+		"bluesky": "#enform"
+	},
 	"domain": "enform.internet4000.com",
 	"namespace": "com.internet4000.enform",
 	"services": {

@@ -7,3 +7,5 @@ i18n/project.inlang/.gitignore
 e2e/.network
 dist-e2e
 e2e/quality.js
+# A copy of feedbai's embed.js, kept identical to the published file
+static/feedbai.js
