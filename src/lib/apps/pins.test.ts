@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest'
-import {movePin, parsePins, pinKey, readPin, togglePin} from './pins'
+import {movePin, parsePins, pinKey, pinsStorageKey, readPin, togglePin} from './pins'
 
 describe('pins', () => {
 	it('keeps domains only, once, lowercased', () => {
@@ -17,6 +17,11 @@ describe('pins', () => {
 		expect(readPin(pins[0])).toEqual({did: 'did:plc:abc', domain: '4000.radio'})
 		expect(readPin('4000.radio')).toEqual({domain: '4000.radio', did: undefined})
 		expect(pinKey({did: 'did:plc:abc', domain: '4000.radio'})).toBe(pins[0])
+	})
+
+	it("keeps each owner's pins apart, and no one's when signed out", () => {
+		expect(pinsStorageKey('enform:pins', 'did:plc:abc')).toBe('enform:pins:did:plc:abc')
+		expect(pinsStorageKey('enform:pins', undefined)).toBe('enform:pins:signed-out')
 	})
 
 	it('pins at the end and unpins', () => {

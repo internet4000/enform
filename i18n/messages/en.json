@@ -365,7 +365,7 @@
 	"pins_title": "Your apps",
 	"pins_suggested": "Apps you have records in. Pin the ones you want here.",
 	"pins_add": "Find an app to pin",
-	"pins_hint": "Pinned on this device, in this order.",
+	"pins_hint": "Pinned on this device for the account or profile you are using, in this order.",
 	"pins_none": "Nothing pinned yet: pin an app, or someone's profile in it, from its page.",
 	"pin": "Pin",
 	"unpin": "Unpin",
