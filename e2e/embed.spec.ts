@@ -55,3 +55,20 @@ test("a profile's home in an app, on any page", async ({page, context, request, 
 	// Nothing to edit, nothing to sign in to
 	await expect(embed.getByRole('button', {name: /^\+ /})).toHaveCount(0)
 })
+
+test("a profile's page says how to embed it", async ({page, context}) => {
+	await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+	await page.goto('/@alice.test/apps/enform.test')
+	await page
+		.locator('enform-app-screen > header')
+		.getByRole('button', {name: t('record_menu')})
+		.click()
+	await page.getByRole('button', {name: t('embed_menu')}).click()
+	const dialog = page.getByRole('dialog', {name: t('embed_title')})
+	const snippet = dialog.locator('pre')
+	await expect(snippet).toContainText('<enform-embed actor="alice.test" app="enform.test"')
+	await expect(snippet).toContainText('cdn.jsdelivr.net/npm/@internet4000/enform@')
+	await dialog.getByRole('button', {name: t('embed_copy')}).click()
+	await expect(dialog.getByRole('button', {name: t('embed_copied')})).toBeVisible()
+	expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('<enform-embed')
+})

@@ -146,7 +146,11 @@
 		<!-- The app at hand: pin it; open it, read what it is, see its data, in its menu -->
 		<menu>
 			<li>
-				<AppMenu {info} data={selected ? collectionPath(actor, selected.nsid) : dataPath(actor)} />
+				<AppMenu
+					{info}
+					data={selected ? collectionPath(actor, selected.nsid) : dataPath(actor)}
+					actor={data.repo.local ? undefined : actor}
+				/>
 			</li>
 		</menu>
 	</header>

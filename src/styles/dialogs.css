@@ -23,6 +23,12 @@ dialog:not(:has(> enform-sheet)) form {
 	justify-content: end;
 }
 
+/* Code to copy (a snippet): wrapped, all of it in sight */
+dialog pre {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
 /* Destructive confirmations: the button says it */
 dialog[data-danger] button[type='submit'] {
 	color: var(--color-danger);
