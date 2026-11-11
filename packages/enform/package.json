@@ -1,6 +1,6 @@
 {
 	"name": "@internet4000/enform",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "<enform-embed>: someone's profile in an atproto app, on any web page, read from their own PDS",
 	"license": "GPL-3.0-only",
 	"type": "module",
