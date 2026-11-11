@@ -8,6 +8,7 @@ const VERBS: Partial<Record<RecordKind, () => string>> = {
 	link: m.kind_link,
 	photo: m.kind_photo,
 	follow: m.kind_follow,
+	block: m.kind_block,
 	reaction: m.kind_reaction,
 	status: m.kind_status,
 	event: m.kind_event

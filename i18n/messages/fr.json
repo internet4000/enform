@@ -282,6 +282,7 @@
 	"kind_link": "Partager un lien",
 	"kind_photo": "Partager une photo",
 	"kind_follow": "Suivre quelqu'un",
+	"kind_block": "Bloquer quelqu'un",
 	"kind_reaction": "Réagir à quelque chose",
 	"kind_status": "Donner votre statut",
 	"kind_event": "Créer un événement",

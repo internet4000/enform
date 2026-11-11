@@ -58,7 +58,11 @@
 			"text": "text",
 			"date": "createdAt"
 		},
-		"points": {},
+		"points": {
+			"records": [
+				"reply"
+			]
+		},
 		"source": "lexicon"
 	},
 	"app.bsky.feed.repost": {
@@ -78,8 +82,8 @@
 		"source": "lexicon"
 	},
 	"app.bsky.graph.block": {
-		"kind": "follow",
-		"because": "subject-account",
+		"kind": "block",
+		"because": "against-account",
 		"count": "many",
 		"roles": {
 			"subject": "subject",
@@ -137,12 +141,12 @@
 		"source": "records"
 	},
 	"com.whtwnd.blog.entry": {
-		"kind": "list",
-		"because": "has-title",
+		"kind": "post",
+		"because": "title-long-text",
 		"count": "many",
 		"roles": {
-			"title": "title",
 			"text": "content",
+			"title": "title",
 			"date": "createdAt"
 		},
 		"points": {},
@@ -199,23 +203,36 @@
 		"source": "lexicon"
 	},
 	"org.tangled.feed.star": {
-		"kind": "thing",
-		"because": "nothing-telling",
+		"kind": "reaction",
+		"because": "subject-record",
 		"count": "many",
 		"roles": {
+			"subject": "subject",
 			"date": "createdAt"
 		},
-		"points": {},
+		"points": {
+			"accounts": [
+				"subject"
+			],
+			"records": [
+				"subject"
+			]
+		},
 		"source": "lexicon"
 	},
 	"org.tangled.graph.follow": {
-		"kind": "thing",
-		"because": "nothing-telling",
+		"kind": "follow",
+		"because": "key-account",
 		"count": "keyed",
 		"roles": {
+			"subject": "$key",
 			"date": "createdAt"
 		},
-		"points": {},
+		"points": {
+			"accounts": [
+				"$key"
+			]
+		},
 		"source": "lexicon"
 	},
 	"org.tangled.key.sshKey": {
@@ -253,7 +270,8 @@
 		},
 		"points": {
 			"accounts": [
-				"spindle"
+				"spindle",
+				"declaration"
 			]
 		},
 		"source": "lexicon"
@@ -268,7 +286,8 @@
 		},
 		"points": {
 			"accounts": [
-				"subject"
+				"subject",
+				"$key"
 			]
 		},
 		"source": "lexicon"

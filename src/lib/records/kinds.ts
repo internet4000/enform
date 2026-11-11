@@ -24,6 +24,11 @@ export type Kind = {kind: RecordKind; fields: KindFields}
 export function kindOf(doc: LexiconDoc | undefined): Kind {
 	const {kind, roles} = describeType(doc?.id ?? '', {lexicon: doc})
 	const {date: _date, ...fields} = roles
-	// Only the fields its kind carries, as views and forms read them
-	return {kind, fields: Object.fromEntries(Object.entries(fields).filter(([, v]) => v))}
+	// Only the record's fields its kind carries, as views and forms read them (not its key)
+	return {
+		kind,
+		fields: Object.fromEntries(
+			Object.entries(fields).filter(([, field]) => field && !field.startsWith('$'))
+		)
+	}
 }

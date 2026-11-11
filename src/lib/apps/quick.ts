@@ -59,11 +59,11 @@ export function contactWay(
 	const properties = doc.defs.main.record?.properties ?? {}
 	const field = didField(doc)
 	const {kind, fields} = kindOf(doc)
-	// Following: the account alone (a block or a mute is shaped the same, and isn't one)
+	// Following: the account alone (a block or a mute is its own kind, see describe/type)
 	const others = (doc.defs.main.record?.required ?? []).filter(
 		(key) => key !== field && !/At$/.test(key)
 	)
-	if (field && kind === 'follow' && !others.length && !/block|mute/i.test(doc.id)) {
+	if (field && kind === 'follow' && !others.length) {
 		return {way: 'follow', field}
 	}
 	if (field && fields.text) return {way: 'message', field}

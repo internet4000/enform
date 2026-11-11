@@ -11,11 +11,9 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
    descriptions, and say why (and let people change it).
    Started: `describeType` (src/lib/describe), with why; `kindOf` reads it; the corpus
    (22 published lexicons, 5 types known by their records) in
-   `corpus/descriptions.json`. What it gets wrong there, to do next: refs and unions to
-   other definitions (Tangled's star points at a repo through `#repo`); a record keyed
-   by what it points at (Tangled's follow: the account is the key); a block read as a
-   follow (same shape: the type's name or description must tell them apart); a long
-   text with a title read as a list (WhiteWind's entries are articles). Then
+   `corpus/descriptions.json`. It follows refs to a lexicon's other definitions, reads
+   records keyed by the account they point at, tells blocks from follows and articles
+   from lists. Then
    `describeApp` (consolidating apps/apps, related, person, quick) and
    `describeRecord` (card, summary, actions).
 2. **Addresses and views apart from their shell**: one address module for every link;

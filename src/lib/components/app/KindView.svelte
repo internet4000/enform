@@ -40,7 +40,7 @@
 			(shape.kind === 'link' && isWebLink(url)) ||
 			(shape.kind === 'photo' && !!image && !repo.local) ||
 			(shape.kind === 'status' && !!shape.fields.value) ||
-			(shape.kind === 'follow' && typeof subject === 'string') ||
+			((shape.kind === 'follow' || shape.kind === 'block') && typeof subject === 'string') ||
 			(shape.kind === 'reaction' && typeof subject === 'object' && !!subject) ||
 			(shape.kind === 'event' && !!shape.fields.start) ||
 			(typeof text === 'string' && !!text)
@@ -80,7 +80,7 @@
 		<img src={blobUrl(repo, image)} alt={typeof value.alt === 'string' ? value.alt : ''} />
 	{:else if shape.kind === 'status' && shape.fields.value}
 		<p>{String(value[shape.fields.value] ?? '')}</p>
-	{:else if shape.kind === 'follow' && typeof subject === 'string'}
+	{:else if (shape.kind === 'follow' || shape.kind === 'block') && typeof subject === 'string'}
 		<IdentityChip actor={subject} />
 	{:else if shape.kind === 'reaction' && typeof subject === 'object' && subject && 'uri' in subject}
 		<RecordCard uri={String(subject.uri)} />

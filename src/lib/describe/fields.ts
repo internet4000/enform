@@ -7,7 +7,7 @@ import type {LexiconDoc, LexNode} from '#lib/lexicons/types'
 
 export type Field = {
 	name: string
-	type: 'string' | 'integer' | 'boolean' | 'blob' | 'ref' | 'array' | 'object' | 'other'
+	type: 'string' | 'integer' | 'boolean' | 'blob' | 'ref' | 'union' | 'array' | 'object' | 'other'
 	/** A string's format: datetime, uri, at-uri, did… (inferred from values without a lexicon) */
 	format?: string
 	/** A blob's media types */
@@ -16,29 +16,58 @@ export type Field = {
 	ref?: string
 	/** A short value of its own: an emoji, a choice among known values */
 	short?: boolean
+	/** A long text: an article's body, not a line */
+	long?: boolean
+	/** What it points at: an account (a DID), a record (an at:// URI, a strongRef),
+	    directly or through the lexicon's other definitions it refers to */
+	points?: ('account' | 'record')[]
 }
 
 /** Where the fields come from: a lexicon is certain; records only show what they have */
 export type FieldSource = 'lexicon' | 'records' | 'none'
 
 const SHORT = 64
+/** Longer than a post: an article's body */
+const LONG = 3000
 
 /** The fields of a lexicon's record, in its order */
 export function fieldsFromLexicon(doc: LexiconDoc): Field[] {
 	const properties = doc.defs.main?.record?.properties ?? {}
-	return Object.entries(properties).map(([name, node]) => fromNode(name, node))
+	return Object.entries(properties).map(([name, node]) => fromNode(name, node, doc))
 }
 
-function fromNode(name: string, node: LexNode): Field {
-	const type = (['string', 'integer', 'boolean', 'blob', 'ref', 'array', 'object'] as const).find(
-		(known) => known === node.type
-	)
+const STRONG_REF = /com\.atproto\.repo\.strongRef/
+
+/**
+ * What a node points at: itself (a DID, an at:// URI, a strongRef), or, one level
+ * down, the fields of the definitions of the same lexicon it refers to (`#repo`)
+ */
+function pointsOf(node: LexNode, doc: LexiconDoc, deep = true): ('account' | 'record')[] {
+	if (node.type === 'string' && node.format === 'did') return ['account']
+	if (node.type === 'string' && node.format === 'at-uri') return ['record']
+	if (node.type === 'ref' && STRONG_REF.test(node.ref ?? '')) return ['record']
+	if (!deep) return []
+	const refs =
+		node.type === 'union' ? (node.refs ?? []) : node.type === 'ref' ? [node.ref ?? ''] : []
+	const found = refs
+		.filter((ref) => ref.startsWith('#'))
+		.flatMap((ref) => Object.values(doc.defs[ref.slice(1)]?.properties ?? {}))
+		.flatMap((inner) => pointsOf(inner, doc, false))
+	return [...new Set(found)]
+}
+
+function fromNode(name: string, node: LexNode, doc: LexiconDoc): Field {
+	const type = (
+		['string', 'integer', 'boolean', 'blob', 'ref', 'union', 'array', 'object'] as const
+	).find((known) => known === node.type)
 	return {
 		name,
 		type: type ?? 'other',
 		format: node.format,
 		accept: node.accept,
 		ref: node.ref,
+		points: pointsOf(node, doc),
+		long: node.type === 'string' && (node.maxGraphemes ?? node.maxLength ?? 0) >= LONG,
 		short:
 			node.type === 'string' &&
 			((node.maxGraphemes ?? node.maxLength ?? Infinity) <= SHORT ||
@@ -68,7 +97,11 @@ function fromValue(name: string, values: unknown[]): Field {
 		const format = formats.size === 1 ? [...formats][0] : undefined
 		// Short only when every sample is (an emoji, a word), not a title that happens to be
 		const short = !format && strings.every((value) => [...value].length <= 16)
-		return {name, type: 'string', format, short}
+		// Long when a sample is: paragraphs, or more than a post holds
+		const long = !format && strings.some((value) => value.includes('\n\n') || value.length > 300)
+		const points: Field['points'] =
+			format === 'did' ? ['account'] : format === 'at-uri' ? ['record'] : []
+		return {name, type: 'string', format, short, long, points}
 	}
 	if (typeof first === 'number') return {name, type: 'integer'}
 	if (typeof first === 'boolean') return {name, type: 'boolean'}
@@ -80,7 +113,7 @@ function fromValue(name: string, values: unknown[]): Field {
 			return {name, type: 'blob', accept: [...new Set(types.filter((t) => !!t))] as string[]}
 		}
 		if (typeof object.uri === 'string' && typeof object.cid === 'string') {
-			return {name, type: 'ref', ref: 'com.atproto.repo.strongRef'}
+			return {name, type: 'ref', ref: 'com.atproto.repo.strongRef', points: ['record']}
 		}
 		return {name, type: 'object'}
 	}

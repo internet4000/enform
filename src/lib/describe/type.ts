@@ -11,6 +11,7 @@ import {fieldsFromLexicon, fieldsFromRecords, type Field, type FieldSource} from
 export type RecordKind =
 	| 'profile'
 	| 'follow'
+	| 'block'
 	| 'reaction'
 	| 'photo'
 	| 'link'
@@ -45,7 +46,8 @@ export type TypeDescription = {
 	kind: RecordKind
 	roles: Roles
 	count?: Count
-	/** Fields pointing at accounts (a DID) and at records (an at:// URI, a strongRef) */
+	/** Fields pointing at accounts (a DID) and at records (an at:// URI, a strongRef);
+	    `$key` when the record's key is what it points at (a follow keyed by the DID) */
 	points: {accounts: string[]; records: string[]}
 	/** Where the description comes from: a lexicon is certain, records are a guess */
 	source: FieldSource
@@ -65,6 +67,11 @@ const STAMP = /(At|_at)$/
 /** A picture that dresses something named isn't what it is (an avatar, a cover) */
 const DECORATIVE = /avatar|icon|logo|banner|cover|thumb/i
 const TID = /^[234567abcdefghij][234567abcdefghijklmnopqrstuvwxyz]{12}$/
+/** A relation against an account, not to it: said by the type's name or description */
+const AGAINST = /\b(block|blocks|blocking|mute|mutes|muting)\b|block$|mute$/i
+/** The key is the account it points at: said by the lexicon (subject DID as rkey) */
+const KEY_IS_DID = /\bDID\b[^.]*\b(rkey|record key)\b|\b(rkey|record key)\b[^.]*\bDID\b/i
+const DID = /^did:[a-z]+:\S+$/
 
 const isString = (field?: Field) => field?.type === 'string'
 const isImage = (field?: Field) =>
@@ -103,13 +110,23 @@ export function describeType(
 	if (start) why.push({about: 'start', rule: 'usual-name-datetime', fields: [start]})
 	if (date) why.push({about: 'date', rule: 'usual-name-datetime', fields: [date]})
 
-	// What its records point at
-	const accounts = fields
-		.filter((field) => isString(field) && field.format === 'did')
-		.map((f) => f.name)
-	const records = fields
-		.filter((field) => (isString(field) && field.format === 'at-uri') || isStrongRef(field))
-		.map((field) => field.name)
+	// What its records point at: their fields, and their key when it is an account
+	const accounts = fields.filter((field) => field.points?.includes('account')).map((f) => f.name)
+	const records = fields.filter((field) => field.points?.includes('record')).map((f) => f.name)
+	const said = [lexicon?.description, lexicon?.defs.main?.description].filter(Boolean).join(' ')
+	const keyedByAccount =
+		(lexicon?.defs.main?.key === 'any' && KEY_IS_DID.test(said)) ||
+		(!lexicon && samples.length > 0 && samples.every((sample) => DID.test(sample.rkey)))
+	if (keyedByAccount) {
+		accounts.push('$key')
+		why.push({
+			about: 'subject',
+			rule: lexicon ? 'key-is-did-described' : 'keys-are-dids',
+			fields: []
+		})
+	}
+	/** A relation against an account (a block, a mute), not to it */
+	const against = AGAINST.test(nsid.split('.').pop() ?? '') || AGAINST.test(said)
 
 	// How many an account has: its lexicon's key, else its records' keys
 	const count = countOf(lexicon, samples, why)
@@ -135,10 +152,13 @@ export function describeType(
 		])
 	}
 	const subject = byName.get('subject')
-	if (subject && isString(subject) && subject.format === 'did' && !text) {
-		return done('follow', {subject: 'subject'}, 'subject-account', ['subject'])
+	const toAccount = subject?.points?.length === 1 && subject.points[0] === 'account'
+	if ((toAccount || (keyedByAccount && !subject)) && !text) {
+		const field = subject ? 'subject' : '$key'
+		if (against) return done('block', {subject: field}, 'against-account', [field])
+		return done('follow', {subject: field}, subject ? 'subject-account' : 'key-account', [field])
 	}
-	if (isStrongRef(subject)) {
+	if (subject?.points?.includes('record')) {
 		return done('reaction', {subject: 'subject'}, 'subject-record', ['subject'])
 	}
 	if (start) return done('event', {title, text, start}, 'has-start', [start])
@@ -151,6 +171,10 @@ export function describeType(
 	const values = own.filter((field) => isString(field) && !field.format)
 	if (values.length === 1 && !title && values[0].short) {
 		return done('status', {value: values[0].name}, 'one-short-value', [values[0].name])
+	}
+	// A title and a long text: an article, not a list
+	if (title && text && byName.get(text)?.long) {
+		return done('post', {text, title}, 'title-long-text', [title, text])
 	}
 	if (text === 'text' || (text && !title)) {
 		return done('post', {text, title}, 'has-text', [text])
