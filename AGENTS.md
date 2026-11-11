@@ -1,8 +1,10 @@
 # enform
 
-A universal app for the atmosphere: read your own PDS data and create, edit and delete
-records in any app, with forms generated from lexicons, and explore other people and
-their collections. For people on atproto, including newcomers to decentralized apps.
+Describes the atmosphere as best it can: from record types (their lexicons, else their
+records) and what can be inferred from them, it generates a super app of all apps:
+every app's screens, cards, forms and reader, with no code written for any one app.
+Reading and writing your own records (CRUD) is one of its abilities. For people on
+atproto, including newcomers to decentralized apps.
 
 Objectives: CRUD of any record in your own repo, with forms that follow the lexicon
 (generic patterns for every field: links, images, rich text, places); discover and

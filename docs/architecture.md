@@ -5,6 +5,36 @@ that app. Each layer derives from the one below, and each can be extended or
 overridden without touching the others. Nothing decides for people for good: what is
 inferred is shown, and another view is always one tap away.
 
+## Where it is going
+
+The objective (AGENTS.md): describe the atmosphere, and generate from that description
+a super app of all apps. So the code is organised around a description engine, and
+everything else renders its output. Today the inferences are spread over modules that
+components call directly (`records/kinds`, `card`, `summary`, `actions`,
+`capabilities/detect`, `apps/apps`, `related`, `person`, `quick`); they converge into:
+
+1. **Description** (pure TypeScript, no UI): `describeType` (from a lexicon, else
+   sample records: its kind, each field's role, how many an account has, its verbs
+   and actions), `describeApp` (its profile type, lists, single records, how its types
+   relate, what it is about) and `describeRecord` (title, text, image, date, actions,
+   what it points at). Every inference says why it was made, so the interface can
+   explain it and people can change it. Overrides are layered data, never code:
+   inferred, then the directory, then what an app publishes about itself, then the
+   person's own choice. A corpus of real lexicons and records with their expected
+   descriptions measures each change on every app at once.
+2. **Data**: reading (identity, collections, records, lexicons), deduplicated and
+   cached locally; the graph followed outward from what records point at. Who points
+   at a record needs a backlink index: optional, and said so.
+3. **Addresses**: one module parses and builds every address (a person, an app, a
+   type, a record, `at://`); every link goes through it, with a base given to it (a
+   path, a hash, another instance).
+4. **Views**: person, app home, type list, record, lexicon, search. Each takes an
+   address and renders descriptions only; what it needs from around it (the session,
+   links, the reader) comes through Svelte context. Each is also a custom element.
+5. **Shells**: the SvelteKit app (sign-in, writing, settings, pins), its routes thin
+   (URL, address, view); and `<enform-app>` on npm, a hash router around the same
+   views, read-only unless the page serves its own OAuth client metadata.
+
 ## Layers
 
 1. **Data**: records, read from their repo's own PDS, and their lexicons, resolved
