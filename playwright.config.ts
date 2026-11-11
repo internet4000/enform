@@ -45,7 +45,7 @@ export default defineConfig({
 		},
 		{
 			// The built app, served as in production (its service worker included)
-			command: `vite build --mode e2e && vite preview --mode e2e --port ${network.ports.app} --strictPort`,
+			command: `vite build --mode e2e && vite build -c vite.embed.config.ts --mode e2e && vite preview --mode e2e --port ${network.ports.app} --strictPort`,
 			url: app,
 			reuseExistingServer: !process.env.CI,
 			timeout: 240_000

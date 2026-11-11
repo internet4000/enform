@@ -20,8 +20,9 @@ Follows https://hwww.gitlab.io/savoir/agents.md (local: ~/src/hwww/savoir). Exce
   yet in Sveltia CMS.
 
 Read docs/principles.md (atproto rules, writing and permissions), docs/architecture.md
-(data → capabilities → kinds → presenters → descriptions), docs/local-first.md and
-docs/self-host.md (any host, any folder: no instance of ours to trust).
+(data → capabilities → kinds → presenters → descriptions), docs/local-first.md,
+docs/self-host.md (any host, any folder: no instance of ours to trust) and
+docs/embed.md (<enform-embed>, a profile's home in an app on any page).
 Larger work in plan.md.
 
 ## Commands

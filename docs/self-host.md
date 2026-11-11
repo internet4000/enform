@@ -22,6 +22,7 @@ Upload `dist/` to any static host. It contains:
 - `404.html`: the app again, which static hosts serve for paths they have no file for,
   so any page opens at its URL (with a 404 status; hosts with a single-page-app mode,
   like Cloudflare's `not_found_handling`, answer 200).
+- `enform-embed.js`: `<enform-embed>`, linking to this instance (docs/embed.md).
 
 ## Deploy from a fork
 

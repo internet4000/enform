@@ -425,5 +425,7 @@
 	"unpin_profile": "Unpin {actor} on {app}",
 	"pin_profile_name": "{actor} on {app}",
 	"shelf_all": "See all",
-	"shelf_count_more": "{count}+ records"
+	"shelf_count_more": "{count}+ records",
+	"embed_open": "Open in enform",
+	"embed_failed": "Couldn't read {actor}'s records on {app}."
 }

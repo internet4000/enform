@@ -425,5 +425,7 @@
 	"unpin_profile": "Désépingler {actor} sur {app}",
 	"pin_profile_name": "{actor} sur {app}",
 	"shelf_all": "Tout voir",
-	"shelf_count_more": "{count}+ enregistrements"
+	"shelf_count_more": "{count}+ enregistrements",
+	"embed_open": "Ouvrir dans enform",
+	"embed_failed": "Impossible de lire les enregistrements de {actor} sur {app}."
 }
