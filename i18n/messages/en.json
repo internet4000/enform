@@ -435,5 +435,6 @@
 	"embed_copied": "Copied",
 	"embed_failed": "Couldn't read {actor}'s records.",
 	"embed_all_apps": "All apps",
-	"embed_apps": "Their apps"
+	"embed_apps": "Their apps",
+	"embed_intro_all": "Show {actor} and their apps on any web page: paste this where it should appear. Their apps show as icons, each opening in place, read from their own server in the visitor's browser."
 }

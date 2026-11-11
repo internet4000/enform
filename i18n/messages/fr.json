@@ -435,5 +435,6 @@
 	"embed_copied": "Copié",
 	"embed_failed": "Impossible de lire les enregistrements de {actor}.",
 	"embed_all_apps": "Toutes les apps",
-	"embed_apps": "Leurs apps"
+	"embed_apps": "Leurs apps",
+	"embed_intro_all": "Affichez {actor} et ses apps dans n'importe quelle page web : collez ceci là où il doit apparaître. Ses apps s'affichent en icônes, chacune s'ouvrant sur place, lues depuis son propre serveur dans le navigateur du visiteur."
 }

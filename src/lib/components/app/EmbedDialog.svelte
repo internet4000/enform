@@ -7,7 +7,8 @@
 	import embed from '../../../../packages/enform/package.json' with {type: 'json'}
 	import {inApp} from '#lib/paths'
 
-	type Props = {actor: string; domain: string; name: string}
+	/** Whose profile; in which app (its domain and name), else all of theirs */
+	type Props = {actor: string; domain?: string; name?: string}
 	let {actor, domain, name}: Props = $props()
 
 	let dialog = $state<HTMLDialogElement>()
@@ -27,7 +28,7 @@
 	})
 	let snippet = $derived(
 		[
-			`<enform-embed actor="${actor}" app="${domain}"${instance ? ` enform="${instance}"` : ''}></enform-embed>`,
+			`<enform-embed actor="${actor}"${domain ? ` app="${domain}"` : ''}${instance ? ` enform="${instance}"` : ''}></enform-embed>`,
 			`<script type="module" src="https://cdn.jsdelivr.net/npm/${embed.name}@${embed.version}"></` +
 				'script>'
 		].join('\n')
@@ -41,7 +42,11 @@
 
 <dialog bind:this={dialog} aria-labelledby="embed-title">
 	<h2 id="embed-title">{m.embed_title()}</h2>
-	<p>{m.embed_intro({actor: `@${actor}`, app: name})}</p>
+	<p>
+		{name
+			? m.embed_intro({actor: `@${actor}`, app: name})
+			: m.embed_intro_all({actor: `@${actor}`})}
+	</p>
 	<pre><code>{snippet}</code></pre>
 	<p>
 		<small

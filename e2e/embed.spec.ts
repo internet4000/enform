@@ -120,3 +120,11 @@ test('without an app, all of theirs, each opened in place', async ({
 	await embed.getByRole('button', {name: new RegExp(t('embed_all_apps'))}).click()
 	await expect(apps.getByRole('link', {name: /enform\.test/})).toBeVisible()
 })
+
+test("a person's page says how to embed all their apps", async ({page}) => {
+	await page.goto('/@alice.test')
+	await page.getByRole('button', {name: t('embed_menu')}).click()
+	const snippet = page.getByRole('dialog', {name: t('embed_title')}).locator('pre')
+	await expect(snippet).toContainText('<enform-embed actor="alice.test">')
+	await expect(snippet).not.toContainText('app="')
+})

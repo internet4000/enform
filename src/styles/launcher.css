@@ -214,3 +214,19 @@ enform-quick small {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+/* A person's page ends with its occasional links: all their data, embedding them */
+enform-page > menu {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-s);
+	margin: 0;
+	padding: 0;
+	font-size: var(--font-size-s);
+	list-style: none;
+}
+
+enform-page > menu button {
+	font-size: var(--font-size-s);
+}
