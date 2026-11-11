@@ -1,0 +1,40 @@
+# Publishes the embed, @internet4000/enform (packages/enform), to npm when a tag
+# enform-v<version> is pushed. npm's trusted publishing: npm trusts this workflow, no
+# token is stored, and each version says where and how it was built (provenance).
+# Set up once on npmjs.com, in the package's settings (docs/embed.md › Publish).
+name: npm
+
+on:
+  push:
+    tags: ['enform-v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm 11.5.1 or newer
+      - run: npm install -g npm@latest
+      - run: bun install --frozen-lockfile
+      - run: bun run verify
+      - name: The tag is the package's version
+        if: github.ref_type == 'tag'
+        run: |
+          version=$(node -p "require('./packages/enform/package.json').version")
+          test "${GITHUB_REF_NAME#enform-v}" = "$version" || {
+            echo "Tag $GITHUB_REF_NAME, package version $version"
+            exit 1
+          }
+      # Builds the embed again first (prepublishOnly), linking to enform.internet4000.com
+      - run: npm publish
+        working-directory: packages/enform

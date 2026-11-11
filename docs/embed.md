@@ -27,10 +27,24 @@ served at `https://<you>.tngl.io/<repo>/`.
 
 ## Publish
 
-    bun run embed:package          # builds packages/enform/enform-embed.js
-    cd packages/enform
-    npm version patch              # or minor, major
-    npm publish                    # builds it again first (prepublishOnly)
+From GitHub Actions (`.github/workflows/npm.yml`), with npm's trusted publishing: no
+token, and each version records where it was built (provenance). A version is published
+by pushing its tag:
+
+    # packages/enform/package.json: "version": "0.1.1", committed
+    git tag enform-v0.1.1
+    git push origin enform-v0.1.1
+
+The workflow checks that the tag matches the package's version, runs `bun run verify`,
+builds the embed and publishes it.
+
+Set up once, by hand: npm lets a package trust a workflow only once it exists.
+
+1. Publish its first version yourself: `npm login`, then `npm publish` in
+   `packages/enform` (it builds the embed first).
+2. On npmjs.com, the package's Settings › Trusted publishing: GitHub Actions,
+   repository `internet4000/enform`, workflow `npm.yml`.
+3. Optionally, in the same settings, require trusted publishing and disallow tokens.
 
 ## What it does
 
