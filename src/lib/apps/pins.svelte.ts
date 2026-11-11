@@ -1,11 +1,14 @@
 /**
- * The pins, on this device, of whoever you act as (an account, a local profile, or no
- * one): apps, and profiles in apps, in the rail and first on Home
- * (docs/architecture.md › Pins)
+ * The pins, on this device, of whoever you act as (an account or a local profile):
+ * apps, and profiles in apps, in the rail and first on Home. With no one acting,
+ * pinning starts on this device, as its default profile: pins are always someone's,
+ * and never move from one to another (docs/architecture.md › Pins)
  */
 import app from '#lib/config/app.json' with {type: 'json'}
 import {localIdentity} from '#lib/atproto/identity'
 import {auth} from '#lib/auth/session.svelte'
+import {startOnDevice} from '#lib/local/start'
+import * as m from '#lib/paraglide/messages.js'
 import {movePin, parsePins, pinKey, pinsStorageKey, readPin, togglePin, type Pin} from './pins'
 
 class Pins {
@@ -14,7 +17,7 @@ class Pins {
 	/** Bumped on every change, so what reads the lists updates */
 	#version = $state(0)
 
-	/** Whose pins: the DID you act as, or no one's when signed out */
+	/** Whose pins: the DID you act as, if anyone */
 	get owner(): string | undefined {
 		return auth.local ? localIdentity(auth.local).did : auth.did
 	}
@@ -22,12 +25,12 @@ class Pins {
 	/** Every pin, as stored, in order; none until who you are is known */
 	get keys(): string[] {
 		void this.#version
-		if (!auth.ready) return []
 		const owner = this.owner
-		let keys = this.#lists.get(owner ?? '')
+		if (!auth.ready || !owner) return []
+		let keys = this.#lists.get(owner)
 		if (!keys) {
 			keys = load(owner)
-			this.#lists.set(owner ?? '', keys)
+			this.#lists.set(owner, keys)
 		}
 		return keys
 	}
@@ -51,7 +54,9 @@ class Pins {
 		return this.keys.includes(pinKey({domain, did}))
 	}
 
-	toggle(domain: string, did?: string) {
+	/** Pins or unpins it; with no one acting, as this device's default profile */
+	async toggle(domain: string, did?: string) {
+		if (!this.owner) await startOnDevice(m.local_default_name())
 		this.#save(togglePin(this.keys, pinKey({domain, did})))
 	}
 
@@ -59,14 +64,10 @@ class Pins {
 		this.#save(movePin(this.keys, pinKey(pin), by))
 	}
 
-	/** The signed-out pins went to someone: read them again when signed out */
-	forgetSignedOut() {
-		this.#lists.delete('')
-	}
-
 	#save(keys: string[]) {
 		const owner = this.owner
-		this.#lists.set(owner ?? '', keys)
+		if (!owner) return
+		this.#lists.set(owner, keys)
 		this.#version++
 		try {
 			localStorage.setItem(pinsStorageKey(app.storage.pins, owner), JSON.stringify(keys))
@@ -76,24 +77,10 @@ class Pins {
 	}
 }
 
-/**
- * This owner's pins. An account or profile with none yet on this device takes the
- * pins made before anyone was acting (signed out, or before pins had owners): they
- * were most likely theirs, made while trying things out.
- */
-function load(owner: string | undefined): string[] {
+/** This owner's pins, on this device */
+function load(owner: string): string[] {
 	try {
-		const key = pinsStorageKey(app.storage.pins, owner)
-		const stored = localStorage.getItem(key)
-		if (stored !== null) return parsePins(stored)
-		const from = [app.storage.pins, ...(owner ? [pinsStorageKey(app.storage.pins, undefined)] : [])]
-		const before = from.flatMap((old) => parsePins(localStorage.getItem(old)))
-		if (!before.length) return []
-		const keys = [...new Set(before)]
-		localStorage.setItem(key, JSON.stringify(keys))
-		for (const old of from) localStorage.removeItem(old)
-		if (owner) pins.forgetSignedOut()
-		return keys
+		return parsePins(localStorage.getItem(pinsStorageKey(app.storage.pins, owner)))
 	} catch {
 		return []
 	}

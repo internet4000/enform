@@ -2,8 +2,7 @@
  * Pins: the apps someone keeps at hand, and the profiles in them (a radio on Radio4000),
  * in their order. An app is pinned by its domain ("4000.radio"); a profile in an app by
  * its account's DID and the app's domain ("did:plc:…/4000.radio"), so it stays pinned
- * when its handle changes. Each account and local profile has its own list, and so has
- * no one (signed out). Kept on this device (localStorage): pinning needs no permission.
+ * when its handle changes. Each account and local profile has its own list. Kept on this device (localStorage): pinning needs no permission.
  * Pure helpers, tested; the state that uses them is in pins.svelte.ts.
  */
 import {isValidDid, isValidHandle} from '@atproto/syntax'
@@ -13,9 +12,8 @@ export type Pin = {domain: string; did?: string}
 /** A pin as stored */
 export const pinKey = ({domain, did}: Pin): string => (did ? `${did}/${domain}` : domain)
 
-/** Where an owner's pins are stored: by their DID, or for no one when signed out */
-export const pinsStorageKey = (prefix: string, owner: string | undefined): string =>
-	`${prefix}:${owner ?? 'signed-out'}`
+/** Where an owner's pins are stored: by their DID */
+export const pinsStorageKey = (prefix: string, owner: string): string => `${prefix}:${owner}`
 
 /** A stored pin, if it is one: a domain, or a DID and a domain */
 export function readPin(value: unknown): Pin | undefined {

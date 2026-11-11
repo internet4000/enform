@@ -19,9 +19,8 @@ describe('pins', () => {
 		expect(pinKey({did: 'did:plc:abc', domain: '4000.radio'})).toBe(pins[0])
 	})
 
-	it("keeps each owner's pins apart, and no one's when signed out", () => {
+	it("keeps each owner's pins apart", () => {
 		expect(pinsStorageKey('enform:pins', 'did:plc:abc')).toBe('enform:pins:did:plc:abc')
-		expect(pinsStorageKey('enform:pins', undefined)).toBe('enform:pins:signed-out')
 	})
 
 	it('pins at the end and unpins', () => {

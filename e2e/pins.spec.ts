@@ -1,5 +1,5 @@
 /** Pinning apps: from an app's page, first on Home, in the rail, reordered and unpinned in Settings */
-import {creating, expect, t, test} from './fixtures'
+import {expect, t, test} from './fixtures'
 
 test('pin apps, find them first, reorder and unpin them', async ({page}, info) => {
 	for (const domain of ['tangled.org', '4000.radio']) {
@@ -39,24 +39,19 @@ test('pin apps, find them first, reorder and unpin them', async ({page}, info) =
 	await expect(page.getByText(t('pins_none'))).toBeVisible()
 })
 
-test('each profile has its own pins; the first takes those made signed out', async ({page}) => {
-	// Signed out, on a new browser, Tangled is pinned
+test("pinning with no one acting is as this device's default profile", async ({page}) => {
+	// On a new browser, pinning starts on this device: the pin is its profile's
 	await page.goto('/apps/tangled.org')
 	await page.getByRole('button', {name: t('pin_app', {app: 'Tangled'})}).click()
-
-	// Starting a local profile, it is still there: now the profile's
-	await page.goto('/apps/statusphere.xyz')
-	await page.getByRole('button', {name: t('start_device_button')}).click()
-	await page.waitForURL(creating)
-	await page.goto('/apps/statusphere.xyz')
-	await page.getByRole('button', {name: t('pin_app', {app: 'Statusphere'})}).click()
+	await expect(page.getByRole('button', {name: t('unpin_app', {app: 'Tangled'})})).toBeVisible()
 	await page.goto('/settings/pins')
 	const pins = page.locator('enform-pins').getByRole('link')
-	await expect(pins).toHaveCount(2)
-	await expect(pins.nth(0)).toContainText('Tangled')
-	await expect(pins.nth(1)).toContainText('Statusphere')
+	await expect(pins).toHaveCount(1)
+	await expect(pins.first()).toContainText('Tangled')
+	const local = await page.evaluate(() => localStorage.getItem('enform:local'))
+	expect(local).toBeTruthy()
 
-	// Back to no one acting, they stay the profile's
+	// No one acting: no pins, not the profile's
 	await page.evaluate(() => localStorage.removeItem('enform:local'))
 	await page.reload()
 	await expect(page.getByText(t('pins_none'))).toBeVisible()
