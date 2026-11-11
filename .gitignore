@@ -19,3 +19,6 @@ e2e/.network/
 test-results/
 playwright-report/
 dist-e2e
+
+# The embed, built into its npm package (bun run embed:package)
+packages/enform/enform-embed.js

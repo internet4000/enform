@@ -1,0 +1,37 @@
+{
+	"name": "@internet4000/enform",
+	"version": "0.1.0",
+	"description": "<enform-embed>: someone's profile in an atproto app, on any web page, read from their own PDS",
+	"license": "GPL-3.0-only",
+	"type": "module",
+	"main": "./enform-embed.js",
+	"exports": {
+		".": "./enform-embed.js",
+		"./enform-embed.js": "./enform-embed.js"
+	},
+	"files": [
+		"enform-embed.js",
+		"README.md",
+		"LICENSE"
+	],
+	"sideEffects": true,
+	"keywords": [
+		"atproto",
+		"bluesky",
+		"web-component",
+		"custom-element",
+		"embed"
+	],
+	"homepage": "https://enform.internet4000.com",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/internet4000/enform.git",
+		"directory": "packages/enform"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"prepublishOnly": "cd ../.. && bun run embed:package"
+	}
+}

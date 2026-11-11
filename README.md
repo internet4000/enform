@@ -49,3 +49,7 @@ bun run e2e:network  # or only the network, to try by hand (Node 22+)
 - `src/lib/components/`: `enform-*` elements (`form/`: the generated record form)
 - `src/lib/config/app.json`: services and settings
 - `i18n/messages/`: translations
+
+## License
+
+[GPL-3.0](./LICENSE).

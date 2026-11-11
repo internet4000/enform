@@ -5,7 +5,7 @@ profile it is (picture, name, handle, words), a shelf per type their repo has th
 (its first records, read or play them all), and the reader. It is enform's own view,
 read-only: each record links to its page in enform, where its owner can edit it.
 
-    <script type="module" src="enform-embed.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@internet4000/enform@0/enform-embed.js"></script>
     <enform-embed actor="hwww.org" app="4000.radio"></enform-embed>
 
 - `actor`: whose profile, a handle or a DID.
@@ -14,15 +14,23 @@ read-only: each record links to its page in enform, where its owner can edit it.
   built with (`https://enform.internet4000.com/`, or your `ORIGIN` and `BASE_PATH`,
   docs/self-host.md).
 
-## Host it yourself
+## Where to load it from
 
-`enform-embed.js` is one file, built with the app (`bun run build`, in `dist/`) and
-served by every instance (`https://enform.internet4000.com/enform-embed.js`). Copy it
-next to your page rather than loading it from an instance: your page then depends on
-nobody, and stays as it is until you copy a newer one.
+- **npm**, `@internet4000/enform` (`packages/enform`): from a CDN as above, which serves
+  any npm package (pin a version, `@0.1.0`, so the page changes only when you choose),
+  or installed and imported (`import '@internet4000/enform'`).
+- **A copy next to your page**: `enform-embed.js`, built with the app (`bun run build`,
+  in `dist/`) and served by every instance. Your page then depends on nobody.
 
-On a Tangled site, for example: a repo with `index.html` and `enform-embed.js`, pushed,
-is served at `https://<you>.tngl.io/<repo>/`.
+On a Tangled site, for example: a repo with an `index.html` loading it, pushed, is
+served at `https://<you>.tngl.io/<repo>/`.
+
+## Publish
+
+    bun run embed:package          # builds packages/enform/enform-embed.js
+    cd packages/enform
+    npm version patch              # or minor, major
+    npm publish                    # builds it again first (prepublishOnly)
 
 ## What it does
 
