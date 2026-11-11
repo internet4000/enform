@@ -9,6 +9,7 @@
 	import {formatDate} from '#lib/dates'
 	import {isWebLink, linkDetails} from '#lib/links/details'
 	import {recordCard} from '#lib/records/card'
+	import {recordSummary} from '#lib/records/summary'
 	import {kindOf} from '#lib/records/kinds'
 	import {firstImage} from '#lib/records/links'
 	import IdentityChip from '../IdentityChip.svelte'
@@ -31,7 +32,33 @@
 	let subject = $derived(field(shape.fields.subject))
 	let card = $derived(recordCard(value, lexicon?.defs.main?.record))
 	let image = $derived(card.banner ?? firstImage(field(shape.fields.image) ?? value))
+
+	/** Whether its kind shows it: else (no lexicon, or a kind with nothing to show), it is
+	    shown from its values alone, as its card is */
+	let known = $derived(
+		(shape.kind === 'profile' && !!card.title) ||
+			(shape.kind === 'link' && isWebLink(url)) ||
+			(shape.kind === 'photo' && !!image && !repo.local) ||
+			(shape.kind === 'status' && !!shape.fields.value) ||
+			(shape.kind === 'follow' && typeof subject === 'string') ||
+			(shape.kind === 'reaction' && typeof subject === 'object' && !!subject) ||
+			(shape.kind === 'event' && !!shape.fields.start) ||
+			(typeof text === 'string' && !!text)
+	)
+	/** From its values: its first web link (a track's video), its title, its words */
+	let link = $derived(Object.values(value).find(isWebLink))
+	let title = $derived(recordSummary(value, lexicon?.defs.main?.record))
 </script>
+
+{#snippet preview(url: string)}
+	{#await linkDetails(url) then found}
+		<a href={url} rel="noopener noreferrer external" target="_blank">
+			{#if found?.image}<img src={found.image} alt="" />{/if}
+			<strong>{found?.title ?? url}</strong>
+			<small>{m.kind_open_link({site: found?.site ?? new URL(url).hostname})}</small>
+		</a>
+	{/await}
+{/snippet}
 
 <enform-kind-view kind={shape.kind}>
 	{#if beside}
@@ -42,14 +69,13 @@
 			{#if card.avatar && !repo.local}<img src={blobUrl(repo, card.avatar)} alt="" />{/if}
 			{#if card.title}<strong>{card.title}</strong>{/if}
 		</enform-kind-person>
+	{:else if !known}
+		<!-- No kind to show it by: as its card shows it, from its values -->
+		{#if title && title !== link}<h3>{title}</h3>{/if}
+		{#if card.text && card.text !== title}<p>{card.text}</p>{/if}
+		{#if link}{@render preview(link)}{/if}
 	{:else if shape.kind === 'link' && isWebLink(url)}
-		{#await linkDetails(url) then found}
-			<a href={url} rel="noopener noreferrer external" target="_blank">
-				{#if found?.image}<img src={found.image} alt="" />{/if}
-				<strong>{found?.title ?? url}</strong>
-				<small>{m.kind_open_link({site: found?.site ?? new URL(url).hostname})}</small>
-			</a>
-		{/await}
+		{@render preview(url)}
 	{:else if shape.kind === 'photo' && image && !repo.local}
 		<img src={blobUrl(repo, image)} alt={typeof value.alt === 'string' ? value.alt : ''} />
 	{:else if shape.kind === 'status' && shape.fields.value}

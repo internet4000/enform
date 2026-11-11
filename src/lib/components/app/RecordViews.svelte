@@ -1,14 +1,14 @@
 <script lang="ts">
 	// A record three ways: as its kind shows it (a post's text, a link's preview, the
 	// person followed), its fields as its lexicon names them, or its JSON. The choice is
-	// remembered per type, on this device; a type with no kind to show starts on its fields.
+	// remembered per type, on this device. Rendered first: a record with no kind to show it by
+	// (no lexicon) is rendered from its values, as its card is.
 	// Over it, one bar: what one can do with it (its actions), then how to see it.
 	import type {Snippet} from 'svelte'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
 	import type {RepoRecord} from '#lib/atproto/repo'
 	import type {LexiconDoc} from '#lib/lexicons/types'
-	import {kindOf} from '#lib/records/kinds'
 	import KindView from './KindView.svelte'
 	import RecordValue from '../RecordValue.svelte'
 
@@ -36,12 +36,7 @@
 	}
 
 	let chosen = $state<View>()
-	let view = $derived(
-		chosen ??
-			remembered(collection) ??
-			initial ??
-			(kindOf(lexicon).kind === 'thing' ? 'fields' : 'rendered')
-	)
+	let view = $derived(chosen ?? remembered(collection) ?? initial ?? 'rendered')
 
 	function choose(next: View) {
 		chosen = next

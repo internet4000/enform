@@ -327,6 +327,12 @@ enform-kind-view > a > small {
 	color: var(--color-accent);
 }
 
+enform-kind-view > h3 {
+	margin: 0;
+	font-size: var(--font-size-l);
+	overflow-wrap: anywhere;
+}
+
 enform-kind-view > p {
 	margin: 0;
 	font-size: var(--font-size-l);
