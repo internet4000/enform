@@ -1,6 +1,6 @@
 /**
- * <enform-embed actor="alice.example" app="4000.radio">: a profile's home in an app, on
- * any page (docs/embed.md). One module, no dependency on any enform instance: it reads
+ * <enform-embed actor="alice.example" app="4000.radio">: a profile on any page, in one app
+ * (its home there) or, without `app`, all of theirs (docs/embed.md). One module, no dependency on any enform instance: it reads
  * the repo's own PDS; its links go to enform (or the instance named by `enform="…"`).
  * Its styles are enform's, in its own shadow root, so the page's and its own don't mix.
  */
@@ -35,8 +35,8 @@ class EnformEmbed extends HTMLElement {
 
 	#render() {
 		const actor = this.getAttribute('actor')
-		const app = this.getAttribute('app')
-		if (!actor || !app) return
+		const app = this.getAttribute('app') ?? undefined
+		if (!actor) return
 		const enform = this.getAttribute('enform')
 		if (enform) linkTo(enform)
 		const root = this.shadowRoot ?? this.attachShadow({mode: 'open'})

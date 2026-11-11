@@ -28,7 +28,7 @@
 	let snippet = $derived(
 		[
 			`<enform-embed actor="${actor}" app="${domain}"${instance ? ` enform="${instance}"` : ''}></enform-embed>`,
-			`<script type="module" src="https://cdn.jsdelivr.net/npm/${embed.name}@${embed.version}/enform-embed.js"></` +
+			`<script type="module" src="https://cdn.jsdelivr.net/npm/${embed.name}@${embed.version}"></` +
 				'script>'
 		].join('\n')
 	)

@@ -37,11 +37,22 @@ enform-embed-page > header {
 	gap: var(--space-s);
 }
 
-enform-embed-page > header > a {
+/* Where it is: back to all their apps (when none was named), then the app */
+enform-embed-page > header > nav {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-s);
+}
+
+enform-embed-page > header > nav > button {
+	font-size: var(--font-size-s);
+}
+
+enform-embed-page > header > nav > a {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--space-xs);
-	align-self: flex-start;
 	font-size: var(--font-size-s);
 	color: var(--color-text);
 	text-decoration: none;

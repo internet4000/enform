@@ -5,6 +5,8 @@
 	"license": "GPL-3.0-only",
 	"type": "module",
 	"main": "./enform-embed.js",
+	"jsdelivr": "./enform-embed.js",
+	"unpkg": "./enform-embed.js",
 	"exports": {
 		".": "./enform-embed.js",
 		"./enform-embed.js": "./enform-embed.js"

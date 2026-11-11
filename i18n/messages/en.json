@@ -427,11 +427,13 @@
 	"shelf_all": "See all",
 	"shelf_count_more": "{count}+ records",
 	"embed_open": "Open in enform",
-	"embed_failed": "Couldn't read {actor}'s records on {app}.",
 	"embed_menu": "Embed this profile",
 	"embed_title": "Embed this profile",
 	"embed_intro": "Show {actor} on {app} on any web page: paste this where it should appear. It reads their records from their own server, in the visitor's browser.",
 	"embed_how": "How it works",
 	"embed_copy": "Copy",
-	"embed_copied": "Copied"
+	"embed_copied": "Copied",
+	"embed_failed": "Couldn't read {actor}'s records.",
+	"embed_all_apps": "All apps",
+	"embed_apps": "Their apps"
 }

@@ -1,11 +1,12 @@
 # Embed
 
-`<enform-embed>` shows a profile's home in an app on any web page: the app, whose
-profile it is (picture, name, handle, words), a shelf per type their repo has there
-(its first records, read or play them all), and the reader. It is enform's own view,
+`<enform-embed>` shows a profile on any web page. In an app (`app="…"`), their home
+there: the app, whose profile it is (picture, name, handle, words), a shelf per type
+their repo has there (its first records, read or play them all), and the reader.
+Without `app`, all their apps, as icons, each opening its home in place. It is enform's own view,
 read-only: each record links to its page in enform, where its owner can edit it.
 
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@internet4000/enform@0/enform-embed.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@internet4000/enform@0"></script>
     <enform-embed actor="hwww.org" app="4000.radio"></enform-embed>
 
 In enform, a profile's screen in an app gives it, ready to copy: its menu (⋯) › Embed
@@ -13,7 +14,8 @@ this profile. It loads the embed's current version from npm, and on another publ
 instance than enform.internet4000.com, names it (`enform`), so its links come back there.
 
 - `actor`: whose profile, a handle or a DID.
-- `app`: the app, by its domain (`4000.radio`, `tangled.org`, `bsky.app`).
+- `app` (optional): the app, by its domain (`4000.radio`, `tangled.org`, `bsky.app`);
+  without it, all of theirs.
 - `enform` (optional): the enform instance its links go to. By default, the one it was
   built with (`https://enform.internet4000.com/`, or your `ORIGIN` and `BASE_PATH`,
   docs/self-host.md).

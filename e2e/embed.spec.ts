@@ -74,3 +74,49 @@ test("a profile's page says how to embed it", async ({page, context}) => {
 	await expect(dialog.getByRole('button', {name: t('embed_copied')})).toBeVisible()
 	expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('<enform-embed')
 })
+
+test('without an app, all of theirs, each opened in place', async ({
+	page,
+	context,
+	request,
+	baseURL
+}) => {
+	const pds = `http://localhost:${network.ports.pds}`
+	const {handle, password} = account('alice.test')
+	const session = await request.post(`${pds}/xrpc/com.atproto.server.createSession`, {
+		data: {identifier: handle, password}
+	})
+	const {did, accessJwt} = await session.json()
+	const text = `Everywhere ${Date.now()}`
+	await request.post(`${pds}/xrpc/com.atproto.repo.createRecord`, {
+		headers: {authorization: `Bearer ${accessJwt}`},
+		data: {
+			repo: did,
+			collection: 'test.enform.note',
+			record: {$type: 'test.enform.note', text, createdAt: new Date().toISOString()}
+		}
+	})
+
+	await page.route(`${baseURL}/enform-embed.js`, (route) =>
+		route.fulfill({path: 'dist-e2e/enform-embed.js', contentType: 'text/javascript'})
+	)
+	await context.grantPermissions(['local-network-access'])
+	await page.route(`${baseURL}/someones-page.html`, (route) =>
+		route.fulfill({
+			contentType: 'text/html',
+			body: `<!doctype html><title>Someone's page</title>
+				<script type="module" src="/enform-embed.js"></script>
+				<enform-embed actor="alice.test"></enform-embed>`
+		})
+	)
+	await page.goto('/someones-page.html')
+
+	const embed = page.locator('enform-embed')
+	const apps = embed.locator('enform-launcher')
+	await apps.getByRole('link', {name: /enform\.test/}).click()
+	// Opened here, not in enform
+	await expect(page).toHaveURL(/someones-page\.html$/)
+	await expect(embed.locator('enform-type-shelf').filter({hasText: text})).toBeVisible()
+	await embed.getByRole('button', {name: new RegExp(t('embed_all_apps'))}).click()
+	await expect(apps.getByRole('link', {name: /enform\.test/})).toBeVisible()
+})

@@ -35,8 +35,9 @@ export default defineConfig(({mode}) => ({
 		outDir: mode === 'e2e' ? 'dist-e2e' : 'dist',
 		emptyOutDir: false,
 		copyPublicDir: false,
-		// One file to copy: the media players it loads when needed, in it
-		rolldownOptions: {output: {codeSplitting: false}},
+		// One file to copy, minified (Vite leaves a library's ES module unminified): the
+		// media players it loads when needed, in it
+		rolldownOptions: {output: {codeSplitting: false, minify: true}},
 		lib: {
 			entry: here('src/embed/index.ts'),
 			formats: ['es'],

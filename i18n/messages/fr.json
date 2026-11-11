@@ -427,11 +427,13 @@
 	"shelf_all": "Tout voir",
 	"shelf_count_more": "{count}+ enregistrements",
 	"embed_open": "Ouvrir dans enform",
-	"embed_failed": "Impossible de lire les enregistrements de {actor} sur {app}.",
 	"embed_menu": "Intégrer ce profil",
 	"embed_title": "Intégrer ce profil",
 	"embed_intro": "Affichez {actor} sur {app} dans n'importe quelle page web : collez ceci là où il doit apparaître. Ses enregistrements sont lus depuis son propre serveur, dans le navigateur du visiteur.",
 	"embed_how": "Comment ça marche",
 	"embed_copy": "Copier",
-	"embed_copied": "Copié"
+	"embed_copied": "Copié",
+	"embed_failed": "Impossible de lire les enregistrements de {actor}.",
+	"embed_all_apps": "Toutes les apps",
+	"embed_apps": "Leurs apps"
 }

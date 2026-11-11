@@ -7,15 +7,13 @@ and a reader to read or play them; each record links to its page in
 visitor's browser: no server, no account.
 
 ```html
-<script
-	type="module"
-	src="https://cdn.jsdelivr.net/npm/@internet4000/enform@0/enform-embed.js"
-></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@internet4000/enform@0"></script>
 <enform-embed actor="hwww.org" app="4000.radio"></enform-embed>
 ```
 
 - `actor`: whose profile, a handle or a DID.
-- `app`: the app, by its domain (`4000.radio`, `tangled.org`, `bsky.app`).
+- `app` (optional): the app, by its domain (`4000.radio`, `tangled.org`, `bsky.app`);
+  without it, all their apps, each opening in place.
 - `enform` (optional): the enform instance its links go to (default:
   `https://enform.internet4000.com/`).
 
