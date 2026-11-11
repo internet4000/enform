@@ -291,8 +291,6 @@
 	"actions_more": "Plus à faire dans {app}",
 	"actions_view_only": "Voici ce que {app} conserve. Connectez-vous, ou essayez sur cet appareil, pour créer les vôtres.",
 	"kind_open_link": "Ouvrir sur {site}",
-	"whose_yours": "À vous",
-	"whose_theirs": "De {actor}",
 	"field_text": "Texte",
 	"field_title": "Titre",
 	"field_name": "Nom",
@@ -427,7 +425,5 @@
 	"unpin_profile": "Désépingler {actor} sur {app}",
 	"pin_profile_name": "{actor} sur {app}",
 	"shelf_all": "Tout voir",
-	"shelf_count_more": "{count}+ enregistrements",
-	"whose_you": "vous",
-	"whose_this_is_you": "C'est vous"
+	"shelf_count_more": "{count}+ enregistrements"
 }

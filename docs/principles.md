@@ -51,6 +51,10 @@ We don't hack the protocol.
   (`src/lib/records/kinds.ts`), for every app. From it come the actions offered in
   plain words, and how records show as cards and in detail; the lexicon's own
   description explains each type.
+- Always clear, never repeated: whose data is their handle, once, where the page is
+  named; who you act as is in the shell (the rail's account, the tab bar on phones);
+  where it's kept, the handle says (`.local` is this device). No "this is you"
+  labels: what is yours shows by what you can do with it (edit, add).
 
 ## Forms
 

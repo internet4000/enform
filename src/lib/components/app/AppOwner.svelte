@@ -14,8 +14,7 @@
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import PinButton from '#lib/components/PinButton.svelte'
 
-	let {repo, app, info, mine}: {repo: Identity; app: RepoApp; info: AppInfo; mine: boolean} =
-		$props()
+	let {repo, app, info}: {repo: Identity; app: RepoApp; info: AppInfo} = $props()
 
 	let handle = $derived(`@${actorName(repo)}`)
 	let card = $derived(
@@ -53,15 +52,8 @@
 				</a>
 				<hgroup>
 					<h1>{name ?? handle}</h1>
-					{#if name || mine}
-						<!-- Yours: said in words, after who it is -->
-						<p>
-							{#if name}{handle}{#if mine}
-									· <strong>{m.whose_you()}</strong>{/if}{:else}<strong
-									>{m.whose_this_is_you()}</strong
-								>{/if}
-						</p>
-					{/if}
+					<!-- Whose it is, by their handle alone: who you act as is in the shell -->
+					{#if name}<p>{handle}</p>{/if}
 				</hgroup>
 				{#if !repo.local}
 					<PinButton domain={info.domain} name={info.name} did={repo.did} actor={handle} />

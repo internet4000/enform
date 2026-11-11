@@ -106,9 +106,7 @@
 	let base = $derived(selected ? keep(appScreenPath(actor, app.app, {type: selected.nsid})) : '')
 	/** Which app and whose data, for sheets that cover the app's header on phones */
 	let context = $derived(
-		`${info.name}${info.name.toLowerCase() === info.domain ? '' : ` · ${info.domain}`} · ${
-			owner ? m.whose_yours() : m.whose_theirs({actor: `@${actor}`})
-		}`
+		`${info.name}${info.name.toLowerCase() === info.domain ? '' : ` · ${info.domain}`} · @${actor}`
 	)
 	const at = (type: string, open: {record?: string; edit?: boolean; create?: boolean} = {}) =>
 		appScreenPath(actor, app.app, {type, ...open})
@@ -137,7 +135,7 @@
 <enform-app-screen>
 	<header>
 		<!-- Where one is: the app, then whose profile in it, as this app shows them -->
-		<AppOwner repo={data.repo} {app} {info} mine={owner} />
+		<AppOwner repo={data.repo} {app} {info} />
 		<!-- The app at hand: pin it; open it, read what it is, see its data, in its menu -->
 		<menu>
 			<li>

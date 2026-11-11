@@ -291,8 +291,6 @@
 	"actions_more": "More you can do in {app}",
 	"actions_view_only": "This is what {app} keeps. Sign in, or try it on this device, to make your own.",
 	"kind_open_link": "Open on {site}",
-	"whose_yours": "Yours",
-	"whose_theirs": "{actor}'s",
 	"field_text": "Text",
 	"field_title": "Title",
 	"field_name": "Name",
@@ -427,7 +425,5 @@
 	"unpin_profile": "Unpin {actor} on {app}",
 	"pin_profile_name": "{actor} on {app}",
 	"shelf_all": "See all",
-	"shelf_count_more": "{count}+ records",
-	"whose_you": "you",
-	"whose_this_is_you": "This is you"
+	"shelf_count_more": "{count}+ records"
 }
