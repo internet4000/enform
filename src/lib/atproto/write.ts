@@ -10,6 +10,7 @@ import {localIdentity} from './identity'
 import * as m from '#lib/paraglide/messages.js'
 import * as local from '#lib/local/store'
 import {isExample} from '#lib/lexicons/examples/index'
+import {pointsOnDevice} from '#lib/local/handle'
 import {TID} from '@atproto/common-web'
 import {
 	enqueue,
@@ -73,9 +74,13 @@ const fromLocal = (record: local.LocalRecord): WriteResult => ({
 	rkey: record.rkey
 })
 
-/** An example app's records stay on this device: no one can resolve their type */
-function onDeviceOnly(collection: string) {
+/**
+ * What is on this device stays on it: an example app's records (no one can resolve
+ * their type), and any mention of the device's records in an account's, which is public
+ */
+function onDeviceOnly(collection: string, record?: Record<string, unknown>) {
 	if (isExample(collection)) throw new Error(m.example_on_device())
+	if (record && pointsOnDevice(record)) throw new Error(m.local_stays_private())
 }
 
 export async function createRecord(
@@ -85,7 +90,7 @@ export async function createRecord(
 ) {
 	if (auth.local)
 		return fromLocal(await local.createRecord(auth.local.id, collection, record, rkey))
-	onDeviceOnly(collection)
+	onDeviceOnly(collection, record)
 	const session = await auth.authorizeRepo(collection, 'create')
 	// Its key is chosen here (a TID, unless the lexicon fixes it), so it can wait offline
 	const key = rkey ?? TID.nextStr()
@@ -111,7 +116,7 @@ export async function putRecord(
 	if (auth.local) {
 		return fromLocal(await local.putRecord(auth.local.id, collection, rkey, record, swapRecord))
 	}
-	onDeviceOnly(collection)
+	onDeviceOnly(collection, record)
 	const session = await auth.authorizeRepo(collection, 'update')
 	const write = {op: 'update' as const, collection, rkey, value: record, swap: swapRecord}
 	// A record with writes still waiting gets this one after them
@@ -161,25 +166,6 @@ export async function uploadBlob(file: File): Promise<unknown> {
 		file.type || 'application/octet-stream'
 	)
 	return blob
-}
-
-export type BatchCreate = {collection: string; rkey: string; value: Record<string, unknown>}
-
-/** Creates records in the current account in batches of the PDS's limit, keeping their keys */
-export async function createBatch(records: BatchCreate[], size = 200) {
-	const collections = [...new Set(records.map((record) => record.collection))]
-	const session = await auth.authorizeRepos(collections, 'create')
-	for (let start = 0; start < records.length; start += size) {
-		await call(session, 'com.atproto.repo.applyWrites', {
-			repo: session.did,
-			writes: records.slice(start, start + size).map(({collection, rkey, value}) => ({
-				$type: 'com.atproto.repo.applyWrites#create',
-				collection,
-				rkey,
-				value
-			}))
-		})
-	}
 }
 
 async function waitingOn(did: string, collection: string, rkey: string): Promise<boolean> {

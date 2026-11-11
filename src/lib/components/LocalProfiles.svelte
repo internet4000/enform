@@ -1,11 +1,11 @@
 <script lang="ts">
 	// Local profiles: repos in this browser only, to try apps without an account. Act as
-	// one, create one, publish one to your account, or remove it.
+	// one, create one, or remove it. What is made on one stays on this device: it is never
+	// published to an account (private here, public there).
 	import * as m from '#lib/paraglide/messages.js'
 	import {goto} from '$app/navigation'
 	import {auth} from '#lib/auth/session.svelte'
 	import {localIdentity} from '#lib/atproto/identity'
-	import {publishProfile, type Published} from '#lib/local/publish'
 	import {createProfile, listProfiles, removeProfile, type LocalProfile} from '#lib/local/store'
 	import {actorName, repoPath} from '#lib/paths'
 
@@ -13,7 +13,6 @@
 	let name = $state('')
 	let busy = $state<string>()
 	let failed = $state<string>()
-	let published = $state<{id: string; result: Published}>()
 
 	async function load() {
 		profiles = await listProfiles().catch(() => [])
@@ -42,12 +41,6 @@
 			await goto(repoPath(actorName(localIdentity(profile))))
 		})
 	}
-
-	const publish = (profile: LocalProfile) =>
-		run(profile.id, async () => {
-			if (!auth.identity) return
-			published = {id: profile.id, result: await publishProfile(profile.id, auth.identity)}
-		})
 
 	/** Removing asks first, in a native dialog */
 	let removing = $state<LocalProfile>()
@@ -91,27 +84,8 @@
 								{m.local_use()}
 							</button>
 						{/if}
-						{#if auth.identity}
-							<button type="button" onclick={() => publish(profile)}>
-								{m.local_publish({handle: `@${auth.identity.handle ?? auth.identity.did}`})}
-							</button>
-						{/if}
 						<button type="button" onclick={() => ask(profile)}>{m.local_remove()}</button>
 					</enform-account-item>
-					{#if published?.id === profile.id}
-						<p role="status">
-							{m.local_published({count: String(published.result.created)})}
-							{#if published.result.skipped.length}
-								{m.local_published_skipped({records: published.result.skipped.join(', ')})}
-							{/if}
-							{#if published.result.invalid.length}
-								{m.local_published_invalid({records: published.result.invalid.join(', ')})}
-							{/if}
-							{#if published.result.kept.length}
-								{m.local_published_kept({records: published.result.kept.join(', ')})}
-							{/if}
-						</p>
-					{/if}
 				</li>
 			{/each}
 		</ul>

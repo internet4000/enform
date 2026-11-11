@@ -167,15 +167,6 @@ class Auth {
 		return this.authorize([scopeForRepo(collection, action)])
 	}
 
-	/** One authorization for an action on several collections (publishing many records) */
-	async authorizeRepos(collections: string[], action: RepoAction): Promise<OAuthSession> {
-		const missing = collections.filter((collection) => !this.canWrite(collection, action))
-		if (this.session && missing.length === 0) return this.session
-		return this.authorize([
-			...new Set(missing.map((collection) => scopeForRepo(collection, action)))
-		])
-	}
-
 	async authorizeBlob(mime: string): Promise<OAuthSession> {
 		if (this.session && this.canUpload(mime)) return this.session
 		return this.authorize([scopeForBlob(mime)])

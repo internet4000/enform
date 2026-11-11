@@ -44,8 +44,9 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
 ## Data and ecosystem
 
 - **Your own types** (to design together first): make a type (a lexicon) on this
-  device, then create, browse and play its records like any app's; publish it later.
-  Needs a lexicon editor, local lexicons resolved like published ones, and publishing.
+  device, then create, browse and play its records like any app's; publish the type
+  (its lexicon, not the device's records) under your domain. Needs a lexicon editor,
+  and local lexicons resolved like published ones.
 
 8. **View switcher, further**: a record shows rendered, as fields or as JSON,
    remembered per type. Still to do: the same for a list (cards, rows, a table) and
@@ -58,17 +59,11 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
 
 ## Delivery
 
-11. **enform.internet4000.com on GitHub Pages**: set it as the repository's Pages
-    custom domain and point its DNS (`CNAME` to `internet4000.github.io`); the workflow
-    then builds for it on its own. Then remove `wrangler.jsonc` and `bun run deploy`.
-12. **End-to-end suite in CI**: the local atproto network on Node, Playwright's
+11. **End-to-end suite in CI**: the local atproto network on Node, Playwright's
     Chromium, before publishing.
 
 ## Found by the example apps
 
-- **Publishing a local profile with references**: its records point at each other by
-  `at://name.local/…` and their CIDs; once published, those should name the account
-  (`at://did…/…`), in an order that keeps the CIDs right.
 - **Pictures on this device**: local profiles hold no files yet, so an example app's
   picture (radio.example's) can't be added on a device.
 

@@ -27,3 +27,12 @@ export function uniqueSlug(name: string, taken: string[]): string {
 }
 
 export const isLocalHandle = (actor: string) => actor.endsWith(LOCAL_TLD)
+
+/** An at:// URI naming a repo on this device (`name.local`, or an older `local:<id>`) */
+const ON_DEVICE = /at:\/\/(local:[^/\s"]+|[^/\s"]+\.local)(\/|$|")/
+
+/**
+ * Whether a record's value points at a record on this device. What is made on the
+ * device stays private: an account's records, public, never name it.
+ */
+export const pointsOnDevice = (value: unknown) => ON_DEVICE.test(JSON.stringify(value) ?? '')

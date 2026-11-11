@@ -3,7 +3,11 @@
 ## Why
 
 - **Try apps without an account**: start a radio, a list, a status on this device,
-  publish it to an account later (onboarding).
+  privately (onboarding).
+- **Private by design**: what is made on a device stays on it. A repo is public, so
+  nothing moves from one to the other: no publishing a local profile, no account
+  record pointing at a device's (`pointsOnDevice`, `src/lib/atproto/write.ts`), no
+  pins carried over.
 - **Work offline, read instantly**: writes don't wait on the network.
 - **Test every create, edit and delete headless**, with no credentials.
 
@@ -18,10 +22,10 @@ Nothing local pretends to be atproto:
 
 - A local profile has **no DID**, and a handle only this device knows: its name,
   slugified, under `.local` (`@my-radio.local`), which no atproto handle can be. It
-  is named by its person, marked "on this device", and its records never leave the browser until published.
+  is named by its person, marked "on this device", and its records never leave the
+  browser.
 - Its records are **valid records of their lexicons**: same forms, same validation,
-  record keys as atproto makes them (TIDs, or the lexicon's literal key), so
-  publishing keeps them.
+  record keys as atproto makes them (TIDs, or the lexicon's literal key), and CIDs.
 
 ## Local profiles
 
@@ -32,9 +36,8 @@ Nothing local pretends to be atproto:
   (`src/lib/atproto/repo.ts`, `write.ts`), which dispatch on the repo.
 - **Who you are** is the current account _or_ local profile: Settings › Profiles lists both,
   to switch to, add or remove. Owner actions (Add, Edit, Delete) follow it.
-- **Publishing** copies a local profile's records into a signed-in account in one
-  batch (`com.atproto.repo.applyWrites`), after one permission request covering all
-  their collections, keeping record keys. The local profile can then be removed.
+- **Never published**: an account starts from nothing of the device's. Making the
+  same thing there is done again, on purpose, as that account.
 - Not in the first version: blobs (files) in local profiles.
 
 ## Writes to accounts, local-first

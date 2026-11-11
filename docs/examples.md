@@ -22,7 +22,7 @@ designed to exercise part of the engine.
 publish lexicons for `example.note.*`. That makes the NSIDs safe to use, and sets their
 limits: they can't be resolved from the network, so they are bundled; and their records
 stay on this device (a local profile), never written to a repo, where nothing could
-read them (`src/lib/atproto/write.ts`; publishing a local profile keeps them there).
+read them (`src/lib/atproto/write.ts`), as every record made on a device does.
 
 Your own types are the next step: the same, under a domain you control, published as
 atproto specifies, so their records can live in your repo (plan.md).
