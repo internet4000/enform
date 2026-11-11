@@ -442,5 +442,8 @@
 	"local_published_kept": "Kept on this device (example apps): {records}.",
 	"examples_title": "Example apps",
 	"examples_intro": "Apps made from their types alone: enform comes with their lexicons, and generates everything else. Try them on this device, or see what enform makes of a type.",
-	"kind_empty": "Nothing in it yet: its fields show what it holds."
+	"kind_empty": "Nothing in it yet: its fields show what it holds.",
+	"apps_accounts_title": "{app}'s own account",
+	"apps_accounts_lexicons": "Publishes its types",
+	"apps_open_theirs": "Open"
 }

@@ -84,6 +84,14 @@ many, its first records, read or play them all, add one when it's yours. Each ty
 is also a tab: the profile's shows its record alone, a list's all its records. Bluesky's posts, a radio's
 tracks, someone's Tangled repos: the same, from the repo alone.
 
+## An app's own accounts
+
+An app's page shows the app as it shows itself: its own accounts, with what they have
+in it and their first records (`src/lib/apps/accounts.ts`). No list of them is kept;
+the protocol names them: the account its domain is the handle of (@bsky.app,
+@joblist.today), and the account publishing its lexicons (`_lexicon` TXT records),
+often the same one. An account with nothing in the app isn't shown.
+
 ## Pins
 
 The apps someone keeps at hand, by domain, and the profiles in them (someone's radio),

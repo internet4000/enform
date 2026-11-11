@@ -442,5 +442,8 @@
 	"local_published_kept": "Gardés sur cet appareil (apps d'exemple) : {records}.",
 	"examples_title": "Apps d'exemple",
 	"examples_intro": "Des apps faites de leurs seuls types : enform fournit leurs lexiques et génère tout le reste. Essayez-les sur cet appareil, ou voyez ce qu'enform fait d'un type.",
-	"kind_empty": "Rien dedans pour l'instant : ses champs montrent ce qu'il contient."
+	"kind_empty": "Rien dedans pour l'instant : ses champs montrent ce qu'il contient.",
+	"apps_accounts_title": "Le compte de {app}",
+	"apps_accounts_lexicons": "Publie ses types",
+	"apps_open_theirs": "Ouvrir"
 }

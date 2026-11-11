@@ -136,9 +136,9 @@ enform-pins li > a > span {
 	white-space: nowrap;
 }
 
-/* You on an app: your profile there, what you have, and opening it */
-/* You on an app: one card, who you are there and what you have, its way in at the end */
-enform-app-yours {
+/* An account on an app (you, the app's own): one card, who it is there and what it
+   has, its way in at the end */
+enform-app-place {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) auto;
 	align-items: center;
@@ -148,19 +148,29 @@ enform-app-yours {
 	border-radius: var(--radius-large);
 }
 
-enform-app-yours enform-app-profile img {
+enform-app-place enform-app-profile img {
 	width: var(--app-icon-size-large);
 	height: var(--app-icon-size-large);
 }
 
-enform-app-yours > p {
+enform-app-place > p {
 	grid-column: 1;
 	margin: 0;
 	font-size: var(--font-size-s);
 	color: var(--color-muted);
 }
 
-enform-app-yours > a[role='button'] {
+enform-app-place > p small {
+	display: block;
+}
+
+/* The app's own accounts: each card, then the first of what it has */
+enform-app-accounts {
+	display: grid;
+	gap: var(--space-s);
+}
+
+enform-app-place > a[role='button'] {
 	grid-column: 2;
 	grid-row: 1 / span 2;
 }

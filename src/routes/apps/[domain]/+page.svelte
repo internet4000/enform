@@ -17,7 +17,9 @@
 	import StartChoice from '#lib/components/StartChoice.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import AppActions from '#lib/components/app/AppActions.svelte'
-	import AppProfile from '#lib/components/app/AppProfile.svelte'
+	import AppPlace from '#lib/components/app/AppPlace.svelte'
+	import TypeShelf from '#lib/components/app/TypeShelf.svelte'
+	import {appAccounts, type AccountReason} from '#lib/apps/accounts'
 	import PinButton from '#lib/components/PinButton.svelte'
 	import {actorName, appScreenPath, lexiconPath} from '#lib/paths'
 
@@ -39,6 +41,9 @@
 					.catch(() => undefined)
 			: Promise.resolve(undefined)
 	)
+	/** Why an account is the app's, when its handle doesn't say (it publishes its types) */
+	const reasonOf = (why: AccountReason[]) =>
+		why.includes('lexicons') ? m.apps_accounts_lexicons() : undefined
 	const typesOf = (app: RepoApp) => [
 		...(app.profile ? [app.profile] : []),
 		...app.lists,
@@ -68,22 +73,45 @@
 
 	{#await yours then app}
 		{#if app && me}
-			{@const actor = actorName(me)}
-			{@const had = byDirectory(typesOf(app).filter((type) => type.used))}
 			<section aria-labelledby="yours">
 				<h2 id="yours">{m.apps_your_place()}</h2>
-				<!-- One card: who you are there, what you have, and one way in -->
-				<enform-app-yours>
-					<AppProfile repo={me} {app} />
-					{#if had.length}
-						<p>
-							{had.map((type) => typeLabel(type.nsid)).join(' · ')}
-						</p>
-					{/if}
-					<a href={appScreenPath(actor, info.domain)} role="button"
-						>{m.apps_open_yours({app: info.name})}</a
-					>
-				</enform-app-yours>
+				<AppPlace
+					repo={me}
+					{app}
+					href={appScreenPath(actorName(me), info.domain)}
+					label={m.apps_open_yours({app: info.name})}
+				/>
+			</section>
+		{/if}
+	{/await}
+
+	<!-- The app's own accounts, as the protocol names them (docs/architecture.md), with
+	     the first of what they have: the app as it shows itself -->
+	{#await data.app.then(appAccounts) then accounts}
+		{#if accounts.length}
+			<section aria-labelledby="accounts">
+				<h2 id="accounts">{m.apps_accounts_title({app: info.name})}</h2>
+				<enform-app-accounts>
+					{#each accounts as account (account.repo.did)}
+						{@const name = actorName(account.repo)}
+						{@const shelf = byDirectory(account.app.lists.filter((type) => type.used))[0]}
+						<AppPlace
+							repo={account.repo}
+							app={account.app}
+							href={appScreenPath(name, info.domain)}
+							label={m.apps_open_theirs()}
+							note={reasonOf(account.why)}
+						/>
+						{#if shelf}
+							<TypeShelf
+								repo={account.repo}
+								type={shelf}
+								all={appScreenPath(name, info.domain, {type: shelf.nsid})}
+								href={(rkey) => appScreenPath(name, info.domain, {type: shelf.nsid, record: rkey})}
+							/>
+						{/if}
+					{/each}
+				</enform-app-accounts>
 			</section>
 		{/if}
 	{/await}
