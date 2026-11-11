@@ -1,6 +1,6 @@
 <script lang="ts">
 	// The app's main places: in thumb reach at the bottom on phones; on wide screens a
-	// rail on the left, the app's name at its top, your apps under the places, and who
+	// rail on the left, the app's icon and name at its top, your apps under the places, and who
 	// you act as at its bottom. Who you are opens Settings: your profiles, switching,
 	// signing in, and the rest.
 	import {page} from '$app/state'
@@ -30,7 +30,7 @@
 </script>
 
 <nav aria-label={m.nav_main()}>
-	<a href={inApp('/')} rel="home">{app.name}</a>
+	<a href={inApp('/')} rel="home"><img src={inApp(app.logo)} alt="" />{app.name}</a>
 	<ul>
 		{#each places as place (place.href)}
 			<li>

@@ -208,11 +208,18 @@ enform-app > nav li a > span {
 	enform-app > nav > a[rel='home'] {
 		display: flex;
 		align-items: center;
+		gap: var(--space-xs);
 		min-height: var(--header-height);
 		padding: 0 var(--space-s);
 		font-weight: 700;
 		color: inherit;
 		text-decoration: none;
+	}
+
+	/* enform's own icon, as the rail shows an app's */
+	enform-app > nav > a[rel='home'] > img {
+		width: var(--app-icon-size);
+		height: var(--app-icon-size);
 	}
 
 	enform-app > nav ul {
