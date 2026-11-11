@@ -68,6 +68,8 @@ test("a profile's page says how to embed it", async ({page, context}) => {
 	const snippet = dialog.locator('pre')
 	await expect(snippet).toContainText('<enform-embed actor="alice.test" app="enform.test"')
 	await expect(snippet).toContainText('cdn.jsdelivr.net/npm/@internet4000/enform@')
+	// Copied from a local instance (here, the tests'), it links to enform's own
+	await expect(snippet).not.toContainText('enform="')
 	await dialog.getByRole('button', {name: t('embed_copy')}).click()
 	await expect(dialog.getByRole('button', {name: t('embed_copied')})).toBeVisible()
 	expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('<enform-embed')

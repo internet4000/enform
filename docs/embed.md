@@ -9,8 +9,8 @@ read-only: each record links to its page in enform, where its owner can edit it.
     <enform-embed actor="hwww.org" app="4000.radio"></enform-embed>
 
 In enform, a profile's screen in an app gives it, ready to copy: its menu (⋯) › Embed
-this profile. It loads the embed's current version from npm, and on another instance
-than enform.internet4000.com, names it (`enform`), so its links come back there.
+this profile. It loads the embed's current version from npm, and on another public
+instance than enform.internet4000.com, names it (`enform`), so its links come back there.
 
 - `actor`: whose profile, a handle or a DID.
 - `app`: the app, by its domain (`4000.radio`, `tangled.org`, `bsky.app`).

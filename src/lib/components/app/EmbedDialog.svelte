@@ -1,7 +1,7 @@
 <script lang="ts">
 	// How to show this profile's home in an app on any web page (docs/embed.md): the
 	// snippet for it, ready to copy, loading the embed from npm (through a CDN) at its
-	// current version; on another instance than enform's, its links go back to that one
+	// current version; on another public instance than enform's, its links go back there
 	import * as m from '#lib/paraglide/messages.js'
 	import app from '#lib/config/app.json' with {type: 'json'}
 	import embed from '../../../../packages/enform/package.json' with {type: 'json'}
@@ -18,10 +18,12 @@
 		dialog?.showModal()
 	}
 
-	/** This instance, when it isn't the one the published embed links to */
+	/** This instance, when it isn't the one the published embed links to, and others can
+	    open it: not a local one (a dev server), whose links would lead visitors nowhere */
 	let instance = $derived.by(() => {
-		const here = new URL(inApp('/'), location.href).href
-		return here === `https://${app.domain}/` ? undefined : here
+		const here = new URL(inApp('/'), location.href)
+		const local = ['localhost', '127.0.0.1', '[::1]'].includes(here.hostname)
+		return local || here.href === `https://${app.domain}/` ? undefined : here.href
 	})
 	let snippet = $derived(
 		[
