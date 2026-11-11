@@ -215,13 +215,3 @@ export async function sendWaiting(): Promise<number> {
 	await outbox.refresh()
 	return sent
 }
-
-/**
- * Your account's new handle (com.atproto.identity.updateHandle): one of its server's
- * domains, or your own once it points at you. Not kept to send later: it's now or not.
- */
-export async function updateHandle(handle: string) {
-	const session = await auth.authorizeHandle()
-	await call(session, 'com.atproto.identity.updateHandle', {handle})
-	await auth.refreshIdentity()
-}

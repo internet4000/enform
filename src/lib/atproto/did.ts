@@ -36,11 +36,6 @@ export function didDocument(did: string): Promise<DidDocument> {
 	return doc
 }
 
-/** Reads this DID's document again next time (its handle changed) */
-export function forgetDocument(did: string) {
-	documents.delete(did)
-}
-
 /** The handle a DID document claims (still to be verified the other way) */
 export function claimedHandle(doc: DidDocument): string | undefined {
 	return doc.alsoKnownAs?.find((aka) => aka.startsWith('at://'))?.slice('at://'.length)

@@ -4,7 +4,7 @@
  */
 import type {OAuthSession} from '@atproto/oauth-client-browser'
 import {refreshAll} from '$app/navigation'
-import {forgetIdentity, localIdentity, resolveIdentity, type Identity} from '#lib/atproto/identity'
+import {localIdentity, resolveIdentity, type Identity} from '#lib/atproto/identity'
 import {getProfile, type LocalProfile} from '#lib/local/store'
 import app from '#lib/config/app.json' with {type: 'json'}
 import {loadAccounts, nextAccount, saveAccounts, withAccount, withoutAccount} from './accounts'
@@ -18,9 +18,7 @@ import {
 } from './client'
 import {
 	allowsBlob,
-	allowsHandle,
 	allowsRepo,
-	HANDLE_SCOPE,
 	scopeForBlob,
 	scopeForRepo,
 	withScopes,
@@ -170,23 +168,6 @@ class Auth {
 	async authorizeBlob(mime: string): Promise<OAuthSession> {
 		if (this.session && this.canUpload(mime)) return this.session
 		return this.authorize([scopeForBlob(mime)])
-	}
-
-	async authorizeHandle(): Promise<OAuthSession> {
-		if (this.session && allowsHandle(this.scope)) return this.session
-		return this.authorize([HANDLE_SCOPE])
-	}
-
-	/** Reads who the current account is again (its handle changed) */
-	async refreshIdentity() {
-		const session = this.session
-		if (!session) return
-		forgetIdentity(session.did, this.identity?.handle)
-		const identity = await resolveIdentity(session.did)
-		if (this.session === session) this.identity = identity
-		this.accounts = this.accounts.map((account) =>
-			account.did === session.did ? {did: session.did, identity} : account
-		)
 	}
 }
 
