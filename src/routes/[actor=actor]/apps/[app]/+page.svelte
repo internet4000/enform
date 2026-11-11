@@ -27,7 +27,6 @@
 	import CreateRecord from '#lib/components/CreateRecord.svelte'
 	import EditRecord from '#lib/components/EditRecord.svelte'
 	import RecordActions from '#lib/components/RecordActions.svelte'
-	import RecordValue from '#lib/components/RecordValue.svelte'
 	import {actorName, appScreenPath, collectionPath, dataPath, inApp, recordPath} from '#lib/paths'
 
 	let {data} = $props()
@@ -156,32 +155,45 @@
 			<p><small>{m.collection_loading()}</small></p>
 		{:then record}
 			{@const card = recordCard(record.value, selected.lexicon?.defs.main?.record)}
-			<enform-toolbar>
-				{@render sections()}
-				{#if owner}
-					<menu>
-						<li>
-							<a href={at(selected.nsid, {record: selected.rkey, edit: true})} role="button"
-								>{m.record_edit()}</a
-							>
-						</li>
-					</menu>
-				{/if}
-			</enform-toolbar>
+			{@const title = recordSummary(record.value, selected.lexicon?.defs.main?.record)}
+			<enform-toolbar>{@render sections()}</enform-toolbar>
 			<!-- Its name, picture and words are in the header: here, its banner -->
 			{#if card.banner && !data.repo.local}
 				<enform-person><img src={blobUrl(data.repo, card.banner)} alt="" /></enform-person>
 			{/if}
-			<details>
-				<summary>{m.app_all_fields()}</summary>
-				<RecordValue
-					value={record.value}
-					node={selected.lexicon?.defs.main?.record}
-					base={selected.nsid}
-					repo={data.repo}
-					typed={false}
-				/>
-			</details>
+			<!-- The record, as in its sheet: its actions and how to see it on one line; its
+			     fields first, as the header already shows it rendered -->
+			<RecordViews
+				repo={data.repo}
+				{record}
+				lexicon={selected.lexicon}
+				collection={selected.nsid}
+				initial="fields"
+			>
+				{#snippet actions()}
+					<RecordActionsMenu
+						value={record.value}
+						lexicon={selected.lexicon}
+						title={title ?? typeLabel(selected.nsid)}
+						start={() =>
+							reader.start([
+								{repo: data.repo, record, lexicon: selected.lexicon, href: shownUrl().href}
+							])}
+					/>
+					{#if owner}
+						<menu>
+							<RecordActions
+								{actor}
+								collection={selected.nsid}
+								rkey={selected.rkey}
+								cid={record.cid}
+								editHref={at(selected.nsid, {record: selected.rkey, edit: true})}
+								deleted={appScreenPath(actor, app.app)}
+							/>
+						</menu>
+					{/if}
+				{/snippet}
+			</RecordViews>
 		{:catch}
 			<enform-toolbar>{@render sections()}</enform-toolbar>
 			{#if owner}

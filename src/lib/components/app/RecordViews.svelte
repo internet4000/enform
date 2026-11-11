@@ -18,10 +18,12 @@
 		record: RepoRecord
 		lexicon?: LexiconDoc
 		collection: string
+		/** The view to start on, until one is chosen for its type */
+		initial?: View
 		/** What one can do with it, at the bar's start */
 		actions?: Snippet
 	}
-	let {repo, record, lexicon, collection, actions}: Props = $props()
+	let {repo, record, lexicon, collection, initial, actions}: Props = $props()
 
 	const key = (type: string) => `enform:view:${type}`
 	function remembered(type: string): View | undefined {
@@ -35,7 +37,10 @@
 
 	let chosen = $state<View>()
 	let view = $derived(
-		chosen ?? remembered(collection) ?? (kindOf(lexicon).kind === 'thing' ? 'fields' : 'rendered')
+		chosen ??
+			remembered(collection) ??
+			initial ??
+			(kindOf(lexicon).kind === 'thing' ? 'fields' : 'rendered')
 	)
 
 	function choose(next: View) {

@@ -242,7 +242,6 @@
 	"person_all_data": "Toutes les données, telles que stockées",
 	"app_tabs": "Sections",
 	"app_screen_empty": "Rien dans {app} ici pour l'instant.",
-	"app_all_fields": "Tous ses champs",
 	"records_count_one": "1 enregistrement",
 	"records_count": "{count} enregistrements",
 	"records_count_more": "{count} enregistrements, d’autres à charger",

@@ -242,7 +242,6 @@
 	"person_all_data": "All data, as it's stored",
 	"app_tabs": "Sections",
 	"app_screen_empty": "Nothing in {app} here yet.",
-	"app_all_fields": "All its fields",
 	"records_count_one": "1 record",
 	"records_count": "{count} records",
 	"records_count_more": "{count} records, more to load",
