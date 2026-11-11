@@ -114,18 +114,8 @@
 		appScreenPath(actor, app.app, {type, ...open})
 </script>
 
-<enform-app-screen>
-	<header>
-		<!-- Where one is: the app, then whose profile in it, as this app shows them -->
-		<AppOwner repo={data.repo} {app} {info} mine={owner} />
-		<!-- The app at hand: pin it; open it, read what it is, see its data, in its menu -->
-		<menu>
-			<li>
-				<AppMenu {info} data={selected ? collectionPath(actor, selected.nsid) : dataPath(actor)} />
-			</li>
-		</menu>
-	</header>
-
+{#snippet sections()}
+	<!-- Its types as tabs, where the bar under the header starts -->
 	{#if tabs.length}
 		<nav aria-label={m.app_tabs()}>
 			<ul>
@@ -142,27 +132,47 @@
 			</ul>
 		</nav>
 	{/if}
+{/snippet}
+
+<enform-app-screen>
+	<header>
+		<!-- Where one is: the app, then whose profile in it, as this app shows them -->
+		<AppOwner repo={data.repo} {app} {info} mine={owner} />
+		<!-- The app at hand: pin it; open it, read what it is, see its data, in its menu -->
+		<menu>
+			<li>
+				<AppMenu {info} data={selected ? collectionPath(actor, selected.nsid) : dataPath(actor)} />
+			</li>
+		</menu>
+	</header>
 
 	{#if !selected}
+		<enform-toolbar>{@render sections()}</enform-toolbar>
 		{#if !owner}<p>{m.app_screen_empty({app: info.name})}</p>{/if}
 		<AppActions types={doable} href={start} title={m.actions_title({app: info.name})} />
 		{#if !owner && !me}<p><small>{m.actions_view_only({app: info.name})}</small></p>{/if}
 	{:else if single(selected)}
-		<!-- One record per account: shown whole -->
+		<!-- One record per account: shown whole, edited from the bar -->
 		{#await getRecord(data.repo, selected.nsid, selected.rkey)}
+			<enform-toolbar>{@render sections()}</enform-toolbar>
 			<p><small>{m.collection_loading()}</small></p>
 		{:then record}
 			{@const card = recordCard(record.value, selected.lexicon?.defs.main?.record)}
+			<enform-toolbar>
+				{@render sections()}
+				{#if owner}
+					<menu>
+						<li>
+							<a href={at(selected.nsid, {record: selected.rkey, edit: true})} role="button"
+								>{m.record_edit()}</a
+							>
+						</li>
+					</menu>
+				{/if}
+			</enform-toolbar>
 			<!-- Its name, picture and words are in the header: here, its banner -->
 			{#if card.banner && !data.repo.local}
 				<enform-person><img src={blobUrl(data.repo, card.banner)} alt="" /></enform-person>
-			{/if}
-			{#if owner}
-				<p>
-					<a href={at(selected.nsid, {record: selected.rkey, edit: true})} role="button"
-						>{m.record_edit()}</a
-					>
-				</p>
 			{/if}
 			<details>
 				<summary>{m.app_all_fields()}</summary>
@@ -175,6 +185,7 @@
 				/>
 			</details>
 		{:catch}
+			<enform-toolbar>{@render sections()}</enform-toolbar>
 			{#if owner}
 				<p>
 					<a href={at(selected.nsid, {create: true})} role="button">
@@ -209,6 +220,7 @@
 				lexicon={doc}
 				href={(rkey) => keep(at(type.nsid, {record: rkey}))}
 				{open}
+				lead={sections}
 			>
 				{#snippet actions()}
 					{#if start}
@@ -224,7 +236,7 @@
 		{#if owner && selected.lexicon}
 			<enform-fab>
 				<a href={at(selected.nsid, {create: true})} role="button">
-					+ {m.app_new({type: typeLabel(selected.nsid)})}
+					+ {kindVerb(kindOf(selected.lexicon).kind, typeLabel(selected.nsid)).verb}
 				</a>
 			</enform-fab>
 		{/if}
@@ -274,38 +286,35 @@
 				close={base}
 				page={recordPath(actor, selected.nsid, open)}
 			>
-				{#if owner}
-					<menu>
-						<RecordActions
-							{actor}
-							collection={selected.nsid}
-							rkey={open}
-							cid={record.cid}
-							editHref={at(selected.nsid, {record: open, edit: true})}
-							deleted={base}
-						/>
-					</menu>
-					<!-- Keep going: the next one, without closing this one first -->
-					{#if selected.lexicon}
-						<p>
-							<a href={at(selected.nsid, {create: true})} role="button">
-								+ {m.app_new({type: typeLabel(selected.nsid)})}
-							</a>
-						</p>
-					{/if}
-				{/if}
 				{#if record.pending}
 					<p role="status"><a href={inApp('/settings/waiting')}>{m.outbox_record_waiting()}</a></p>
 				{/if}
-				<!-- What one can do with it: play, read, view, go to what it points at -->
-				<RecordActionsMenu
-					value={record.value}
-					lexicon={doc}
-					title={recordSummary(record.value, doc?.defs.main?.record) ?? typeLabel(selected.nsid)}
-					start={() =>
-						reader.start([{repo: data.repo, record, lexicon: doc, href: shownUrl().href}])}
-				/>
-				<RecordViews repo={data.repo} {record} lexicon={doc} collection={selected.nsid} />
+				<!-- One bar: what one can do with it (play, read, go to what it points at; edit
+				     and delete, when it's yours), then how to see it -->
+				<RecordViews repo={data.repo} {record} lexicon={doc} collection={selected.nsid}>
+					{#snippet actions()}
+						<RecordActionsMenu
+							value={record.value}
+							lexicon={doc}
+							title={recordSummary(record.value, doc?.defs.main?.record) ??
+								typeLabel(selected.nsid)}
+							start={() =>
+								reader.start([{repo: data.repo, record, lexicon: doc, href: shownUrl().href}])}
+						/>
+						{#if owner}
+							<menu>
+								<RecordActions
+									{actor}
+									collection={selected.nsid}
+									rkey={open}
+									cid={record.cid}
+									editHref={at(selected.nsid, {record: open, edit: true})}
+									deleted={base}
+								/>
+							</menu>
+						{/if}
+					{/snippet}
+				</RecordViews>
 			</RecordSheet>
 		{/if}
 	{:catch}

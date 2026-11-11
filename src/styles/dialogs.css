@@ -97,15 +97,6 @@ enform-sheet > header button {
 	border-radius: var(--pill-radius);
 }
 
-enform-sheet > menu {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--space-s);
-	padding: 0;
-	margin: 0;
-	list-style: none;
-}
-
 enform-sheet > header > a {
 	display: inline-flex;
 	flex: none;
@@ -131,23 +122,49 @@ enform-sheet > header > a {
 	}
 }
 
-/* A record's views: rendered, its fields, its JSON */
+/* A record's views: rendered, its fields, its JSON; over them, one bar: its actions,
+   then how to see it, at the end */
 enform-record-views {
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-m);
 }
 
-enform-record-views > menu {
+enform-record-bar {
 	display: flex;
-	gap: var(--space-2xs);
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-xs);
+}
+
+enform-record-bar menu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-enform-record-views > menu button {
+enform-record-bar :is(button, a[role='button']) {
 	font-size: var(--font-size-s);
+}
+
+/* How to see it: one segmented control, at the end of the line */
+enform-record-bar > menu:last-child {
+	gap: 0;
+	margin-inline-start: auto;
+}
+
+enform-record-bar > menu:last-child li:not(:first-child) button {
+	margin-inline-start: calc(-1 * var(--border-width));
+	border-start-start-radius: 0;
+	border-end-start-radius: 0;
+}
+
+enform-record-bar > menu:last-child li:not(:last-child) button {
+	border-start-end-radius: 0;
+	border-end-end-radius: 0;
 }
 
 enform-record-views > pre {

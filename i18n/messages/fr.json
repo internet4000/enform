@@ -266,7 +266,6 @@
 	"contact_follow": "Suivre {actor}",
 	"contact_message": "Écrire à {actor}",
 	"contact_mention": "Mentionner {actor}",
-	"app_new": "Nouveau : {type}",
 	"sheet_close": "Fermer",
 	"sheet_open_page": "Ouvrir la page",
 	"view_label": "Afficher",

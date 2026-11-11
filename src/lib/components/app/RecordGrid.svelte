@@ -27,10 +27,12 @@
 		lexicon?: LexiconDoc
 		href: (rkey: string) => string
 		open?: string
+		/** What the page puts first in the toolbar (its sections) */
+		lead?: Snippet
 		/** The page's own actions, at the toolbar's end */
 		actions?: Snippet
 	}
-	let {repo, collection, lexicon, href, open, actions}: Props = $props()
+	let {repo, collection, lexicon, href, open, lead, actions}: Props = $props()
 
 	let records = $state<RepoRecord[]>([])
 	let cursor = $state<string>()
@@ -102,6 +104,7 @@
 </script>
 
 <enform-toolbar>
+	{@render lead?.()}
 	<p>
 		{#if narrowed}
 			{(cursor ? m.records_filtered_more : m.records_filtered)({

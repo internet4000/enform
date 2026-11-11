@@ -23,7 +23,7 @@
 {#if current}
 	<li>
 		<enform-new>
-			<a href={href(current.nsid)} role="button">+ {m.app_new({type: typeLabel(current.nsid)})}</a>
+			<a href={href(current.nsid)} role="button">+ {verb(current).verb}</a>
 		</enform-new>
 	</li>
 {/if}

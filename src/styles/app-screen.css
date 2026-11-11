@@ -12,19 +12,37 @@ enform-app-screen {
 	padding: var(--space-s) var(--gutter) calc(var(--space-l) * 2);
 }
 
-/* Its sections: a strip that scrolls sideways on phones */
-enform-app-screen > nav ul {
+/* Its sections, first in the bar under its header: a strip that scrolls sideways on
+   phones, the bar's actions on the next line; one line with them on wide screens */
+enform-toolbar > nav {
+	flex: 1 1 100%;
+	min-width: 0;
+}
+
+enform-toolbar > nav ul {
 	display: flex;
 	gap: var(--space-xs);
 	margin: 0 calc(-1 * var(--gutter));
-	padding: 0 var(--gutter) var(--space-xs);
+	padding: 0 var(--gutter);
 	overflow-x: auto;
 	list-style: none;
 	scrollbar-width: none;
 }
 
-enform-app-screen > nav a {
+@media (min-width: 48rem) {
+	enform-toolbar > nav {
+		flex-basis: auto;
+	}
+
+	enform-toolbar > nav ul {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+enform-toolbar > nav a:not([role]) {
 	display: inline-flex;
+	font-size: inherit;
 	align-items: center;
 	min-height: var(--control-height);
 	padding: 0 var(--space-m);
@@ -35,7 +53,7 @@ enform-app-screen > nav a {
 	border-radius: var(--pill-radius);
 }
 
-enform-app-screen > nav a[aria-current='page'] {
+enform-toolbar > nav a[aria-current='page'] {
 	color: var(--color-accent-text);
 	box-shadow: inset 0 0 0 var(--border-width)
 		color-mix(in oklch, var(--color-accent) 45%, var(--color-border));
@@ -258,6 +276,22 @@ enform-kind-view {
 
 enform-kind-view:empty {
 	display: none;
+}
+
+/* Someone: their picture beside their name */
+enform-kind-person {
+	display: flex;
+	align-items: center;
+	gap: var(--space-s);
+	font-size: var(--font-size-l);
+}
+
+enform-kind-person > img {
+	flex: none;
+	width: var(--avatar-size);
+	height: var(--avatar-size);
+	object-fit: cover;
+	border-radius: var(--avatar-radius);
 }
 
 enform-kind-view > a {

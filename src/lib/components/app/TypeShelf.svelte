@@ -2,6 +2,8 @@
 	// One type of what a profile has in an app (a radio's tracks, someone's posts): its name
 	// and how many, read or play them all, add one when it's yours, and its first records.
 	// What a profile has is what its repo has in the same app: no link is written for it
+	import {kindOf} from '#lib/records/kinds'
+	import {kindVerb} from '#lib/records/kind-words'
 	import * as m from '#lib/paraglide/messages.js'
 	import app from '#lib/config/app.json' with {type: 'json'}
 	import type {Identity} from '#lib/atproto/identity'
@@ -90,7 +92,11 @@
 				</li>
 			{/if}
 			{#if add}
-				<li><a href={add} role="button">+ {m.app_new({type: typeLabel(type.nsid)})}</a></li>
+				<li>
+					<a href={add} role="button"
+						>+ {kindVerb(kindOf(type.lexicon).kind, typeLabel(type.nsid)).verb}</a
+					>
+				</li>
 			{/if}
 		</menu>
 	</header>

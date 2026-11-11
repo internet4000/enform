@@ -2,6 +2,8 @@
 	// A record three ways: as its kind shows it (a post's text, a link's preview, the
 	// person followed), its fields as its lexicon names them, or its JSON. The choice is
 	// remembered per type, on this device; a type with no kind to show starts on its fields.
+	// Over it, one bar: what one can do with it (its actions), then how to see it.
+	import type {Snippet} from 'svelte'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
 	import type {RepoRecord} from '#lib/atproto/repo'
@@ -11,8 +13,15 @@
 	import RecordValue from '../RecordValue.svelte'
 
 	type View = 'rendered' | 'fields' | 'json'
-	type Props = {repo: Identity; record: RepoRecord; lexicon?: LexiconDoc; collection: string}
-	let {repo, record, lexicon, collection}: Props = $props()
+	type Props = {
+		repo: Identity
+		record: RepoRecord
+		lexicon?: LexiconDoc
+		collection: string
+		/** What one can do with it, at the bar's start */
+		actions?: Snippet
+	}
+	let {repo, record, lexicon, collection, actions}: Props = $props()
 
 	const key = (type: string) => `enform:view:${type}`
 	function remembered(type: string): View | undefined {
@@ -46,15 +55,18 @@
 </script>
 
 <enform-record-views>
-	<menu aria-label={m.view_label()}>
-		{#each views as [name, label] (name)}
-			<li>
-				<button type="button" aria-pressed={view === name} onclick={() => choose(name)}
-					>{label()}</button
-				>
-			</li>
-		{/each}
-	</menu>
+	<enform-record-bar>
+		{@render actions?.()}
+		<menu aria-label={m.view_label()}>
+			{#each views as [name, label] (name)}
+				<li>
+					<button type="button" aria-pressed={view === name} onclick={() => choose(name)}
+						>{label()}</button
+					>
+				</li>
+			{/each}
+		</menu>
+	</enform-record-bar>
 	{#if view === 'rendered'}
 		<KindView {repo} {record} {lexicon} />
 	{:else if view === 'fields'}

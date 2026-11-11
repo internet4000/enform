@@ -266,7 +266,6 @@
 	"contact_follow": "Follow {actor}",
 	"contact_message": "Write to {actor}",
 	"contact_mention": "Mention {actor}",
-	"app_new": "New {type}",
 	"sheet_close": "Close",
 	"sheet_open_page": "Open page",
 	"view_label": "Show it",

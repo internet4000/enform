@@ -1,7 +1,7 @@
 <script lang="ts">
 	// What a record is, shown for its kind (from its lexicon), before its fields: a link's
 	// preview to open, a photo, a status, the person followed, the thing reacted to,
-	// an event's date, a post's text
+	// an event's date, a post's text, someone's picture and name
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
 	import {blobUrl, type RepoRecord} from '#lib/atproto/repo'
@@ -29,15 +29,19 @@
 	let text = $derived(field(shape.fields.text))
 	let url = $derived(field(shape.fields.url))
 	let subject = $derived(field(shape.fields.subject))
-	let image = $derived(
-		recordCard(value, lexicon?.defs.main?.record).banner ??
-			firstImage(field(shape.fields.image) ?? value)
-	)
+	let card = $derived(recordCard(value, lexicon?.defs.main?.record))
+	let image = $derived(card.banner ?? firstImage(field(shape.fields.image) ?? value))
 </script>
 
 <enform-kind-view kind={shape.kind}>
 	{#if beside}
 		<!-- shown beside its media or images -->
+	{:else if shape.kind === 'profile'}
+		<!-- Someone, as the app shows them: their picture, their name -->
+		<enform-kind-person>
+			{#if card.avatar && !repo.local}<img src={blobUrl(repo, card.avatar)} alt="" />{/if}
+			{#if card.title}<strong>{card.title}</strong>{/if}
+		</enform-kind-person>
 	{:else if shape.kind === 'link' && isWebLink(url)}
 		{#await linkDetails(url) then found}
 			<a href={url} rel="noopener noreferrer external" target="_blank">
