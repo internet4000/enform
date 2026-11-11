@@ -1,6 +1,7 @@
 <script lang="ts">
 	// A record as a card in its app, shaped by its kind (from its lexicon): a link with its
 	// thumbnail, a photo, a status in big, an event's date, a post's text…
+	import {describeRecord} from '#lib/describe/record'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
 	import {blobUrl, type RepoRecord} from '#lib/atproto/repo'
@@ -10,7 +11,7 @@
 	import {recordCard} from '#lib/records/card'
 	import {kindOf} from '#lib/records/kinds'
 	import {firstImage} from '#lib/records/links'
-	import {recordDate, recordSummary} from '#lib/records/summary'
+	import {recordDate} from '#lib/records/summary'
 	import RowSummary from '../RowSummary.svelte'
 	import LinkThumb from './LinkThumb.svelte'
 	import RecordActionsMenu from './RecordActionsMenu.svelte'
@@ -37,7 +38,7 @@
 	let summary = $derived(
 		(shape.kind === 'status' && shape.fields.value
 			? String(value[shape.fields.value] ?? '')
-			: recordSummary(value, node)) || record.rkey
+			: describeRecord(record, lexicon).title) || record.rkey
 	)
 </script>
 

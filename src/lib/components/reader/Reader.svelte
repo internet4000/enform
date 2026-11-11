@@ -5,17 +5,17 @@
 	// menu), and autoplay on to the next record when one is done. Its record stays mounted
 	// in every mode. With several lists at hand, a deck each, as tabs: the one in front
 	// plays, the others keep their place.
+	import {describeRecord} from '#lib/describe/record'
 	import * as m from '#lib/paraglide/messages.js'
 	import {typeLabel} from '#lib/apps/directory'
 	import {reader, type ReaderItem, type ReaderMode} from '#lib/reader/reader.svelte'
-	import {recordSummary} from '#lib/records/summary'
 	import Icon from '../shell/Icon.svelte'
 	import Present from '../present/Present.svelte'
 	import ReaderItemMenu from './ReaderItemMenu.svelte'
 
 	let item = $derived(reader.current)
 	const titleOf = (entry: ReaderItem) =>
-		recordSummary(entry.record.value, entry.lexicon?.defs.main?.record) ?? entry.record.rkey
+		describeRecord(entry.record, entry.lexicon).title ?? entry.record.rkey
 	let title = $derived(item ? titleOf(item) : '')
 
 	const modes: {mode: ReaderMode; label: () => string}[] = [

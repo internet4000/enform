@@ -2,6 +2,7 @@
 	// An app as a person has it: its types as tabs (Radio · Tracks · Followed radios), their
 	// records as cards under a toolbar (how many, play all, + New and what else to make),
 	// and, over it, a record or a form. On phones, + New is also a button in thumb reach.
+	import {describeRecord} from '#lib/describe/record'
 	import * as m from '#lib/paraglide/messages.js'
 	import {shownUrl} from '#lib/where.svelte'
 	import {auth} from '#lib/auth/session.svelte'
@@ -10,7 +11,6 @@
 	import type {AppSingle, AppType} from '#lib/apps/types'
 	import {resolveLexicon} from '#lib/lexicons/resolve'
 	import {recordCard} from '#lib/records/card'
-	import {recordSummary} from '#lib/records/summary'
 	import {filterParams} from '#lib/records/filters'
 	import {kindOf} from '#lib/records/kinds'
 	import {kindVerb} from '#lib/records/kind-words'
@@ -191,7 +191,7 @@
 			<enform-toolbar>{@render sections()}</enform-toolbar>
 			<p><small>{m.collection_loading()}</small></p>
 		{:then record}
-			{@const title = recordSummary(record.value, selected.lexicon?.defs.main?.record)}
+			{@const title = describeRecord(record, selected.lexicon).title}
 			<enform-toolbar>{@render sections()}</enform-toolbar>
 			<!-- The record, as in its sheet: its actions and how to see it on one line; its
 			     fields first, as the header already shows it rendered -->
@@ -308,7 +308,7 @@
 			</RecordSheet>
 		{:else}
 			<RecordSheet
-				title={recordSummary(record.value, doc?.defs.main?.record) ?? typeLabel(selected.nsid)}
+				title={describeRecord(record, doc).title ?? typeLabel(selected.nsid)}
 				subtitle={`${typeLabel(selected.nsid)} · ${context}`}
 				close={base}
 				page={recordPath(actor, selected.nsid, open)}
@@ -323,8 +323,7 @@
 						<RecordActionsMenu
 							value={record.value}
 							lexicon={doc}
-							title={recordSummary(record.value, doc?.defs.main?.record) ??
-								typeLabel(selected.nsid)}
+							title={describeRecord(record, doc).title ?? typeLabel(selected.nsid)}
 							start={() =>
 								reader.start([{repo: data.repo, record, lexicon: doc, href: shownUrl().href}])}
 						/>

@@ -72,6 +72,11 @@ const AGAINST = /\b(block|blocks|blocking|mute|mutes|muting)\b|block$|mute$/i
 /** The key is the account it points at: said by the lexicon (subject DID as rkey) */
 const KEY_IS_DID = /\bDID\b[^.]*\b(rkey|record key)\b|\b(rkey|record key)\b[^.]*\bDID\b/i
 const DID = /^did:[a-z]+:\S+$/
+/** The key names the record: said by the lexicon (the key is a slug, a name…) */
+const KEY_NAMES = /\b(rkey|record[- ]key)\b[^.]*\b(slug|name|domain|identifier)\b/i
+/** A key that is a word, not a sequence (a TID, a number) or an account */
+const isWordKey = (rkey: string) =>
+	/[a-z]/i.test(rkey) && rkey !== 'self' && !TID.test(rkey) && !DID.test(rkey)
 
 const isString = (field?: Field) => field?.type === 'string'
 const isImage = (field?: Field) =>
@@ -125,6 +130,22 @@ export function describeType(
 			fields: []
 		})
 	}
+	// Named by its key, when it has no name of its own: a repo's slug, a lexicon's NSID
+	const key = lexicon?.defs.main?.key
+	const keyNames =
+		!title &&
+		!keyedByAccount &&
+		(lexicon
+			? key === 'nsid' || (key === 'any' && KEY_NAMES.test(said))
+			: samples.length > 0 && samples.every((sample) => isWordKey(sample.rkey)))
+	const naming = title ?? (keyNames ? '$key' : undefined)
+	if (keyNames) {
+		why.push({
+			about: 'title',
+			rule: lexicon ? (key === 'nsid' ? 'key-nsid' : 'key-names-described') : 'keys-are-words',
+			fields: []
+		})
+	}
 	/** A relation against an account (a block, a mute), not to it */
 	const against = AGAINST.test(nsid.split('.').pop() ?? '') || AGAINST.test(said)
 
@@ -139,7 +160,7 @@ export function describeType(
 		return {
 			nsid,
 			kind,
-			roles: {...roles, date},
+			roles: {...roles, title: roles.title ?? naming, date},
 			count,
 			points: {accounts, records},
 			source,
@@ -183,6 +204,7 @@ export function describeType(
 		return done('post', {text, title}, 'has-text', [text])
 	}
 	if (title) return done('list', {title, text, image}, 'has-title', [title])
+	if (naming) return done('thing', {title: naming}, 'named-by-key', ['$key'])
 	return done('thing', {}, 'nothing-telling', [])
 }
 

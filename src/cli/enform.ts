@@ -88,7 +88,8 @@ async function fromRepo(uri: string): Promise<Described> {
 export function gaps(type: TypeDescription): string[] {
 	const found: string[] = []
 	if (type.source === 'none') found.push('no lexicon and no records')
-	if (type.kind === 'thing') found.push('kind: nothing telling (no title, text, link, picture…)')
+	if (type.kind === 'thing' && !type.roles.title)
+		found.push('kind: nothing telling (no title, text, link, picture…)')
 	const {title, text, url, value, subject, image} = type.roles
 	if (type.kind !== 'thing' && !(title || text || url || value || subject || image)) {
 		found.push('nothing to show it by (no title, text, link or value)')

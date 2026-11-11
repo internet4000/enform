@@ -1,5 +1,6 @@
 <script lang="ts">
 	// A collection's records, a page at a time, newest first (listRecords' order)
+	import {describeRecord} from '#lib/describe/record'
 	import * as m from '#lib/paraglide/messages.js'
 	import app from '#lib/config/app.json' with {type: 'json'}
 	import type {Identity} from '#lib/atproto/identity'
@@ -7,7 +8,7 @@
 	import type {LexiconDoc} from '#lib/lexicons/types'
 	import {formatDate} from '#lib/dates'
 	import {actorName, recordPath} from '#lib/paths'
-	import {recordDate, recordSummary} from '#lib/records/summary'
+	import {recordDate} from '#lib/records/summary'
 	import RowSummary from './RowSummary.svelte'
 	import {page} from '$app/state'
 
@@ -50,7 +51,7 @@
 						href={recordPath(actor, collection, rkey)}
 						aria-current={page.params.rkey === rkey ? 'page' : undefined}
 					>
-						<RowSummary text={recordSummary(record.value, doc?.defs.main?.record) ?? rkey} />
+						<RowSummary text={describeRecord(record, doc).title ?? rkey} />
 						{#if date}<time datetime={date}>{formatDate(date)}</time>{/if}
 						{#if record.pending}
 							<enform-pending state={record.pending}>

@@ -101,6 +101,7 @@
 							href={appScreenPath(name, info.domain)}
 							label={m.apps_open_theirs()}
 							note={reasonOf(account.why)}
+							types={false}
 						/>
 						{#if shelf}
 							<TypeShelf

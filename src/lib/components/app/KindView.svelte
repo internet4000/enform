@@ -2,6 +2,7 @@
 	// What a record is, shown for its kind (from its lexicon), before its fields: a link's
 	// preview to open, a photo, a status, the person followed, the thing reacted to,
 	// an event's date, a post's text, someone's picture and name
+	import {describeRecord} from '#lib/describe/record'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
 	import {blobUrl, type RepoRecord} from '#lib/atproto/repo'
@@ -9,7 +10,6 @@
 	import {formatDate} from '#lib/dates'
 	import {isWebLink, linkDetails} from '#lib/links/details'
 	import {recordCard} from '#lib/records/card'
-	import {recordSummary} from '#lib/records/summary'
 	import {kindOf} from '#lib/records/kinds'
 	import {firstImage} from '#lib/records/links'
 	import IdentityChip from '../IdentityChip.svelte'
@@ -47,7 +47,7 @@
 	)
 	/** From its values: its first web link (a track's video), its title, its words */
 	let link = $derived(Object.values(value).find(isWebLink))
-	let title = $derived(recordSummary(value, lexicon?.defs.main?.record))
+	let title = $derived(describeRecord(record, lexicon).title)
 </script>
 
 {#snippet preview(url: string)}

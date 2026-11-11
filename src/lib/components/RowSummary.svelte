@@ -21,7 +21,7 @@
 		}
 		if (isValidDid(text)) {
 			return resolvePerson(text).then(
-				(person) => person.name ?? `@${person.identity.handle ?? text}`
+				(person) => person.name ?? (person.identity.handle ? `@${person.identity.handle}` : text)
 			)
 		}
 		return undefined

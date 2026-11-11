@@ -387,9 +387,10 @@
 	},
 	"org.tangled.repo.declaration": {
 		"kind": "thing",
-		"because": "nothing-telling",
+		"because": "named-by-key",
 		"count": "keyed",
 		"roles": {
+			"title": "$key",
 			"date": "createdAt"
 		},
 		"points": {
