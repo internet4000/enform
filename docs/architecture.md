@@ -58,7 +58,8 @@ tracks, someone's Tangled repos: the same, from the repo alone.
 The apps someone keeps at hand, by domain, and the profiles in them (someone's radio),
 by their DID and the app's domain, so a new handle keeps them: in their order, in the
 rail from 64rem and first on Home. Each account and local profile has its own pins, as
-who you act as decides them, and so has no one, signed out. Kept on this device
+who you act as decides them, and so has no one, signed out: the first account or
+profile used on a device takes those, as they were made trying things out. Kept on this device
 (`localStorage`, by DID), so pinning asks for no permission.
 Until something is pinned, the rail suggests the apps you have records in; it never
 decides for you. Keeping pins in your own repo, as records of an enform lexicon, would

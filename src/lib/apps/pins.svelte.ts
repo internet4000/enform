@@ -59,6 +59,11 @@ class Pins {
 		this.#save(movePin(this.keys, pinKey(pin), by))
 	}
 
+	/** The signed-out pins went to someone: read them again when signed out */
+	forgetSignedOut() {
+		this.#lists.delete('')
+	}
+
 	#save(keys: string[]) {
 		const owner = this.owner
 		this.#lists.set(owner ?? '', keys)
@@ -72,19 +77,23 @@ class Pins {
 }
 
 /**
- * This owner's pins. The one list kept before pins had owners goes to whoever is
- * acting first, as it was most likely theirs, then is removed.
+ * This owner's pins. An account or profile with none yet on this device takes the
+ * pins made before anyone was acting (signed out, or before pins had owners): they
+ * were most likely theirs, made while trying things out.
  */
 function load(owner: string | undefined): string[] {
 	try {
 		const key = pinsStorageKey(app.storage.pins, owner)
 		const stored = localStorage.getItem(key)
 		if (stored !== null) return parsePins(stored)
-		const before = localStorage.getItem(app.storage.pins)
-		if (before === null) return []
-		localStorage.setItem(key, before)
-		localStorage.removeItem(app.storage.pins)
-		return parsePins(before)
+		const from = [app.storage.pins, ...(owner ? [pinsStorageKey(app.storage.pins, undefined)] : [])]
+		const before = from.flatMap((old) => parsePins(localStorage.getItem(old)))
+		if (!before.length) return []
+		const keys = [...new Set(before)]
+		localStorage.setItem(key, JSON.stringify(keys))
+		for (const old of from) localStorage.removeItem(old)
+		if (owner) pins.forgetSignedOut()
+		return keys
 	} catch {
 		return []
 	}
