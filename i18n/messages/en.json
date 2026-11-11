@@ -240,6 +240,7 @@
 	"person_your_apps": "Your apps",
 	"person_add_app": "Add an app",
 	"person_all_data": "All data, as it's stored",
+	"app_overview": "Overview",
 	"app_tabs": "Sections",
 	"app_screen_empty": "Nothing in {app} here yet.",
 	"records_count_one": "1 record",

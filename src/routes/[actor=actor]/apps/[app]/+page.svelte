@@ -86,12 +86,15 @@
 	let toStart = $derived(startable.filter((type) => type !== app.profile))
 
 	let params = $derived(shownUrl().searchParams)
-	/** The profile, home of what it has, when there is one; else its first list */
-	let selected = $derived(
-		[...tabs, ...startable].find((type) => type.nsid === params.get('type')) ??
-			(app.profile?.record ? app.profile : undefined) ??
-			tabs.find((type) => !single(type)) ??
-			tabs[0]
+	/** The type at hand, from the URL; none on the app's home */
+	let selected = $derived([...tabs, ...startable].find((type) => type.nsid === params.get('type')))
+	/** Its home: what this profile has here, a shelf per type (no type chosen) */
+	let home = $derived(!selected && tabs.length > 0)
+	/** Its profile's banner, atop its home */
+	let banner = $derived(
+		app.profile?.record && !data.repo.local
+			? recordCard(app.profile.record.value, app.profile.lexicon?.defs.main?.record).banner
+			: undefined
 	)
 	let lexicon = $derived(
 		selected ? resolveLexicon(selected.nsid).catch(() => undefined) : undefined
@@ -116,6 +119,11 @@
 	{#if tabs.length}
 		<nav aria-label={m.app_tabs()}>
 			<ul>
+				<li>
+					<a href={appScreenPath(actor, app.app)} aria-current={home ? 'page' : undefined}
+						>{m.app_overview()}</a
+					>
+				</li>
 				{#each tabs as type (type.nsid)}
 					<li>
 						<a
@@ -143,7 +151,32 @@
 		</menu>
 	</header>
 
-	{#if !selected}
+	{#if home}
+		<!-- Its home: a shelf per type it has, its first records; what one can start -->
+		<enform-toolbar>{@render sections()}</enform-toolbar>
+		{#if banner}
+			<enform-person><img src={blobUrl(data.repo, banner)} alt="" /></enform-person>
+		{/if}
+		{#if owner && app.profile && !app.profile.record && app.profile.lexicon}
+			<p>
+				<a href={at(app.profile.nsid, {create: true})} role="button">
+					{m.app_create_profile({app: info.name})}
+				</a>
+			</p>
+		{/if}
+		{#each shelves as type (type.nsid)}
+			<TypeShelf
+				repo={data.repo}
+				{type}
+				all={at(type.nsid)}
+				href={(rkey) => at(type.nsid, {record: rkey})}
+				add={owner && type.lexicon ? at(type.nsid, {create: true}) : undefined}
+			/>
+		{/each}
+		{#if owner && toStart.length}
+			<AppActions types={toStart} href={start} title={m.actions_title({app: info.name})} />
+		{/if}
+	{:else if !selected}
 		<enform-toolbar>{@render sections()}</enform-toolbar>
 		{#if !owner}<p>{m.app_screen_empty({app: info.name})}</p>{/if}
 		<AppActions types={doable} href={start} title={m.actions_title({app: info.name})} />
@@ -154,13 +187,8 @@
 			<enform-toolbar>{@render sections()}</enform-toolbar>
 			<p><small>{m.collection_loading()}</small></p>
 		{:then record}
-			{@const card = recordCard(record.value, selected.lexicon?.defs.main?.record)}
 			{@const title = recordSummary(record.value, selected.lexicon?.defs.main?.record)}
 			<enform-toolbar>{@render sections()}</enform-toolbar>
-			<!-- Its name, picture and words are in the header: here, its banner -->
-			{#if card.banner && !data.repo.local}
-				<enform-person><img src={blobUrl(data.repo, card.banner)} alt="" /></enform-person>
-			{/if}
 			<!-- The record, as in its sheet: its actions and how to see it on one line; its
 			     fields first, as the header already shows it rendered -->
 			<RecordViews
@@ -206,21 +234,6 @@
 				<p>{m.collection_records_empty()}</p>
 			{/if}
 		{/await}
-		{#if selected === app.profile}
-			<!-- Home: what this profile has here, a shelf per type -->
-			{#each shelves as type (type.nsid)}
-				<TypeShelf
-					repo={data.repo}
-					{type}
-					all={at(type.nsid)}
-					href={(rkey) => at(type.nsid, {record: rkey})}
-					add={owner && type.lexicon ? at(type.nsid, {create: true}) : undefined}
-				/>
-			{/each}
-			{#if owner && toStart.length}
-				<AppActions types={toStart} href={start} title={m.actions_title({app: info.name})} />
-			{/if}
-		{/if}
 	{:else}
 		{@const type = selected}
 		{#await lexicon then doc}
@@ -252,7 +265,7 @@
 		{/if}
 	{/if}
 
-	{#if selected && !start}
+	{#if (selected || home) && !start}
 		<p><small>{m.actions_view_only({app: info.name})}</small></p>
 	{/if}
 </enform-app-screen>

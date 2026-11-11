@@ -39,6 +39,15 @@ test("a profile's home: its shelves, and pinning it", async ({page}, info) => {
 	await expect(shelf).toBeVisible()
 	await expect(shelf.getByRole('button', {name: t('reader_read_all')})).toBeVisible()
 	await expect(shelf.getByRole('button', {name: /^\+ /})).toBeVisible()
+	await expect(
+		page.getByRole('navigation', {name: t('app_tabs')}).getByRole('link', {name: t('app_overview')})
+	).toHaveAttribute('aria-current', 'page')
+
+	// Its profile's tab is the profile record alone, not the home again
+	await page.goto('/@bob.test/apps/enform.test?type=test.enform.profile')
+	await expect(page.locator('enform-record-bar')).toBeVisible()
+	await expect(page.locator('enform-type-shelf')).toHaveCount(0)
+	await page.goto('/@bob.test/apps/enform.test')
 
 	// Pinned, apart from the app
 	await page.getByRole('button', {name: /^Pin @bob\.test on /}).click()

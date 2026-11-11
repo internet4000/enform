@@ -48,9 +48,10 @@ its lexicon say what it can do.
 
 What a profile has in an app is written nowhere: a radio's tracks don't point at the
 radio. They are in the same repo, in the same app's namespace, and that is the link.
-So an app's screen opens on the profile (its one-record type, a `literal:` key), and
-under it a shelf for each of the app's other types the repo has: how many, its first
-records, read or play them all, add one when it's yours. Bluesky's posts, a radio's
+So an app's screen opens on its overview, under the profile's header (its one-record
+type, a `literal:` key): a shelf for each of the app's other types the repo has: how
+many, its first records, read or play them all, add one when it's yours. Each type
+is also a tab: the profile's shows its record alone, a list's all its records. Bluesky's posts, a radio's
 tracks, someone's Tangled repos: the same, from the repo alone.
 
 ## Pins
