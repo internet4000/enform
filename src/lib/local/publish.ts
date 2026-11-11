@@ -9,15 +9,23 @@ import {createBatch} from '#lib/atproto/write'
 import {lexiconClosure, validateRecord} from '#lib/forms/validate'
 import {allRecords} from './store'
 
-export type Published = {created: number; skipped: string[]; invalid: string[]}
+/** What was published; already there; not valid; kept here (example apps' records) */
+import {isExample} from '#lib/lexicons/examples/index'
+export type Published = {created: number; skipped: string[]; invalid: string[]; kept: string[]}
 
 export async function publishProfile(profile: string, account: Identity): Promise<Published> {
 	const records = await allRecords(profile)
 	const skipped: string[] = []
 	const invalid: string[] = []
+	const kept: string[] = []
 	const ready = []
 	for (const record of records) {
 		const name = `${record.collection}/${record.rkey}`
+		// An example app's: no one can resolve its type, so it stays on this device
+		if (isExample(record.collection)) {
+			kept.push(name)
+			continue
+		}
 		const docs = await lexiconClosure(record.collection).catch(() => [])
 		if (!docs.length || !validateRecord(docs, record.collection, record.value).success) {
 			invalid.push(name)
@@ -31,5 +39,5 @@ export async function publishProfile(profile: string, account: Identity): Promis
 		else ready.push({collection: record.collection, rkey: record.rkey, value: record.value})
 	}
 	if (ready.length) await createBatch(ready)
-	return {created: ready.length, skipped, invalid}
+	return {created: ready.length, skipped, invalid, kept}
 }

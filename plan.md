@@ -13,7 +13,8 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
    (22 published lexicons, 5 types known by their records) in
    `corpus/descriptions.json`. It follows refs to a lexicon's other definitions, reads
    records keyed by the account they point at, tells blocks from follows and articles
-   from lists. Then
+   from lists. Example apps (docs/examples.md) and the CLI (docs/cli.md) test it, from
+   types alone. Then
    `describeApp` (consolidating apps/apps, related, person, quick) and
    `describeRecord` (card, summary, actions).
 2. **Addresses and views apart from their shell**: one address module for every link;
@@ -60,6 +61,14 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
     then builds for it on its own. Then remove `wrangler.jsonc` and `bun run deploy`.
 12. **End-to-end suite in CI**: the local atproto network on Node, Playwright's
     Chromium, before publishing.
+
+## Found by the example apps
+
+- **Publishing a local profile with references**: its records point at each other by
+  `at://name.local/…` and their CIDs; once published, those should name the account
+  (`at://did…/…`), in an order that keeps the CIDs right.
+- **Pictures on this device**: local profiles hold no files yet, so an example app's
+  picture (radio.example's) can't be added on a device.
 
 ## Waiting on the owner
 

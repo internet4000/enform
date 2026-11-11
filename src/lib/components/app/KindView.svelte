@@ -74,6 +74,7 @@
 		{#if title && title !== link}<h3>{title}</h3>{/if}
 		{#if card.text && card.text !== title}<p>{card.text}</p>{/if}
 		{#if link}{@render preview(link)}{/if}
+		{#if !title && !card.text && !link}<small>{m.kind_empty()}</small>{/if}
 	{:else if shape.kind === 'link' && isWebLink(url)}
 		{@render preview(url)}
 	{:else if shape.kind === 'photo' && image && !repo.local}

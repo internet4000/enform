@@ -1,0 +1,26 @@
+{
+	"lexicon": 1,
+	"id": "example.note.entry",
+	"description": "A note: a few lines of text.",
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["text", "createdAt"],
+				"properties": {
+					"text": {
+						"type": "string",
+						"maxGraphemes": 1000,
+						"description": "What the note says"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	}
+}

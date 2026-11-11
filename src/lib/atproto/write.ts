@@ -6,7 +6,10 @@
 import type {OAuthSession} from '@atproto/oauth-client-browser'
 import {AtUri} from '@atproto/syntax'
 import {auth} from '#lib/auth/session.svelte'
+import {localIdentity} from './identity'
+import * as m from '#lib/paraglide/messages.js'
 import * as local from '#lib/local/store'
+import {isExample} from '#lib/lexicons/examples/index'
 import {TID} from '@atproto/common-web'
 import {
 	enqueue,
@@ -62,11 +65,18 @@ async function sendOrKeep(
 }
 
 const fromLocal = (record: local.LocalRecord): WriteResult => ({
-	uri: '',
+	uri: auth.local
+		? `at://${localIdentity(auth.local).handle}/${record.collection}/${record.rkey}`
+		: '',
 	cid: record.version,
 	collection: record.collection,
 	rkey: record.rkey
 })
+
+/** An example app's records stay on this device: no one can resolve their type */
+function onDeviceOnly(collection: string) {
+	if (isExample(collection)) throw new Error(m.example_on_device())
+}
 
 export async function createRecord(
 	collection: string,
@@ -75,6 +85,7 @@ export async function createRecord(
 ) {
 	if (auth.local)
 		return fromLocal(await local.createRecord(auth.local.id, collection, record, rkey))
+	onDeviceOnly(collection)
 	const session = await auth.authorizeRepo(collection, 'create')
 	// Its key is chosen here (a TID, unless the lexicon fixes it), so it can wait offline
 	const key = rkey ?? TID.nextStr()
@@ -100,6 +111,7 @@ export async function putRecord(
 	if (auth.local) {
 		return fromLocal(await local.putRecord(auth.local.id, collection, rkey, record, swapRecord))
 	}
+	onDeviceOnly(collection)
 	const session = await auth.authorizeRepo(collection, 'update')
 	const write = {op: 'update' as const, collection, rkey, value: record, swap: swapRecord}
 	// A record with writes still waiting gets this one after them

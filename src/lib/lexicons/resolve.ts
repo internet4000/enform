@@ -11,6 +11,7 @@ import {NSID} from '@atproto/syntax'
 import {txtDids} from '#lib/atproto/dns'
 import {didDocument, pdsEndpoint} from '#lib/atproto/did'
 import {xrpcGet} from '#lib/atproto/xrpc'
+import {exampleLexicon, isExample} from './examples/index'
 import type {LexiconDoc} from './types'
 
 export const SCHEMA_COLLECTION = 'com.atproto.lexicon.schema'
@@ -22,6 +23,12 @@ export class LexiconNotFound extends Error {
 }
 
 async function fetchLexicon(nsid: string): Promise<LexiconDoc> {
+	// An example app's: bundled, as no one can publish under `example`
+	if (isExample(nsid)) {
+		const doc = exampleLexicon(nsid)
+		if (!doc) throw new LexiconNotFound(nsid)
+		return doc
+	}
 	const {authority} = NSID.parse(nsid)
 	const [did] = await txtDids(`_lexicon.${authority}`)
 	if (!did) throw new LexiconNotFound(nsid)

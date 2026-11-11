@@ -132,6 +132,9 @@ export function describeType(
 	const count = countOf(lexicon, samples, why)
 
 	const done = (kind: RecordKind, roles: Roles, rule: string, read: string[]) => {
+		// The roles only a kind gives: what it is about, its one value
+		if (roles.subject) why.push({about: 'subject', rule, fields: [roles.subject]})
+		if (roles.value) why.push({about: 'value', rule, fields: [roles.value]})
 		why.unshift({about: 'kind', rule, fields: read})
 		return {
 			nsid,
@@ -201,6 +204,11 @@ function countOf(
 	}
 	if (samples.every((sample) => TID.test(sample.rkey))) {
 		why.push({about: 'count', rule: 'records-keyed-tid', fields: []})
+		return 'many'
+	}
+	// Numbers (a timestamp, a counter): one after another, as TIDs are
+	if (samples.every((sample) => /^\d+$/.test(sample.rkey))) {
+		why.push({about: 'count', rule: 'records-keyed-numbers', fields: []})
 		return 'many'
 	}
 	why.push({about: 'count', rule: 'records-keyed-other', fields: []})

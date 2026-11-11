@@ -1,0 +1,37 @@
+{
+	"lexicon": 1,
+	"id": "example.event.event",
+	"description": "An event: what, when, and what it is about.",
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["name", "startsAt", "createdAt"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"maxGraphemes": 200
+					},
+					"description": {
+						"type": "string",
+						"maxGraphemes": 2000
+					},
+					"startsAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"endsAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	}
+}

@@ -8,6 +8,7 @@ import {txtDids} from '#lib/atproto/dns'
 import {didDocument, pdsEndpoint} from '#lib/atproto/did'
 import {xrpcGet} from '#lib/atproto/xrpc'
 import {primeLexicons, SCHEMA_COLLECTION} from './resolve'
+import {exampleTypes, isExample} from './examples/index'
 import type {LexiconDoc} from './types'
 
 const PAGE = 100
@@ -44,6 +45,7 @@ export function schemasOf(did: string): Promise<LexiconDoc[]> {
 
 /** The record lexicons published alongside `seed` (an NSID of the app), in its namespace */
 export async function recordTypes(seed: string, namespace: string): Promise<LexiconDoc[]> {
+	if (isExample(seed)) return exampleTypes(namespace)
 	const [did] = await txtDids(`_lexicon.${NSID.parse(seed).authority}`).catch(() => [])
 	if (!did) return []
 	return (await schemasOf(did).catch(() => [])).filter(

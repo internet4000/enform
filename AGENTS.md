@@ -24,7 +24,8 @@ Follows https://hwww.gitlab.io/savoir/agents.md (local: ~/src/hwww/savoir). Exce
 Read docs/principles.md (atproto rules, writing and permissions), docs/architecture.md
 (data → capabilities → kinds → presenters → descriptions), docs/local-first.md,
 docs/self-host.md (any host, any folder: no instance of ours to trust) and
-docs/embed.md (<enform-embed>, a profile's home in an app on any page).
+docs/embed.md (<enform-embed>, a profile's home in an app on any page), docs/examples.md
+(apps made from their types alone) and docs/cli.md (the engine in a terminal).
 Larger work in plan.md.
 
 ## Commands
@@ -32,6 +33,7 @@ Larger work in plan.md.
     bun run dev        # http://127.0.0.1:5173
     bun run verify     # formatting, types, unit tests, build: before every commit
     bun run test:e2e   # local atproto network, Playwright, the UI quality gate
+    bun run enform     # the description engine: describe, check (docs/cli.md)
     git push           # main: GitHub Pages builds and publishes (docs/self-host.md)
     bun run deploy     # Cloudflare, serving enform.internet4000.com until its DNS moves
 

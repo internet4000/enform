@@ -1,0 +1,30 @@
+{
+	"lexicon": 1,
+	"id": "example.event.rsvp",
+	"description": "Answering an event: going, or interested.",
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["subject", "status", "createdAt"],
+				"properties": {
+					"subject": {
+						"type": "ref",
+						"ref": "com.atproto.repo.strongRef",
+						"description": "The event"
+					},
+					"status": {
+						"type": "string",
+						"knownValues": ["going", "interested", "notgoing"]
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	}
+}

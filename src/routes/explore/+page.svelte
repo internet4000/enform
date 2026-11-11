@@ -10,6 +10,8 @@
 	import AppCard from '#lib/components/AppCard.svelte'
 	import DiscoveredApps from '#lib/components/DiscoveredApps.svelte'
 	import {matchesWords} from '#lib/records/filters'
+	import {appInfo} from '#lib/apps/directory'
+	import {exampleNamespaces, exampleTypes} from '#lib/lexicons/examples/index'
 	import {actorName, repoPath, searchResultsPath} from '#lib/paths'
 
 	const all = directoryApps()
@@ -56,5 +58,16 @@
 	<section aria-labelledby="discover">
 		<h2 id="discover">{m.discover_title()}</h2>
 		<DiscoveredApps />
+	</section>
+
+	<!-- Apps made from their types alone, to try on this device (docs/examples.md) -->
+	<section aria-labelledby="examples">
+		<h2 id="examples">{m.examples_title()}</h2>
+		<p>{m.examples_intro()}</p>
+		<enform-app-cards>
+			{#each exampleNamespaces as namespace (namespace)}
+				<AppCard app={appInfo(namespace)} count={exampleTypes(namespace).length} />
+			{/each}
+		</enform-app-cards>
 	</section>
 </enform-page>

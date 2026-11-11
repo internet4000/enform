@@ -437,5 +437,10 @@
 	"embed_failed": "Couldn't read {actor}'s records.",
 	"embed_all_apps": "All apps",
 	"embed_apps": "Their apps",
-	"embed_intro_all": "Show {actor} and their apps on any web page: paste this where it should appear. Their apps show as icons, each opening in place, read from their own server in the visitor's browser."
+	"embed_intro_all": "Show {actor} and their apps on any web page: paste this where it should appear. Their apps show as icons, each opening in place, read from their own server in the visitor's browser.",
+	"example_on_device": "Example apps keep their records on this device: start on this device to try them.",
+	"local_published_kept": "Kept on this device (example apps): {records}.",
+	"examples_title": "Example apps",
+	"examples_intro": "Apps made from their types alone: enform comes with their lexicons, and generates everything else. Try them on this device, or see what enform makes of a type.",
+	"kind_empty": "Nothing in it yet: its fields show what it holds."
 }

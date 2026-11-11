@@ -1,0 +1,30 @@
+{
+	"lexicon": 1,
+	"id": "example.blog.post",
+	"description": "An article: a title, and its text, as long as it takes.",
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["title", "content", "createdAt"],
+				"properties": {
+					"title": {
+						"type": "string",
+						"maxGraphemes": 300
+					},
+					"content": {
+						"type": "string",
+						"maxLength": 100000,
+						"description": "The article, in plain text or Markdown"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	}
+}

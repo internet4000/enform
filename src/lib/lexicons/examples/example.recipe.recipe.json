@@ -1,0 +1,45 @@
+{
+	"lexicon": 1,
+	"id": "example.recipe.recipe",
+	"description": "A recipe: its name, what it takes, and how to make it.",
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["title", "createdAt"],
+				"properties": {
+					"title": {
+						"type": "string",
+						"maxGraphemes": 200
+					},
+					"description": {
+						"type": "string",
+						"maxGraphemes": 1000
+					},
+					"ingredients": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"maxGraphemes": 200
+						},
+						"maxLength": 50
+					},
+					"steps": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"maxGraphemes": 1000
+						},
+						"maxLength": 50
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	}
+}

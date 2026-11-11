@@ -179,6 +179,145 @@
 		},
 		"source": "lexicon"
 	},
+	"example.blog.post": {
+		"kind": "post",
+		"because": "title-long-text",
+		"count": "many",
+		"roles": {
+			"text": "content",
+			"title": "title",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"example.bookmark.link": {
+		"kind": "link",
+		"because": "has-link",
+		"count": "many",
+		"roles": {
+			"url": "url",
+			"title": "title",
+			"text": "description",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"example.event.event": {
+		"kind": "event",
+		"because": "has-start",
+		"count": "many",
+		"roles": {
+			"title": "name",
+			"text": "description",
+			"start": "startsAt",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"example.event.rsvp": {
+		"kind": "reaction",
+		"because": "subject-record",
+		"count": "many",
+		"roles": {
+			"subject": "subject",
+			"date": "createdAt"
+		},
+		"points": {
+			"records": [
+				"subject"
+			]
+		},
+		"source": "lexicon"
+	},
+	"example.note.entry": {
+		"kind": "post",
+		"because": "has-text",
+		"count": "many",
+		"roles": {
+			"text": "text",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"example.note.profile": {
+		"kind": "profile",
+		"because": "one-per-account-named",
+		"count": "one",
+		"roles": {
+			"title": "displayName",
+			"text": "description"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"example.radio.follow": {
+		"kind": "follow",
+		"because": "subject-account",
+		"count": "many",
+		"roles": {
+			"subject": "subject",
+			"date": "createdAt"
+		},
+		"points": {
+			"accounts": [
+				"subject"
+			]
+		},
+		"source": "lexicon"
+	},
+	"example.radio.profile": {
+		"kind": "profile",
+		"because": "one-per-account-named",
+		"count": "one",
+		"roles": {
+			"title": "name",
+			"text": "description",
+			"image": "image",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"example.radio.track": {
+		"kind": "link",
+		"because": "has-link",
+		"count": "many",
+		"roles": {
+			"url": "url",
+			"title": "title",
+			"text": "description",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"example.recipe.recipe": {
+		"kind": "list",
+		"because": "has-title",
+		"count": "many",
+		"roles": {
+			"title": "title",
+			"text": "description",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"example.status.status": {
+		"kind": "status",
+		"because": "one-short-value",
+		"count": "many",
+		"roles": {
+			"value": "status",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
 	"fyi.unravel.frontpage.post": {
 		"kind": "link",
 		"because": "has-link",

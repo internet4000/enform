@@ -12,6 +12,7 @@
 	import {byDirectory, directoryTypes, typeLabel} from '#lib/apps/directory'
 	import type {RepoApp} from '#lib/apps/types'
 	import {startType} from '#lib/apps/start'
+	import {isExample} from '#lib/lexicons/examples/index'
 	import SignIn from '#lib/components/SignIn.svelte'
 	import StartChoice from '#lib/components/StartChoice.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
@@ -132,7 +133,15 @@
 		{#if !mine}
 			<section aria-labelledby="start">
 				<h2 id="start">{auth.me ? m.apps_your_place() : m.start_title()}</h2>
-				{#if !auth.me}
+				{#if start && isExample(start) && !auth.local}
+					<!-- An example app's records stay on this device: signed in or not -->
+					<p>{m.example_on_device()}</p>
+					<p>
+						<button type="button" onclick={() => tryLocally(start)}>
+							{m.start_device_button()}
+						</button>
+					</p>
+				{:else if !auth.me}
 					{#if auth.ready}
 						{#if start}
 							<StartChoice start={() => tryLocally(start)} />

@@ -1,0 +1,43 @@
+{
+	"lexicon": 1,
+	"id": "example.bookmark.link",
+	"description": "A link kept to read or share later.",
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["url", "createdAt"],
+				"properties": {
+					"url": {
+						"type": "string",
+						"format": "uri",
+						"description": "The page"
+					},
+					"title": {
+						"type": "string",
+						"maxGraphemes": 200
+					},
+					"description": {
+						"type": "string",
+						"maxGraphemes": 1000,
+						"description": "Why it is worth keeping"
+					},
+					"tags": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"maxGraphemes": 64
+						},
+						"maxLength": 10
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	}
+}

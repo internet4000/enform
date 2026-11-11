@@ -107,6 +107,9 @@
 							{#if published.result.invalid.length}
 								{m.local_published_invalid({records: published.result.invalid.join(', ')})}
 							{/if}
+							{#if published.result.kept.length}
+								{m.local_published_kept({records: published.result.kept.join(', ')})}
+							{/if}
 						</p>
 					{/if}
 				</li>

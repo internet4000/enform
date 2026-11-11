@@ -1,0 +1,34 @@
+{
+	"lexicon": 1,
+	"id": "example.radio.track",
+	"description": "A track on a radio: a link to the music, and its title.",
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["url", "title", "createdAt"],
+				"properties": {
+					"url": {
+						"type": "string",
+						"format": "uri",
+						"description": "Where it plays (YouTube, SoundCloud, Vimeo…)"
+					},
+					"title": {
+						"type": "string",
+						"maxGraphemes": 200
+					},
+					"description": {
+						"type": "string",
+						"maxGraphemes": 500
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	}
+}
