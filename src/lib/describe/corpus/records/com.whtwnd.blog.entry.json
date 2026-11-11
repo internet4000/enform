@@ -1,0 +1,13 @@
+[
+	{
+		"rkey": "3lb2xgzv5tc2a",
+		"value": {
+			"$type": "com.whtwnd.blog.entry",
+			"title": "Notes on a long walk",
+			"content": "# Notes\n\nA long post, in Markdown.",
+			"createdAt": "2025-03-01T09:00:00.000Z",
+			"visibility": "public",
+			"theme": "github-light"
+		}
+	}
+]

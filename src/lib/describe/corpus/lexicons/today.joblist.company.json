@@ -1,0 +1,152 @@
+{
+	"id": "today.joblist.company",
+	"defs": {
+		"main": {
+			"key": "any",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["name", "createdAt"],
+				"properties": {
+					"url": {
+						"type": "string",
+						"format": "uri",
+						"description": "The organization's website."
+					},
+					"kind": {
+						"type": "string",
+						"maxLength": 64,
+						"description": "What sort of organization it is: a company, a cooperative, a nonprofit, a collective, a project, a public body. Apps show others as unknown.",
+						"knownValues": [
+							"company",
+							"cooperative",
+							"nonprofit",
+							"collective",
+							"project",
+							"public"
+						]
+					},
+					"name": {
+						"type": "string",
+						"maxLength": 1000,
+						"maxGraphemes": 100
+					},
+					"tags": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"maxLength": 640,
+							"maxGraphemes": 64
+						},
+						"maxLength": 20
+					},
+					"links": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "uri"
+						},
+						"maxLength": 20,
+						"description": "Other public pages of the organization (social profiles, wikipedia, etc.)."
+					},
+					"jobBoard": {
+						"ref": "#jobBoard",
+						"type": "ref"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "When this author first described the organization."
+					},
+					"locations": {
+						"type": "array",
+						"items": {
+							"ref": "#location",
+							"type": "ref"
+						},
+						"maxLength": 50
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "When this author last saved this version. The most recently edited version is the one shown, unless the organization publishes its own."
+					},
+					"description": {
+						"type": "string",
+						"maxLength": 30000,
+						"maxGraphemes": 3000
+					}
+				}
+			}
+		},
+		"jobBoard": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string",
+					"maxLength": 256,
+					"description": "The organization's identifier at the provider."
+				},
+				"url": {
+					"type": "string",
+					"format": "uri",
+					"description": "Careers page, when there is no supported provider."
+				},
+				"provider": {
+					"type": "string",
+					"maxLength": 64,
+					"knownValues": [
+						"ashby",
+						"greenhouse",
+						"lever",
+						"personio",
+						"recruitee",
+						"rippling",
+						"smartrecruiters",
+						"workable"
+					]
+				}
+			},
+			"description": "Where the organization publishes its jobs."
+		},
+		"location": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string",
+					"maxLength": 1000,
+					"description": "City or place name.",
+					"maxGraphemes": 100
+				},
+				"address": {
+					"type": "string",
+					"maxLength": 2000,
+					"maxGraphemes": 200
+				},
+				"country": {
+					"type": "string",
+					"maxLength": 1000,
+					"maxGraphemes": 100
+				},
+				"latitude": {
+					"type": "string",
+					"maxLength": 32,
+					"description": "Decimal degrees, as a string."
+				},
+				"longitude": {
+					"type": "string",
+					"maxLength": 32,
+					"description": "Decimal degrees, as a string."
+				},
+				"countryCode": {
+					"type": "string",
+					"maxLength": 2,
+					"minLength": 2,
+					"description": "ISO 3166-1 alpha-2 code of the country (e.g. 'DE'), alongside its name."
+				}
+			}
+		}
+	},
+	"lexicon": 1,
+	"description": "A company or organization, described by anyone, like a wiki page: each author's record is one version. The record key is the organization's domain, normalised: the website's host name, lowercase, without 'www.' (e.g. 'example.org' for https://www.Example.org/jobs), at most 253 characters (a DNS name). When the author's handle equals that domain, the record is the organization's own."
+}

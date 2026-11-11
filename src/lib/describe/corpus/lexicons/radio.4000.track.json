@@ -1,0 +1,60 @@
+{
+	"id": "radio.4000.track",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["url", "title", "createdAt"],
+				"properties": {
+					"url": {
+						"type": "string",
+						"format": "uri",
+						"maxLength": 2048
+					},
+					"links": {
+						"type": "array",
+						"items": {
+							"ref": "radio.4000.defs#link",
+							"type": "ref"
+						},
+						"maxLength": 10,
+						"description": "Links about the track elsewhere: Discogs, Bandcamp, the artist's site…"
+					},
+					"title": {
+						"type": "string",
+						"maxLength": 3000,
+						"maxGraphemes": 300
+					},
+					"duration": {
+						"type": "integer",
+						"minimum": 0,
+						"description": "Media duration in seconds, when known."
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"description": {
+						"type": "string",
+						"maxLength": 30000,
+						"description": "Free text. #tags and @mentions are parsed from it.",
+						"maxGraphemes": 3000
+					},
+					"playbackError": {
+						"type": "string",
+						"maxLength": 1000,
+						"description": "Set by the radio's owner when the media could not be played, as provider:code, e.g. youtube:150 for a video that can't be embedded."
+					}
+				}
+			},
+			"description": "A media reference curated into a radio: a URL with a title, a description and #tags."
+		}
+	},
+	"lexicon": 1
+}

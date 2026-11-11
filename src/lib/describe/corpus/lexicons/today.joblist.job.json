@@ -1,0 +1,141 @@
+{
+	"id": "today.joblist.job",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["title", "company", "url", "createdAt", "expiresAt"],
+				"properties": {
+					"url": {
+						"type": "string",
+						"format": "uri",
+						"description": "Where to read the offer: its page on the company's site or job board, or its joblist page. May equal the application link."
+					},
+					"apply": {
+						"ref": "#apply",
+						"type": "ref"
+					},
+					"langs": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "language"
+						},
+						"maxLength": 3,
+						"description": "Languages the offer is written in (BCP-47 tags)."
+					},
+					"title": {
+						"type": "string",
+						"maxLength": 2000,
+						"maxGraphemes": 200
+					},
+					"remote": {
+						"type": "string",
+						"knownValues": ["onsite", "hybrid", "remote"]
+					},
+					"salary": {
+						"ref": "#salary",
+						"type": "ref"
+					},
+					"status": {
+						"type": "string",
+						"maxLength": 32,
+						"description": "Whether the offer still takes applications. Missing means open; a filled or closed offer is no longer shown.",
+						"knownValues": ["open", "filled", "closed"]
+					},
+					"company": {
+						"type": "string",
+						"maxLength": 253,
+						"description": "Company record key: its domain, lowercase, without 'www.' (see today.joblist.company)."
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"expiresAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "After this date the offer is no longer shown."
+					},
+					"locations": {
+						"type": "array",
+						"items": {
+							"ref": "today.joblist.company#location",
+							"type": "ref"
+						},
+						"maxLength": 20
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "When the poster last edited the offer."
+					},
+					"employment": {
+						"type": "string",
+						"knownValues": ["full-time", "part-time", "contract", "internship", "volunteer"]
+					},
+					"description": {
+						"type": "string",
+						"maxLength": 100000,
+						"maxGraphemes": 10000
+					},
+					"applicantLocations": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"maxLength": 2,
+							"minLength": 2
+						},
+						"maxLength": 50,
+						"description": "Countries applicants can work from (ISO 3166-1 alpha-2 codes, e.g. 'DE'), for remote offers."
+					}
+				}
+			}
+		},
+		"apply": {
+			"type": "object",
+			"properties": {
+				"url": {
+					"type": "string",
+					"format": "uri",
+					"description": "An application form (https://…) or an email address (mailto:…)."
+				},
+				"bluesky": {
+					"type": "boolean",
+					"description": "Apply by sending a direct message to the poster's account on Bluesky."
+				}
+			},
+			"description": "How to apply. Applications go straight to the poster: joblist never receives them."
+		},
+		"salary": {
+			"type": "object",
+			"required": ["currency", "period"],
+			"properties": {
+				"max": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"min": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"period": {
+					"type": "string",
+					"maxLength": 16,
+					"knownValues": ["year", "month", "week", "day", "hour"]
+				},
+				"currency": {
+					"type": "string",
+					"maxLength": 3,
+					"minLength": 3,
+					"description": "ISO 4217 code, e.g. 'EUR'."
+				}
+			},
+			"description": "What the job pays, in whole units of the currency (not cents). At least one of min and max."
+		}
+	},
+	"lexicon": 1,
+	"description": "A job offer, posted by anyone. When the author's handle equals the company key (its domain), it is the company's own offer. Offers expire; renew to extend. Applications never go through joblist: `apply` says where to send them."
+}

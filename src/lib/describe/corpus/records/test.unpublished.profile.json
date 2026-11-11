@@ -1,0 +1,16 @@
+[
+	{
+		"rkey": "self",
+		"value": {
+			"$type": "test.unpublished.profile",
+			"displayName": "Someone",
+			"description": "Who they are, in a few words",
+			"avatar": {
+				"$type": "blob",
+				"ref": {"$link": "bafkreiaaaa"},
+				"mimeType": "image/jpeg",
+				"size": 1000
+			}
+		}
+	}
+]

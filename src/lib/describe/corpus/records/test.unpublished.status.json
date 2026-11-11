@@ -1,0 +1,18 @@
+[
+	{
+		"rkey": "3lc4rjx6q2s2b",
+		"value": {
+			"$type": "test.unpublished.status",
+			"status": "🌱",
+			"createdAt": "2025-05-01T08:00:00.000Z"
+		}
+	},
+	{
+		"rkey": "3lc4rjx6q2s2c",
+		"value": {
+			"$type": "test.unpublished.status",
+			"status": "🎧",
+			"createdAt": "2025-05-02T08:00:00.000Z"
+		}
+	}
+]

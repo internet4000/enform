@@ -1,0 +1,362 @@
+{
+	"app.bsky.actor.profile": {
+		"kind": "profile",
+		"because": "one-per-account-named",
+		"count": "one",
+		"roles": {
+			"title": "displayName",
+			"text": "description",
+			"image": "avatar",
+			"date": "createdAt"
+		},
+		"points": {
+			"records": [
+				"pinnedPost",
+				"joinedViaStarterPack"
+			]
+		},
+		"source": "lexicon"
+	},
+	"app.bsky.feed.generator": {
+		"kind": "list",
+		"because": "has-title",
+		"count": "keyed",
+		"roles": {
+			"title": "displayName",
+			"text": "description",
+			"image": "avatar",
+			"date": "createdAt"
+		},
+		"points": {
+			"accounts": [
+				"did"
+			]
+		},
+		"source": "lexicon"
+	},
+	"app.bsky.feed.like": {
+		"kind": "reaction",
+		"because": "subject-record",
+		"count": "many",
+		"roles": {
+			"subject": "subject",
+			"date": "createdAt"
+		},
+		"points": {
+			"records": [
+				"via",
+				"subject"
+			]
+		},
+		"source": "lexicon"
+	},
+	"app.bsky.feed.post": {
+		"kind": "post",
+		"because": "has-text",
+		"count": "many",
+		"roles": {
+			"text": "text",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"app.bsky.feed.repost": {
+		"kind": "reaction",
+		"because": "subject-record",
+		"count": "many",
+		"roles": {
+			"subject": "subject",
+			"date": "createdAt"
+		},
+		"points": {
+			"records": [
+				"via",
+				"subject"
+			]
+		},
+		"source": "lexicon"
+	},
+	"app.bsky.graph.block": {
+		"kind": "follow",
+		"because": "subject-account",
+		"count": "many",
+		"roles": {
+			"subject": "subject",
+			"date": "createdAt"
+		},
+		"points": {
+			"accounts": [
+				"subject"
+			]
+		},
+		"source": "lexicon"
+	},
+	"app.bsky.graph.follow": {
+		"kind": "follow",
+		"because": "subject-account",
+		"count": "many",
+		"roles": {
+			"subject": "subject",
+			"date": "createdAt"
+		},
+		"points": {
+			"accounts": [
+				"subject"
+			],
+			"records": [
+				"via"
+			]
+		},
+		"source": "lexicon"
+	},
+	"app.bsky.graph.list": {
+		"kind": "list",
+		"because": "has-title",
+		"count": "many",
+		"roles": {
+			"title": "name",
+			"text": "description",
+			"image": "avatar",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"com.radio4000.track": {
+		"kind": "link",
+		"because": "has-link",
+		"count": "many",
+		"roles": {
+			"url": "url",
+			"title": "title",
+			"text": "description",
+			"date": "created_at"
+		},
+		"points": {},
+		"source": "records"
+	},
+	"com.whtwnd.blog.entry": {
+		"kind": "list",
+		"because": "has-title",
+		"count": "many",
+		"roles": {
+			"title": "title",
+			"text": "content",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "records"
+	},
+	"community.lexicon.calendar.event": {
+		"kind": "event",
+		"because": "has-start",
+		"count": "many",
+		"roles": {
+			"title": "name",
+			"text": "description",
+			"start": "startsAt",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"community.lexicon.calendar.rsvp": {
+		"kind": "reaction",
+		"because": "subject-record",
+		"count": "many",
+		"roles": {
+			"subject": "subject"
+		},
+		"points": {
+			"records": [
+				"subject"
+			]
+		},
+		"source": "lexicon"
+	},
+	"fyi.unravel.frontpage.post": {
+		"kind": "link",
+		"because": "has-link",
+		"count": "many",
+		"roles": {
+			"url": "url",
+			"title": "title",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "records"
+	},
+	"org.tangled.actor.profile": {
+		"kind": "profile",
+		"because": "one-per-account-named",
+		"count": "one",
+		"roles": {
+			"text": "description",
+			"image": "avatar"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"org.tangled.feed.star": {
+		"kind": "thing",
+		"because": "nothing-telling",
+		"count": "many",
+		"roles": {
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"org.tangled.graph.follow": {
+		"kind": "thing",
+		"because": "nothing-telling",
+		"count": "keyed",
+		"roles": {
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"org.tangled.key.sshKey": {
+		"kind": "list",
+		"because": "has-title",
+		"count": "many",
+		"roles": {
+			"title": "name",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"org.tangled.repo.declaration": {
+		"kind": "thing",
+		"because": "nothing-telling",
+		"count": "keyed",
+		"roles": {
+			"date": "createdAt"
+		},
+		"points": {
+			"accounts": [
+				"repo"
+			]
+		},
+		"source": "lexicon"
+	},
+	"org.tangled.repo.manifest": {
+		"kind": "profile",
+		"because": "one-per-account-named",
+		"count": "one",
+		"roles": {
+			"text": "description",
+			"date": "createdAt"
+		},
+		"points": {
+			"accounts": [
+				"spindle"
+			]
+		},
+		"source": "lexicon"
+	},
+	"radio.4000.follow": {
+		"kind": "follow",
+		"because": "subject-account",
+		"count": "keyed",
+		"roles": {
+			"subject": "subject",
+			"date": "createdAt"
+		},
+		"points": {
+			"accounts": [
+				"subject"
+			]
+		},
+		"source": "lexicon"
+	},
+	"radio.4000.profile": {
+		"kind": "profile",
+		"because": "one-per-account-named",
+		"count": "one",
+		"roles": {
+			"title": "name",
+			"text": "description",
+			"image": "image",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"radio.4000.track": {
+		"kind": "link",
+		"because": "has-link",
+		"count": "many",
+		"roles": {
+			"url": "url",
+			"title": "title",
+			"text": "description",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"test.unpublished.profile": {
+		"kind": "profile",
+		"because": "one-per-account-named",
+		"count": "one",
+		"roles": {
+			"title": "displayName",
+			"text": "description",
+			"image": "avatar"
+		},
+		"points": {},
+		"source": "records"
+	},
+	"test.unpublished.status": {
+		"kind": "status",
+		"because": "one-short-value",
+		"count": "many",
+		"roles": {
+			"value": "status",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "records"
+	},
+	"today.joblist.company": {
+		"kind": "link",
+		"because": "has-link",
+		"count": "keyed",
+		"roles": {
+			"url": "url",
+			"title": "name",
+			"text": "description",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"today.joblist.job": {
+		"kind": "link",
+		"because": "has-link",
+		"count": "many",
+		"roles": {
+			"url": "url",
+			"title": "title",
+			"text": "description",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	},
+	"xyz.statusphere.status": {
+		"kind": "status",
+		"because": "one-short-value",
+		"count": "many",
+		"roles": {
+			"value": "status",
+			"date": "createdAt"
+		},
+		"points": {},
+		"source": "lexicon"
+	}
+}

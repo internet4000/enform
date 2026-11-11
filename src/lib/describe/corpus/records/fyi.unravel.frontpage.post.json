@@ -1,0 +1,11 @@
+[
+	{
+		"rkey": "3lc4rjx6q2s2a",
+		"value": {
+			"$type": "fyi.unravel.frontpage.post",
+			"title": "An article worth reading",
+			"url": "https://example.com/an-article",
+			"createdAt": "2025-04-02T12:00:00.000Z"
+		}
+	}
+]

@@ -9,6 +9,15 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
    of real lexicons and records (Bluesky, Radio4000, Tangled, WhiteWind, Statusphere,
    events…) and their expected descriptions, in the unit tests. Then the views read
    descriptions, and say why (and let people change it).
+   Started: `describeType` (src/lib/describe), with why; `kindOf` reads it; the corpus
+   (22 published lexicons, 5 types known by their records) in
+   `corpus/descriptions.json`. What it gets wrong there, to do next: refs and unions to
+   other definitions (Tangled's star points at a repo through `#repo`); a record keyed
+   by what it points at (Tangled's follow: the account is the key); a block read as a
+   follow (same shape: the type's name or description must tell them apart); a long
+   text with a title read as a list (WhiteWind's entries are articles). Then
+   `describeApp` (consolidating apps/apps, related, person, quick) and
+   `describeRecord` (card, summary, actions).
 2. **Addresses and views apart from their shell**: one address module for every link;
    views (person, app home, type list, record, lexicon, search) out of the routes,
    given the session, links and reader through context; routes become thin.

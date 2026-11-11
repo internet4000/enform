@@ -10,3 +10,5 @@ e2e/quality.js
 # A copy of feedbai's embed.js, kept identical to the published file
 static/feedbai.js
 packages/enform/enform-embed.js
+# Written by the description engine's corpus test (src/lib/describe/corpus.test.ts)
+src/lib/describe/corpus/descriptions.json

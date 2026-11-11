@@ -1,0 +1,25 @@
+[
+	{
+		"rkey": "3m6fkq2xmsk2a",
+		"value": {
+			"$type": "com.radio4000.track",
+			"url": "https://www.youtube.com/watch?v=aaaaaaaaaaa",
+			"title": "An artist - A track (A remix)",
+			"description": "for a friend #house #dub",
+			"discogs_url": "https://www.discogs.com/release/1-An-Artist-A-Record",
+			"duration_seconds": 412,
+			"created_at": "2025-11-21T13:47:17.354133+00:00",
+			"updated_at": "2025-11-30T18:17:57.298Z"
+		}
+	},
+	{
+		"rkey": "3m6fkq2xmsk2b",
+		"value": {
+			"$type": "com.radio4000.track",
+			"url": "https://soundcloud.com/someone/a-set",
+			"title": "Someone - A set",
+			"created_at": "2025-11-22T10:00:00.000Z",
+			"updated_at": "2025-11-22T10:00:00.000Z"
+		}
+	}
+]

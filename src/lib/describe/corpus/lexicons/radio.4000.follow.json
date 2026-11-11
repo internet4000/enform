@@ -1,0 +1,25 @@
+{
+	"id": "radio.4000.follow",
+	"defs": {
+		"main": {
+			"key": "any",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["subject", "createdAt"],
+				"properties": {
+					"subject": {
+						"type": "string",
+						"format": "did"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			},
+			"description": "Follow the radio of another account. The rkey is derived from the subject DID, so each radio is followed at most once."
+		}
+	},
+	"lexicon": 1
+}
