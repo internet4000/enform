@@ -362,7 +362,7 @@ enform-actions + details > enform-actions {
 }
 
 /* Whose profile: their avatar and name in this app, and their handle */
-enform-app-profile > a {
+enform-app-profile > :is(a, div) {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--space-xs);

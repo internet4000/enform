@@ -68,24 +68,20 @@
 	{#await yours then app}
 		{#if app && me}
 			{@const actor = actorName(me)}
+			{@const had = byDirectory(typesOf(app).filter((type) => type.used))}
 			<section aria-labelledby="yours">
 				<h2 id="yours">{m.apps_your_place()}</h2>
+				<!-- One card: who you are there, what you have, and one way in -->
 				<enform-app-yours>
-					<AppProfile repo={me} {app} href={appScreenPath(actor, info.domain)} />
-					<menu aria-label={m.apps_joined_long({app: info.name})}>
-						{#each byDirectory(typesOf(app).filter((type) => type.used)) as type (type.nsid)}
-							<li>
-								<a href={appScreenPath(actor, info.domain, {type: type.nsid})}
-									>{typeLabel(type.nsid)}</a
-								>
-							</li>
-						{/each}
-					</menu>
-					<p>
-						<a href={appScreenPath(actor, info.domain)} role="button"
-							>{m.apps_open_yours({app: info.name})}</a
-						>
-					</p>
+					<AppProfile repo={me} {app} />
+					{#if had.length}
+						<p>
+							{had.map((type) => typeLabel(type.nsid)).join(' · ')}
+						</p>
+					{/if}
+					<a href={appScreenPath(actor, info.domain)} role="button"
+						>{m.apps_open_yours({app: info.name})}</a
+					>
 				</enform-app-yours>
 			</section>
 		{/if}
@@ -110,14 +106,24 @@
 					title={m.apps_types()}
 				/>
 			{:else}
-				<!-- Known by name only: no lexicon to make a form from -->
-				<enform-type-rows unpublished>
-					<ul>
-						{#each directoryTypes(info.namespace) as nsid (nsid)}
-							<li><span><span>{typeLabel(nsid)}</span><small>{nsid}</small></span></li>
-						{/each}
-					</ul>
-				</enform-type-rows>
+				<!-- Known by name only: its types (the directory's, and those seen in your repo),
+				     and why there is no form for them -->
+				{@const known = [
+					...new Set([
+						...directoryTypes(info.namespace),
+						...typesOf(mine ?? app).map((type) => type.nsid)
+					])
+				]}
+				{#if known.length}
+					<h2 id="types">{m.apps_types_known()}</h2>
+					<enform-type-rows unpublished>
+						<ul>
+							{#each known as nsid (nsid)}
+								<li><span><span>{typeLabel(nsid)}</span><small>{nsid}</small></span></li>
+							{/each}
+						</ul>
+					</enform-type-rows>
+				{/if}
 				<p><small>{m.apps_unpublished_long({app: info.name})}</small></p>
 			{/if}
 		</section>

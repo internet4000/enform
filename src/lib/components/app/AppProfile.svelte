@@ -8,7 +8,8 @@
 	import {actorName} from '#lib/paths'
 	import {recordCard} from '#lib/records/card'
 
-	type Props = {repo: Identity; app?: RepoApp; href: string; rel?: string}
+	/** Without href, shown, not a link (when something beside it opens it) */
+	type Props = {repo: Identity; app?: RepoApp; href?: string; rel?: string}
 	let {repo, app, href, rel}: Props = $props()
 
 	let handle = $derived(`@${actorName(repo)}`)
@@ -22,12 +23,12 @@
 </script>
 
 <enform-app-profile>
-	<a {href} {rel}>
+	<svelte:element this={href ? 'a' : 'div'} {href} {rel}>
 		{#if avatar}<img src={avatar} alt="" />{/if}
 		{#if name}
 			<span><strong>{name}</strong> <small>{handle}</small></span>
 		{:else}
 			<span>{handle}</span>
 		{/if}
-	</a>
+	</svelte:element>
 </enform-app-profile>
