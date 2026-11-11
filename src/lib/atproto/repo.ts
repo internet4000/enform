@@ -29,9 +29,17 @@ function fromWire(record: Wire): RepoRecord {
 	return {...record, collection: at.collection, rkey: at.rkey}
 }
 
-export function fromLocal(record: local.LocalRecord): RepoRecord {
+/** A local profile's record: its at:// URI names its repo by handle (`name.local`), as it
+    has no DID: valid, and resolved on this device only */
+export function fromLocal(record: local.LocalRecord, handle?: string): RepoRecord {
 	const {collection, rkey, value, version} = record
-	return {uri: '', cid: version, collection, rkey, value}
+	return {
+		uri: handle ? `at://${handle}/${collection}/${rkey}` : '',
+		cid: version,
+		collection,
+		rkey,
+		value
+	}
 }
 
 /** What was last read of each account, to show while its PDS can't be reached */
@@ -68,7 +76,10 @@ export async function listRecords(
 ): Promise<{records: RepoRecord[]; cursor?: string}> {
 	if (repo.local) {
 		const page = await local.listRecords(repo.local, collection, limit, cursor)
-		return {records: page.records.map(fromLocal), cursor: page.cursor}
+		return {
+			records: page.records.map((record) => fromLocal(record, repo.handle)),
+			cursor: page.cursor
+		}
 	}
 	const writes = await waiting(repo.did, collection)
 	const page = await orLastSeen(`records ${repo.did} ${collection} ${cursor} ${limit}`, () =>
@@ -92,7 +103,7 @@ export async function getRecord(repo: Identity, collection: string, rkey: string
 	if (repo.local) {
 		const record = await local.getRecord(repo.local, collection, rkey)
 		if (!record) throw new Error(`No ${collection} record ${rkey}`)
-		return fromLocal(record)
+		return fromLocal(record, repo.handle)
 	}
 	const writes = await waiting(repo.did, collection)
 	const read = orLastSeen(`record ${repo.did} ${collection} ${rkey}`, () =>

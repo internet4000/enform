@@ -1,5 +1,5 @@
 {
-	"$comment": "The local atproto network the end-to-end tests run against (e2e/network.mjs): fixed ports on localhost, its accounts, and which account publishes each lexicon authority's schemas (e2e/lexicons/<authority>/*.json). statusphere.xyz's and app.bsky.richtext.facet's are copies of their published schemas, so tests run offline.",
+	"$comment": "The local atproto network the end-to-end tests run against (e2e/network.mjs): fixed ports on localhost, its accounts, and which account publishes each lexicon authority's schemas (e2e/lexicons/<authority>/*.json). statusphere.xyz's, app.bsky.richtext.facet's and com.atproto.repo.strongRef's are copies of their published schemas, so tests run offline.",
 	"ports": {
 		"plc": 2582,
 		"pds": 2583,
@@ -36,6 +36,11 @@
 			"handle": "handles.test",
 			"email": "handles@enform.test",
 			"password": "handles-pass"
+		},
+		{
+			"handle": "atproto.test",
+			"email": "atproto@enform.test",
+			"password": "atproto-pass"
 		}
 	],
 	"lexicons": [
@@ -50,6 +55,10 @@
 		{
 			"authority": "richtext.bsky.app",
 			"publisher": "facets.test"
+		},
+		{
+			"authority": "repo.atproto.com",
+			"publisher": "atproto.test"
 		}
 	]
 }

@@ -37,8 +37,10 @@
 			const repo = await resolveIdentity(at.host)
 			const record = await getRecord(repo, at.collection, at.rkey)
 			if (target !== uri) return
-			// A strong ref names its repo by DID, which outlives handles
-			if (pin) value = {uri: `at://${repo.did}/${at.collection}/${at.rkey}`, cid: record.cid}
+			// A strong ref names its repo by DID, which outlives handles; a local profile has
+			// none, so by its handle, on this device
+			const host = repo.local ? at.host : repo.did
+			if (pin) value = {uri: `at://${host}/${at.collection}/${at.rkey}`, cid: record.cid}
 			summary = recordSummary(record.value) ?? at.rkey
 		} catch (err) {
 			if (target === uri) failure = m.form_strongref_failed({message: (err as Error).message})

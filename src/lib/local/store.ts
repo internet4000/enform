@@ -7,6 +7,8 @@
 import {TID} from '@atproto/common-web'
 import {BY_COLLECTION, PROFILES, RECORDS, run} from './db'
 import {slugify, uniqueSlug} from './handle'
+import {cidForLex} from '@atproto/lex-cbor'
+import {jsonToLex, type JsonValue} from '@atproto/lex-json'
 
 export type LocalProfile = {
 	id: string
@@ -39,12 +41,13 @@ export type LocalRecord = {
 
 export class LocalConflict extends Error {}
 
+/**
+ * A record's CID, as a PDS computes it (its DAG-CBOR encoding, hashed): a strong
+ * reference to a record on this device is then a valid one, and stays right once the
+ * record is published unchanged
+ */
 async function versionOf(value: unknown): Promise<string> {
-	const bytes = new TextEncoder().encode(JSON.stringify(value))
-	const digest = await crypto.subtle.digest('SHA-256', bytes)
-	return [...new Uint8Array(digest).slice(0, 16)]
-		.map((b) => b.toString(16).padStart(2, '0'))
-		.join('')
+	return (await cidForLex(jsonToLex(value as JsonValue))).toString()
 }
 
 export function listProfiles(): Promise<LocalProfile[]> {

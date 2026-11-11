@@ -8,6 +8,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && vite build -c vite.embed.config.ts",
+		"enform": "bun src/cli/enform.ts",
 		"embed:package": "vite build -c vite.embed.config.ts --outDir packages/enform",
 		"preview": "vite preview",
 		"test": "vitest run",
@@ -24,6 +25,8 @@
 	},
 	"dependencies": {
 		"@atproto/common-web": "^0.5.17",
+		"@atproto/lex-cbor": "^0.1.9",
+		"@atproto/lex-json": "^0.1.9",
 		"@atproto/lexicon": "^0.7.19",
 		"@atproto/oauth-client-browser": "^0.5.14",
 		"@atproto/oauth-scopes": "^0.5.14",

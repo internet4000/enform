@@ -8,8 +8,8 @@ import app from '#lib/config/app.json' with {type: 'json'}
 import {txtDids} from './dns'
 import {claimedHandle, didDocument, forgetDocument, pdsEndpoint} from './did'
 import {xrpcGet} from './xrpc'
-import {slugOf, type LocalProfile} from '#lib/local/store'
-import {LOCAL_TLD} from '#lib/local/handle'
+import {profileBySlug, slugOf, type LocalProfile} from '#lib/local/store'
+import {isLocalHandle, LOCAL_TLD} from '#lib/local/handle'
 
 export type Identity = {
 	/** The account's DID, or `local:<id>` for a local profile (never sent anywhere) */
@@ -66,6 +66,12 @@ export async function resolveHandle(handle: string): Promise<string> {
 const identities = new Map<string, Promise<Identity>>()
 
 async function lookup(actor: string): Promise<Identity> {
+	// A local profile, by its handle: on this device, no DID
+	if (isLocalHandle(actor)) {
+		const profile = await profileBySlug(actor.slice(0, -LOCAL_TLD.length))
+		if (!profile) throw new Error(`No profile ${actor} on this device`)
+		return localIdentity(profile)
+	}
 	const did = isValidDid(actor) ? actor : await resolveHandle(actor)
 	const doc = await didDocument(did)
 	const claimed = claimedHandle(doc)
