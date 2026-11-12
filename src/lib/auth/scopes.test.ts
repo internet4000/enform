@@ -1,6 +1,7 @@
 import {expect, test} from 'vitest'
 import {
 	DECLARED_SCOPES,
+	actionsFor,
 	allowsBlob,
 	allowsRepo,
 	scopeForBlob,
@@ -49,4 +50,10 @@ test('blob scopes, narrowest first', () => {
 	expect(scopeForBlob('application/pdf')).toBe('blob:*/*')
 	expect(allowsBlob('atproto blob:image/*', 'image/png')).toBe(true)
 	expect(allowsBlob('atproto', 'image/png')).toBe(false)
+})
+
+test('an edit needs create and update, as putRecord is checked by the PDS', () => {
+	expect(actionsFor('update')).toEqual(['create', 'update'])
+	expect(actionsFor('create')).toEqual(['create'])
+	expect(actionsFor('delete')).toEqual(['delete'])
 })

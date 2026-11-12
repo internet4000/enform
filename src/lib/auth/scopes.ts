@@ -30,6 +30,14 @@ export const DECLARED_SCOPES: string[] = [
 	...permissions.blobs.map(blobScope)
 ]
 
+/**
+ * The permissions a write needs, as the PDS checks them: an update is sent with
+ * putRecord, which can also create the record, so it needs both create and update
+ */
+export function actionsFor(action: RepoAction): RepoAction[] {
+	return action === 'update' ? ['create', 'update'] : [action]
+}
+
 export function allowsRepo(granted: string | undefined, collection: string, action: RepoAction) {
 	return new ScopePermissions(granted).allowsRepo({collection, action})
 }

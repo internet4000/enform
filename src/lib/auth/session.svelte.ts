@@ -17,6 +17,7 @@ import {
 	signInRedirect
 } from './client'
 import {
+	actionsFor,
 	allowsBlob,
 	allowsRepo,
 	scopeForBlob,
@@ -131,8 +132,9 @@ class Auth {
 		else await refreshAll()
 	}
 
+	/** Whether this write is allowed: every permission the PDS checks for it */
 	canWrite(collection: string, action: RepoAction): boolean {
-		return allowsRepo(this.scope, collection, action)
+		return actionsFor(action).every((each) => allowsRepo(this.scope, collection, each))
 	}
 
 	canUpload(mime: string): boolean {
@@ -162,7 +164,8 @@ class Auth {
 
 	async authorizeRepo(collection: string, action: RepoAction): Promise<OAuthSession> {
 		if (this.session && this.canWrite(collection, action)) return this.session
-		return this.authorize([scopeForRepo(collection, action)])
+		const missing = actionsFor(action).filter((each) => !allowsRepo(this.scope, collection, each))
+		return this.authorize(missing.map((each) => scopeForRepo(collection, each)))
 	}
 
 	async authorizeBlob(mime: string): Promise<OAuthSession> {
