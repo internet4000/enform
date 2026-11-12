@@ -16,10 +16,12 @@ test("an account's record can't point at a record on this device", async ({page}
 	await page.waitForURL(opened)
 	const rkey = address(page.url()).searchParams.get('record')!
 
-	// Signed in, liking it from an account: refused, nothing written
+	// Signed in, liking it from an account: refused, nothing written. The account just
+	// signed in is who you act as, without switching to it
 	await signIn(page, 'alice.test')
-	await page.getByRole('button', {name: t('accounts_switch_to', {actor: 'alice.test'})}).click()
-	await expect(page.getByText(t('accounts_current')).first()).toBeVisible()
+	await expect(
+		page.locator('enform-account-item[current]').getByRole('link', {name: /@alice\.test/})
+	).toBeVisible()
 	await page.goto('/@alice.test/apps/enform.test?type=test.enform.like&new')
 	await page.waitForURL(creating)
 	const subject = form.locator('[id$="-subject"]').first()

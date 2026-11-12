@@ -45,12 +45,21 @@ export function onSessionDeleted(listener: (did: string) => void) {
 	deletedListeners.add(listener)
 }
 
-/** Completes a sign-in callback or restores the last session; `returnTo` from its state */
-export async function initSession(): Promise<{session?: OAuthSession; returnTo?: string}> {
+/**
+ * Completes a sign-in callback or restores the last session; `signedIn` when it was a
+ * sign-in that just came back, `returnTo` from its state
+ */
+export async function initSession(): Promise<{
+	session?: OAuthSession
+	signedIn: boolean
+	returnTo?: string
+}> {
 	const result = await (await oauthClient()).init()
+	const callback = !!result && 'state' in result
 	return {
 		session: result?.session,
-		returnTo: result && 'state' in result ? (result.state ?? undefined) : undefined
+		signedIn: callback && !!result?.session,
+		returnTo: callback ? (result.state ?? undefined) : undefined
 	}
 }
 

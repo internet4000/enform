@@ -184,12 +184,23 @@ onSessionDeleted((did) => {
 export async function startAuth(): Promise<string | undefined> {
 	try {
 		auth.list(loadAccounts())
-		auth.local = await restoreLocal()
-		const {session, returnTo} = await initSession()
+		const {session, signedIn, returnTo} = await initSession()
+		// An account just signed in is who you act as: not the account on this device
+		// you were using before
+		if (signedIn) forgetLocal()
+		else auth.local = await restoreLocal()
 		await auth.use(session)
 		return returnTo
 	} finally {
 		auth.ready = true
+	}
+}
+
+function forgetLocal() {
+	try {
+		localStorage.removeItem(app.storage.local)
+	} catch {
+		// Storage blocked: nothing was remembered
 	}
 }
 
