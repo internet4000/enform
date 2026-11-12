@@ -439,6 +439,7 @@
 	"bulk_edit_remove": "Retirer de {count} enregistrements",
 	"bulk_edit_invalid": "{count} enregistrements ne seraient plus valides : {error}",
 	"bulk_permission": "Le serveur de votre compte vous demandera d'abord de l'autoriser.",
+	"bulk_permission_all": "Le serveur de votre compte vous demandera d'abord de l'autoriser, pour toutes vos collections : enform ne peut pas le demander pour ce type seul. Seulement cette fois : la prochaine autorisation demandée par enform ne l'inclura pas.",
 	"bulk_writing": "Écriture… {written} sur {count}",
 	"bulk_deleted": "{count} enregistrements supprimés.",
 	"bulk_edited": "{count} enregistrements modifiés.",

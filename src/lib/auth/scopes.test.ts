@@ -39,10 +39,13 @@ test('every scope asked for is declared', () => {
 	}
 })
 
-test('step-up keeps what was granted and drops what was not declared', () => {
-	const granted = 'atproto repo:a.b.c?action=create repo:*?action=create'
-	const next = withScopes(granted, [scopeForRepo('a.b.c', 'delete')])
-	expect(next).toBe('atproto repo:*?action=create repo:*?action=delete')
+test('step-up keeps what was granted for one collection, not undeclared or broad ones', () => {
+	const granted =
+		'atproto repo:a.b.c?action=create repo:app.bsky.feed.post?action=create repo:*?action=delete blob:*/* blob:image/*'
+	const next = withScopes(granted, [scopeForRepo('a.b.c', 'create')])
+	expect(next).toBe(
+		'atproto repo:app.bsky.feed.post?action=create blob:image/* repo:*?action=create'
+	)
 })
 
 test('blob scopes, narrowest first', () => {

@@ -1,10 +1,11 @@
 /**
  * Never more permission than the action at hand: what each authorization request asks
  * the PDS for (its pushed request's `scope`), not the list the client declares. Signing
- * in asks for the identity alone; a first write, for that write's action alone.
+ * in asks for the identity alone; each write, for that write's action alone, a
+ * permission over all collections never carried on to the next.
  */
 import type {Request} from '@playwright/test'
-import {approvePopup, creating, expect, opened, signIn, t, test} from './fixtures'
+import {approvePopup, closed, creating, expect, opened, signIn, t, test} from './fixtures'
 
 const NSID = 'test.enform.note'
 
@@ -16,7 +17,7 @@ function asked(request: Request): string[] | undefined {
 	return scope?.split(' ').sort()
 }
 
-test('sign-in asks for the identity alone, a first write for its action alone', async ({
+test('sign-in asks for the identity alone, each write for its action alone', async ({
 	page,
 	context
 }, info) => {
@@ -43,4 +44,16 @@ test('sign-in asks for the identity alone, a first write for its action alone', 
 	expect(requests).toHaveLength(2)
 	expect(requests[1]).toEqual(['atproto', 'repo:*?action=create'])
 	expect(requests.flat().some((scope) => /action=(update|delete)|^blob:/.test(scope))).toBe(false)
+
+	// Deleting it: delete alone, the create on all collections not carried on
+	await page
+		.getByRole('button', {name: t('record_delete'), exact: true})
+		.first()
+		.click()
+	const dialog = page.getByRole('dialog', {name: t('record_delete_confirm_title')})
+	await approvePopup(page, 'alice.test', () =>
+		dialog.getByRole('button', {name: t('record_delete')}).click()
+	)
+	await page.waitForURL(closed)
+	expect(requests[2]).toEqual(['atproto', 'repo:*?action=delete'])
 })

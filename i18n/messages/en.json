@@ -439,6 +439,7 @@
 	"bulk_edit_remove": "Remove from {count} records",
 	"bulk_edit_invalid": "{count} records would no longer be valid: {error}",
 	"bulk_permission": "Your account's server will ask you to allow this first.",
+	"bulk_permission_all": "Your account's server will ask you to allow this first, for all your collections: enform can't ask for this type alone. Only for this time: the next permission enform asks for won't include it.",
 	"bulk_writing": "Writing… {written} of {count}",
 	"bulk_deleted": "{count} records deleted.",
 	"bulk_edited": "{count} records edited.",

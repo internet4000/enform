@@ -9,6 +9,7 @@
 	import type {LexiconDoc, LexNode} from '#lib/lexicons/types'
 	import {writeRecords, type Change} from '#lib/atproto/bulk'
 	import {uploadBlob} from '#lib/atproto/write'
+	import {isDeclared} from '#lib/auth/scopes'
 	import {auth} from '#lib/auth/session.svelte'
 	import {cleanValue} from '#lib/forms/clean'
 	import {initialProperty} from '#lib/forms/initial'
@@ -154,7 +155,9 @@
 				>{m.bulk_save_copy()}</button
 			>
 		</p>
-		{#if asks}<p><small>{m.bulk_permission()}</small></p>{/if}
+		{#if asks}<p>
+				<small>{isDeclared(collection) ? m.bulk_permission() : m.bulk_permission_all()}</small>
+			</p>{/if}
 		<form data-fields onsubmit={confirmDelete}>
 			{#if count > MANY}
 				<label>
@@ -198,7 +201,9 @@
 					/>
 				{/key}
 			{/if}
-			{#if asks}<p><small>{m.bulk_permission()}</small></p>{/if}
+			{#if asks}<p>
+					<small>{isDeclared(collection) ? m.bulk_permission() : m.bulk_permission_all()}</small>
+				</p>{/if}
 			{#if failure}<p role="alert">{failure}</p>{/if}
 			<p>
 				<button type="button" onclick={() => dialog?.close()}>{m.action_cancel()}</button>

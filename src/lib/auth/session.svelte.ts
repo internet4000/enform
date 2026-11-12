@@ -163,19 +163,20 @@ class Auth {
 	reauthorizing = new Set<string>()
 
 	async authorizeRepo(collection: string, action: RepoAction): Promise<OAuthSession> {
-		if (this.session && this.canWrite(collection, action)) return this.session
-		const missing = actionsFor(action).filter((each) => !allowsRepo(this.scope, collection, each))
-		return this.authorize(missing.map((each) => scopeForRepo(collection, each)))
+		return this.authorizeRepos([collection], action)
 	}
 
-	/** One authorization for writing to several collections at once (a batch) */
+	/**
+	 * One authorization for writing to several collections at once (a batch). Asks for
+	 * all the action needs, not only what's missing: a broad permission held now isn't
+	 * carried into a new request (withScopes)
+	 */
 	async authorizeRepos(collections: string[], action: RepoAction): Promise<OAuthSession> {
+		if (this.session && collections.every((collection) => this.canWrite(collection, action)))
+			return this.session
 		const needed = collections.flatMap((collection) =>
-			actionsFor(action)
-				.filter((each) => !allowsRepo(this.scope, collection, each))
-				.map((each) => scopeForRepo(collection, each))
+			actionsFor(action).map((each) => scopeForRepo(collection, each))
 		)
-		if (this.session && !needed.length) return this.session
 		return this.authorize([...new Set(needed)])
 	}
 

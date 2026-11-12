@@ -65,12 +65,19 @@ export function scopeForBlob(mime: string): string {
 	return blobScope(accept)
 }
 
+/** A permission over every collection or every file type, given for one action only */
+export const isBroad = (scope: string) => scope.startsWith('repo:*') || scope === blobScope('*/*')
+
 /**
  * The scope to request so that `needed` is allowed too. A new authorization replaces
- * the session's scope, so it's everything granted so far plus what's new, limited to
- * declared scopes (anything else would be refused).
+ * the session's scope, so it's what was granted so far plus what's new, limited to
+ * declared scopes (anything else would be refused). Broad ones (every collection, every
+ * file type) were given for the action that needed them: not carried on, so they end
+ * at the next request.
  */
 export function withScopes(granted: string | undefined, needed: string[]): string {
-	const held = (granted ?? '').split(' ').filter((scope) => DECLARED_SCOPES.includes(scope))
+	const held = (granted ?? '')
+		.split(' ')
+		.filter((scope) => DECLARED_SCOPES.includes(scope) && !isBroad(scope))
 	return [...new Set([BASE_SCOPE, ...held, ...needed])].join(' ')
 }
