@@ -34,9 +34,8 @@ Larger work in plan.md.
     bun run verify     # formatting, types, unit tests, build: before every commit
     bun run test:e2e   # local atproto network, Playwright, the UI quality gate
     bun run enform     # the description engine: describe, check (docs/cli.md)
-    git push           # main: deploys enform.internet4000.com (Cloudflare Workers
-                       # Builds, wrangler.jsonc) and GitHub Pages (docs/self-host.md)
-    bun run deploy     # the same Cloudflare deploy, by hand
+    git push           # main: GitHub Pages builds and publishes enform.internet4000.com
+                       # (docs/self-host.md)
 
 ## Git
 
