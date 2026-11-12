@@ -11,6 +11,8 @@ enform-identity-chip[state='ready'] > a {
 	align-items: center;
 	column-gap: var(--space-s);
 	max-width: 100%;
+	/* A target of its own, as tall as a control */
+	min-height: var(--control-height);
 	padding: var(--space-xs) var(--space-m) var(--space-xs) var(--space-xs);
 	color: inherit;
 	text-decoration: none;
@@ -74,6 +76,7 @@ enform-identity-chip[size='small'] {
 }
 
 enform-identity-chip[size='small'][state='ready'] > a {
+	min-height: 0;
 	padding: 0;
 	background: none;
 }
