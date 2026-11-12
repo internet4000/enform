@@ -55,12 +55,13 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
 9. **App descriptions as data**: what `apps.json` says about an app (labels, related
    types, views) read from the app's own repo once a shared lexicon for it exists;
    until then, the directory stays the fallback.
-10. **Many records at once**: an app's ⋯ menu, in your repo, deletes all its records
-    (counted, a copy to save, the count typed, batches of `applyWrites`). Still to do:
-    a list's Select mode, its scope what its filters match across every page (delete,
-    save as JSON); setting one field across a selection, with its lexicon's widget;
-    batches that go on after a reload (the outbox); a CLI `plan` that prints the
-    writes a selection would make.
+10. **Many records at once**, as in a mailbox: in your repo, a list's Select gives cards
+    checkboxes (shift for a range), a bar with how many, all that match on every page,
+    and what to do: edit a field (its lexicon's control, each record checked before
+    writing), save as JSON, delete (a copy offered, the count typed when many), in
+    batches of `applyWrites`. Still to do: across an app's types at once; batches that
+    go on after a reload (the outbox); a CLI `plan` printing the writes a selection
+    would make.
 11. **A lasting local copy** of collections people open often, for reading offline
     (`local-first`), next to the outbox.
 

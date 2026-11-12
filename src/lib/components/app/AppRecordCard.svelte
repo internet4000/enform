@@ -1,6 +1,7 @@
 <script lang="ts">
 	// A record as a card in its app, shaped by its kind (from its lexicon): a link with its
-	// thumbnail, a photo, a status in big, an event's date, a post's text…
+	// thumbnail, a photo, a status in big, an event's date, a post's text… While its list
+	// selects, the whole card is a checkbox's label: a click (shift: a range) selects it.
 	import {describeRecord} from '#lib/describe/record'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
@@ -24,8 +25,11 @@
 		current?: boolean
 		/** Starts the reader on it, with its list */
 		play?: () => void
+		/** While its list selects: whether it is selected, and what a click on its box
+		    (or anywhere on it, its label) does */
+		select?: {checked: boolean; toggle: (event: MouseEvent) => void}
 	}
-	let {repo, record, lexicon, href, current = false, play}: Props = $props()
+	let {repo, record, lexicon, href, current = false, play, select}: Props = $props()
 
 	let node = $derived(lexicon?.defs.main?.record)
 	let shape = $derived(kindOf(lexicon))
@@ -42,30 +46,46 @@
 	)
 </script>
 
+{#snippet content()}
+	{#if image && !repo.local}
+		<img src={blobUrl(repo, image)} alt="" loading="lazy" />
+	{:else if isWebLink(url)}
+		<LinkThumb {url} />
+	{/if}
+	{#if shape.kind === 'event' && start}
+		<time datetime={start}>{formatDate(start)}</time>
+	{/if}
+	<RowSummary text={summary} />
+	{#if card.text && card.text !== summary}<span>{card.text}</span>{/if}
+	<small>
+		{#if date && shape.kind !== 'event'}<time datetime={date}>{formatDate(date)}</time>{/if}
+		{#if record.pending}
+			· {record.pending === 'conflict' ? m.outbox_conflict_short() : m.outbox_waiting()}
+		{/if}
+	</small>
+{/snippet}
+
 <enform-record-card-item
 	kind={shape.kind}
 	image={image || isWebLink(url) ? true : undefined}
 	current={current || undefined}
+	selected={select?.checked || undefined}
 >
-	<a {href} aria-current={current ? 'true' : undefined}>
-		{#if image && !repo.local}
-			<img src={blobUrl(repo, image)} alt="" loading="lazy" />
-		{:else if isWebLink(url)}
-			<LinkThumb {url} />
-		{/if}
-		{#if shape.kind === 'event' && start}
-			<time datetime={start}>{formatDate(start)}</time>
-		{/if}
-		<RowSummary text={summary} />
-		{#if card.text && card.text !== summary}<span>{card.text}</span>{/if}
-		<small>
-			{#if date && shape.kind !== 'event'}<time datetime={date}>{formatDate(date)}</time>{/if}
-			{#if record.pending}
-				· {record.pending === 'conflict' ? m.outbox_conflict_short() : m.outbox_waiting()}
-			{/if}
-		</small>
-	</a>
-	{#if play}
+	{#if select}
+		<!-- The whole card selects it: a click on the box or around it, shift for a range -->
+		<label>
+			<input
+				type="checkbox"
+				checked={select.checked}
+				aria-label={m.select_record({title: summary})}
+				onclick={(event) => select.toggle(event)}
+			/>
+			{@render content()}
+		</label>
+	{:else}
+		<a {href} aria-current={current ? 'true' : undefined}>{@render content()}</a>
+	{/if}
+	{#if play && !select}
 		<RecordActionsMenu value={record.value} {lexicon} title={summary} start={play} first />
 	{/if}
 </enform-record-card-item>

@@ -30,7 +30,8 @@ dialog pre {
 }
 
 /* Destructive confirmations: the button says it */
-dialog[data-danger] button[type='submit'] {
+dialog[data-danger] button[type='submit'],
+dialog button[data-danger] {
 	color: var(--color-danger);
 	background: var(--color-surface);
 	border-color: var(--color-danger);
@@ -185,4 +186,25 @@ enform-menu button[data-danger] {
 /* Deleting many: its progress, as wide as the dialog */
 dialog progress {
 	width: 100%;
+}
+
+/* A dialog's form of fields: one under the other, its buttons at the end */
+dialog form[data-fields] {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: var(--space-m);
+}
+
+/* Its labels as tall as they are (a row's labels share its width) */
+dialog form[data-fields] > label {
+	flex: none;
+}
+
+dialog form[data-fields] > p:last-child {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: end;
+	gap: var(--space-xs);
+	margin: 0;
 }

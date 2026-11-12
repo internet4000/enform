@@ -79,47 +79,60 @@ async function applyWrites(session: OAuthSession, writes: object[]) {
 	}
 }
 
+/** A change to one record: its new value, or none to delete it */
+export type Change = Pick<RepoRecord, 'collection' | 'rkey' | 'cid'> & {
+	value?: Record<string, unknown>
+}
+
 /**
- * Deletes these records from the current account's repo (or this device's), a batch at
- * a time; `progress` counts those deleted. Stops between batches once `signal` aborts.
+ * Writes these changes to the current account's repo (or this device's), a batch at a
+ * time; `progress` counts those written. Stops between batches once `signal` aborts.
  */
-export async function deleteRecords(
-	records: Pick<RepoRecord, 'collection' | 'rkey' | 'cid'>[],
-	progress: (deleted: number) => void,
+export async function writeRecords(
+	changes: Change[],
+	progress: (written: number) => void,
 	signal?: AbortSignal
 ): Promise<number> {
-	let deleted = 0
+	let written = 0
 	if (auth.local) {
-		for (const record of records) {
+		for (const {collection, rkey, cid, value} of changes) {
 			if (signal?.aborted) break
-			await local.deleteRecord(auth.local.id, record.collection, record.rkey, record.cid)
-			progress(++deleted)
+			if (value) await local.putRecord(auth.local.id, collection, rkey, value, cid)
+			else await local.deleteRecord(auth.local.id, collection, rkey, cid)
+			progress(++written)
 		}
-		return deleted
+		return written
 	}
-	const collections = [...new Set(records.map((record) => record.collection))]
-	const session = await auth.authorizeRepos(collections, 'delete')
-	for (let at = 0; at < records.length && !signal?.aborted; at += BATCH) {
-		const batch = records.slice(at, at + BATCH)
+	const collections = [...new Set(changes.map((change) => change.collection))]
+	const updates = changes.some((change) => change.value)
+	const deletes = changes.some((change) => !change.value)
+	let session = await auth.authorizeRepos(collections, updates ? 'update' : 'delete')
+	if (updates && deletes) session = await auth.authorizeRepos(collections, 'delete')
+	for (let at = 0; at < changes.length && !signal?.aborted; at += BATCH) {
+		const batch = changes.slice(at, at + BATCH)
 		await applyWrites(
 			session,
-			batch.map(({collection, rkey}) => ({
-				$type: 'com.atproto.repo.applyWrites#delete',
-				collection,
-				rkey
-			}))
+			batch.map(({collection, rkey, value}) =>
+				value
+					? {$type: 'com.atproto.repo.applyWrites#update', collection, rkey, value}
+					: {$type: 'com.atproto.repo.applyWrites#delete', collection, rkey}
+			)
 		)
-		deleted += batch.length
-		progress(deleted)
+		written += batch.length
+		progress(written)
 	}
-	// What waited to be sent to those collections goes with them
-	if (!signal?.aborted) {
+	// Writes still waiting for records deleted now go with them
+	const gone = new Set(
+		changes.filter((change) => !change.value).map((c) => `${c.collection}/${c.rkey}`)
+	)
+	if (gone.size) {
 		for (const collection of collections) {
 			for (const write of await pendingFor(session.did, collection).catch(() => [])) {
-				if (write.id !== undefined) await removePending(write.id)
+				if (write.id !== undefined && gone.has(`${write.collection}/${write.rkey}`))
+					await removePending(write.id)
 			}
 		}
 		await outbox.refresh()
 	}
-	return deleted
+	return written
 }

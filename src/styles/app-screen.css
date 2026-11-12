@@ -103,7 +103,7 @@ enform-record-actions :is(a, button)[data-verb='play'] {
 	color: var(--color-accent-text);
 }
 
-enform-record-card-item > a {
+enform-record-card-item > :is(a, label) {
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-xs);
@@ -118,9 +118,78 @@ enform-record-card-item > a {
 	-webkit-tap-highlight-color: transparent;
 }
 
-enform-record-card-item > a:hover,
-enform-record-card-item[current] > a {
+enform-record-card-item > :is(a, label):hover,
+enform-record-card-item[current] > a,
+enform-record-card-item[selected] > label {
 	border-color: var(--color-accent);
+}
+
+/* Selecting: the card is a checkbox's label, its box in the corner, over any image */
+enform-record-card-item > label {
+	position: relative;
+	cursor: pointer;
+	user-select: none;
+}
+
+enform-record-card-item > label > input[type='checkbox'] {
+	position: absolute;
+	inset: var(--space-s) auto auto var(--space-s);
+	z-index: 1;
+	width: 1.5rem;
+	height: 1.5rem;
+	margin: 0;
+	accent-color: var(--color-accent);
+}
+
+enform-record-card-item > label:has(> input) {
+	padding-inline-start: calc(var(--space-m) + 2rem);
+}
+
+enform-record-card-item[selected] > label {
+	background: color-mix(in oklch, var(--color-accent) 10%, var(--color-surface));
+}
+
+/* What is selected and what to do with it, in place of the toolbar */
+enform-selection-bar {
+	position: sticky;
+	top: var(--sticky-top, 0);
+	z-index: 5;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-xs) var(--space-s);
+	padding: var(--space-s) 0;
+	background: var(--color-bg);
+}
+
+enform-selection-bar > label {
+	display: inline-flex;
+	flex-direction: row;
+	color: inherit;
+	align-items: center;
+	gap: var(--space-xs);
+	min-height: var(--control-height);
+	font-weight: var(--label-weight);
+}
+
+enform-selection-bar > label > input {
+	width: 1.25rem;
+	height: 1.25rem;
+	margin: 0;
+	accent-color: var(--color-accent);
+}
+
+enform-selection-bar > menu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
+	margin: 0 0 0 auto;
+	padding: 0;
+	list-style: none;
+}
+
+enform-selection-bar button[data-danger] {
+	color: var(--color-danger);
 }
 
 enform-record-card-item img {
@@ -144,7 +213,7 @@ enform-record-card-item p {
 	line-clamp: var(--row-lines);
 }
 
-enform-record-card-item > a > span {
+enform-record-card-item > :is(a, label) > span {
 	display: -webkit-box;
 	overflow: hidden;
 	color: var(--color-muted);

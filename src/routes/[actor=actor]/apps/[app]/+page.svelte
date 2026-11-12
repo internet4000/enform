@@ -16,7 +16,6 @@
 	import {kindVerb} from '#lib/records/kind-words'
 	import AppActions from '#lib/components/app/AppActions.svelte'
 	import AppMenu from '#lib/components/app/AppMenu.svelte'
-	import BulkDelete from '#lib/components/app/BulkDelete.svelte'
 	import AppOwner from '#lib/components/app/AppOwner.svelte'
 	import NewMenu from '#lib/components/app/NewMenu.svelte'
 	import RecordGrid from '#lib/components/app/RecordGrid.svelte'
@@ -119,13 +118,6 @@
 	let context = $derived(
 		`${info.name}${info.name.toLowerCase() === info.domain ? '' : ` · ${info.domain}`} · @${actor}`
 	)
-	/** The app's types this repo has records of, to delete them all */
-	let held = $derived(
-		[...(app.profile ? [app.profile] : []), ...app.lists, ...app.singles]
-			.filter((type) => type.used)
-			.map((type) => type.nsid)
-	)
-	let bulk = $state<BulkDelete>()
 	const at = (type: string, open: {record?: string; edit?: boolean; create?: boolean} = {}) =>
 		appScreenPath(actor, app.app, {type, ...open})
 </script>
@@ -166,7 +158,6 @@
 					{info}
 					data={selected ? collectionPath(actor, selected.nsid) : dataPath(actor)}
 					actor={data.repo.local ? undefined : actor}
-					deleteAll={owner && held.length ? () => bulk?.open() : undefined}
 				/>
 			</li>
 		</menu>
@@ -258,6 +249,7 @@
 				href={(rkey) => keep(at(type.nsid, {record: rkey}))}
 				{open}
 				lead={sections}
+				selectable={owner}
 			>
 				{#snippet actions()}
 					{#if start}
@@ -283,15 +275,6 @@
 		<p><small>{m.actions_view_only({app: info.name})}</small></p>
 	{/if}
 </enform-app-screen>
-
-<!-- Kept while it runs and after, as the screen it empties changes under it -->
-<BulkDelete
-	bind:this={bulk}
-	repo={data.repo}
-	collections={held}
-	app={info.name}
-	namespace={app.namespace}
-/>
 
 {#if selected && creating}
 	<RecordSheet
