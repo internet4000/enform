@@ -27,7 +27,15 @@
 	import CreateRecord from '#lib/components/CreateRecord.svelte'
 	import EditRecord from '#lib/components/EditRecord.svelte'
 	import RecordActions from '#lib/components/RecordActions.svelte'
-	import {actorName, appScreenPath, collectionPath, dataPath, inApp, recordPath} from '#lib/paths'
+	import {
+		actorName,
+		appScreenPath,
+		collectionPath,
+		dataPath,
+		hrefOf,
+		inApp,
+		recordPath
+	} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
@@ -209,7 +217,7 @@
 						title={title ?? typeLabel(selected.nsid)}
 						start={() =>
 							reader.start([
-								{repo: data.repo, record, lexicon: selected.lexicon, href: shownUrl().href}
+								{repo: data.repo, record, lexicon: selected.lexicon, href: hrefOf(shownUrl())}
 							])}
 					/>
 					{#if owner}
@@ -325,7 +333,7 @@
 							lexicon={doc}
 							title={describeRecord(record, doc).title ?? typeLabel(selected.nsid)}
 							start={() =>
-								reader.start([{repo: data.repo, record, lexicon: doc, href: shownUrl().href}])}
+								reader.start([{repo: data.repo, record, lexicon: doc, href: hrefOf(shownUrl())}])}
 						/>
 						{#if owner}
 							<menu>

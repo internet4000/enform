@@ -10,7 +10,7 @@
 	import {pins} from '#lib/apps/pins.svelte'
 	import {pinnedProfile} from '#lib/apps/pinned'
 	import type {Pin} from '#lib/apps/pins'
-	import {actorName, appPath, appScreenPath, inApp} from '#lib/paths'
+	import {actorName, addressOf, appPath, appScreenPath, inApp} from '#lib/paths'
 	import AppIcon from '../pane/AppIcon.svelte'
 
 	/** The apps you have records in, by domain, the protocol's own left out */
@@ -31,8 +31,8 @@
 		auth.me ? appScreenPath(actorName(auth.me), domain) : appPath(domain)
 	const nameOf = (domain: string) => appInfo(namespaceOfDomain(domain)).name
 
-	const current = (domain: string) => page.url.pathname.endsWith(`/apps/${domain}`)
-	const here = (href: string) => decodeURIComponent(page.url.pathname) === href
+	const current = (domain: string) => addressOf(page.url).pathname.endsWith(`/apps/${domain}`)
+	const here = (href: string) => inApp(decodeURIComponent(addressOf(page.url).pathname)) === href
 </script>
 
 {#snippet pinned(all: Pin[])}

@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest'
-import {atUriPath, recordPath, searchPath} from './paths'
+import {addressOf, atUriPath, hrefOf, recordPath, searchPath} from './paths'
 
 describe('searchPath', () => {
 	test('handles, with or without @', () => {
@@ -24,4 +24,14 @@ describe('searchPath', () => {
 test('record keys are encoded', () => {
 	expect(recordPath('alice.test', 'x.y.z', 'self')).toBe('/@alice.test/x.y.z/self')
 	expect(recordPath('alice.test', 'x.y.z', 'a:b')).toBe('/@alice.test/x.y.z/a%3Ab')
+})
+
+test('addresses are after #, the part a browser never sends', () => {
+	const at = new URL('https://x.org/enform/#/@a/apps/bsky.app?type=app.bsky.feed.post')
+	const address = addressOf(at)
+	expect(address.pathname).toBe('/@a/apps/bsky.app')
+	expect(address.searchParams.get('type')).toBe('app.bsky.feed.post')
+	// (`#` before it in the app; unit tests check paths without it)
+	expect(hrefOf(address)).toMatch(/\/@a\/apps\/bsky\.app\?type=app\.bsky\.feed\.post$/)
+	expect(addressOf(new URL('https://x.org/enform/')).pathname).toBe('/')
 })

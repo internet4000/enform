@@ -2,7 +2,7 @@
  * A place, picked for latitude/longitude fields of any lexicon: by address (the geocoder
  * answered here, offline) or by this device's location (granted to the test)
  */
-import {creating, expect, t, test} from './fixtures'
+import {address, creating, expect, t, test} from './fixtures'
 
 test('pick a place by address, then by location', async ({page, context}) => {
 	await context.grantPermissions(['geolocation'])
@@ -13,7 +13,7 @@ test('pick a place by address, then by location', async ({page, context}) => {
 	await page.goto('/apps/statusphere.xyz')
 	await page.getByRole('button', {name: t('start_device_button')}).click()
 	await page.waitForURL(creating)
-	const local = new URL(page.url()).pathname.split('/apps/')[0]
+	const local = address(page.url()).pathname.split('/apps/')[0]
 	await page.goto(`${local}/apps/enform.test?type=test.enform.place&new`)
 
 	await page.getByRole('searchbox', {name: t('place_search')}).fill('Berlin')

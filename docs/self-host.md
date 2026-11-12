@@ -15,13 +15,18 @@ their own copy, so nobody has to trust ours.
 
 Upload `dist/` to any static host. It contains:
 
-- `client-metadata.json`: the instance's OAuth client metadata. Its URL
+Every page of the app is one file, `index.html`: what is open is in its address after
+`#` (`…/#/@alice.bsky.social/apps/bsky.app`), the part of a URL a browser never sends.
+The host sees that the app was opened, never whose repo, which app or what record.
+
+- `client-metadata.json`: the instance's OAuth client metadata (written when built).
+  Sign-ins come back to the app's page, their answer in its query. Its URL
   (`ORIGIN` + `BASE_PATH` + `/client-metadata.json`) is the instance's client ID: each
   instance is its own client, and PDSes show its address when you approve a write.
   Keep that address stable, or people approve it again.
 - `404.html`: the app again, which static hosts serve for paths they have no file for,
-  so any page opens at its URL (with a 404 status; hosts with a single-page-app mode,
-  like Cloudflare's `not_found_handling`, answer 200).
+  so a link from before addresses moved after `#` still opens: `address.js` moves its
+  path there, in place (`…/@alice/apps/bsky.app` → `…/#/@alice/apps/bsky.app`).
 - `enform-embed.js`: `<enform-embed>`, linking to this instance (docs/embed.md).
 
 ## Deploy from a fork

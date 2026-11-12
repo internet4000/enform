@@ -5,7 +5,7 @@
  * fails here (docs/examples.md).
  */
 import type {Page} from '@playwright/test'
-import {closed, creating, expect, opened, t, test} from './fixtures'
+import {address, closed, creating, expect, opened, t, test} from './fixtures'
 import network from './network.json' with {type: 'json'}
 import type {LexiconDoc, LexNode} from '../src/lib/lexicons/types'
 import {exampleLexicons} from '../src/lib/lexicons/examples/index'
@@ -18,7 +18,7 @@ async function startOnDevice(page: Page, nsid: string) {
 	await page.goto(`/apps/${domainOf(nsid)}`)
 	await page.getByRole('button', {name: t('start_device_button')}).click()
 	await page.waitForURL(creating)
-	return new URL(page.url()).pathname.split('/')[1].slice(1)
+	return address(page.url()).pathname.split('/')[1].slice(1)
 }
 
 /** A value for each required field, and each the engine says carries the type (its title,
@@ -56,7 +56,7 @@ async function fill(page: Page, doc: LexiconDoc, refs: {account: string; record?
 	}
 	await form.locator('button[type="submit"]', {hasText: t('new_submit')}).click()
 	await page.waitForURL(opened)
-	return new URL(page.url()).searchParams.get('record')!
+	return address(page.url()).searchParams.get('record')!
 }
 
 /** Creates one record of a type, from its app's screen */

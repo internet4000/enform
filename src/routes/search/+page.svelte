@@ -9,9 +9,9 @@
 	import {resolveLexicon} from '#lib/lexicons/resolve'
 	import AppCard from '#lib/components/AppCard.svelte'
 	import IdentityChip from '#lib/components/IdentityChip.svelte'
-	import {lexiconPath} from '#lib/paths'
+	import {addressOf, lexiconPath} from '#lib/paths'
 
-	let query = $derived(page.url.searchParams.get('q')?.trim() ?? '')
+	let query = $derived(addressOf(page.url).searchParams.get('q')?.trim() ?? '')
 	let bare = $derived(query.replace(/^@/, '').toLowerCase())
 
 	let apps = $derived(

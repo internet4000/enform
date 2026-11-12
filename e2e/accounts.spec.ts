@@ -1,5 +1,5 @@
 /** Two accounts of the local PDS on one browser: add one, then switch back */
-import {expect, signIn, t, test} from './fixtures'
+import {address, expect, signIn, t, test} from './fixtures'
 
 test('add a second account and switch between them', async ({page}) => {
 	await signIn(page, 'alice.test')
@@ -21,11 +21,11 @@ test('add a second account and switch between them', async ({page}) => {
 		.getByRole('navigation', {name: t('nav_main')})
 		.getByRole('link', {name: '@alice.test'})
 		.click()
-	await page.waitForURL((url) => url.pathname === '/settings')
+	await page.waitForURL((url) => address(url).pathname === '/settings')
 	// Settings: your page first, then your profiles, where your records are kept
 	const you = page.getByRole('region', {name: t('you_title')})
 	await expect(you.getByRole('link', {name: /@alice\.test/})).toBeVisible()
 	await you.getByRole('link', {name: new RegExp(`^${t('profiles_title')}`)}).click()
-	await page.waitForURL((url) => url.pathname === '/settings/profiles')
+	await page.waitForURL((url) => address(url).pathname === '/settings/profiles')
 	await expect(page.locator('enform-you').getByText('@alice.test')).toBeVisible()
 })

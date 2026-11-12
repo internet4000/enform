@@ -19,12 +19,13 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
    a record's title, read by every view that names one. Then the rest of
    `describeRecord` (card, text, image, actions, `records/card` and `summary` folded
    in) and `describeApp` (consolidating apps/apps, accounts, related, person, quick).
-2. **Addresses and views apart from their shell**: one address module for every link;
-   views (person, app home, type list, record, lexicon, search) out of the routes,
-   given the session, links and reader through context; routes become thin.
+2. **Views apart from their shell**: views (person, app home, type list, record,
+   lexicon, search) out of the routes, given the session, links and reader through
+   context; routes become thin. Done first: addresses, after `#` in the app (hash
+   routing, `src/lib/paths.ts`), the same in the embed's links.
 3. **Views as web components**: each view a custom element, and `<enform-app>`, a hash
-   router around them, replacing `<enform-embed>` in the npm package; then hash routing
-   for the SvelteKit app too, with the same addresses.
+   router around them with the app's addresses, replacing `<enform-embed>` in the npm
+   package.
 
 ## Shell and screens
 

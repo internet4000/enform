@@ -3,6 +3,7 @@
 	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
+	import {addressOf, hrefOf} from '#lib/paths'
 
 	let {returnTo, adding = false}: {returnTo?: string; adding?: boolean} = $props()
 
@@ -15,7 +16,7 @@
 		pending = true
 		failed = undefined
 		try {
-			const back = returnTo ?? page.url.pathname + page.url.search
+			const back = returnTo ?? hrefOf(addressOf(page.url))
 			await auth.addAccount(handle.trim().replace(/^@/, ''), back)
 		} catch (err) {
 			failed = (err as Error).message

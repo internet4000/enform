@@ -17,7 +17,7 @@
 	import {fieldLabel} from '#lib/forms/labels'
 	import {applyFilters, cleared, facetsOf, readFilters, sorted, sortsOf} from '#lib/records/filters'
 	import {typeLabel} from '#lib/apps/directory'
-	import {actorName, searchResultsPath} from '#lib/paths'
+	import {actorName, inApp, searchResultsPath} from '#lib/paths'
 	import AppRecordCard from './AppRecordCard.svelte'
 	import RecordFilters from './RecordFilters.svelte'
 
@@ -66,7 +66,7 @@
 
 	function order(event: Event) {
 		const value = (event.currentTarget as HTMLSelectElement).value
-		goto(sorted(shownUrl(), value), {replace: true, reset: false})
+		goto(inApp(sorted(shownUrl(), value)), {replace: true, reset: false})
 	}
 
 	const toItems = (list: RepoRecord[]): ReaderItem[] =>
@@ -121,7 +121,9 @@
 	</p>
 	<menu>
 		{#if changed}
-			<li><a href={cleared(shownUrl())} data-sveltekit-reset="false">{m.filter_clear()}</a></li>
+			<li>
+				<a href={inApp(cleared(shownUrl()))} data-sveltekit-reset="false">{m.filter_clear()}</a>
+			</li>
 		{/if}
 		{#if records.length > 1}
 			<li>
@@ -160,7 +162,7 @@
 		{#if !loading && records.length}
 			<p>
 				{m.records_filtered_none()}
-				<a href={cleared(shownUrl())} data-sveltekit-reset="false">{m.filter_clear()}</a>
+				<a href={inApp(cleared(shownUrl()))} data-sveltekit-reset="false">{m.filter_clear()}</a>
 				{#if filters.q}
 					· <a href={searchResultsPath(filters.q)}>{m.search_everywhere_for({query: filters.q})}</a>
 				{/if}

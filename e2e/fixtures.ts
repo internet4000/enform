@@ -60,7 +60,7 @@ export async function signIn(page: Page, handle: string) {
 	await page.waitForURL((url) => url.port === String(network.ports.pds))
 	await authorizeOnPds(page, handle)
 	await page.waitForURL(
-		(url) => url.hostname === '127.0.0.1' && url.pathname === '/settings/profiles'
+		(url) => url.hostname === '127.0.0.1' && address(url).pathname === '/settings/profiles'
 	)
 	await expect(page.getByRole('link', {name: `@${handle}`}).first()).toBeVisible()
 }
@@ -72,11 +72,19 @@ export async function approvePopup(page: Page, handle: string, action: () => Pro
 	await popup.waitForEvent('close')
 }
 
+/** Where the app is: its address, after `#` (src/lib/paths.ts) */
+export function address(url: URL | string): URL {
+	const at = new URL(url)
+	return new URL(at.hash.replace(/^#/, '') || '/', at.origin)
+}
+
 /** In an app's screen: a form to create open over it */
-export const creating = (url: URL) => url.searchParams.has('new')
+export const creating = (url: URL) => address(url).searchParams.has('new')
 /** In an app's screen: a record open over it (not its form) */
-export const opened = (url: URL) =>
-	url.searchParams.has('record') && !url.searchParams.has('edit') && !url.searchParams.has('new')
+export const opened = (url: URL) => {
+	const {searchParams} = address(url)
+	return searchParams.has('record') && !searchParams.has('edit') && !searchParams.has('new')
+}
 /** In an app's screen: nothing open over it */
 export const closed = (url: URL) =>
-	url.pathname.includes('/apps/') && !url.searchParams.has('record')
+	address(url).pathname.includes('/apps/') && !address(url).searchParams.has('record')

@@ -1,5 +1,5 @@
 /** Pinning apps: from an app's page, first on Home, in the rail, reordered and unpinned in Settings */
-import {expect, t, test} from './fixtures'
+import {address, expect, t, test} from './fixtures'
 
 test('pin apps, find them first, reorder and unpin them', async ({page}, info) => {
 	for (const domain of ['tangled.org', '4000.radio']) {
@@ -29,7 +29,7 @@ test('pin apps, find them first, reorder and unpin them', async ({page}, info) =
 	// Reordered, then unpinned, in Settings; kept across a reload (on this device)
 	await page.goto('/settings')
 	await page.getByRole('link', {name: new RegExp(`^${t('pins_title')}`)}).click()
-	await page.waitForURL((url) => url.pathname === '/settings/pins')
+	await page.waitForURL((url) => address(url).pathname === '/settings/pins')
 	await page.getByRole('button', {name: t('pins_move_up', {app: 'Radio4000'})}).click()
 	await page.reload()
 	const pins = page.locator('enform-pins').getByRole('link')

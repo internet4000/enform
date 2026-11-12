@@ -12,6 +12,7 @@ export function linkTo(instance: string) {
 	base = instance.endsWith('/') ? instance : `${instance}/`
 }
 
+/** A page of the instance: its address after `#`, as enform's own links (hash routing) */
 export function resolve(path: string): string {
-	return new URL(path.replace(/^\//, ''), base).href
+	return new URL(`#/${path.replace(/^\//, '')}`, base).href
 }

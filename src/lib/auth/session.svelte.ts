@@ -108,7 +108,7 @@ class Auth {
 	}
 
 	/** Signs in another account, through its server, with identity only */
-	async addAccount(handle: string, returnTo = location.pathname + location.search) {
+	async addAccount(handle: string, returnTo = location.hash || '#/') {
 		await signInRedirect(handle, returnTo)
 	}
 

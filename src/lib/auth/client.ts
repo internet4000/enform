@@ -6,20 +6,22 @@
 import {BrowserOAuthClient, type OAuthSession} from '@atproto/oauth-client-browser'
 import {buildAtprotoLoopbackClientId} from '@atproto/oauth-types'
 import app from '#lib/config/app.json' with {type: 'json'}
-import {resolve} from '$app/paths'
-import {CLIENT_SCOPE, clientMetadataPath} from './metadata'
+import {CLIENT_METADATA, CLIENT_SCOPE} from './metadata'
 import {BASE_SCOPE} from './scopes'
 
 let client: Promise<BrowserOAuthClient> | undefined
 
 const deletedListeners = new Set<(did: string) => void>()
 
+/** The app's page (its address is after `#`), where sign-ins come back */
+const home = () => new URL('./', location.href)
+
 function clientId(): string {
-	const {protocol, origin, port} = window.location
-	if (protocol === 'https:') return `${origin}${clientMetadataPath()}`
+	if (location.protocol === 'https:') return new URL(CLIENT_METADATA, home()).href
+	const {port, pathname} = home()
 	return buildAtprotoLoopbackClientId({
 		scope: CLIENT_SCOPE,
-		redirect_uris: [`http://127.0.0.1${port ? `:${port}` : ''}${resolve('')}`]
+		redirect_uris: [`http://127.0.0.1${port ? `:${port}` : ''}${pathname}`]
 	})
 }
 
@@ -30,6 +32,8 @@ export function oauthClient(): Promise<BrowserOAuthClient> {
 		plcDirectoryUrl: app.services.plcDirectory,
 		// Authorization servers and PDSes over plain HTTP: only a local test network's
 		allowHttp: app.oauth.allowHttp,
+		// In the query: the fragment is the app's address (hash routing)
+		responseMode: 'query',
 		// Signed out, revoked or expired, here or in another tab
 		onSessionDeleted: (did) => deletedListeners.forEach((listener) => listener(did))
 	})

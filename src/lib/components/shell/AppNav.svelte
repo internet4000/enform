@@ -7,7 +7,7 @@
 	import * as m from '#lib/paraglide/messages.js'
 	import app from '#lib/config/app.json' with {type: 'json'}
 	import {auth} from '#lib/auth/session.svelte'
-	import {actorName, inApp} from '#lib/paths'
+	import {actorName, addressOf, inApp} from '#lib/paths'
 	import {profileAvatar} from '#lib/atproto/profile'
 	import Icon from './Icon.svelte'
 	import PinnedApps from './PinnedApps.svelte'
@@ -23,7 +23,7 @@
 	let avatar = $derived(auth.me && !auth.me.local ? profileAvatar(auth.me) : undefined)
 
 	function current(href: string) {
-		const path = page.url.pathname
+		const path = inApp(addressOf(page.url).pathname)
 		if (href === inApp('/')) return path === href
 		return path === href || path.startsWith(`${href}/`)
 	}

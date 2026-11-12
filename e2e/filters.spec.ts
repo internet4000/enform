@@ -3,7 +3,7 @@
  * types; removed, everywhere. Over the records, the filters their texts and lexicon offer
  * (here, a #tag), in the URL.
  */
-import {approvePopup, creating, expect, opened, signIn, t, test} from './fixtures'
+import {address, approvePopup, creating, expect, opened, signIn, t, test} from './fixtures'
 
 test('search in place, filter by a #tag, then search everywhere', async ({page}) => {
 	const tag = `t${Date.now()}`
@@ -50,5 +50,5 @@ test('search in place, filter by a #tag, then search everywhere', async ({page})
 	await expect(search).toHaveAttribute('placeholder', t('search_placeholder'))
 	await search.fill('alice.test')
 	await search.press('Enter')
-	await page.waitForURL((url) => url.pathname === '/search')
+	await page.waitForURL((url) => address(url).pathname === '/search')
 })

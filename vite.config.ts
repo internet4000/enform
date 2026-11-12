@@ -1,11 +1,13 @@
-import {copyFileSync} from 'node:fs'
+import {copyFileSync, existsSync, readFileSync, writeFileSync} from 'node:fs'
 import {fileURLToPath} from 'node:url'
 import {sveltekit} from '@sveltejs/kit/vite'
 import {vitePreprocess} from '@sveltejs/vite-plugin-svelte'
 import adapterStatic from '@sveltejs/adapter-static'
 import {defineConfig} from 'vitest/config'
+import type {Plugin} from 'vite'
 import {paraglideVitePlugin} from '@inlang/paraglide-js'
 import app from './src/lib/config/app.json' with {type: 'json'}
+import {CLIENT_METADATA, clientMetadata} from './src/lib/auth/metadata'
 
 /** CSP host sources from config (JSON gives plain strings) */
 const hosts = (list: string[]) => list as `https://${string}.${string}`[]
@@ -25,8 +27,9 @@ const BASE_PATH = (process.env.BASE_PATH ?? '').replace(/\/$/, '') as '' | `/${s
 
 /**
  * adapter-static, plus `404.html`: the page static hosts serve for a path they have no
- * file for (GitHub and GitLab Pages, Netlify…), so any page of the app opens at its URL.
- * Not `_redirects`: on some hosts its rules apply before files (Cloudflare).
+ * file for (GitHub and GitLab Pages, Netlify…), so a link from before hash routing opens
+ * (static/address.js moves its path after `#`). Not `_redirects`: on some hosts its rules
+ * apply before files. And the instance's OAuth client metadata, at its address.
  */
 function staticHost(options: Parameters<typeof adapterStatic>[0] & {pages: string}) {
 	const adapter = adapterStatic(options)
@@ -35,6 +38,25 @@ function staticHost(options: Parameters<typeof adapterStatic>[0] & {pages: strin
 		async adapt(builder: Parameters<typeof adapter.adapt>[0]) {
 			await adapter.adapt(builder)
 			copyFileSync(`${options.pages}/index.html`, `${options.pages}/404.html`)
+			const url = new URL(`${ORIGIN}${BASE_PATH}/${CLIENT_METADATA}`)
+			writeFileSync(`${options.pages}/${CLIENT_METADATA}`, JSON.stringify(clientMetadata(url)))
+		}
+	}
+}
+
+/** `vite preview` as a static host: `404.html` for a path with no file (an old link) */
+function notFoundPage(dir: string): Plugin {
+	return {
+		name: 'enform-not-found',
+		configurePreviewServer(server) {
+			server.middlewares.use((req, res, next) => {
+				const path = decodeURIComponent(new URL(req.url ?? '/', 'http://x').pathname)
+				const file = path.slice(BASE_PATH.length) || '/'
+				if (req.method !== 'GET' || file === '/' || existsSync(`${dir}${file}`)) return next()
+				res.statusCode = 404
+				res.setHeader('content-type', 'text/html')
+				res.end(readFileSync(`${dir}/404.html`))
+			})
 		}
 	}
 }
@@ -52,6 +74,9 @@ export default defineConfig(({mode, command}) => ({
 				fallback: 'index.html',
 				strict: true
 			}),
+			// Addresses after `#` (src/lib/paths.ts): the host never sees whose repo, which
+			// app or what record one opens, only that enform was opened
+			router: {type: 'hash'},
 			paths: {
 				// Unit tests check the app's paths at the root, wherever it is built for
 				base: mode === 'test' ? '' : BASE_PATH,
@@ -83,6 +108,7 @@ export default defineConfig(({mode, command}) => ({
 				}
 			}
 		}),
+		notFoundPage(mode === 'e2e' ? 'dist-e2e' : 'dist'),
 		paraglideVitePlugin({
 			project: './i18n/project.inlang',
 			outdir: './src/lib/paraglide',

@@ -47,7 +47,7 @@ test("a profile's home in an app, on any page", async ({page, context, request, 
 	// Its records link to their pages in enform
 	await expect(shelf.getByRole('link', {name: text})).toHaveAttribute(
 		'href',
-		new RegExp(`/@alice\\.test/apps/enform\\.test\\?type=test\\.enform\\.note&record=`)
+		new RegExp(`#/@alice\\.test/apps/enform\\.test\\?type=test\\.enform\\.note&record=`)
 	)
 	// Read there, in the reader
 	await shelf.getByRole('button', {name: t('reader_read_all')}).click()

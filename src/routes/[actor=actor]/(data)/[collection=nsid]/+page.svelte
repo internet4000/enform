@@ -6,11 +6,11 @@
 	import CollectionOverview from '#lib/components/CollectionOverview.svelte'
 	import CreateRecord from '#lib/components/CreateRecord.svelte'
 	import Pane from '#lib/components/pane/Pane.svelte'
-	import {actorName, collectionPath} from '#lib/paths'
+	import {actorName, addressOf, collectionPath} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
-	let creating = $derived(page.url.searchParams.has('new'))
+	let creating = $derived(addressOf(page.url).searchParams.has('new'))
 </script>
 
 {#if creating}

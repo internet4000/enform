@@ -10,7 +10,7 @@
 	import type {Identity} from '#lib/atproto/identity'
 	import {appInfo, typeLabel} from '#lib/apps/directory'
 	import type {RepoApp} from '#lib/apps/types'
-	import {actorName, searchPath, searchResultsPath} from '#lib/paths'
+	import {actorName, hrefOf, searchPath, searchResultsPath} from '#lib/paths'
 
 	let query = $derived(shownUrl().searchParams.get('q') ?? '')
 	let input = $derived(query)
@@ -40,7 +40,7 @@
 		const url = new URL(shownUrl().href)
 		if (value.trim()) url.searchParams.set('q', value)
 		else url.searchParams.delete('q')
-		return goto(url, {shallow: true, replace: true, state: page.state})
+		return goto(hrefOf(url), {shallow: true, replace: true, state: page.state})
 	}
 
 	function oninput() {

@@ -1,13 +1,12 @@
 /** enform's OAuth client metadata (https://atproto.com/specs/oauth#clients) */
-import {resolve} from '$app/paths'
 import app from '#lib/config/app.json' with {type: 'json'}
 import {DECLARED_SCOPES} from './scopes'
 
 /**
- * Where an instance publishes its client metadata, under the folder it is served from.
- * Its full URL is the instance's client ID: each instance is its own client.
+ * Where an instance publishes its client metadata, beside its page (written when built,
+ * vite.config.ts). Its full URL is the instance's client ID: each instance is its own client.
  */
-export const clientMetadataPath = () => resolve('client-metadata.json')
+export const CLIENT_METADATA = 'client-metadata.json'
 
 /**
  * Everything enform may ever ask for. Each authorization asks for a small part of it:

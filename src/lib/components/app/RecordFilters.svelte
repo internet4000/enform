@@ -4,6 +4,7 @@
 	// keeps them), toggled where you are, without scrolling away.
 	import * as m from '#lib/paraglide/messages.js'
 	import {shownUrl} from '#lib/where.svelte'
+	import {inApp} from '#lib/paths'
 	import {fieldLabel} from '#lib/forms/labels'
 	import {HAS, NONE, toggled, type Facet} from '#lib/records/filters'
 
@@ -39,7 +40,7 @@
 					{#each values(facet) as { value, count } (value)}
 						<li>
 							<a
-								href={toggled(shownUrl(), facet.key, value)}
+								href={inApp(toggled(shownUrl(), facet.key, value))}
 								aria-current={active[facet.key] === value ? 'true' : undefined}
 							>
 								{label(facet, value)} <small>{count}</small>

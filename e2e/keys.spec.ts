@@ -1,11 +1,11 @@
 /** A lexicon whose key is `any`: the form asks for it (here, an organization's domain) */
-import {creating, expect, t, test} from './fixtures'
+import {address, creating, expect, t, test} from './fixtures'
 
 test('choose the key of a record when its lexicon lets you', async ({page}) => {
 	await page.goto('/apps/statusphere.xyz')
 	await page.getByRole('button', {name: t('start_device_button')}).click()
 	await page.waitForURL(creating)
-	const local = new URL(page.url()).pathname.split('/apps/')[0]
+	const local = address(page.url()).pathname.split('/apps/')[0]
 	await page.goto(`${local}/apps/enform.test?type=test.enform.org&new`)
 
 	const form = page.locator('enform-form')
@@ -16,5 +16,5 @@ test('choose the key of a record when its lexicon lets you', async ({page}) => {
 	await key.fill('example.org')
 	await form.getByRole('textbox', {name: 'Name'}).fill('Example')
 	await form.getByRole('button', {name: t('new_submit')}).click()
-	await page.waitForURL((url) => url.searchParams.get('record') === 'example.org')
+	await page.waitForURL((url) => address(url).searchParams.get('record') === 'example.org')
 })

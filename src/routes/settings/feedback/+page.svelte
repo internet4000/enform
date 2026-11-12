@@ -9,11 +9,12 @@
 	import {asset} from '$app/paths'
 	import app from '#lib/config/app.json' with {type: 'json'}
 	import SettingsHeader from '#lib/components/SettingsHeader.svelte'
+	import {addressOf, inApp} from '#lib/paths'
 
 	let from = $state<string>()
 	let ready = $state(false)
 	afterNavigate(({from: previous}) => {
-		if (previous?.url) from = previous.url.origin + previous.url.pathname
+		if (previous?.url) from = new URL(inApp(addressOf(previous.url).pathname), previous.url).href
 	})
 	onMount(async () => {
 		await import(/* @vite-ignore */ asset('feedbai.js'))

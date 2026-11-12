@@ -4,12 +4,23 @@ import {resolve} from '$app/paths'
 import type {Identity} from './atproto/identity'
 
 /**
- * A path in the app, under the folder it is served from: an instance can live at a
- * domain's root or in any folder of it (docs/self-host.md)
+ * A link to an address in the app: `#/@alice/apps/bsky.app?type=…`. The address is after
+ * `#`, the part of a URL a browser never sends: the host serving the app sees only that
+ * the app was opened, never whose repo, which app or what record (hash routing). Relative
+ * to the page, so an instance can live at a domain's root or in any of its folders
+ * (docs/self-host.md).
  */
 export function inApp(path: string): string {
 	return resolve(path.replace(/^\//, ''))
 }
+
+/** Where a page of the app is: its address (after `#`), as a URL of its own */
+export function addressOf(url: Pick<URL, 'hash' | 'origin'>): URL {
+	return new URL(url.hash.replace(/^#/, '') || '/', url.origin)
+}
+
+/** An address (from `addressOf`) as a link again */
+export const hrefOf = (address: URL): string => inApp(address.pathname + address.search)
 
 /** A repo's name in URLs: its verified handle, else its DID */
 export function actorName(repo: Pick<Identity, 'did' | 'handle'>): string {

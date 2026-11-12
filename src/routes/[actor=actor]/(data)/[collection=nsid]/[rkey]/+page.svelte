@@ -10,12 +10,12 @@
 	import RecordMenu from '#lib/components/RecordMenu.svelte'
 	import Pane from '#lib/components/pane/Pane.svelte'
 	import {recordSummary} from '#lib/records/summary'
-	import {actorName, collectionPath, editPath, inApp, recordPath} from '#lib/paths'
+	import {actorName, addressOf, collectionPath, editPath, inApp, recordPath} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
 	let owner = $derived(auth.owns(data.repo))
-	let editing = $derived(owner && page.url.searchParams.has('edit'))
+	let editing = $derived(owner && addressOf(page.url).searchParams.has('edit'))
 	let label = $derived(typeLabel(data.collection))
 	// A link (to a record or a person) isn't a title: the type names it then
 	let summary = $derived(recordSummary(data.record.value))
