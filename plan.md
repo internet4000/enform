@@ -58,11 +58,6 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
 10. **A lasting local copy** of collections people open often, for reading offline
     (`local-first`), next to the outbox.
 
-## Delivery
-
-11. **End-to-end suite in CI**: the local atproto network on Node, Playwright's
-    Chromium, before publishing.
-
 ## Found by the example apps
 
 - **Pictures on this device**: local profiles hold no files yet, so an example app's

@@ -32,8 +32,8 @@ The host sees that the app was opened, never whose repo, which app or what recor
 ## Deploy from a fork
 
 - **GitHub Pages**: in the fork's settings, Pages › Source: GitHub Actions. Each push
-  to `main` runs `.github/workflows/pages.yml`, which reads the address (a custom domain
-  included) from the Pages settings.
+  to `main` runs `.github/workflows/pages.yml`: the end-to-end suite (`e2e.yml`), then
+  the build, whose address (a custom domain included) comes from the Pages settings.
 - **GitLab Pages**: `.gitlab-ci.yml` publishes on the default branch, at the project's
   Pages address.
 - **Anywhere else**: build with your `ORIGIN` and `BASE_PATH`, upload `dist/`.

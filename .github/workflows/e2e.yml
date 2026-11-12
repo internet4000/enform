@@ -1,0 +1,34 @@
+# The end-to-end suite (bun run test:e2e): a local atproto network (PLC, a PDS with its
+# OAuth pages, DNS over HTTPS), the app built in `--mode e2e`, and Playwright's
+# Chromium at a phone and a desktop size. Nothing from the internet. Pages and npm run
+# it before publishing; it also runs on pull requests and by hand.
+name: e2e
+
+on:
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      # The network runs on Node (the PDS's SQLite is a Node addon, built at install)
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run test:e2e
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: test-results
+          retention-days: 7

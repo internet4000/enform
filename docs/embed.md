@@ -42,7 +42,8 @@ by pushing its tag:
     git tag enform-v0.1.1
     git push origin enform-v0.1.1
 
-The workflow checks that the tag matches the package's version, runs `bun run verify`,
+The workflow runs the end-to-end suite (`.github/workflows/e2e.yml`), checks that the
+tag matches the package's version, runs `bun run verify`,
 builds the embed and publishes it.
 
 Set up once, by hand: npm lets a package trust a workflow only once it exists.

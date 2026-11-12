@@ -34,7 +34,7 @@ Larger work in plan.md.
     bun run verify     # formatting, types, unit tests, build: before every commit
     bun run test:e2e   # local atproto network, Playwright, the UI quality gate
     bun run enform     # the description engine: describe, check (docs/cli.md)
-    git push           # main: GitHub Pages builds and publishes enform.internet4000.com
+    git push           # main: the e2e suite, then GitHub Pages publishes enform.internet4000.com
                        # (docs/self-host.md)
 
 ## Git
