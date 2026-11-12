@@ -443,5 +443,10 @@
 	"bulk_deleted": "{count} enregistrements supprimés.",
 	"bulk_edited": "{count} enregistrements modifiés.",
 	"bulk_stopped": "Arrêté : {written} sur {count} écrits.",
-	"bulk_failed": "Arrêté après {written} écrits : {error}"
+	"bulk_failed": "Arrêté après {written} écrits : {error}",
+	"popup_working": "Autorisation d'enform en cours…",
+	"popup_given": "Permission donnée. De retour dans enform, ce que vous faisiez continue.",
+	"popup_refused": "Permission refusée : enform ne fera pas ce pour quoi elle était demandée. De retour dans enform, vous pouvez réessayer.",
+	"popup_close": "Fermer cette fenêtre",
+	"popup_failed": "Cette réponse n'a pas pu être transmise à enform ({error}). Fermez cette fenêtre et réessayez depuis enform."
 }

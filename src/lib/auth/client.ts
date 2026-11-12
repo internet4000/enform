@@ -8,6 +8,7 @@ import {buildAtprotoLoopbackClientId} from '@atproto/oauth-types'
 import app from '#lib/config/app.json' with {type: 'json'}
 import {CLIENT_METADATA, CLIENT_SCOPE} from './metadata'
 import {BASE_SCOPE} from './scopes'
+import {markPopup} from './popup'
 
 let client: Promise<BrowserOAuthClient> | undefined
 
@@ -80,5 +81,25 @@ export async function revokeSession(did: string) {
 
 /** Asks for more permissions in a popup, so the page (and any form on it) stays */
 export async function authorizePopup(did: string, scope: string): Promise<OAuthSession> {
-	return (await oauthClient()).signInPopup(did, {scope})
+	const unmark = markPopup()
+	try {
+		return await (await oauthClient()).signInPopup(did, {scope})
+	} finally {
+		unmark()
+	}
+}
+
+/**
+ * In the popup: hands its answer to the page that asked, which closes it. Resolves
+ * when handed over, else with why it couldn't be (its state unknown or expired…)
+ */
+export async function finishPopup(): Promise<string | undefined> {
+	try {
+		await (await oauthClient()).init()
+		return undefined
+	} catch (err) {
+		return (err as {code?: string})?.code === 'LOGIN_CONTINUED_IN_PARENT_WINDOW'
+			? undefined
+			: String((err as Error)?.message ?? err)
+	}
 }

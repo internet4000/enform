@@ -443,5 +443,10 @@
 	"bulk_deleted": "{count} records deleted.",
 	"bulk_edited": "{count} records edited.",
 	"bulk_stopped": "Stopped: {written} of {count} written.",
-	"bulk_failed": "Stopped after {written} written: {error}"
+	"bulk_failed": "Stopped after {written} written: {error}",
+	"popup_working": "Giving enform this permission…",
+	"popup_given": "Permission given. Back in enform, what you were doing goes on.",
+	"popup_refused": "Permission not given: enform won't do what it asked for. Back in enform, you can try again.",
+	"popup_close": "Close this window",
+	"popup_failed": "This answer couldn't be handed to enform ({error}). Close this window and try again from enform."
 }

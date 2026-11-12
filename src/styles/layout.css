@@ -755,3 +755,19 @@ button[data-pin][aria-pressed='true'] {
 button[data-pin][aria-pressed='true'] > svg {
 	fill: currentColor;
 }
+
+/* A permission's answer, in its popup: what happened, alone and centred */
+enform-popup {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: var(--space-m);
+	max-width: var(--form-measure);
+	min-height: 100dvh;
+	margin: 0 auto;
+	padding: var(--space-l) var(--gutter);
+}
+
+enform-popup > * {
+	margin: 0;
+}
