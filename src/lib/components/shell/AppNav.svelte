@@ -17,6 +17,8 @@
 		{href: inApp('/explore'), icon: 'explore', label: m.nav_explore}
 	] as const
 	const settings = inApp('/settings')
+	/** Beside the app's page, which is always its folder (addresses are after `#`) */
+	const logo = app.logo.replace(/^\//, '')
 
 	/** Who you act as, always in sight: your handle, your local profile's name, or nobody yet */
 	let me = $derived(auth.me ? `@${actorName(auth.me)}` : m.nav_settings())
@@ -30,7 +32,7 @@
 </script>
 
 <nav aria-label={m.nav_main()}>
-	<a href={inApp('/')} rel="home"><img src={inApp(app.logo)} alt="" />{app.name}</a>
+	<a href={inApp('/')} rel="home"><img src={logo} alt="" />{app.name}</a>
 	<ul>
 		{#each places as place (place.href)}
 			<li>
