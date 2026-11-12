@@ -176,3 +176,13 @@ enform-record-bar > menu:first-child li:not(:last-child) a {
 enform-record-views > pre {
 	overflow-x: auto;
 }
+
+/* An action that destroys, in a menu: said in the danger color */
+enform-menu button[data-danger] {
+	color: var(--color-danger);
+}
+
+/* Deleting many: its progress, as wide as the dialog */
+dialog progress {
+	width: 100%;
+}

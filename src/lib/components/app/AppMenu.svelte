@@ -1,7 +1,7 @@
 <script lang="ts">
 	// An app's occasional links, in a menu beside its name: the app itself, what it is
 	// (its page, unless one is on it), its data as stored, and, on someone's profile in it,
-	// how to embed it
+	// how to embed it; in your own repo, deleting all its records
 	import * as m from '#lib/paraglide/messages.js'
 	import type {AppInfo} from '#lib/apps/directory'
 	import {appPath} from '#lib/paths'
@@ -15,8 +15,10 @@
 		actor?: string
 		/** On the app's own page: no link to it */
 		about?: boolean
+		/** In your own repo: deleting all its records */
+		deleteAll?: () => void
 	}
-	let {info, data, actor, about = true}: Props = $props()
+	let {info, data, actor, about = true, deleteAll}: Props = $props()
 	const id = $props.id()
 	let embed = $state<EmbedDialog>()
 </script>
@@ -43,6 +45,18 @@
 						document.getElementById(`${id}-app`)?.hidePopover()
 						embed?.open()
 					}}>{m.embed_menu()}</button
+				>
+			</li>
+		{/if}
+		{#if deleteAll}
+			<li>
+				<button
+					type="button"
+					data-danger
+					onclick={() => {
+						document.getElementById(`${id}-app`)?.hidePopover()
+						deleteAll()
+					}}>{m.bulk_delete_menu()}</button
 				>
 			</li>
 		{/if}

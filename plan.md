@@ -49,13 +49,19 @@ Larger changes, most useful first. Each names the savoir-faire practice it follo
   (its lexicon, not the device's records) under your domain. Needs a lexicon editor,
   and local lexicons resolved like published ones.
 
-8. **View switcher, further**: a record shows rendered, as fields or as JSON,
-   remembered per type. Still to do: the same for a list (cards, rows, a table) and
+8. **View switcher, further**: a record shows rendered, as fields or as JSON, the
+   view in the address (`?view=`). Still to do: the same for a list (cards, rows, a table) and
    picking another kind or presenter than the one inferred.
 9. **App descriptions as data**: what `apps.json` says about an app (labels, related
    types, views) read from the app's own repo once a shared lexicon for it exists;
    until then, the directory stays the fallback.
-10. **A lasting local copy** of collections people open often, for reading offline
+10. **Many records at once**: an app's ⋯ menu, in your repo, deletes all its records
+    (counted, a copy to save, the count typed, batches of `applyWrites`). Still to do:
+    a list's Select mode, its scope what its filters match across every page (delete,
+    save as JSON); setting one field across a selection, with its lexicon's widget;
+    batches that go on after a reload (the outbox); a CLI `plan` that prints the
+    writes a selection would make.
+11. **A lasting local copy** of collections people open often, for reading offline
     (`local-first`), next to the outbox.
 
 ## Found by the example apps

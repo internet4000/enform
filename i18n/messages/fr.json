@@ -415,5 +415,20 @@
 	"accounts_switch_title": "Changer de compte",
 	"privacy_title": "Confidentialité et sécurité",
 	"privacy_device": "Les comptes sur cet appareil gardent leurs enregistrements dans ce navigateur. Ils sont privés : jamais publiés, et les enregistrements d'un compte ne peuvent pas les désigner.",
-	"privacy_nobody": "Rien n'est partagé avant que vous ne créiez quelque chose : avec un compte sur cet appareil, jamais rien."
+	"privacy_nobody": "Rien n'est partagé avant que vous ne créiez quelque chose : avec un compte sur cet appareil, jamais rien.",
+	"bulk_delete_menu": "Supprimer tous ses enregistrements…",
+	"bulk_delete_title": "Supprimer tous les enregistrements de {app}",
+	"bulk_counting": "Décompte des enregistrements… {count}",
+	"bulk_review": "{count} enregistrements de {app} dans le dépôt de {actor} :",
+	"bulk_none": "Aucun enregistrement de {app} ici : rien à supprimer.",
+	"bulk_irreversible": "Une fois supprimés, ils ne peuvent être récupérés que depuis une copie.",
+	"bulk_save_copy": "Enregistrer une copie (JSON)",
+	"bulk_permission": "Le serveur de votre compte vous demandera d'autoriser la suppression de ces types.",
+	"bulk_confirm": "Tapez {count} pour confirmer",
+	"bulk_delete_button": "Supprimer {count} enregistrements",
+	"bulk_deleting": "Suppression… {deleted} sur {count}",
+	"bulk_stop": "Arrêter",
+	"bulk_done": "{deleted} enregistrements supprimés.",
+	"bulk_stopped": "Arrêté : {deleted} sur {count} supprimés.",
+	"bulk_failed": "Arrêté après {deleted} supprimés : {error}"
 }

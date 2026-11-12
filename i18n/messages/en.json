@@ -415,5 +415,20 @@
 	"accounts_switch_title": "Switch account",
 	"privacy_title": "Privacy and security",
 	"privacy_device": "Accounts on this device keep their records in this browser. They are private: never published, and an account's records can't point at them.",
-	"privacy_nobody": "Nothing is shared until you create something: with an account on this device, nothing ever is."
+	"privacy_nobody": "Nothing is shared until you create something: with an account on this device, nothing ever is.",
+	"bulk_delete_menu": "Delete all its records…",
+	"bulk_delete_title": "Delete all of {app}'s records",
+	"bulk_counting": "Counting the records… {count}",
+	"bulk_review": "{count} records of {app} in {actor}'s repo:",
+	"bulk_none": "No records of {app} here: nothing to delete.",
+	"bulk_irreversible": "Once deleted, they can't be brought back, except from a copy.",
+	"bulk_save_copy": "Save a copy (JSON)",
+	"bulk_permission": "Your account's server will ask you to allow deleting these types.",
+	"bulk_confirm": "Type {count} to confirm",
+	"bulk_delete_button": "Delete {count} records",
+	"bulk_deleting": "Deleting… {deleted} of {count}",
+	"bulk_stop": "Stop",
+	"bulk_done": "{deleted} records deleted.",
+	"bulk_stopped": "Stopped: {deleted} of {count} deleted.",
+	"bulk_failed": "Stopped after {deleted} deleted: {error}"
 }

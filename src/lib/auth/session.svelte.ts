@@ -168,6 +168,17 @@ class Auth {
 		return this.authorize(missing.map((each) => scopeForRepo(collection, each)))
 	}
 
+	/** One authorization for writing to several collections at once (a batch) */
+	async authorizeRepos(collections: string[], action: RepoAction): Promise<OAuthSession> {
+		const needed = collections.flatMap((collection) =>
+			actionsFor(action)
+				.filter((each) => !allowsRepo(this.scope, collection, each))
+				.map((each) => scopeForRepo(collection, each))
+		)
+		if (this.session && !needed.length) return this.session
+		return this.authorize([...new Set(needed)])
+	}
+
 	async authorizeBlob(mime: string): Promise<OAuthSession> {
 		if (this.session && this.canUpload(mime)) return this.session
 		return this.authorize([scopeForBlob(mime)])
