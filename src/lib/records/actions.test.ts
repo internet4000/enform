@@ -30,6 +30,15 @@ describe('recordActions', () => {
 		const post = doc('app.bsky.feed.post', {text: {type: 'string'}})
 		expect(verbs({text: 'Hello'}, post)).toEqual(['read'])
 	})
+	it('opens the reader once, as the most telling verb', () => {
+		const profile = doc('app.bsky.actor.profile', {
+			displayName: {type: 'string'},
+			description: {type: 'string'},
+			avatar: {type: 'blob', accept: ['image/*']}
+		})
+		const avatar = {$type: 'blob', ref: {$link: 'bafy'}, mimeType: 'image/png', size: 1}
+		expect(verbs({displayName: 'A', description: 'B', avatar}, profile)).toEqual(['view'])
+	})
 	it('goes to the account followed', () => {
 		const follow = doc('app.bsky.graph.follow', {subject: {type: 'string', format: 'did'}})
 		expect(recordActions({subject: 'did:plc:alice'}, follow)).toEqual([

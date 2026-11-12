@@ -50,20 +50,25 @@ function targets(value: Record<string, unknown>, lexicon?: LexiconDoc): RecordAc
 	return found
 }
 
-/** A record's actions, the most telling first */
+/** A record's actions, the most telling first. The reader shows the record whole, so
+    one action opens it, named by the most telling of what it holds: a profile with
+    images and text is viewed, not viewed and read. */
 export function recordActions(
 	value: Record<string, unknown>,
 	lexicon?: LexiconDoc
 ): RecordAction[] {
 	const capabilities = capabilitiesOf(value, lexicon)
 	const has = (kind: string) => capabilities.some((capability) => capability.kind === kind)
-	return [
-		...(plays(capabilities) ? [{verb: 'play' as const}] : []),
-		...(has('images') ? [{verb: 'view' as const}] : []),
-		...(has('place') ? [{verb: 'map' as const}] : []),
-		...(has('text') && !plays(capabilities) ? [{verb: 'read' as const}] : []),
-		...targets(value, lexicon)
-	]
+	const verb: 'play' | 'view' | 'map' | 'read' | undefined = plays(capabilities)
+		? 'play'
+		: has('images')
+			? 'view'
+			: has('place')
+				? 'map'
+				: has('text')
+					? 'read'
+					: undefined
+	return [...(verb ? [{verb}] : []), ...targets(value, lexicon)]
 }
 
 /** Whether an action happens in the reader (else it goes somewhere) */
