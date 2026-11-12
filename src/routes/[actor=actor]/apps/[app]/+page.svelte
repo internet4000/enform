@@ -201,15 +201,8 @@
 		{:then record}
 			{@const title = describeRecord(record, selected.lexicon).title}
 			<enform-toolbar>{@render sections()}</enform-toolbar>
-			<!-- The record, as in its sheet: its actions and how to see it on one line; its
-			     fields first, as the header already shows it rendered -->
-			<RecordViews
-				repo={data.repo}
-				{record}
-				lexicon={selected.lexicon}
-				collection={selected.nsid}
-				initial="fields"
-			>
+			<!-- The record, as in its sheet: how to see it and its actions on one line -->
+			<RecordViews repo={data.repo} {record} lexicon={selected.lexicon} collection={selected.nsid}>
 				{#snippet actions()}
 					<RecordActionsMenu
 						value={record.value}

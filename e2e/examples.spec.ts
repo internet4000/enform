@@ -96,7 +96,7 @@ for (const doc of exampleLexicons) {
 		await create(page, handle, doc, {account, record})
 		const sheet = page.locator('enform-sheet')
 		await expect(sheet.getByRole('button', {name: t('view_rendered')})).toHaveAttribute(
-			'aria-pressed',
+			'aria-current',
 			'true'
 		)
 		await expect(sheet.locator('enform-kind-view')).not.toBeEmpty()

@@ -128,8 +128,8 @@ enform-sheet > header > a {
 	}
 }
 
-/* A record's views: rendered, its fields, its JSON; over them, one bar: its actions,
-   then how to see it, at the end */
+/* A record's views: rendered, its fields, its JSON; over them, one bar: how to see it,
+   then its actions, at the end */
 enform-record-views {
 	display: flex;
 	flex-direction: column;
@@ -156,19 +156,19 @@ enform-record-bar :is(button, a[role='button']) {
 	font-size: var(--font-size-s);
 }
 
-/* How to see it: one segmented control, at the end of the line */
-enform-record-bar > menu:last-child {
+/* How to see it: one segmented control, at the start of the line */
+enform-record-bar > menu:first-child {
 	gap: 0;
-	margin-inline-start: auto;
+	margin-inline-end: auto;
 }
 
-enform-record-bar > menu:last-child li:not(:first-child) button {
+enform-record-bar > menu:first-child li:not(:first-child) a {
 	margin-inline-start: calc(-1 * var(--border-width));
 	border-start-start-radius: 0;
 	border-end-start-radius: 0;
 }
 
-enform-record-bar > menu:last-child li:not(:last-child) button {
+enform-record-bar > menu:first-child li:not(:last-child) a {
 	border-start-end-radius: 0;
 	border-end-end-radius: 0;
 }

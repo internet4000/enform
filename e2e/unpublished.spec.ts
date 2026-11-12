@@ -37,7 +37,7 @@ test('a record with no lexicon is rendered from its values', async ({page, reque
 	await page.goto(`/@alice.test/apps/unpublished.test?type=test.unpublished.track&record=${rkey}`)
 	const sheet = page.locator('enform-sheet')
 	await expect(sheet.getByRole('button', {name: t('view_rendered')})).toHaveAttribute(
-		'aria-pressed',
+		'aria-current',
 		'true'
 	)
 	const rendered = sheet.locator('enform-kind-view')
