@@ -1,13 +1,20 @@
-/* Signing in, and the accounts signed in on this browser */
+/* Signing in, and every account on this browser, on its server or on this device */
 enform-sign-in,
-enform-accounts {
+enform-accounts,
+enform-accounts > section {
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-s);
 }
 
+/* The list, then each way to add one, apart */
+enform-accounts:has(> section) {
+	gap: var(--space-l);
+}
+
 enform-sign-in > p,
-enform-accounts > p {
+enform-accounts > p,
+enform-accounts > section > :is(h2, p) {
 	margin: 0;
 }
 
@@ -38,17 +45,28 @@ enform-account-item[busy] {
 	opacity: var(--busy-opacity);
 }
 
-enform-account-item > img {
-	width: var(--nav-avatar-size);
-	height: var(--nav-avatar-size);
-	object-fit: cover;
-	border-radius: var(--avatar-radius);
+enform-account-item > enform-avatar {
+	--chip-avatar-size: var(--nav-avatar-size);
+	flex: none;
 }
 
+/* Its name, and under it where its records are kept */
 enform-account-item > a {
+	display: flex;
 	flex: 1 1 var(--account-name-min-width);
+	flex-direction: column;
 	min-width: 0;
 	overflow-wrap: anywhere;
+	text-decoration: none;
+}
+
+enform-account-item > a:hover {
+	text-decoration: underline;
+}
+
+enform-account-item > a > small {
+	font-weight: normal;
+	color: var(--color-muted);
 }
 
 enform-account-item > a[aria-current] {
@@ -57,23 +75,6 @@ enform-account-item > a[aria-current] {
 
 enform-account-item > small {
 	color: var(--color-muted);
-}
-
-/* You: who you act as, where your records are kept, and what enform may do there */
-enform-you {
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-s);
-}
-
-enform-you > p {
-	margin: 0;
-	color: var(--color-muted);
-}
-
-enform-you > p > strong {
-	display: block;
-	color: var(--color-text);
 }
 
 /* Where records can be kept, side by side when there is room */

@@ -1,81 +1,68 @@
 <script lang="ts">
-	// Settings, opened from who you are: only where to go, in groups of rows (as 4000.radio's
-	// and joblist's menus), each to its own page. You (your page, your profiles and
-	// accounts, signing out), this browser (pins, writes waiting, language), and enform
+	// Settings, opened from who you are, as Bluesky's: who you act as, once and large; one
+	// row to switch account (the others' faces on it); then plain rows, each to its own
+	// page; signing out last
 	import * as m from '#lib/paraglide/messages.js'
 	import {getLocale} from '#lib/paraglide/runtime.js'
-	import {inApp, actorName, repoPath} from '#lib/paths'
-	import app from '#lib/config/app.json' with {type: 'json'}
+	import {inApp} from '#lib/paths'
 	import {auth} from '#lib/auth/session.svelte'
 	import {profileAvatar} from '#lib/atproto/profile'
 	import {pins} from '#lib/apps/pins.svelte'
 	import {outbox} from '#lib/outbox/outbox.svelte'
 	import SettingsLinks, {type SettingsLink} from '#lib/components/SettingsLinks.svelte'
+	import SettingsYou from '#lib/components/SettingsYou.svelte'
 
 	const language = new Intl.DisplayNames([getLocale()], {type: 'language'}).of(getLocale())
 
 	let me = $derived(auth.me)
-	let you = $derived.by((): SettingsLink[] => {
-		const profiles: SettingsLink = {
-			href: inApp('/settings/profiles'),
-			icon: 'profile',
-			label: m.profiles_title(),
-			value: me ? (me.local ? m.local_on_device() : me.pds && new URL(me.pds).host) : undefined
+	/** The other accounts on their server, by their faces (those on this device have none) */
+	let others = $derived(
+		auth.accounts
+			.filter((account) => account.did !== me?.did && account.identity)
+			.slice(0, 4)
+			.map((account) => profileAvatar(account.identity!))
+	)
+	let switching = $derived<SettingsLink[]>([
+		{
+			href: inApp('/settings/accounts'),
+			icon: 'accounts',
+			label: me ? m.accounts_switch_title() : m.session_sign_in(),
+			faces: others
 		}
-		if (!me) return [profiles]
-		const actor = actorName(me)
-		const page: SettingsLink = {
-			href: repoPath(actor),
-			icon: 'me',
-			label: `@${actor}`,
-			value: m.account_your_page(),
-			image: me.local ? undefined : profileAvatar(me)
-		}
-		const leave: SettingsLink[] = me.local
-			? auth.identity
-				? [
-						{
-							icon: 'me',
-							label: m.you_use_account({actor: `@${actorName(auth.identity)}`}),
-							onclick: () => auth.useLocal(undefined)
-						}
-					]
-				: []
-			: [{icon: 'signout', label: m.session_sign_out(), onclick: () => auth.signOut()}]
-		return [page, profiles, ...leave]
-	})
-	let browser = $derived<SettingsLink[]>([
+	])
+	let rows = $derived<SettingsLink[]>([
+		{href: inApp('/settings/privacy'), icon: 'lock', label: m.privacy_title()},
 		{
 			href: inApp('/settings/pins'),
 			icon: 'pin',
 			label: m.pins_title(),
 			value: pins.keys.length ? String(pins.keys.length) : undefined
 		},
-		{
-			href: inApp('/settings/waiting'),
-			icon: 'waiting',
-			label: m.outbox_title(),
-			value: outbox.writes.length ? String(outbox.writes.length) : undefined
-		},
-		{href: inApp('/settings/language'), icon: 'language', label: m.locale_label(), value: language}
-	])
-	const about: SettingsLink[] = [
+		...(outbox.writes.length
+			? [
+					{
+						href: inApp('/settings/waiting'),
+						icon: 'waiting',
+						label: m.outbox_title(),
+						value: String(outbox.writes.length)
+					} satisfies SettingsLink
+				]
+			: []),
+		{href: inApp('/settings/language'), icon: 'language', label: m.locale_label(), value: language},
 		{href: inApp('/settings/feedback'), icon: 'post', label: m.feedback_title()},
-		{href: app.source, icon: 'source', label: m.about_source(), external: true},
-		{
-			href: `${app.source}/blob/main/docs/self-host.md`,
-			icon: 'home',
-			label: m.about_self_host(),
-			external: true
-		}
-	]
+		{href: inApp('/settings/about'), icon: 'info', label: m.about_title()}
+	])
+	let leaving = $derived<SettingsLink[]>(
+		me && !me.local && auth.session
+			? [{icon: 'signout', label: m.session_sign_out(), onclick: () => auth.signOut()}]
+			: []
+	)
 </script>
 
 <enform-page>
 	<h1>{m.nav_settings()}</h1>
-	<SettingsLinks title={m.you_title()} items={you} />
-	{#if !me && auth.ready}<p><small>{m.you_nobody()}</small></p>{/if}
-	<SettingsLinks title={m.settings_browser()} items={browser} />
-	<SettingsLinks title={m.about_title()} items={about} />
-	<p><small>{m.app_intro()}</small></p>
+	<SettingsYou />
+	<SettingsLinks items={switching} />
+	<SettingsLinks items={rows} />
+	{#if leaving.length}<SettingsLinks items={leaving} />{/if}
 </enform-page>

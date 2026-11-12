@@ -8,24 +8,25 @@ test('add a second account and switch between them', async ({page}) => {
 	const accounts = page.locator('enform-accounts')
 	const current = accounts.locator('enform-account-item[current]')
 	await expect(accounts.getByRole('listitem')).toHaveCount(2)
-	await expect(current.getByRole('link', {name: '@bob.test'})).toBeVisible()
+	await expect(current.getByRole('link', {name: /@bob\.test/})).toBeVisible()
 
 	await accounts.getByRole('button', {name: t('accounts_switch_to', {actor: 'alice.test'})}).click()
-	await expect(current.getByRole('link', {name: '@alice.test'})).toBeVisible()
-	// You, at the top of Settings: who you act as, and where your records are
-	await expect(page.locator('enform-you').getByText('@alice.test')).toBeVisible()
+	await expect(current.getByRole('link', {name: /@alice\.test/})).toBeVisible()
 
-	// Who you are, in the main navigation, opens Settings
+	// Who you are, in the main navigation, opens Settings: you at its top, once
 	await page.goto('/')
 	await page
 		.getByRole('navigation', {name: t('nav_main')})
 		.getByRole('link', {name: '@alice.test'})
 		.click()
 	await page.waitForURL((url) => address(url).pathname === '/settings')
-	// Settings: your page first, then your profiles, where your records are kept
-	const you = page.getByRole('region', {name: t('you_title')})
-	await expect(you.getByRole('link', {name: /@alice\.test/})).toBeVisible()
-	await you.getByRole('link', {name: new RegExp(`^${t('profiles_title')}`)}).click()
-	await page.waitForURL((url) => address(url).pathname === '/settings/profiles')
-	await expect(page.locator('enform-you').getByText('@alice.test')).toBeVisible()
+	await expect(page.locator('enform-settings-you').getByText(/@alice\.test/)).toBeVisible()
+	// One row to switch, back to the list of every account
+	await page.getByRole('link', {name: t('accounts_switch_title')}).click()
+	await page.waitForURL((url) => address(url).pathname === '/settings/accounts')
+	await expect(current.getByRole('link', {name: /@alice\.test/})).toBeVisible()
+
+	// The old address of that list still opens it
+	await page.goto('/#/settings/profiles')
+	await page.waitForURL((url) => address(url).pathname === '/settings/accounts')
 })

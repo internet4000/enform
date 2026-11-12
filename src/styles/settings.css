@@ -8,6 +8,59 @@ enform-page:has(> enform-settings-links, > enform-settings-header) {
 	max-width: var(--measure-settings);
 }
 
+/* Who you act as, once and large, centered as on Bluesky */
+enform-settings-you > a {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--space-2xs);
+	padding: var(--space-s);
+	color: inherit;
+	text-align: center;
+	text-decoration: none;
+	border-radius: var(--radius-large);
+}
+
+enform-settings-you > a:hover {
+	background: var(--color-surface);
+}
+
+enform-settings-you enform-avatar {
+	width: var(--avatar-size);
+	height: var(--avatar-size);
+	margin-bottom: var(--space-xs);
+	font-size: var(--font-size-l);
+}
+
+enform-settings-you strong {
+	max-width: 100%;
+	font-size: var(--font-size-l);
+	overflow-wrap: anywhere;
+}
+
+enform-settings-you small {
+	color: var(--color-muted);
+	overflow-wrap: anywhere;
+}
+
+enform-settings-you > p {
+	margin: 0 0 var(--space-s);
+}
+
+/* The other accounts' faces, overlapping, on the row to switch */
+enform-faces {
+	display: flex;
+	flex: none;
+}
+
+enform-faces > img + img {
+	margin-inline-start: calc(var(--space-xs) * -1);
+}
+
+enform-settings-links enform-faces > img {
+	box-shadow: 0 0 0 var(--border-width) var(--color-bg);
+}
+
 enform-settings-links h2 {
 	margin: 0 0 var(--space-xs);
 	font-size: var(--font-size-s);
@@ -171,118 +224,4 @@ feedbai-button {
 	--line: var(--color-border);
 	--soft: var(--color-surface);
 	font-family: inherit;
-}
-
-/* Your handle: a name under your server's domain, or your own domain and what to
-   publish there */
-enform-handle form {
-	display: flex;
-	flex-direction: column;
-	align-items: stretch;
-	gap: var(--space-s);
-	padding: var(--space-s);
-	border: var(--border-width) solid var(--color-border);
-	border-radius: var(--radius-large);
-}
-
-enform-handle form > label {
-	flex: none;
-	flex-direction: row;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
-	font-size: var(--font-size-m);
-	color: var(--color-text);
-}
-
-enform-handle label:has(input[role='switch']) {
-	padding-bottom: var(--space-s);
-	border-bottom: var(--border-width) solid var(--color-border);
-}
-
-enform-handle input[role='switch'] {
-	min-height: 0;
-	padding: 0;
-	inline-size: var(--checkbox-size);
-	block-size: var(--checkbox-size);
-	accent-color: var(--color-accent);
-}
-
-enform-handle-name {
-	display: flex;
-	flex: 1 1 14rem;
-	align-items: center;
-	gap: var(--space-2xs);
-}
-
-enform-handle-name input {
-	flex: 1;
-	min-width: 0;
-}
-
-enform-handle-name > span {
-	color: var(--color-muted);
-}
-
-enform-handle p {
-	margin: 0;
-}
-
-enform-handle dl {
-	display: grid;
-	grid-template-columns: auto 1fr;
-	align-items: center;
-	gap: var(--space-2xs) var(--space-xs);
-	margin: 0;
-}
-
-enform-handle dt {
-	color: var(--color-muted);
-	font-size: var(--font-size-s);
-}
-
-enform-handle dd {
-	display: flex;
-	align-items: center;
-	gap: var(--space-2xs);
-	min-width: 0;
-	margin: 0;
-}
-
-enform-handle dd > span {
-	flex: 1;
-	min-width: 0;
-	overflow-wrap: anywhere;
-}
-
-enform-handle code {
-	font-family: var(--font-mono);
-	font-size: var(--font-size-s);
-}
-
-enform-handle dd > button {
-	flex: none;
-	min-height: var(--control-height-small);
-	font-size: var(--font-size-s);
-}
-
-/* On a phone, each name over its value */
-@media (width < 30rem) {
-	enform-handle dl {
-		grid-template-columns: 1fr;
-	}
-}
-
-enform-handle p[data-check='you'] {
-	color: var(--color-accent);
-}
-
-enform-handle menu {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-end;
-	gap: var(--space-xs);
-	margin: 0;
-	padding: 0;
-	list-style: none;
 }

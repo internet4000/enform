@@ -1,5 +1,8 @@
 # Local profiles and local-first writes
 
+People see a local profile as an **account on this device**, always marked so ("This
+device only"): one word for whoever you act as. In code and here it stays a local profile.
+
 ## Why
 
 - **Try apps without an account**: start a radio, a list, a status on this device,
@@ -34,8 +37,8 @@ Nothing local pretends to be atproto:
 - Opened like any repo, at `/@<name>.local` (links to `/@local:<id>` still open): the same panes, apps, lists and forms.
   Reads and writes go through the same modules as remote repos
   (`src/lib/atproto/repo.ts`, `write.ts`), which dispatch on the repo.
-- **Who you are** is the current account _or_ local profile: Settings › Profiles lists both,
-  to switch to, add or remove. Owner actions (Add, Edit, Delete) follow it.
+- **Who you are** is the current account _or_ local profile: Settings shows it at its
+  top; Settings › Switch account lists both in one list, to switch to, add or remove. Owner actions (Add, Edit, Delete) follow it.
 - **Never published**: an account starts from nothing of the device's. Making the
   same thing there is done again, on purpose, as that account.
 - Not in the first version: blobs (files) in local profiles.

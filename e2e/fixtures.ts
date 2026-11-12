@@ -50,7 +50,7 @@ export async function authorizeOnPds(page: Page, handle: string) {
 
 /** Signs in through Settings, as the first account or another one */
 export async function signIn(page: Page, handle: string) {
-	await page.goto('/settings/profiles')
+	await page.goto('/settings/accounts')
 	await expect(page.getByRole('textbox', {name: t('session_handle_label')})).toBeVisible()
 	const adding = await page.getByRole('button', {name: t('accounts_add_submit')}).isVisible()
 	await page.getByRole('textbox', {name: t('session_handle_label')}).fill(handle)
@@ -60,7 +60,7 @@ export async function signIn(page: Page, handle: string) {
 	await page.waitForURL((url) => url.port === String(network.ports.pds))
 	await authorizeOnPds(page, handle)
 	await page.waitForURL(
-		(url) => url.hostname === '127.0.0.1' && address(url).pathname === '/settings/profiles'
+		(url) => url.hostname === '127.0.0.1' && address(url).pathname === '/settings/accounts'
 	)
 	await expect(page.getByRole('link', {name: `@${handle}`}).first()).toBeVisible()
 }

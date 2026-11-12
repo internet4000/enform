@@ -44,7 +44,7 @@
 		<p><small>{m.account_permissions_hint()}</small></p>
 	{/if}
 	{#if auth.accounts.length}
-		<h3>{m.accounts_title()}</h3>
+		<h3>{m.accounts_switch_title()}</h3>
 		<AccountList />
 	{/if}
 	{#if auth.ready}
