@@ -16,6 +16,7 @@
 	import SignIn from '#lib/components/SignIn.svelte'
 	import StartChoice from '#lib/components/StartChoice.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
+	import AppMenu from '#lib/components/app/AppMenu.svelte'
 	import AppActions from '#lib/components/app/AppActions.svelte'
 	import AppPlace from '#lib/components/app/AppPlace.svelte'
 	import TypeShelf from '#lib/components/app/TypeShelf.svelte'
@@ -58,15 +59,10 @@
 			<h1>{info.name}</h1>
 			{#if info.name.toLowerCase() !== info.domain}<p>{info.domain}</p>{/if}
 		</hgroup>
+		<!-- Its actions in its header, as on a profile in it: pin it; open it, in its menu -->
 		<menu>
 			<li><PinButton domain={info.domain} name={info.name} /></li>
-			{#if info.url}
-				<li>
-					<a href={info.url} rel="noopener external" target="_blank" role="button"
-						>{m.apps_visit({domain: info.domain})} ↗</a
-					>
-				</li>
-			{/if}
+			{#if info.url}<li><AppMenu {info} about={false} /></li>{/if}
 		</menu>
 		{#if info.description}<p>{info.description}</p>{/if}
 	</enform-app-hero>

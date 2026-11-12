@@ -570,20 +570,14 @@ enform-app-card[joined] small {
 	color: var(--color-success);
 }
 
-/* An app: its icon and name, its actions at the row's end, what it is under them */
+/* An app: its icon and name, its actions at the row's end (as a profile's header in it),
+   what it is under them */
 enform-app-hero {
 	display: grid;
-	grid-template-columns: auto minmax(0, 1fr);
-	grid-template-areas: 'icon name' 'text text' 'menu menu';
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	grid-template-areas: 'icon name menu' 'text text text';
 	align-items: center;
 	gap: var(--space-s) var(--space-m);
-}
-
-@media (min-width: 48rem) {
-	enform-app-hero {
-		grid-template-columns: auto minmax(0, 1fr) auto;
-		grid-template-areas: 'icon name menu' 'text text text';
-	}
 }
 
 enform-app-hero > enform-app-icon {
