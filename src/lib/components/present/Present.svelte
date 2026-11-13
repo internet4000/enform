@@ -11,18 +11,25 @@
 	import MediaPresenter from './MediaPresenter.svelte'
 	import PlacePresenter from './PlacePresenter.svelte'
 
-	type Props = {repo: Identity; record: RepoRecord; lexicon?: LexiconDoc; onended: () => void}
-	let {repo, record, lexicon, onended}: Props = $props()
+	type Props = {
+		repo: Identity
+		record: RepoRecord
+		lexicon?: LexiconDoc
+		onended: () => void
+		/** Its media element, when it plays one, for controls around it */
+		onmedia?: (media: HTMLMediaElement | undefined) => void
+	}
+	let {repo, record, lexicon, onended, onmedia}: Props = $props()
 
 	let main = $derived(capabilitiesOf(record.value, lexicon)[0])
 </script>
 
 <enform-present capability={main?.kind ?? 'kind'}>
 	{#if main?.kind === 'media'}
-		<MediaPresenter src={main.url} player={main.player} {onended} />
+		<MediaPresenter src={main.url} player={main.player} {onended} {onmedia} />
 		<KindView {repo} {record} {lexicon} beside />
 	{:else if main?.kind === 'blob-media' && !repo.local}
-		<MediaPresenter src={blobUrl(repo, main.cid)} player={main.player} {onended} />
+		<MediaPresenter src={blobUrl(repo, main.cid)} player={main.player} {onended} {onmedia} />
 		<KindView {repo} {record} {lexicon} beside />
 	{:else if main?.kind === 'images'}
 		<ImagesPresenter {repo} cids={main.cids} alts={main.alts} {onended} />

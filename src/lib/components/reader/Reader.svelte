@@ -4,7 +4,9 @@
 	// screens and below it on phones; full screen. Prev, next, what's up next (each with its
 	// menu), and autoplay on to the next record when one is done. Its record stays mounted
 	// in every mode. With several lists at hand, a deck each, as tabs: the one in front
-	// plays, the others keep their place.
+	// plays, the others keep their place. Its record and media keep the share of it one
+	// gave them (dragged, between them and the list), whatever the record's length; docked,
+	// its edge resizes it. Its controls at its foot, as 4000.radio's.
 	import {describeRecord} from '#lib/describe/record'
 	import * as m from '#lib/paraglide/messages.js'
 	import {typeLabel} from '#lib/apps/directory'
@@ -12,6 +14,37 @@
 	import Icon from '../shell/Icon.svelte'
 	import Present from '../present/Present.svelte'
 	import ReaderItemMenu from './ReaderItemMenu.svelte'
+	import PlayerControls from './PlayerControls.svelte'
+	import Resizer from './Resizer.svelte'
+	import {clamp, sizes} from '#lib/reader/sizes.svelte'
+
+	let element = $state<HTMLElement>()
+	/** The media playing, when the record has some */
+	let media = $state<HTMLMediaElement>()
+	let split = $derived(sizes.value.split ?? 0.55)
+
+	/** Docked: its width beside the page, its height above the tab bar, as dragged */
+	$effect(() => {
+		const root = document.documentElement.style
+		const {width, height} = sizes.value
+		if (width) root.setProperty('--reader-width', `${width}px`)
+		if (height) root.setProperty('--reader-docked-height', `${height}px`)
+	})
+
+	function resizeSplit(delta: number) {
+		const height = element?.clientHeight
+		if (height) sizes.set({split: clamp(split + delta / height, 0.2, 0.85)})
+	}
+
+	function resizeWidth(delta: number) {
+		const width = element?.offsetWidth
+		if (width) sizes.set({width: clamp(width - delta, 256, window.innerWidth * 0.6)})
+	}
+
+	function resizeHeight(delta: number) {
+		const height = element?.offsetHeight
+		if (height) sizes.set({height: clamp(height - delta, 160, window.innerHeight * 0.85)})
+	}
 
 	let item = $derived(reader.current)
 	const titleOf = (entry: ReaderItem) =>
@@ -38,7 +71,18 @@
 <svelte:window onkeydown={keys} />
 
 {#if item}
-	<enform-reader mode={reader.mode} role="region" aria-label={m.reader_label()}>
+	<enform-reader
+		bind:this={element}
+		mode={reader.mode}
+		role="region"
+		aria-label={m.reader_label()}
+		style="--reader-split: {split * 100}%"
+	>
+		{#if reader.mode === 'docked'}
+			<!-- Its edge: beside the page on wide screens, above the tab bar on phones -->
+			<Resizer label={m.reader_resize()} axis="x" edge onmove={resizeWidth} />
+			<Resizer label={m.reader_resize()} axis="y" edge onmove={resizeHeight} />
+		{/if}
 		<header>
 			<!-- The small bar opens the reader where it was docked -->
 			<button
@@ -105,46 +149,12 @@
 				record={item.record}
 				lexicon={item.lexicon}
 				onended={() => reader.ended()}
+				onmedia={(found) => (media = found)}
 			/>
 		{/key}
-		<footer>
-			<menu>
-				<li>
-					<button
-						type="button"
-						onclick={() => reader.prev()}
-						disabled={!reader.hasPrev}
-						aria-label={m.reader_prev()}>‹</button
-					>
-				</li>
-				<li>
-					<button
-						type="button"
-						aria-pressed={reader.autoplay}
-						onclick={() => (reader.autoplay = !reader.autoplay)}
-					>
-						{m.reader_autoplay()}
-					</button>
-				</li>
-				<li>
-					<a
-						href={item.href}
-						onclick={() => {
-							if (reader.mode === 'full') reader.mode = 'docked'
-						}}>{m.reader_open()}</a
-					>
-				</li>
-				<li><ReaderItemMenu entry={item} index={reader.index} {title} /></li>
-				<li>
-					<button
-						type="button"
-						onclick={() => reader.next()}
-						disabled={!reader.hasNext}
-						aria-label={m.reader_next()}>›</button
-					>
-				</li>
-			</menu>
-		</footer>
+		{#if reader.mode !== 'small' && reader.items.length > 1}
+			<Resizer label={m.reader_resize_split()} axis="y" onmove={resizeSplit} value={split * 100} />
+		{/if}
 		{#if reader.items.length > 1}
 			<section aria-labelledby="reader-queue">
 				<h2 id="reader-queue">{m.reader_queue()}</h2>
@@ -163,5 +173,18 @@
 				</ol>
 			</section>
 		{/if}
+		<footer>
+			<PlayerControls {media}>
+				<li>
+					<a
+						href={item.href}
+						onclick={() => {
+							if (reader.mode === 'full') reader.mode = 'docked'
+						}}>{m.reader_open()}</a
+					>
+				</li>
+				<li><ReaderItemMenu entry={item} index={reader.index} {title} /></li>
+			</PlayerControls>
+		</footer>
 	</enform-reader>
 {/if}

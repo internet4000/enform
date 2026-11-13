@@ -34,7 +34,8 @@
 	"storage": {
 		"accounts": "enform:accounts",
 		"local": "enform:local",
-		"pins": "enform:pins"
+		"pins": "enform:pins",
+		"readerSizes": "enform:reader-sizes"
 	},
 	"logo": "/favicon.svg",
 	"examples": ["bsky.app", "4000.radio", "atproto.com", "tangled.org"],

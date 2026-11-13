@@ -3,6 +3,13 @@
 	const paths = {
 		explore: 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm9 16-4-4',
 		new: 'M12 5v14M5 12h14',
+		play: 'M8 5.5v13l11-6.5z',
+		pause: 'M8 5v14M16 5v14',
+		'skip-previous': 'M6 5v14M19 5.5v13L9 12z',
+		'skip-next': 'M18 5v14M5 5.5v13L15 12z',
+		volume: 'M4 9.5h3.5L12 6v12l-4.5-3.5H4zM16 9a4.5 4.5 0 0 1 0 6m2.5-8.5a8 8 0 0 1 0 11',
+		muted: 'M4 9.5h3.5L12 6v12l-4.5-3.5H4zM16.5 9.5l5 5m0-5-5 5',
+		autoplay: 'M4 12a8 8 0 0 1 13.7-5.6M20 12a8 8 0 0 1-13.7 5.6M18 3v4h-4M6 21v-4h4',
 		settings: 'M4 7h9m4 0h3M4 17h3m4 0h9M15 5v4M9 15v4',
 		home: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
 		me: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-7 8a7 7 0 0 1 14 0',

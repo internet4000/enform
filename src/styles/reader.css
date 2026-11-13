@@ -60,11 +60,6 @@ enform-reader menu {
 	list-style: none;
 }
 
-enform-reader > footer menu {
-	justify-content: space-between;
-	gap: var(--space-s);
-}
-
 enform-reader > header menu button {
 	display: grid;
 	place-items: center;
@@ -97,16 +92,22 @@ enform-reader:is([mode='docked'], [mode='full']) {
 	overflow: hidden;
 }
 
+/* The record and its media keep the share one gave them, whatever the record's length:
+   what is longer scrolls inside; without the list beside them, all of the room */
 enform-reader:is([mode='docked'], [mode='full']) > enform-present {
-	flex: 0 1 auto;
+	flex: 1 1 0;
 	min-height: 0;
 	overflow-y: auto;
 	overscroll-behavior: contain;
 }
 
+enform-reader[mode='full'] > enform-present:has(~ section) {
+	flex: 0 0 var(--reader-split);
+}
+
 enform-reader:is([mode='docked'], [mode='full']) > section {
 	flex: 1 1 0;
-	min-height: var(--reader-queue-min-height);
+	min-height: 0;
 	overflow-y: auto;
 	overscroll-behavior: contain;
 }
@@ -257,6 +258,21 @@ enform-app > main {
 		display: block;
 	}
 
+	enform-reader[mode='docked'] > enform-present:has(~ section) {
+		flex: 0 0 var(--reader-split);
+	}
+
+	/* Docked beside the page: its left edge, and the handle above the list */
+	enform-reader[mode='docked'] > enform-resizer[edge][axis='x'] {
+		position: absolute;
+		inset: 0 auto 0 calc(-1 * var(--space-xs));
+		display: block;
+	}
+
+	enform-reader[mode='docked'] > enform-resizer:has(+ section) {
+		display: block;
+	}
+
 	/* The + button stays beside the docked reader, not over it */
 	enform-app:has(> enform-reader[mode='docked']) enform-fab {
 		inset-inline-end: calc(var(--reader-width) + var(--gutter));
@@ -343,5 +359,160 @@ enform-reader > nav button[aria-current] {
 }
 
 enform-reader[mode='small'] > nav {
+	display: none;
+}
+
+/*
+ * Handles to drag: between the record and the list (where the list shows), and, docked,
+ * the reader's edge: its left beside the page, its top above the tab bar on phones
+ */
+enform-resizer {
+	display: none;
+	flex: none;
+	touch-action: none;
+}
+
+enform-resizer[axis='y'] {
+	height: var(--space-s);
+	margin-block: calc(-1 * var(--space-2xs));
+	cursor: row-resize;
+}
+
+enform-resizer[axis='x'] {
+	width: var(--space-s);
+	cursor: col-resize;
+}
+
+/* A line shows where it is; brighter as one takes it */
+enform-resizer::after {
+	content: '';
+	display: block;
+	margin: auto;
+	background: var(--color-border);
+	border-radius: var(--pill-radius);
+}
+
+enform-resizer[axis='y']::after {
+	width: var(--space-l);
+	height: var(--space-2xs);
+	margin-top: calc((var(--space-s) - var(--space-2xs)) / 2);
+}
+
+enform-resizer[axis='x']::after {
+	width: var(--space-2xs);
+	height: var(--space-l);
+	margin-top: 50dvh;
+}
+
+enform-resizer:is(:hover, :focus-visible, [dragging])::after {
+	background: var(--color-accent);
+}
+
+/* Between the record and the list, where the list shows */
+enform-reader[mode='full'] > enform-resizer:has(+ section) {
+	display: block;
+}
+
+/* Docked on phones and tablets: its top edge */
+@media (max-width: 63.99rem) {
+	enform-reader[mode='docked'] > enform-resizer[edge][axis='y'] {
+		position: absolute;
+		inset: 0 0 auto;
+		display: block;
+		margin: 0;
+	}
+}
+
+/* The controls, as 4000.radio's: how far the media is, then play and the rest */
+enform-reader > footer {
+	padding-top: var(--space-2xs);
+	border-top: var(--border-width) solid var(--color-border);
+}
+
+enform-player-controls {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2xs);
+}
+
+enform-progress,
+enform-volume {
+	display: flex;
+	align-items: center;
+	gap: var(--space-xs);
+}
+
+enform-progress time {
+	flex: none;
+	font-size: var(--font-size-xs);
+	font-variant-numeric: tabular-nums;
+	color: var(--color-muted);
+}
+
+enform-progress time[data-remaining] {
+	color: var(--color-accent);
+}
+
+enform-progress input,
+enform-volume input {
+	flex: 1;
+	min-width: 0;
+	min-height: 0;
+	padding: 0;
+	accent-color: var(--color-accent);
+}
+
+enform-volume input {
+	width: 4.5rem;
+	flex: none;
+}
+
+enform-player-controls menu {
+	flex-wrap: nowrap;
+	min-width: 0;
+}
+
+/* Phones, and the small bar: the volume's button alone */
+@media (max-width: 47.99rem) {
+	enform-volume input {
+		display: none;
+	}
+}
+
+enform-player-controls menu button {
+	display: grid;
+	place-items: center;
+	width: var(--control-height);
+	min-height: var(--control-height);
+	padding: 0;
+	background: none;
+	border-color: transparent;
+}
+
+enform-player-controls menu button[aria-pressed='true'] {
+	color: var(--color-accent);
+}
+
+/* Play or pause, the one to find at once */
+enform-player-controls menu button[data-play] {
+	color: var(--color-on-accent);
+	background: var(--color-accent);
+	border-radius: var(--pill-radius);
+}
+
+enform-player-controls menu button[data-play] svg {
+	fill: currentColor;
+}
+
+enform-player-controls menu > li:has(> a) {
+	margin-inline-start: auto;
+}
+
+enform-player-controls svg {
+	width: var(--icon-size);
+	height: var(--icon-size);
+}
+
+enform-reader[mode='small'] enform-volume input {
 	display: none;
 }
