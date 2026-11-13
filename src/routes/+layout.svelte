@@ -8,6 +8,7 @@
 	import {sendWaiting} from '#lib/atproto/write'
 	import {outbox} from '#lib/outbox/outbox.svelte'
 	import AppNav from '#lib/components/shell/AppNav.svelte'
+	import ViewSwitch from '#lib/components/shell/ViewSwitch.svelte'
 	import Search from '#lib/components/shell/Search.svelte'
 	import Reader from '#lib/components/reader/Reader.svelte'
 	import app from '#lib/config/app.json' with {type: 'json'}
@@ -76,6 +77,7 @@
 	<enform-app>
 		<header>
 			<Search />
+			<ViewSwitch />
 			{#if outbox.writes.length}
 				<a href={inApp('/settings/waiting')} rel="status"
 					>{m.outbox_count({count: String(outbox.writes.length)})}</a

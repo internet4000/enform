@@ -66,6 +66,32 @@ enform-app > header > form > button > span:first-child {
 	white-space: nowrap;
 }
 
+/* A repo's two views, App and Data: a segmented switch beside the search field */
+enform-app > header > nav {
+	display: flex;
+	flex: none;
+	padding: var(--space-2xs);
+	background: var(--color-surface);
+	border-radius: var(--pill-radius);
+}
+
+enform-app > header > nav > a {
+	display: inline-flex;
+	align-items: center;
+	min-height: calc(var(--control-height) - 2 * var(--space-2xs));
+	padding: 0 var(--space-s);
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+	text-decoration: none;
+	border-radius: var(--pill-radius);
+}
+
+enform-app > header > nav > a[aria-current='page'] {
+	color: var(--color-text);
+	background: var(--color-bg);
+	box-shadow: var(--shadow-icon);
+}
+
 /* Writes waiting to be sent, said in the header */
 enform-app > header > a[rel='status'] {
 	display: inline-flex;

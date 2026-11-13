@@ -14,7 +14,7 @@
 	import QuickLinks, {type QuickLink} from '#lib/components/QuickLinks.svelte'
 	import AppIcon from '#lib/components/pane/AppIcon.svelte'
 	import EmbedDialog from '#lib/components/app/EmbedDialog.svelte'
-	import {actorName, appScreenPath, dataPath, inApp, searchResultsPath} from '#lib/paths'
+	import {actorName, appScreenPath, inApp, searchResultsPath} from '#lib/paths'
 
 	let {data} = $props()
 	let actor = $derived(actorName(data.repo))
@@ -127,7 +127,6 @@
 	</section>
 
 	<menu>
-		<li><a href={dataPath(actor)}>{m.person_all_data()}</a></li>
 		{#if !data.repo.local}
 			<!-- On any page, all their apps (docs/embed.md) -->
 			<li><button type="button" onclick={() => embed?.open()}>{m.embed_menu()}</button></li>
