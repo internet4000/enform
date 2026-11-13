@@ -68,3 +68,56 @@ test('the reader keeps the sizes one gives it', async ({page}, info) => {
 		.click()
 	await expect.poll(async () => Math.round(await size())).toBe(Math.round(after))
 })
+
+test('decks stay mounted: the one in front shown, the others still playing', async ({page}) => {
+	// A note and a status on this device: two lists, two decks
+	await page.goto('/new/test.enform.note')
+	await page.getByRole('button', {name: t('start_device_button')}).click()
+	await page.waitForURL(creating)
+	await page.getByRole('textbox', {name: t('field_text'), exact: true}).fill('A note')
+	await page
+		.locator('enform-form')
+		.getByRole('button', {name: t('new_submit')})
+		.click()
+	await page.waitForURL(opened)
+	const handle = address(page.url()).pathname.split('/')[1]
+	await page.goto(`/${handle}/apps/status.example?type=example.status.status&new`)
+	await page.waitForURL(creating)
+	await page.locator('enform-form [id$="-status"]').first().fill('🙂')
+	await page
+		.locator('enform-form')
+		.getByRole('button', {name: t('new_submit')})
+		.click()
+	await page.waitForURL(opened)
+
+	const reader = page.getByRole('region', {name: t('reader_label')})
+	for (const [type, text] of [
+		['test.enform.note', 'A note'],
+		['example.status.status', '🙂']
+	]) {
+		const domain = type.split('.').slice(0, 2).reverse().join('.')
+		// By a link, in the app (not a new page load): the reader keeps its decks
+		await page.evaluate((hash) => {
+			const link = Object.assign(document.createElement('a'), {href: hash, textContent: 'go'})
+			document.body.append(link)
+			link.click()
+			link.remove()
+		}, `#/${handle}/apps/${domain}?type=${type}`)
+		await page.waitForURL((url) => address(url).searchParams.get('type') === type)
+		await expect(page.locator('enform-record-card-item', {hasText: text})).toBeVisible()
+		await page
+			.getByRole('button', {name: t('reader_read_all')})
+			.first()
+			.click()
+	}
+	const decks = reader.getByRole('navigation', {name: t('reader_decks')})
+	await expect(decks.locator('button[aria-current]')).toBeVisible()
+	await expect(reader.locator('enform-present')).toHaveCount(2)
+	await expect(reader.locator('enform-present[hidden]')).toHaveCount(1)
+	await expect(reader.locator('enform-present:not([hidden])')).toContainText('🙂')
+	// The other deck to the front: the status stays, out of sight
+	await decks.locator('li').first().getByRole('button').first().click()
+	await expect(reader.locator('enform-present')).toHaveCount(2)
+	await expect(reader.locator('enform-present:not([hidden])')).toContainText('A note')
+	await expect(reader.locator('enform-present[hidden]')).toContainText('🙂')
+})

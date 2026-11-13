@@ -343,6 +343,11 @@ enform-app > main {
 	}
 }
 
+/* A deck not in front: out of sight, still playing */
+enform-reader > enform-present[hidden] {
+	display: none;
+}
+
 /* Full screen, the reader is all there is: the page's + button waits under it */
 enform-app:has(> enform-reader[mode='full']) enform-fab {
 	display: none;

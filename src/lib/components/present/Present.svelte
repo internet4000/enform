@@ -18,13 +18,15 @@
 		onended: () => void
 		/** Its media element, when it plays one, for controls around it */
 		onmedia?: (media: HTMLMediaElement | undefined) => void
+		/** Kept playing out of sight (a deck not in front) */
+		hidden?: boolean
 	}
-	let {repo, record, lexicon, onended, onmedia}: Props = $props()
+	let {repo, record, lexicon, onended, onmedia, hidden = false}: Props = $props()
 
 	let main = $derived(capabilitiesOf(record.value, lexicon)[0])
 </script>
 
-<enform-present capability={main?.kind ?? 'kind'}>
+<enform-present capability={main?.kind ?? 'kind'} hidden={hidden || undefined}>
 	{#if main?.kind === 'media'}
 		<MediaPresenter src={main.url} player={main.player} {onended} {onmedia} />
 		<KindView {repo} {record} {lexicon} beside />

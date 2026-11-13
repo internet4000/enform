@@ -6,7 +6,8 @@
  * screen. (docs/architecture.md › The reader)
  *
  * Several lists can be at hand at once, each in its deck (a radio's tracks, someone's
- * posts): each keeps its place, the one in front plays, the others wait where they were.
+ * posts): each keeps its place and stays mounted, so what one plays goes on while
+ * another is in front; each goes on to its next record when one is done.
  */
 import type {Identity} from '#lib/atproto/identity'
 import type {RepoRecord} from '#lib/atproto/repo'
@@ -136,8 +137,7 @@ class Reader {
 		if (this.deck && this.hasPrev) this.deck.index--
 	}
 
-	async next() {
-		const deck = this.deck
+	async next(deck = this.deck) {
 		if (!deck) return
 		if (deck.index < deck.items.length - 1) {
 			deck.index++
@@ -152,9 +152,11 @@ class Reader {
 		}
 	}
 
-	/** The current record is done (its media ended, its slideshow shown) */
-	ended() {
-		if (this.autoplay && this.hasNext) void this.next()
+	/** A deck's current record is done (its media ended, its slideshow shown): that
+	    deck goes on, in front or not */
+	ended(deck = this.deck) {
+		if (!deck || !this.autoplay) return
+		if (deck.index < deck.items.length - 1 || deck.more) void this.next(deck)
 	}
 
 	/** Stops reading: every deck put away */

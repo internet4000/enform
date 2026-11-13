@@ -73,8 +73,9 @@ Every record a list shows has its own actions, found like everything else
 its text (in the reader, from it on with its list), or go to what its lexicon says it
 points at (an account by a `did` field, a record by an `at-uri` or a strongRef). A
 card shows the first; a record, all of them. Several lists can be at hand at once, a
-deck each (a radio's tracks, someone's posts): the one in front plays, the others keep
-their place; starting a list again comes back to its deck. This is libli's idea of
+deck each (a radio's tracks, someone's posts): one is in front, and every deck stays
+mounted, so what another plays goes on, to its next record; starting a list again
+comes back to its deck. This is libli's idea of
 actions per event type and a player per type, with no registry: the record's data and
 its lexicon say what it can do.
 

@@ -24,6 +24,12 @@
 	let element = $state<HTMLElement>()
 	/** The media playing, when the record has some */
 	let media = $state<HTMLMediaElement>()
+	/** Each deck's media, so the controls follow the deck in front */
+	const medias = new Map<string, HTMLMediaElement | undefined>()
+	$effect(() => {
+		const key = reader.deck?.list.key
+		media = key ? medias.get(key) : undefined
+	})
 	let split = $derived(sizes.value.split ?? 0.55)
 
 	/** Docked: its width beside the page, its height above the tab bar, as dragged */
@@ -160,15 +166,26 @@
 				</ul>
 			</nav>
 		{/if}
-		{#key `${reader.at}/${item.repo.did}/${item.record.collection}/${item.record.rkey}`}
-			<Present
-				repo={item.repo}
-				record={item.record}
-				lexicon={item.lexicon}
-				onended={() => reader.ended()}
-				onmedia={(found) => (media = found)}
-			/>
-		{/key}
+		<!-- Every deck's record stays mounted, the one in front shown: switching decks
+		     never stops what another plays -->
+		{#each reader.decks as deck, at (deck.list.key)}
+			{@const entry = deck.items[deck.index]}
+			{#if entry}
+				{#key `${entry.repo.did}/${entry.record.collection}/${entry.record.rkey}`}
+					<Present
+						repo={entry.repo}
+						record={entry.record}
+						lexicon={entry.lexicon}
+						hidden={at !== reader.at}
+						onended={() => reader.ended(deck)}
+						onmedia={(found) => {
+							if (at === reader.at) media = found
+							medias.set(deck.list.key, found)
+						}}
+					/>
+				{/key}
+			{/if}
+		{/each}
 		{#if reader.mode !== 'small' && reader.items.length > 1}
 			<Resizer label={m.reader_resize_split()} axis="y" onmove={resizeSplit} value={split * 100} />
 		{/if}
