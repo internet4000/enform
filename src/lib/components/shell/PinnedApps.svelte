@@ -1,6 +1,8 @@
 <script lang="ts">
 	// Your apps, in the rail: the ones you pinned, and the profiles in them, in your order;
-	// until you pin one, the apps you have records in, as suggestions (never decided for you)
+	// until you pin one, the apps you have records in, as suggestions (never decided for you).
+	// An app shows as apps do (its square icon, its name); a profile as people do (their
+	// round face, the app's icon on it, their name, then the app's)
 	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
@@ -46,9 +48,20 @@
 							href={profile.href}
 							aria-current={here(profile.href) ? 'page' : undefined}
 							title={`${profile.actor} · ${name}`}
+							data-pin="profile"
 						>
-							<AppIcon domain={pin.domain} {name} />
-							<span>{profile.actor}</span>
+							<enform-pin-face>
+								{#if profile.avatar}
+									<img src={profile.avatar} alt="" loading="lazy" />
+								{:else}
+									<span>{(profile.name ?? profile.actor.slice(1)).charAt(0).toUpperCase()}</span>
+								{/if}
+								<AppIcon domain={pin.domain} {name} />
+							</enform-pin-face>
+							<span>
+								{profile.name ?? profile.actor}
+								<small>{m.pins_profile_in({app: name})}</small>
+							</span>
 						</a>
 					{/await}
 				{:else}
