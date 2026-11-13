@@ -1,98 +1,139 @@
 <script lang="ts">
-	// What to create: a type of one of your apps, of an app enform knows, or any NSID
+	// What to create, and as whom. Who you act as first, in a line (with nobody yet, how
+	// to start is asked once a type is chosen), then one field to find a type by its name, its app or its NSID (any NSID opens its form),
+	// then each app's types as its own screen shows them: the verb of the type's kind, its
+	// name and its description. Your apps first; what you have one of is edited, not made.
 	import {goto} from '$app/navigation'
 	import {NSID} from '@atproto/syntax'
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {listCollections} from '#lib/atproto/repo'
 	import {repoApps} from '#lib/apps/apps'
+	import {appInfo, byDirectory, typeLabel} from '#lib/apps/directory'
 	import type {AppType, RepoApp} from '#lib/apps/types'
-	import {isDeclared} from '#lib/auth/scopes'
-	import TypeRows from '#lib/components/TypeRows.svelte'
-	import {newPath} from '#lib/paths'
+	import AppActions from '#lib/components/app/AppActions.svelte'
+	import {actorName, appScreenPath, newPath, repoPath} from '#lib/paths'
 
 	let {data} = $props()
 
-	let nsid = $state('')
+	let query = $state('')
 	let invalid = $state(false)
+	let me = $derived(auth.me)
 	let mine = $derived(
-		auth.me ? listCollections(auth.me).then((c) => repoApps(auth.me!, c)) : Promise.resolve([])
+		me ? listCollections(me).then((c) => repoApps(me, c)) : Promise.resolve<RepoApp[]>([])
 	)
+	let words = $derived(query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean))
+	/** What was typed, when it names a type by its NSID */
+	let typed = $derived(NSID.isValid(query.trim()) ? query.trim() : undefined)
+
+	/** An app's types to create: its profile, lists, then one-record types */
+	const creatable = (app: RepoApp): AppType[] =>
+		byDirectory([...(app.profile ? [app.profile] : []), ...app.lists, ...app.singles]).filter(
+			(type) => type.lexicon
+		)
+
+	/** Its types matching every word typed, in its name, NSID, app or description */
+	function matching(app: RepoApp): AppType[] {
+		const name = appInfo(app.namespace).name
+		return creatable(app).filter((type) => {
+			const text = [
+				typeLabel(type.nsid),
+				type.nsid,
+				name,
+				app.app,
+				type.lexicon?.defs.main?.description ?? ''
+			]
+				.join(' ')
+				.toLocaleLowerCase()
+			return words.every((word) => text.includes(word))
+		})
+	}
+
+	function shown(apps: RepoApp[]) {
+		return apps
+			.map((app) => ({app, info: appInfo(app.namespace), types: matching(app)}))
+			.filter(({types}) => types.length)
+	}
 
 	function open(event: SubmitEvent) {
 		event.preventDefault()
-		const value = nsid.trim()
-		invalid = !NSID.isValid(value)
-		if (!invalid) goto(newPath(value))
+		invalid = !typed
+		if (typed) goto(newPath(typed))
 	}
 
-	/** An app's types to create: its profile, lists, then one-record types */
-	const creatable = (app: RepoApp) => [
-		...(app.profile ? [app.profile] : []),
-		...app.lists.filter((type) => type.lexicon),
-		...app.singles.filter((type) => type.lexicon)
-	]
-
-	/** The types to show first: the ones you use, and the ones enform knows well */
-	const main = (type: AppType) => type.used || isDeclared(type.nsid)
+	const edit = (domain: string) =>
+		me
+			? (type: string, rkey: string) =>
+					appScreenPath(actorName(me), domain, {type, record: rkey, edit: true})
+			: undefined
 </script>
 
 <enform-page>
 	<h1>{m.new_title()}</h1>
 
-	{#snippet apps(list: RepoApp[])}
-		{#each list.filter((app) => creatable(app).length) as app (app.app)}
-			{@const types = creatable(app)}
-			{@const first = types.filter(main)}
-			{@const rest = types.filter((type) => !main(type))}
-			<section>
-				<h3>{app.app}</h3>
-				<TypeRows types={first.length ? first : types} create />
-				{#if first.length && rest.length}
-					<details>
-						<summary>{m.new_more({app: app.app, count: String(rest.length)})}</summary>
-						<TypeRows types={rest} create />
-					</details>
-				{/if}
-			</section>
-		{/each}
-	{/snippet}
+	{#if me}
+		<p>
+			{m.new_as()}
+			<a href={repoPath(actorName(me))}>@{actorName(me)}</a>
+			<small>· {me.local ? m.accounts_on_device() : me.pds ? new URL(me.pds).host : ''}</small>
+		</p>
+	{:else if auth.ready}
+		<p>{m.new_nobody()}</p>
+	{/if}
+
+	<form role="search" onsubmit={open}>
+		<label>
+			{m.new_find_label()}
+			<input
+				type="search"
+				bind:value={query}
+				oninput={() => (invalid = false)}
+				placeholder={m.new_find_placeholder()}
+				autocapitalize="off"
+				autocomplete="off"
+				spellcheck="false"
+				enterkeyhint="go"
+				aria-invalid={invalid}
+			/>
+		</label>
+		{#if invalid}<p role="alert">{m.new_nsid_invalid()}</p>{/if}
+	</form>
+
+	{#if typed}
+		<p><a href={newPath(typed)} role="button">{m.new_record_title({collection: typed})}</a></p>
+	{/if}
 
 	<enform-apps>
-		{#await mine then list}
-			{#if list.length}
-				<h2>{m.new_yours()}</h2>
-				{@render apps(list)}
-			{/if}
+		{#await mine then yours}
+			{@const own = shown(yours)}
+			{#each own as { app, info, types } (app.namespace)}
+				<AppActions
+					{types}
+					title={info.name}
+					domain={info.domain}
+					href={newPath}
+					edit={edit(info.domain)}
+					limit={words.length ? Infinity : 4}
+				/>
+			{/each}
 			{#await data.known then known}
-				{@const others = known.filter((app) => !list.some((mine) => mine.app === app.app))}
+				{@const others = shown(known.filter((app) => !yours.some((y) => y.app === app.app)))}
 				{#if others.length}
-					<h2>{m.new_known()}</h2>
-					{@render apps(others)}
+					{#if own.length}<h2>{m.new_known()}</h2>{/if}
+					{#each others as { app, info, types } (app.namespace)}
+						<AppActions
+							{types}
+							title={info.name}
+							domain={info.domain}
+							href={newPath}
+							limit={words.length ? Infinity : 4}
+						/>
+					{/each}
+				{/if}
+				{#if words.length && !own.length && !others.length && !typed}
+					<p>{m.new_none({query: query.trim()})}</p>
 				{/if}
 			{/await}
 		{/await}
 	</enform-apps>
-
-	<details>
-		<summary>{m.new_other()}</summary>
-		<form onsubmit={open}>
-			<label>
-				{m.new_nsid_label()}
-				<input
-					type="text"
-					bind:value={nsid}
-					placeholder="com.example.recipe"
-					autocapitalize="off"
-					autocomplete="off"
-					spellcheck="false"
-					enterkeyhint="go"
-					aria-invalid={invalid}
-					required
-				/>
-			</label>
-			<button type="submit">{m.new_nsid_submit()}</button>
-		</form>
-		{#if invalid}<p role="alert">{m.new_nsid_invalid()}</p>{/if}
-	</details>
 </enform-page>

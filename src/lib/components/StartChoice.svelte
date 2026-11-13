@@ -3,8 +3,14 @@
 	// device (no account, offline) or an atproto account (its server, other apps read it)
 	import * as m from '#lib/paraglide/messages.js'
 	import {inApp} from '#lib/paths'
+	import SignIn from './SignIn.svelte'
 
-	let {start}: {start: () => Promise<void>} = $props()
+	type Props = {
+		start: () => Promise<void>
+		/** Sign in here, back to this page after, instead of from Settings */
+		inline?: boolean
+	}
+	let {start, inline = false}: Props = $props()
 	let pending = $state(false)
 
 	async function onDevice() {
@@ -29,7 +35,11 @@
 		<li>
 			<h3>{m.start_account_title()}</h3>
 			<p>{m.start_account()}</p>
-			<a href={inApp('/settings/accounts')} role="button">{m.session_sign_in()}</a>
+			{#if inline}
+				<SignIn />
+			{:else}
+				<a href={inApp('/settings/accounts')} role="button">{m.session_sign_in()}</a>
+			{/if}
 		</li>
 	</ul>
 	<p><small>{m.start_later()}</small></p>

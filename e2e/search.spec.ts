@@ -1,4 +1,4 @@
-import {address, expect, signIn, t, test} from './fixtures'
+import {address, creating, expect, signIn, t, test} from './fixtures'
 
 test('search from the top: someone by handle, then their page', async ({page}) => {
 	await page.goto('/')
@@ -30,9 +30,26 @@ test('the main menu: New picks a type to create, Profile is your repo', async ({
 	await signIn(page, 'alice.test')
 	await page.goto('/')
 	const nav = page.getByRole('navigation', {name: t('nav_main')})
+	await nav.getByRole('link', {name: t('nav_profile')}).click()
+	await page.waitForURL((url) => address(url).pathname === '/@alice.test')
 	await nav.getByRole('link', {name: t('nav_new')}).click()
 	await page.waitForURL((url) => address(url).pathname === '/new')
 	await expect(page.getByRole('heading', {level: 1, name: t('new_title')})).toBeVisible()
-	await nav.getByRole('link', {name: t('nav_profile')}).click()
-	await page.waitForURL((url) => address(url).pathname === '/@alice.test')
+	await expect(page.getByRole('link', {name: '@alice.test'}).first()).toBeVisible()
+	// Any type by its NSID opens its form
+	await page.getByRole('searchbox', {name: t('new_find_label')}).fill('test.enform.note')
+	await page
+		.getByRole('button', {name: t('new_record_title', {collection: 'test.enform.note'})})
+		.click()
+	await page.waitForURL(creating)
+})
+
+test('nobody yet: a type to make, then the two ways to start, signing in back to it', async ({
+	page
+}) => {
+	await page.goto('/new/test.enform.note')
+	await expect(page.getByRole('button', {name: t('start_device_button')})).toBeVisible()
+	await expect(page.getByRole('button', {name: t('session_sign_in')})).toBeVisible()
+	await page.getByRole('button', {name: t('start_device_button')}).click()
+	await page.waitForURL(creating)
 })

@@ -9,6 +9,7 @@
 	import {kindOf} from '#lib/records/kinds'
 	import {kindVerb} from '#lib/records/kind-words'
 	import Icon from '../shell/Icon.svelte'
+	import AppIcon from '../pane/AppIcon.svelte'
 
 	type Props = {
 		types: AppType[]
@@ -16,9 +17,11 @@
 		/** Where to edit the one record of a type one has, when it can be edited */
 		edit?: (type: string, rkey: string) => string
 		title: string
+		/** The app's domain, to show its icon before the title */
+		domain?: string
 		limit?: number
 	}
-	let {types, href, edit, title, limit = 4}: Props = $props()
+	let {types, href, edit, title, domain, limit = 4}: Props = $props()
 
 	/** The one record of this type one already has, to edit */
 	const had = (type: AppType): string | undefined =>
@@ -58,7 +61,10 @@
 
 {#if types.length}
 	<section aria-label={title}>
-		<h2>{title}</h2>
+		<h2>
+			{#if domain}<AppIcon {domain} name={title} />{/if}
+			{title}
+		</h2>
 		{@render cards(sorted.slice(0, limit))}
 		{#if sorted.length > limit}
 			<details>

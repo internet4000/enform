@@ -420,6 +420,13 @@ enform-kind-view > time {
 	color: var(--color-accent);
 }
 
+/* An app's name with its icon, before its types (as on /new) */
+section:has(> enform-actions) > h2:has(> enform-app-icon) {
+	display: flex;
+	align-items: center;
+	gap: var(--space-xs);
+}
+
 enform-actions + details {
 	margin-top: var(--space-s);
 }
