@@ -27,6 +27,7 @@
 	import CreateRecord from '#lib/components/CreateRecord.svelte'
 	import EditRecord from '#lib/components/EditRecord.svelte'
 	import RecordActions from '#lib/components/RecordActions.svelte'
+	import AnswerActions from '#lib/components/AnswerActions.svelte'
 	import {
 		actorName,
 		appScreenPath,
@@ -213,6 +214,7 @@
 								{repo: data.repo, record, lexicon: selected.lexicon, href: hrefOf(shownUrl())}
 							])}
 					/>
+					<AnswerActions repo={data.repo} {record} />
 					{#if owner}
 						<menu>
 							<RecordActions
@@ -329,6 +331,7 @@
 							start={() =>
 								reader.start([{repo: data.repo, record, lexicon: doc, href: hrefOf(shownUrl())}])}
 						/>
+						<AnswerActions repo={data.repo} {record} />
 						{#if owner}
 							<menu>
 								<RecordActions

@@ -359,6 +359,24 @@ enform-strongref dd {
 	overflow-wrap: anywhere;
 }
 
+enform-strongref > small {
+	display: block;
+}
+
+/* Records of what it points at, to pick one */
+enform-strongref-pick ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
+	margin: var(--space-xs) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+enform-strongref-pick button[aria-pressed='true'] {
+	border-color: var(--color-accent);
+}
+
 enform-counter {
 	align-self: flex-end;
 	font-size: var(--font-size-s);

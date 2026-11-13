@@ -115,3 +115,9 @@ export function knownApp(namespace: string, seed?: string): Promise<RepoApp> {
 export function knownApps(): Promise<RepoApp[]> {
 	return Promise.all(directoryApps().map((app) => knownApp(app.namespace)))
 }
+
+/** Every type of the app a type is in, as its catalog lists them */
+export async function appTypesOf(nsid: string): Promise<AppType[]> {
+	const app = await knownApp(namespaceOf(nsid), nsid)
+	return [...(app.profile ? [app.profile] : []), ...app.lists, ...app.singles]
+}

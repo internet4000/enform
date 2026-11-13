@@ -10,6 +10,7 @@
 	import RecordActions from '#lib/components/RecordActions.svelte'
 	import RecordValue from '#lib/components/RecordValue.svelte'
 	import RecordMenu from '#lib/components/RecordMenu.svelte'
+	import AnswerActions from '#lib/components/AnswerActions.svelte'
 	import {recordSummary} from '#lib/records/summary'
 	import {actorName, collectionPath, editPath, inApp, recordPath} from '#lib/paths'
 	import Pane from './Pane.svelte'
@@ -46,6 +47,7 @@
 {:else}
 	<Pane {title} subtitle={label} back={{href: collectionPath(actor, collection), label}}>
 		{#snippet actions()}
+			<AnswerActions {repo} {record} bare />
 			{#await lexicon then doc}
 				<RecordMenu {repo} nsid={collection} uri={record.uri} lexicon={doc} value={record.value} />
 			{/await}

@@ -88,6 +88,17 @@ many, its first records, read or play them all, add one when it's yours. Each ty
 is also a tab: the profile's shows its record alone, a list's all its records. Bluesky's posts, a radio's
 tracks, someone's Tangled repos: the same, from the repo alone.
 
+## What a reference points at
+
+A lexicon can't say which type a strongRef or an at:// URI points at: an RSVP's
+`subject` is any record to it ("The event" only in its description). So it is
+inferred (`src/lib/describe/references.ts`), with its reason: from the records (the
+collections their references name), else from the field's name or description naming
+a type of its app, else from the app (the one other type in it to point at). From
+that, a record offers its answers (an event: "Answer: RSVP", its form open with the
+reference set), and the field says what it points at and lists yours of it to pick.
+Only a guess: the field still takes any record.
+
 ## An app's own accounts
 
 An app's page shows the app as it shows itself: its own accounts, with what they have

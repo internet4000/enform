@@ -119,3 +119,35 @@ for (const doc of exampleLexicons) {
 		await page.waitForURL(closed)
 	})
 }
+
+test('an event is answered: its RSVP starts pointing at it, and picks among yours', async ({
+	page
+}) => {
+	const event = exampleLexicons.find((doc) => doc.id === 'example.event.event')!
+	const handle = await startOnDevice(page, event.id)
+	await fill(page, event, {account: ''})
+	const sheet = page.locator('enform-sheet')
+	await sheet.getByRole('button', {name: t('answer_with', {type: 'Rsvp'})}).click()
+	await page.waitForURL(
+		(url) => creating(url) && address(url).searchParams.get('type') === 'example.event.rsvp'
+	)
+	const form = page.locator('enform-form')
+	// Already set to the event, said why, and the event is among yours to pick
+	await expect(form.getByText(t('form_strongref_found'))).toBeVisible()
+	await expect(form.getByText(`name of ${event.id}`).first()).toBeVisible()
+	await expect(form.getByRole('button', {name: `name of ${event.id}`})).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	)
+	await expect(
+		form.getByText(
+			t('form_strongref_points', {
+				type: 'Event',
+				because: t('references_because_described')
+			})
+		)
+	).toBeVisible()
+	await form.locator('[id$="-status"]').first().fill('going')
+	await form.locator('button[type="submit"]', {hasText: t('new_submit')}).click()
+	await page.waitForURL(opened)
+})
