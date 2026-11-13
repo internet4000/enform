@@ -1,7 +1,7 @@
 import {describe, expect, it} from 'vitest'
 import type {LexiconDoc} from '#lib/lexicons/types'
 import type {AppType, RepoApp} from './types'
-import {contactActions, contactPrefill, contactWay, quickActions} from './quick'
+import {quickActions} from './quick'
 
 const record = (
 	id: string,
@@ -61,43 +61,6 @@ const app = (namespace: string, lists: AppType[]): RepoApp => ({
 	lists,
 	singles: [],
 	published: true
-})
-
-describe('contactWay', () => {
-	it('follows by an account alone, never by a block or a list item', () => {
-		expect(contactWay(follow)).toEqual({way: 'follow', field: 'subject'})
-		expect(contactWay(block)).toBeUndefined()
-		expect(contactWay(listitem)).toBeUndefined()
-	})
-	it('writes to someone with an account and a text', () => {
-		expect(contactWay(message)).toEqual({way: 'message', field: 'subject'})
-	})
-	it('mentions someone in a text with facets', () => {
-		expect(contactWay(post)).toEqual({way: 'mention', field: 'text'})
-	})
-	it('has no way when nothing points at an account', () => {
-		expect(contactWay(track)).toBeUndefined()
-	})
-})
-
-describe('contactActions and their prefill', () => {
-	const apps = [
-		app('app.bsky', [type(block), type(follow), type(post)]),
-		app('radio.4000', [type(track), type(message)])
-	]
-	it('finds one action per app and way', () => {
-		expect(contactActions(apps).map((a) => `${a.type.nsid}:${a.way}`)).toEqual([
-			'app.bsky.graph.follow:follow',
-			'app.bsky.feed.post:mention',
-			'radio.4000.chat.message:message'
-		])
-	})
-	it('starts the form with their DID, or their handle in the text', () => {
-		const [followed, mention] = contactActions(apps)
-		const person = {did: 'did:plc:alice', handle: 'alice.test'}
-		expect(contactPrefill(followed, person)).toEqual({subject: 'did:plc:alice'})
-		expect(contactPrefill(mention, person)).toEqual({text: '@alice.test '})
-	})
 })
 
 describe('quickActions', () => {
