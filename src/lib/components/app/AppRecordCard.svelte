@@ -2,7 +2,8 @@
 	// A record as a card in its app, shaped by its kind (from its lexicon): a link with its
 	// thumbnail, a photo, a status in big, an event's date, a post's text… While its list
 	// selects, the whole card is a checkbox's label: a click (shift: a range) selects it.
-	import {describeRecord} from '#lib/describe/record'
+	import {describeRecord, recordRest} from '#lib/describe/record'
+	import {fieldLabel} from '#lib/forms/labels'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
 	import {blobUrl, type RepoRecord} from '#lib/atproto/repo'
@@ -39,6 +40,14 @@
 	let url = $derived(shape.fields.url ? value[shape.fields.url] : undefined)
 	let start = $derived(shape.fields.start ? String(value[shape.fields.start] ?? '') : '')
 	let date = $derived(recordDate(value))
+	/** Its lists, counted: 4 ingredients, 3 steps */
+	let lists = $derived(
+		recordRest(value, lexicon).flatMap((part) =>
+			part.as === 'list'
+				? [m.card_count({count: part.items.length, name: fieldLabel(part.field).toLowerCase()})]
+				: []
+		)
+	)
 	let summary = $derived(
 		(shape.kind === 'status' && shape.fields.value
 			? String(value[shape.fields.value] ?? '')
@@ -59,6 +68,7 @@
 	{#if card.text && card.text !== summary}<span>{card.text}</span>{/if}
 	<small>
 		{#if date && shape.kind !== 'event'}<time datetime={date}>{formatDate(date)}</time>{/if}
+		{#if lists.length}{date && shape.kind !== 'event' ? ' · ' : ''}{lists.join(' · ')}{/if}
 		{#if record.pending}
 			· {record.pending === 'conflict' ? m.outbox_conflict_short() : m.outbox_waiting()}
 		{/if}

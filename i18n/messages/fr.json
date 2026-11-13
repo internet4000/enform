@@ -84,6 +84,7 @@
 	"references_because_records": "comme le font les enregistrements",
 	"references_because_described": "comme le dit sa description",
 	"references_because_app": "l’autre type de son app",
+	"card_count": "{count} {name}",
 	"answer_with": "Répondre : {type}",
 	"form_json_hint": "JSON",
 	"form_json_invalid": "JSON invalide : {message}",

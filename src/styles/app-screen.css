@@ -409,6 +409,53 @@ enform-kind-view > p {
 	overflow-wrap: anywhere;
 }
 
+/* Its other fields, by their shape: lists, words, links, dates; facts side by side */
+enform-kind-view > section {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+}
+
+enform-kind-view > section > h4 {
+	margin: 0;
+	font-size: var(--font-size-s);
+	font-weight: normal;
+	color: var(--color-muted);
+}
+
+enform-kind-view > section > :is(p, ul, ol) {
+	margin: 0;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+enform-kind-view > section > :is(ul, ol) {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	padding-inline-start: var(--space-l);
+}
+
+enform-kind-view > section > a {
+	overflow-wrap: anywhere;
+}
+
+enform-kind-view > dl {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-s) var(--space-l);
+	margin: 0;
+}
+
+enform-kind-view > dl dt {
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+enform-kind-view > dl dd {
+	margin: 0;
+}
+
 enform-kind-view[kind='status'] > p {
 	font-size: calc(var(--font-size-xl) * 2);
 	text-align: center;

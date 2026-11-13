@@ -2,7 +2,8 @@
 	// What a record is, shown for its kind (from its lexicon), before its fields: a link's
 	// preview to open, a photo, a status, the person followed, the thing reacted to,
 	// an event's date, a post's text, someone's picture and name
-	import {describeRecord} from '#lib/describe/record'
+	import {describeRecord, recordRest} from '#lib/describe/record'
+	import {fieldLabel} from '#lib/forms/labels'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
 	import {blobUrl, type RepoRecord} from '#lib/atproto/repo'
@@ -48,6 +49,11 @@
 	/** From its values: its first web link (a track's video), its title, its words */
 	let link = $derived(Object.values(value).find(isWebLink))
 	let title = $derived(describeRecord(record, lexicon).title)
+	/** What its kind doesn't show: its other fields, by their shape */
+	let rest = $derived(
+		recordRest(value, lexicon).filter((part) => part.as !== 'link' || part.value !== link || known)
+	)
+	let facts = $derived(rest.filter((part) => part.as === 'fact'))
 </script>
 
 {#snippet preview(url: string)}
@@ -91,4 +97,38 @@
 		>
 	{/if}
 	{#if typeof text === 'string' && text && shape.kind !== 'status'}<p>{text}</p>{/if}
+	{#if facts.length}
+		<dl>
+			{#each facts as part (part.field)}
+				<div>
+					<dt>{fieldLabel(part.field)}</dt>
+					<dd>{part.as === 'fact' ? part.value : ''}</dd>
+				</div>
+			{/each}
+		</dl>
+	{/if}
+	{#each rest as part (part.field)}
+		{#if part.as !== 'fact'}
+			<section>
+				<h4>{fieldLabel(part.field)}</h4>
+				{#if part.as === 'list'}
+					{#if part.ordered}
+						<ol>
+							{#each part.items as item, index (index)}<li>{item}</li>{/each}
+						</ol>
+					{:else}
+						<ul>
+							{#each part.items as item, index (index)}<li>{item}</li>{/each}
+						</ul>
+					{/if}
+				{:else if part.as === 'link'}
+					<a href={part.value} rel="noopener noreferrer external" target="_blank">{part.value}</a>
+				{:else if part.as === 'date'}
+					<time datetime={part.value}>{formatDate(part.value)}</time>
+				{:else}
+					<p>{part.value}</p>
+				{/if}
+			</section>
+		{/if}
+	{/each}
 </enform-kind-view>

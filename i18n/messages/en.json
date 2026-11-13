@@ -84,6 +84,7 @@
 	"references_because_records": "as records do",
 	"references_because_described": "as its description says",
 	"references_because_app": "the one other type of its app",
+	"card_count": "{count} {name}",
 	"answer_with": "Answer: {type}",
 	"form_json_hint": "JSON",
 	"form_json_invalid": "Not valid JSON: {message}",

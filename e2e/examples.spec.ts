@@ -151,3 +151,35 @@ test('an event is answered: its RSVP starts pointing at it, and picks among your
 	await form.locator('button[type="submit"]', {hasText: t('new_submit')}).click()
 	await page.waitForURL(opened)
 })
+
+test('a recipe shows all it holds: its lists, steps numbered; its card counts them', async ({
+	page
+}) => {
+	const recipe = exampleLexicons.find((doc) => doc.id === 'example.recipe.recipe')!
+	const handle = await startOnDevice(page, recipe.id)
+	await page.goto(`/@${handle}/apps/${domainOf(recipe.id)}?type=${recipe.id}&new`)
+	const form = page.locator('enform-form')
+	await form.locator('[id$="-title"]').first().fill('Pasta')
+	const lists = {
+		ingredients: ['Pasta', 'Water', 'Salt'],
+		steps: [
+			'Boil the water',
+			'When the water is boiling, put the pasta in, and stir it as it cooks'
+		]
+	}
+	for (const [name, items] of Object.entries(lists)) {
+		for (const [index, item] of items.entries()) {
+			await form.getByRole('button', {name: t('form_array_add', {name})}).click()
+			await form.locator(`[id$="-${name}-${index}"]`).first().fill(item)
+		}
+	}
+	await form.locator('button[type="submit"]', {hasText: t('new_submit')}).click()
+	await page.waitForURL(opened)
+	const view = page.locator('enform-sheet enform-kind-view')
+	await expect(view.locator('section', {hasText: 'Ingredients'}).locator('ul li')).toHaveCount(3)
+	await expect(view.locator('section', {hasText: 'Steps'}).locator('ol li')).toHaveCount(2)
+	await page.goto(`/@${handle}/apps/${domainOf(recipe.id)}?type=${recipe.id}`)
+	await expect(page.locator('enform-record-card-item', {hasText: 'Pasta'})).toContainText(
+		t('card_count', {count: '3', name: 'ingredients'})
+	)
+})

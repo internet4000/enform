@@ -122,3 +122,20 @@ describe('sortsOf and the URL', () => {
 		)
 	})
 })
+
+describe('lists of text', () => {
+	it('filters by short items (ingredients), not by items of text (steps)', () => {
+		const recipe: LexNode = {
+			type: 'object',
+			properties: {
+				ingredients: {type: 'array', items: {type: 'string', maxGraphemes: 200}},
+				steps: {type: 'array', items: {type: 'string', maxGraphemes: 1000}}
+			}
+		}
+		const recipes = [
+			record('1', {ingredients: ['Salt'], steps: ['Boil']}),
+			record('2', {ingredients: ['Pasta'], steps: ['Stir']})
+		]
+		expect(facetsOf(recipe, recipes).map((facet) => facet.key)).toEqual(['ingredients'])
+	})
+})

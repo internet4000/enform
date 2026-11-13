@@ -88,6 +88,15 @@ many, its first records, read or play them all, add one when it's yours. Each ty
 is also a tab: the profile's shows its record alone, a list's all its records. Bluesky's posts, a radio's
 tracks, someone's Tangled repos: the same, from the repo alone.
 
+## All a record holds
+
+A kind shows what carries a type's meaning (its title, text, link, picture, date);
+whatever no role shows is shown too, by its shape (`recordRest` in
+`src/lib/describe/record.ts`): a list of short items as a list (a recipe's
+ingredients), of long ones numbered (its steps), a text, a link, a date, and numbers,
+yes or no and short values side by side. A card counts its lists (3 ingredients · 2
+steps). Nothing a record holds is only in its JSON.
+
 ## What a reference points at
 
 A lexicon can't say which type a strongRef or an at:// URI points at: an RSVP's

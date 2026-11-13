@@ -37,11 +37,22 @@ const isValue = (node?: LexNode) =>
 const isImage = (node?: LexNode) =>
 	node?.type === 'blob' && (!node.accept || node.accept.some((type) => type.startsWith('image/')))
 
+/** Longer than a post: an item of text (a recipe's step), not a value to filter by */
+const TEXT_ITEM = 300
+const isText = (node?: LexNode) =>
+	node?.type === 'string' && (node.maxGraphemes ?? node.maxLength ?? 0) > TEXT_ITEM
+
 /** How a field can filter: by its values, by the sites of its links, or by having one */
 function howOf(node: LexNode): Facet['how'] | undefined {
 	if (node.type === 'string' && node.format === 'uri') return 'site'
 	if (isImage(node) || (node.type === 'array' && isImage(node.items))) return 'presence'
-	if (node.type === 'array' && node.items?.type === 'string' && isValue(node.items)) return 'value'
+	if (
+		node.type === 'array' &&
+		node.items?.type === 'string' &&
+		isValue(node.items) &&
+		!isText(node.items)
+	)
+		return 'value'
 	if (node.type === 'string' && !node.format && !node.enum && !node.knownValues) return undefined
 	if (isValue(node)) return 'value'
 	return undefined
