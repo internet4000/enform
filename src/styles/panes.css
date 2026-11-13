@@ -269,16 +269,25 @@ enform-records > ol > li > a[aria-current='page'] {
 
 /* Tablets: the chosen pane and the one above it */
 @media (min-width: 48rem) {
+	/* Panes float as Settings' groups: rounded, with space between and around them */
 	enform-panes {
 		display: grid;
 		grid-template-columns: minmax(var(--pane-min), var(--pane-nav)) minmax(0, 1fr);
+		gap: var(--float-space);
 		height: calc(100dvh - var(--header-height) - var(--sticky-bottom));
+		padding: 0 var(--float-space) var(--float-space);
 	}
 
 	enform-pane {
 		overflow-y: auto;
 		overscroll-behavior: contain;
-		border-inline-end: var(--border-width) solid var(--color-border);
+		border: var(--border-width) solid var(--color-border);
+		border-radius: var(--radius-large);
+	}
+
+	/* No pane chosen yet: only space */
+	enform-pane[placeholder] {
+		border-color: transparent;
 	}
 
 	/* Each pane scrolls on its own: its header sticks to its top */

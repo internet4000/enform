@@ -28,8 +28,12 @@
 	--rail-width: 14rem;
 	/* What sticky bars at the top stay under: the search header */
 	--sticky-top: var(--header-height);
-	/* What sticky bars at the bottom stay above: the tab bar, on phones */
-	--sticky-bottom: calc(var(--tabbar-height) + env(safe-area-inset-bottom));
+	/* Space around what floats (the tab bar, panes), as between Settings' groups */
+	--float-space: var(--space-s);
+	/* What sticky bars at the bottom stay above: the tab bar, floating, on phones */
+	--sticky-bottom: calc(
+		var(--tabbar-height) + 2 * var(--float-space) + env(safe-area-inset-bottom)
+	);
 	--icon-size: 1.5rem;
 	--icon-size-small: 1.125rem;
 	--icon-stroke: 1.75;
