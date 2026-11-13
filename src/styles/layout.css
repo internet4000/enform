@@ -15,6 +15,7 @@
 	enform-app-tile,
 	enform-app-view,
 	enform-type-rows,
+	enform-create-types,
 	enform-app-cards,
 	enform-app-card,
 	enform-app-hero,
@@ -770,4 +771,130 @@ enform-popup {
 
 enform-popup > * {
 	margin: 0;
+}
+
+/*
+ * What to create (/new): each app's types as a group of rows, as Settings' groups. A row:
+ * its kind's icon, its name, what one does with it, its description, and its lexicon by
+ * its NSID, a link of its own.
+ */
+enform-create-types {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-m);
+}
+
+enform-create-types h2 {
+	margin: var(--space-s) 0 0;
+}
+
+enform-create-types section {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+}
+
+enform-create-types h3 {
+	display: flex;
+	align-items: center;
+	gap: var(--space-xs);
+	margin: 0;
+	font-size: var(--font-size-m);
+}
+
+enform-create-types h3 > a {
+	font-size: var(--font-size-s);
+	font-weight: 400;
+	color: var(--color-muted);
+}
+
+enform-create-types ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--radius-large);
+	overflow: hidden;
+}
+
+enform-create-types li {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: start;
+}
+
+enform-create-types li + li {
+	border-top: var(--border-width) solid var(--color-border);
+}
+
+enform-create-types li > a:first-child {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	gap: var(--space-2xs) var(--space-s);
+	padding: var(--space-s);
+	color: inherit;
+	text-decoration: none;
+}
+
+enform-create-types li > a:hover {
+	background: var(--color-surface);
+}
+
+enform-create-types li > a:first-child > svg {
+	width: var(--icon-size);
+	height: var(--icon-size);
+	color: var(--color-accent);
+	fill: none;
+	stroke: currentColor;
+	stroke-width: var(--icon-stroke);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+enform-create-types li > a:first-child > span {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0 var(--space-s);
+}
+
+enform-create-types li > a:first-child small {
+	color: var(--color-muted);
+}
+
+enform-create-types li > a:first-child > p {
+	grid-column: 2;
+	margin: 0;
+	font-size: var(--font-size-s);
+	color: var(--color-muted);
+}
+
+/* The lexicon, by its NSID: beside the row on wide screens, under it on phones */
+enform-create-types li > a + a {
+	padding: var(--space-s);
+	font-size: var(--font-size-xs);
+	color: var(--color-muted);
+	overflow-wrap: anywhere;
+}
+
+@media (max-width: 47.99rem) {
+	enform-create-types li {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	enform-create-types li > a + a {
+		padding: 0 var(--space-s) var(--space-s) calc(var(--space-s) * 2 + var(--icon-size));
+	}
+}
+
+enform-create-types details > summary {
+	display: flex;
+	align-items: center;
+	min-height: var(--control-height);
+	color: var(--color-accent);
+	cursor: pointer;
+}
+
+enform-create-types details > ul {
+	margin-top: var(--space-xs);
 }

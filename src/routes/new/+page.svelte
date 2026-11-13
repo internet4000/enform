@@ -1,18 +1,24 @@
 <script lang="ts">
 	// What to create, and as whom. Who you act as first, in a line (with nobody yet, how
 	// to start is asked once a type is chosen), then one field to find a type by its name, its app or its NSID (any NSID opens its form),
-	// then each app's types as its own screen shows them: the verb of the type's kind, its
-	// name and its description. Your apps first; what you have one of is edited, not made.
+	// then every type of each app, a row each: the verb of its kind, its name, its
+	// description, its lexicon (by its NSID), and whether your repo has records of it.
+	// Your apps first; the types you use and enform knows well first in each, the rest
+	// folded; what you have one of is edited, not made again.
 	import {goto} from '$app/navigation'
 	import {NSID} from '@atproto/syntax'
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {listCollections} from '#lib/atproto/repo'
 	import {repoApps} from '#lib/apps/apps'
-	import {appInfo, byDirectory, typeLabel} from '#lib/apps/directory'
-	import type {AppType, RepoApp} from '#lib/apps/types'
-	import AppActions from '#lib/components/app/AppActions.svelte'
-	import {actorName, appScreenPath, newPath, repoPath} from '#lib/paths'
+	import {appInfo, byDirectory, typeLabel, type AppInfo} from '#lib/apps/directory'
+	import type {AppSingle, AppType, RepoApp} from '#lib/apps/types'
+	import {isDeclared} from '#lib/auth/scopes'
+	import {kindOf} from '#lib/records/kinds'
+	import {kindVerb} from '#lib/records/kind-words'
+	import AppIcon from '#lib/components/pane/AppIcon.svelte'
+	import Icon from '#lib/components/shell/Icon.svelte'
+	import {actorName, appPath, appScreenPath, lexiconPath, newPath, repoPath} from '#lib/paths'
 
 	let {data} = $props()
 
@@ -61,11 +67,25 @@
 		if (typed) goto(newPath(typed))
 	}
 
-	const edit = (domain: string) =>
-		me
-			? (type: string, rkey: string) =>
-					appScreenPath(actorName(me), domain, {type, record: rkey, edit: true})
-			: undefined
+	/** The types to show first: the ones you use, and the ones enform knows well */
+	const main = (type: AppType) => type.used || isDeclared(type.nsid)
+
+	/** The one record of this type you already have, to edit rather than make again */
+	const had = (type: AppType): string | undefined =>
+		'rkey' in type && (type as AppSingle).record ? (type as AppSingle).rkey : undefined
+
+	function target(type: AppType, domain: string, yours: boolean) {
+		const rkey = yours && me ? had(type) : undefined
+		const label = typeLabel(type.nsid)
+		if (rkey && me) {
+			return {
+				href: appScreenPath(actorName(me), domain, {type: type.nsid, record: rkey, edit: true}),
+				verb: m.actions_edit({type: label.toLocaleLowerCase()})
+			}
+		}
+		const words = kindVerb(kindOf(type.lexicon).kind, label)
+		return {href: newPath(type.nsid), verb: words.named ? undefined : words.verb}
+	}
 </script>
 
 <enform-page>
@@ -103,31 +123,65 @@
 		<p><a href={newPath(typed)} role="button">{m.new_record_title({collection: typed})}</a></p>
 	{/if}
 
-	<enform-apps>
+	{#snippet rows(types: AppType[], domain: string, yours: boolean)}
+		<ul>
+			{#each types as type (type.nsid)}
+				{@const kind = kindOf(type.lexicon).kind}
+				{@const to = target(type, domain, yours)}
+				{@const description = type.lexicon?.defs.main?.description ?? type.lexicon?.description}
+				<li>
+					<a href={to.href}>
+						<Icon name={kind} />
+						<span>
+							<strong>{typeLabel(type.nsid)}</strong>
+							{#if to.verb}<small>{to.verb}</small>{/if}
+							{#if yours && type.used}<small>{m.new_used()}</small>{/if}
+						</span>
+						{#if description}<p>{description}</p>{/if}
+					</a>
+					<a href={lexiconPath(type.nsid)} title={m.lexicon_view()}><code>{type.nsid}</code></a>
+				</li>
+			{/each}
+		</ul>
+	{/snippet}
+
+	{#snippet group(app: RepoApp, info: AppInfo, types: AppType[], yours: boolean)}
+		{@const first = words.length ? types : types.filter(main)}
+		{@const shownFirst = first.length ? first : types}
+		{@const rest = types.filter((type) => !shownFirst.includes(type))}
+		<section aria-label={info.name}>
+			<h3>
+				<AppIcon domain={info.domain} name={info.name} />
+				<span>{info.name}</span>
+				<a href={appPath(info.domain)}>{info.domain}</a>
+			</h3>
+			{@render rows(shownFirst, info.domain, yours)}
+			{#if rest.length}
+				<details>
+					<summary>{m.new_more({app: info.name, count: String(rest.length)})}</summary>
+					{@render rows(rest, info.domain, yours)}
+				</details>
+			{/if}
+		</section>
+	{/snippet}
+
+	<enform-create-types>
 		{#await mine then yours}
 			{@const own = shown(yours)}
-			{#each own as { app, info, types } (app.namespace)}
-				<AppActions
-					{types}
-					title={info.name}
-					domain={info.domain}
-					href={newPath}
-					edit={edit(info.domain)}
-					limit={words.length ? Infinity : 4}
-				/>
-			{/each}
-			{#await data.known then known}
+			{#if own.length}
+				<h2>{m.new_yours()}</h2>
+				{#each own as { app, info, types } (app.namespace)}
+					{@render group(app, info, types, true)}
+				{/each}
+			{/if}
+			{#await data.known}
+				<p aria-busy="true">{m.new_loading()}</p>
+			{:then known}
 				{@const others = shown(known.filter((app) => !yours.some((y) => y.app === app.app)))}
 				{#if others.length}
-					{#if own.length}<h2>{m.new_known()}</h2>{/if}
+					<h2>{own.length ? m.new_known() : m.new_apps()}</h2>
 					{#each others as { app, info, types } (app.namespace)}
-						<AppActions
-							{types}
-							title={info.name}
-							domain={info.domain}
-							href={newPath}
-							limit={words.length ? Infinity : 4}
-						/>
+						{@render group(app, info, types, false)}
 					{/each}
 				{/if}
 				{#if words.length && !own.length && !others.length && !typed}
@@ -135,5 +189,5 @@
 				{/if}
 			{/await}
 		{/await}
-	</enform-apps>
+	</enform-create-types>
 </enform-page>
