@@ -97,7 +97,9 @@ whatever no role shows is shown too, by its shape (`recordRest` in
 ingredients), of long ones numbered (its steps), a text, a link, a date, and numbers,
 yes or no and short values side by side. A card counts its lists (3 ingredients · 2
 steps). Its title heads it, whatever its kind, and its own dates (created, updated)
-close it. Nothing a record holds is only in its JSON.
+close it. What it points at, wherever in it (a reply's root and parent, a quote's
+embed: `recordLinks`), is shown before it as those records' cards, labelled by where
+(Reply › Parent), once each. Nothing a record holds is only in its JSON.
 
 ## What a reference points at
 

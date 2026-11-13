@@ -6,7 +6,7 @@
 	import {namespaceOf} from '#lib/apps/names'
 	import {formatDate} from '#lib/dates'
 	import {resolveLinkedRecord} from '#lib/records/links'
-	import {atUriPath} from '#lib/paths'
+	import {atUriAppPath} from '#lib/paths'
 	import IdentityChip from './IdentityChip.svelte'
 	import {whenVisible} from './visible'
 
@@ -18,7 +18,7 @@
 
 	let {uri, cid}: Props = $props()
 	let visible = $state(false)
-	let href = $derived(atUriPath(uri))
+	let href = $derived(atUriAppPath(uri))
 </script>
 
 {#snippet version()}

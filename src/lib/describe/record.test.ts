@@ -1,6 +1,6 @@
 import {expect, test} from 'vitest'
 import {exampleLexicon} from '#lib/lexicons/examples'
-import {recordRest} from './record'
+import {recordLinks, recordRest} from './record'
 
 const pasta = {
 	$type: 'example.recipe.recipe',
@@ -31,4 +31,32 @@ test('without a lexicon, the same from its values', () => {
 		['servings', 'fact'],
 		['vegan', 'fact']
 	])
+})
+
+test('a reply points at its thread: root and parent, once when they are one record', () => {
+	const parent = {cid: 'b1', uri: 'at://did:plc:a/app.bsky.feed.post/3p'}
+	const one = recordLinks({text: 'Thanks', reply: {root: parent, parent}})
+	expect(one).toEqual([
+		{
+			uri: parent.uri,
+			cid: 'b1',
+			paths: [
+				['reply', 'root'],
+				['reply', 'parent']
+			]
+		}
+	])
+	const root = {cid: 'b0', uri: 'at://did:plc:a/app.bsky.feed.post/3r'}
+	expect(recordLinks({reply: {root, parent}}).map((link) => link.paths)).toEqual([
+		[['reply', 'root']],
+		[['reply', 'parent']]
+	])
+	// A quote, in an embed; an at:// URI as a string; not a repo's or a collection's
+	expect(
+		recordLinks({
+			embed: {$type: 'app.bsky.embed.record', record: root},
+			list: 'at://did:plc:a/app.bsky.graph.list/3l',
+			repo: 'at://did:plc:a'
+		}).map((link) => link.paths)
+	).toEqual([[['embed', 'record']], [['list']]])
 })

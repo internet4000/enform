@@ -75,3 +75,39 @@ export function describeRecord(
 	if (type?.roles.title === '$key') return {title: record.rkey}
 	return {title: recordSummary(record.value, lexicon?.defs.main?.record)}
 }
+
+/** A record another one points at, and where in it: `reply › root`, `reply › parent` */
+export type RecordLink = {uri: string; cid?: string; paths: string[][]}
+
+/** Deep enough for a reply's root, a quote's embed; not into what they hold */
+const LINK_DEPTH = 4
+
+const isRecordUri = (value: unknown): value is string =>
+	typeof value === 'string' && /^at:\/\/[^/]+\/[^/]+\/[^/]+$/.test(value)
+
+/**
+ * Every record it points at, wherever it is in it (a strongRef, an at:// URI), in its
+ * order, once each: a reply's root and parent are one record when they are the same
+ */
+export function recordLinks(value: Record<string, unknown>): RecordLink[] {
+	const found = new Map<string, RecordLink>()
+	const add = (uri: string, path: string[], cid?: string) => {
+		const link = found.get(uri) ?? {uri, cid, paths: []}
+		link.paths.push(path)
+		found.set(uri, link)
+	}
+	const walk = (node: unknown, path: string[]) => {
+		if (path.length > LINK_DEPTH) return
+		if (isRecordUri(node)) return add(node, path)
+		if (Array.isArray(node))
+			return node.forEach((item, index) => walk(item, [...path, `${index + 1}`]))
+		if (!node || typeof node !== 'object') return
+		const object = node as Record<string, unknown>
+		if (isRecordUri(object.uri))
+			return add(object.uri, path, typeof object.cid === 'string' ? object.cid : undefined)
+		for (const [key, inner] of Object.entries(object))
+			if (key !== '$type') walk(inner, [...path, key])
+	}
+	walk(value, [])
+	return [...found.values()]
+}

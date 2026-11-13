@@ -2,7 +2,7 @@
 	// What a record is, shown for its kind (from its lexicon), before its fields: a link's
 	// preview to open, a photo, a status, the person followed, the thing reacted to,
 	// an event's date, a post's text, someone's picture and name
-	import {describeRecord, recordRest} from '#lib/describe/record'
+	import {describeRecord, recordLinks, recordRest} from '#lib/describe/record'
 	import {fieldLabel} from '#lib/forms/labels'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
@@ -54,6 +54,19 @@
 		recordRest(value, lexicon).filter((part) => part.as !== 'link' || part.value !== link || known)
 	)
 	let facts = $derived(rest.filter((part) => part.as === 'fact'))
+	/** What it points at, wherever in it (a reply's thread, a quote), as cards: what a
+	    reaction is to is its kind's already */
+	let links = $derived(
+		recordLinks(value).filter(
+			(link) =>
+				!(
+					shape.kind === 'reaction' &&
+					link.paths.every((path) => path.length === 1 && path[0] === shape.fields.subject)
+				)
+		)
+	)
+	const linkLabel = (paths: string[][]) =>
+		paths.map((path) => path.map((part) => fieldLabel(part)).join(' › ')).join(', ')
 	/** Its title, for every kind (a profile's is its name, shown with its picture) */
 	let heading = $derived(
 		shape.kind === 'profile' || beside
@@ -95,6 +108,15 @@
 
 <enform-kind-view kind={shape.kind}>
 	{#if heading}<h3>{heading}</h3>{/if}
+	{#if !beside}
+		{#each links as link (link.uri)}
+			<!-- What it answers, quotes or names, before it: why it was written -->
+			<section data-link>
+				<h4>{linkLabel(link.paths)}</h4>
+				<RecordCard uri={link.uri} cid={link.cid} />
+			</section>
+		{/each}
+	{/if}
 	{#if beside}
 		<!-- shown beside its media or images -->
 	{:else if shape.kind === 'profile'}
