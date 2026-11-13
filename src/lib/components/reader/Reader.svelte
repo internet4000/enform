@@ -9,7 +9,10 @@
 	// its edge resizes it. Its controls at its foot, as 4000.radio's.
 	import {describeRecord} from '#lib/describe/record'
 	import * as m from '#lib/paraglide/messages.js'
-	import {typeLabel} from '#lib/apps/directory'
+	import {appInfo, typeLabel} from '#lib/apps/directory'
+	import {appOf, namespaceOf} from '#lib/apps/names'
+	import {actorName, appScreenPath, lexiconPath, repoPath} from '#lib/paths'
+	import AppIcon from '../pane/AppIcon.svelte'
 	import {reader, type ReaderItem, type ReaderMode} from '#lib/reader/reader.svelte'
 	import Icon from '../shell/Icon.svelte'
 	import Present from '../present/Present.svelte'
@@ -50,6 +53,10 @@
 	const titleOf = (entry: ReaderItem) =>
 		describeRecord(entry.record, entry.lexicon).title ?? entry.record.rkey
 	let title = $derived(item ? titleOf(item) : '')
+	/** Where it plays from: whose repo, which app, which type (its lexicon) */
+	let actor = $derived(item ? actorName(item.repo) : '')
+	let domain = $derived(item ? appOf(item.record.collection) : '')
+	let app = $derived(item ? appInfo(namespaceOf(item.record.collection)) : undefined)
 
 	const modes: {mode: ReaderMode; label: () => string}[] = [
 		{mode: 'small', label: m.reader_small},
@@ -97,7 +104,7 @@
 							index: String(reader.index + 1),
 							count: String(reader.items.length)
 						})}
-						· {typeLabel(item.record.collection)}
+						· {typeLabel(item.record.collection)} · @{actor}
 					</small>
 				</hgroup>
 			</button>
@@ -122,6 +129,16 @@
 				</li>
 			</menu>
 		</header>
+		{#if reader.mode !== 'small'}
+			<!-- Where it plays from: the app, the profile, the type (its lexicon) -->
+			<nav aria-label={m.reader_from()} data-from>
+				<a href={appScreenPath(actor, domain)}>
+					<AppIcon {domain} name={app?.name ?? domain} />{domain}
+				</a>
+				<a href={repoPath(actor)}>@{actor}</a>
+				<a href={lexiconPath(item.record.collection)}><code>{item.record.collection}</code></a>
+			</nav>
+		{/if}
 		{#if reader.decks.length > 1}
 			<nav aria-label={m.reader_decks()}>
 				<ul>

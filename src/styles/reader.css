@@ -77,15 +77,72 @@ enform-reader svg {
 	stroke-linejoin: round;
 }
 
+/* Where it plays from: the app, the profile, the type; one line, shortened */
+enform-reader > nav[data-from] {
+	display: flex;
+	align-items: center;
+	gap: var(--space-xs) var(--space-s);
+	min-width: 0;
+	font-size: var(--font-size-s);
+	white-space: nowrap;
+}
+
+enform-reader > nav[data-from] > a {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-2xs);
+	min-width: 0;
+	min-height: var(--control-height);
+	overflow: hidden;
+	color: var(--color-muted);
+	text-overflow: ellipsis;
+	text-decoration: none;
+}
+
+enform-reader > nav[data-from] > a:hover {
+	color: inherit;
+}
+
+enform-reader > nav[data-from] > a:last-child {
+	flex: 1;
+}
+
+enform-reader > nav[data-from] enform-app-icon {
+	flex: none;
+}
+
 /* Its controls keep their size; the record and the list scroll, each on its own */
 enform-reader > * {
 	flex: none;
 }
 
+/* The record centred, as a text is on a page; its media as wide as the reader */
 enform-reader > enform-present {
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-m);
+	text-align: center;
+}
+
+enform-reader > enform-present > :is(enform-media, enform-images, enform-place) {
+	flex: none;
+	text-align: start;
+}
+
+/* Lists keep their marks beside them, the list itself centred */
+enform-reader > enform-present :is(ul, ol) {
+	width: fit-content;
+	max-width: 100%;
+	margin-inline: auto;
+	text-align: start;
+}
+
+enform-reader > enform-present enform-kind-view {
+	align-items: center;
+}
+
+enform-reader > enform-present enform-kind-view > :is(footer, dl) {
+	justify-content: center;
 }
 
 enform-reader:is([mode='docked'], [mode='full']) {
@@ -99,6 +156,13 @@ enform-reader:is([mode='docked'], [mode='full']) > enform-present {
 	min-height: 0;
 	overflow-y: auto;
 	overscroll-behavior: contain;
+}
+
+/* With no media, the record sits in the middle of its room, its start never cut off;
+   media stay on top, as large as the room lets them */
+enform-reader:is([mode='docked'], [mode='full'])
+	> enform-present:not(:has(> :is(enform-media, enform-images))) {
+	justify-content: safe center;
 }
 
 enform-reader[mode='full'] > enform-present:has(~ section) {
@@ -277,6 +341,11 @@ enform-app > main {
 	enform-app:has(> enform-reader[mode='docked']) enform-fab {
 		inset-inline-end: calc(var(--reader-width) + var(--gutter));
 	}
+}
+
+/* Full screen, the reader is all there is: the page's + button waits under it */
+enform-app:has(> enform-reader[mode='full']) enform-fab {
+	display: none;
 }
 
 enform-media {

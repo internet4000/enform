@@ -24,6 +24,13 @@ test('the reader keeps the sizes one gives it', async ({page}, info) => {
 		.click()
 
 	const reader = page.getByRole('region', {name: t('reader_label')})
+	// Where it plays from: the app, the profile, the type's lexicon
+	const from = reader.getByRole('navigation', {name: t('reader_from')})
+	await expect(from.getByRole('link', {name: 'enform.test'})).toBeVisible()
+	await expect(from.getByRole('link', {name: 'test.enform.note'})).toHaveAttribute(
+		'href',
+		/lexicon\/test\.enform\.note/
+	)
 	await expect(reader.getByRole('button', {name: t('reader_next')})).toBeEnabled()
 	await expect(reader.getByRole('button', {name: t('reader_autoplay')})).toHaveAttribute(
 		'aria-pressed',
