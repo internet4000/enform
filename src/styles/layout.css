@@ -679,6 +679,22 @@ enform-menu li > span {
 		inset: calc(var(--header-height) * 2) var(--gutter) auto auto;
 		width: var(--menu-width);
 	}
+
+	/* Beside the button that opened it (CSS anchor positioning: the button names itself
+	   its anchor): under it, its end aligned with the button's, flipped above or to the
+	   other side when the screen has no room there */
+	@supports (position-area: bottom) {
+		enform-menu[popover] {
+			inset: auto;
+			margin: var(--space-2xs) 0;
+			position-area: block-end span-inline-start;
+			position-try-fallbacks:
+				flip-block,
+				flip-inline,
+				flip-block flip-inline;
+			max-height: min(70dvh, 100%);
+		}
+	}
 }
 
 /* An app card while its publisher is being read */

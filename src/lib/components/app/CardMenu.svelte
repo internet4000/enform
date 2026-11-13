@@ -43,10 +43,13 @@
 </script>
 
 <enform-card-menu>
-	<button type="button" popovertarget="{id}-menu" aria-label={`${m.record_menu()} · ${title}`}
-		>⋯</button
+	<button
+		type="button"
+		popovertarget="{id}-menu"
+		style:anchor-name="--{id}-menu"
+		aria-label={`${m.record_menu()} · ${title}`}>⋯</button
 	>
-	<enform-menu id="{id}-menu" popover="auto" bind:this={menu}>
+	<enform-menu id="{id}-menu" popover="auto" style:position-anchor="--{id}-menu" bind:this={menu}>
 		<ul>
 			<li><a {href} onclick={() => menu?.hidePopover()}>{m.action_view_record()}</a></li>
 			{#each actions as action, index (index)}

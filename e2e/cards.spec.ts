@@ -4,7 +4,7 @@
  */
 import {address, creating, expect, opened, t, test} from './fixtures'
 
-test('a card reads its note; View record, in its menu, opens it', async ({page}) => {
+test('a card reads its note; View record, in its menu, opens it', async ({page}, info) => {
 	await page.goto('/new/test.enform.note')
 	await page.getByRole('button', {name: t('start_device_button')}).click()
 	await page.waitForURL(creating)
@@ -27,7 +27,18 @@ test('a card reads its note; View record, in its menu, opens it', async ({page})
 	).toBeVisible()
 	await expect(page).not.toHaveURL((url) => opened(url))
 
-	await card.getByRole('button', {name: `${t('record_menu')} · A note to read`}).click()
+	const opener = card.getByRole('button', {name: `${t('record_menu')} · A note to read`})
+	await opener.click()
+	// Wide screens: beside its button (anchored), not somewhere on the screen
+	if (info.project.name === 'desktop') {
+		const button = (await opener.boundingBox())!
+		const menu = (await page.locator('enform-menu:popover-open').boundingBox())!
+		const near = (a: number, b: number) => Math.abs(a - b) < 16
+		expect(near(menu.y, button.y + button.height) || near(menu.y + menu.height, button.y)).toBe(
+			true
+		)
+		expect(near(menu.x + menu.width, button.x + button.width) || near(menu.x, button.x)).toBe(true)
+	}
 	await page.getByRole('link', {name: t('action_view_record')}).click()
 	await page.waitForURL(opened)
 })

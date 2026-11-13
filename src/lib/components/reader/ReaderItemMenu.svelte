@@ -40,10 +40,11 @@
 <button
 	type="button"
 	popovertarget="{id}-item"
+	style:anchor-name="--{id}-item"
 	aria-label={m.reader_item_menu({title})}
 	title={m.record_menu()}>⋯</button
 >
-<enform-menu id="{id}-item" popover="auto" bind:this={menu}>
+<enform-menu id="{id}-item" popover="auto" style:position-anchor="--{id}-item" bind:this={menu}>
 	<ul>
 		<li><span>{title}</span></li>
 		<li><a href={entry.href} onclick={leave}>{m.reader_open()}</a></li>

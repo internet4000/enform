@@ -32,12 +32,13 @@
 		<button
 			type="button"
 			popovertarget="{id}-new"
+			style:anchor-name="--{id}-new"
 			aria-label={current ? m.app_new_other() : undefined}
 			title={current ? m.app_new_other() : undefined}
 		>
 			{current ? '+ …' : `+ ${m.app_new_menu()}`}
 		</button>
-		<enform-menu id="{id}-new" popover="auto">
+		<enform-menu id="{id}-new" popover="auto" style:position-anchor="--{id}-new">
 			<ul>
 				{#each others as type (type.nsid)}
 					{@const words = verb(type)}

@@ -21,8 +21,13 @@
 	let embed = $state<EmbedDialog>()
 </script>
 
-<button type="button" popovertarget="{id}-app" aria-label={m.record_menu()}>⋯</button>
-<enform-menu id="{id}-app" popover="auto">
+<button
+	type="button"
+	popovertarget="{id}-app"
+	style:anchor-name="--{id}-app"
+	aria-label={m.record_menu()}>⋯</button
+>
+<enform-menu id="{id}-app" popover="auto" style:position-anchor="--{id}-app">
 	<ul>
 		{#if info.url}
 			<li>
