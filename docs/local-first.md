@@ -52,9 +52,11 @@ Nothing local pretends to be atproto:
 - Reads of your own repo lay the waiting writes over what the PDS returns, and show
   what was last read (this visit) while it can't be reached.
 - The outbox is sent in order on start and when the network is back; a write that
-  waited on another swaps against the version that one made. A conflict (the record
-  changed elsewhere) or a refusal stops that write, kept in Settings › Waiting to be sent, to give up;
-  nothing is overwritten silently.
+  waited on another swaps against the version that one made, kept with it should
+  sending stop in between. A conflict (the record changed elsewhere) or a refusal
+  stops that write, and the later writes of its record wait behind it, kept in
+  Settings › Waiting to be sent, to give up; the next then swaps against the version
+  the one given up would have written over. Nothing is overwritten silently.
 - The app itself works offline: a service worker keeps its built files.
 - Not yet: a lasting local copy of read collections (only this visit's reads).
 

@@ -12,13 +12,8 @@ import * as local from '#lib/local/store'
 import {isExample} from '#lib/lexicons/examples/index'
 import {pointsOnDevice} from '#lib/local/handle'
 import {TID} from '@atproto/common-web'
-import {
-	enqueue,
-	markConflict,
-	pendingFor,
-	removePending,
-	type PendingWrite
-} from '#lib/outbox/store'
+import {enqueue, pendingFor, type PendingWrite} from '#lib/outbox/store'
+import {sendPending} from '#lib/outbox/send'
 import {outbox} from '#lib/outbox/outbox.svelte'
 import {isNetworkFailure, XrpcError} from './xrpc'
 
@@ -172,46 +167,25 @@ async function waitingOn(did: string, collection: string, rkey: string): Promise
 	return (await pendingFor(did, collection).catch(() => [])).some((write) => write.rkey === rkey)
 }
 
-/**
- * Sends the current account's waiting writes, in order. A write that waited on another
- * swaps against the version that one made. A conflict (the record changed elsewhere)
- * or a refusal stops that write, kept to look at; an unreachable PDS stops them all.
- */
+/** Sends the current account's waiting writes, in order (`sendPending`) */
 export async function sendWaiting(): Promise<number> {
 	const session = auth.session
 	if (!session || auth.local) return 0
-	const writes = (await pendingFor(session.did)).filter((write) => !write.conflict)
-	const versions = new Map<string, string>()
-	let sent = 0
-	for (const write of writes) {
-		const key = `${write.collection}/${write.rkey}`
-		const swap = write.swap || versions.get(key) || undefined
+	const sent = await sendPending(session.did, async (write, swapRecord) => {
 		const input = {repo: session.did, collection: write.collection, rkey: write.rkey}
-		try {
-			if (write.op === 'create') {
-				const done = await call<WriteResult>(session, 'com.atproto.repo.createRecord', {
-					...input,
-					record: write.value
-				})
-				versions.set(key, done.cid)
-			} else if (write.op === 'update') {
-				const done = await call<WriteResult>(session, 'com.atproto.repo.putRecord', {
-					...input,
-					record: write.value,
-					swapRecord: swap
-				})
-				versions.set(key, done.cid)
-			} else {
-				await call(session, 'com.atproto.repo.deleteRecord', {...input, swapRecord: swap})
-				versions.delete(key)
-			}
-			await removePending(write.id as number)
-			sent++
-		} catch (err) {
-			if (isNetworkFailure(err)) break
-			await markConflict(write, (err as Error).message)
+		if (write.op === 'delete') {
+			await call(session, 'com.atproto.repo.deleteRecord', {...input, swapRecord})
+			return undefined
 		}
-	}
+		const nsid = write.op === 'create' ? 'createRecord' : 'putRecord'
+		const extra = write.op === 'create' ? {} : {swapRecord}
+		const done = await call<WriteResult>(session, `com.atproto.repo.${nsid}`, {
+			...input,
+			record: write.value,
+			...extra
+		})
+		return done.cid
+	})
 	await outbox.refresh()
 	return sent
 }
