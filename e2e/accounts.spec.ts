@@ -13,12 +13,14 @@ test('add a second account and switch between them', async ({page}) => {
 	await accounts.getByRole('button', {name: t('accounts_switch_to', {actor: 'alice.test'})}).click()
 	await expect(current.getByRole('link', {name: /@alice\.test/})).toBeVisible()
 
-	// Who you are, in the main navigation, opens Settings: you at its top, once
+	// The main navigation: your profile (who you are, said), then Settings, you at its top
 	await page.goto('/')
-	await page
-		.getByRole('navigation', {name: t('nav_main')})
-		.getByRole('link', {name: '@alice.test'})
-		.click()
+	const nav = page.getByRole('navigation', {name: t('nav_main')})
+	await expect(nav.getByRole('link', {name: t('nav_profile')})).toHaveAttribute(
+		'title',
+		'@alice.test'
+	)
+	await nav.getByRole('link', {name: t('nav_settings')}).click()
 	await page.waitForURL((url) => address(url).pathname === '/settings')
 	await expect(page.locator('enform-settings-you').getByText(/@alice\.test/)).toBeVisible()
 	// One row to switch, back to the list of every account

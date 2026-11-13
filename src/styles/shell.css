@@ -70,7 +70,6 @@ enform-app > header > form > button > span:first-child {
 enform-app > header > nav {
 	display: flex;
 	flex: none;
-	padding: var(--space-2xs);
 	background: var(--color-surface);
 	border-radius: var(--pill-radius);
 }
@@ -78,7 +77,9 @@ enform-app > header > nav {
 enform-app > header > nav > a {
 	display: inline-flex;
 	align-items: center;
-	min-height: calc(var(--control-height) - 2 * var(--space-2xs));
+	justify-content: center;
+	min-width: var(--control-height);
+	min-height: var(--control-height);
 	padding: 0 var(--space-s);
 	font-size: var(--font-size-s);
 	color: var(--color-muted);
