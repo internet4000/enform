@@ -212,25 +212,22 @@ enform-app > nav li a > span {
 @media (min-width: 64rem) {
 	enform-app {
 		grid-template-areas: 'nav header' 'nav main';
-		grid-template-columns: var(--rail-width) minmax(0, 1fr);
+		grid-template-columns: calc(var(--rail-width) + var(--float-space)) minmax(0, 1fr);
 		padding-bottom: 0;
 		--sticky-bottom: 0px;
 	}
 
+	/* The rail floats as the tab bar does on phones: space around it, rounded */
 	enform-app > nav {
 		grid-area: nav;
 		position: sticky;
-		inset: 0 auto auto;
+		inset: var(--float-space) auto auto;
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-s);
-		height: 100dvh;
+		height: calc(100dvh - 2 * var(--float-space));
+		margin: var(--float-space) 0 var(--float-space) var(--float-space);
 		padding: var(--space-s);
-		background: none;
-		backdrop-filter: none;
-		border: 0;
-		border-radius: 0;
-		box-shadow: none;
 	}
 
 	enform-app > nav > a[rel='home'] {
