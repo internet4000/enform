@@ -364,6 +364,7 @@
 	"search_everywhere_for": "Chercher « {query} » partout",
 	"search_scope_person": "les apps de {actor}",
 	"search_scope_apps": "les apps",
+	"app_version": "Version {version}",
 	"about_title": "À propos",
 	"about_source": "Code source",
 	"about_self_host": "Héberger votre propre copie",

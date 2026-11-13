@@ -1,3 +1,4 @@
+import pkg from '../package.json' with {type: 'json'}
 import {address, creating, expect, signIn, t, test} from './fixtures'
 
 test('search from the top: someone by handle, then their page', async ({page}) => {
@@ -18,6 +19,10 @@ test('Settings opens from the main menu; old More links still land', async ({pag
 	await page.goto('/more')
 	await page.waitForURL((url) => address(url).pathname === '/settings')
 	await expect(page.getByRole('heading', {level: 1, name: t('nav_settings')})).toBeVisible()
+	// enform's name and version end Settings (the rail has neither)
+	await expect(page.locator('enform-page > footer')).toContainText(
+		t('app_version', {version: pkg.version})
+	)
 	await page.goto('/')
 	await page
 		.getByRole('navigation', {name: t('nav_main')})

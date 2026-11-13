@@ -127,6 +127,30 @@ enform-page {
 	padding: var(--space-s) var(--gutter) var(--space-l);
 }
 
+/* Settings' last line: enform, its icon and version */
+enform-page > footer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--space-2xs);
+	color: var(--color-muted);
+}
+
+enform-page > footer > a {
+	display: flex;
+	align-items: center;
+	gap: var(--space-xs);
+	min-height: var(--control-height);
+	font-weight: 700;
+	color: inherit;
+	text-decoration: none;
+}
+
+enform-page > footer img {
+	width: var(--app-icon-size);
+	height: var(--app-icon-size);
+}
+
 /* Flex children may shrink below their content (long one-line text truncates instead) */
 enform-page > *,
 enform-pane > *,
@@ -150,9 +174,7 @@ enform-app > nav {
 	box-shadow: var(--shadow-menu);
 }
 
-/* The app's name and your apps are the rail's; on phones, Home is the first tab and
-   your apps are on Home */
-enform-app > nav > a[rel='home'],
+/* Your apps are the rail's; on phones, Home is the first tab and your apps are on Home */
 enform-app > nav > section {
 	display: none;
 }
@@ -229,23 +251,6 @@ enform-app > nav li a > span {
 		height: calc(100dvh - 2 * var(--float-space));
 		margin: var(--float-space) 0 var(--float-space) var(--float-space);
 		padding: var(--space-s);
-	}
-
-	enform-app > nav > a[rel='home'] {
-		display: flex;
-		align-items: center;
-		gap: var(--space-xs);
-		min-height: var(--header-height);
-		padding: 0 var(--space-s);
-		font-weight: 700;
-		color: inherit;
-		text-decoration: none;
-	}
-
-	/* enform's own icon, as the rail shows an app's */
-	enform-app > nav > a[rel='home'] > img {
-		width: var(--app-icon-size);
-		height: var(--app-icon-size);
 	}
 
 	enform-app > nav ul {

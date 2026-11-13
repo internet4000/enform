@@ -1,11 +1,10 @@
 <script lang="ts">
 	// The app's main places: in thumb reach at the bottom on phones; on wide screens a
-	// rail on the left, the app's icon and name at its top, your apps under the places, and who
+	// rail on the left (enform's name and version are in Settings), your apps under the places, and who
 	// you act as at its bottom: your profile (your repo), then Settings (your profiles,
 	// switching, signing in, and the rest). New creates a record of any type.
 	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
-	import app from '#lib/config/app.json' with {type: 'json'}
 	import {auth} from '#lib/auth/session.svelte'
 	import {actorName, addressOf, inApp, newPath, repoPath} from '#lib/paths'
 	import {profileAvatar} from '#lib/atproto/profile'
@@ -18,8 +17,6 @@
 		{href: newPath(), icon: 'new', label: m.nav_new}
 	] as const
 	const settings = inApp('/settings')
-	/** Beside the app's page, which is always its folder (addresses are after `#`) */
-	const logo = app.logo.replace(/^\//, '')
 
 	/** Who you act as, always in sight: your handle, or your local profile's name */
 	let me = $derived(auth.me ? `@${actorName(auth.me)}` : undefined)
@@ -34,7 +31,6 @@
 </script>
 
 <nav aria-label={m.nav_main()}>
-	<a href={inApp('/')} rel="home"><img src={logo} alt="" />{app.name}</a>
 	<ul>
 		{#each places as place (place.href)}
 			<li>

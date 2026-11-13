@@ -3,6 +3,8 @@
 	// row to switch account (the others' faces on it); then plain rows, each to its own
 	// page; signing out last
 	import * as m from '#lib/paraglide/messages.js'
+	import app from '#lib/config/app.json' with {type: 'json'}
+	import {version} from '../../../package.json' with {type: 'json'}
 	import {getLocale} from '#lib/paraglide/runtime.js'
 	import {inApp} from '#lib/paths'
 	import {auth} from '#lib/auth/session.svelte'
@@ -12,6 +14,8 @@
 	import SettingsLinks, {type SettingsLink} from '#lib/components/SettingsLinks.svelte'
 	import SettingsYou from '#lib/components/SettingsYou.svelte'
 
+	/** enform's own icon, beside its page (addresses are after `#`) */
+	const logo = app.logo.replace(/^\//, '')
 	const language = new Intl.DisplayNames([getLocale()], {type: 'language'}).of(getLocale())
 
 	let me = $derived(auth.me)
@@ -65,4 +69,8 @@
 	<SettingsLinks items={switching} />
 	<SettingsLinks items={rows} />
 	{#if leaving.length}<SettingsLinks items={leaving} />{/if}
+	<footer>
+		<a href={inApp('/settings/about')}><img src={logo} alt="" />{app.name}</a>
+		<small>{m.app_version({version})}</small>
+	</footer>
 </enform-page>

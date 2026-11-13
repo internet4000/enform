@@ -364,6 +364,7 @@
 	"search_everywhere_for": "Search everywhere for “{query}”",
 	"search_scope_person": "apps of {actor}",
 	"search_scope_apps": "apps",
+	"app_version": "Version {version}",
 	"about_title": "About",
 	"about_source": "Source code",
 	"about_self_host": "Serve your own copy",
