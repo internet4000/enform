@@ -54,6 +54,33 @@
 		recordRest(value, lexicon).filter((part) => part.as !== 'link' || part.value !== link || known)
 	)
 	let facts = $derived(rest.filter((part) => part.as === 'fact'))
+	/** Its title, for every kind (a profile's is its name, shown with its picture) */
+	let heading = $derived(
+		shape.kind === 'profile' || beside
+			? undefined
+			: known
+				? (() => {
+						const named = field(shape.fields.title)
+						return typeof named === 'string' && named !== text ? named : undefined
+					})()
+				: title && title !== link
+					? title
+					: undefined
+	)
+	/** When it was made, and changed: its own dates, last */
+	let stamps = $derived(
+		(
+			[
+				['createdAt', m.field_created_at],
+				['updatedAt', m.field_updated_at]
+			] as const
+		).flatMap(([key, label]) => {
+			const date = value[key]
+			return typeof date === 'string' && !Number.isNaN(Date.parse(date))
+				? [{date, label: label()}]
+				: []
+		})
+	)
 </script>
 
 {#snippet preview(url: string)}
@@ -67,6 +94,7 @@
 {/snippet}
 
 <enform-kind-view kind={shape.kind}>
+	{#if heading}<h3>{heading}</h3>{/if}
 	{#if beside}
 		<!-- shown beside its media or images -->
 	{:else if shape.kind === 'profile'}
@@ -77,7 +105,6 @@
 		</enform-kind-person>
 	{:else if !known}
 		<!-- No kind to show it by: as its card shows it, from its values -->
-		{#if title && title !== link}<h3>{title}</h3>{/if}
 		{#if card.text && card.text !== title}<p>{card.text}</p>{/if}
 		{#if link}{@render preview(link)}{/if}
 		{#if !title && !card.text && !link}<small>{m.kind_empty()}</small>{/if}
@@ -131,4 +158,11 @@
 			</section>
 		{/if}
 	{/each}
+	{#if stamps.length}
+		<footer>
+			{#each stamps as stamp (stamp.label)}
+				<small>{stamp.label} <time datetime={stamp.date}>{formatDate(stamp.date)}</time></small>
+			{/each}
+		</footer>
+	{/if}
 </enform-kind-view>

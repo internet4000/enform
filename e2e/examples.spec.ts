@@ -99,7 +99,14 @@ for (const doc of exampleLexicons) {
 			'aria-current',
 			'true'
 		)
-		await expect(sheet.locator('enform-kind-view')).not.toBeEmpty()
+		const view = sheet.locator('enform-kind-view')
+		await expect(view).not.toBeEmpty()
+		// All it holds: its title (a profile's: its name, with its picture), its dates
+		const {kind, roles} = describeType(doc.id, {lexicon: doc})
+		if (roles.title && kind !== 'profile')
+			await expect(view.getByRole('heading', {name: `${roles.title} of ${doc.id}`})).toBeVisible()
+		if (doc.defs.main.record?.required?.includes('createdAt'))
+			await expect(view.locator(':scope > footer time').first()).toBeVisible()
 		const recordUrl = page.url()
 
 		// Edited: its form again, saved as it is

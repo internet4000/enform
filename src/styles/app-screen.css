@@ -440,6 +440,13 @@ enform-kind-view > section > a {
 	overflow-wrap: anywhere;
 }
 
+enform-kind-view > footer {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs) var(--space-m);
+	color: var(--color-muted);
+}
+
 enform-kind-view > dl {
 	display: flex;
 	flex-wrap: wrap;

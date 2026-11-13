@@ -95,7 +95,8 @@ whatever no role shows is shown too, by its shape (`recordRest` in
 `src/lib/describe/record.ts`): a list of short items as a list (a recipe's
 ingredients), of long ones numbered (its steps), a text, a link, a date, and numbers,
 yes or no and short values side by side. A card counts its lists (3 ingredients · 2
-steps). Nothing a record holds is only in its JSON.
+steps). Its title heads it, whatever its kind, and its own dates (created, updated)
+close it. Nothing a record holds is only in its JSON.
 
 ## What a reference points at
 
