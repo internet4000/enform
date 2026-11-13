@@ -157,6 +157,12 @@ test('an event is answered: its RSVP starts pointing at it, and picks among your
 	await form.locator('[id$="-status"]').first().fill('going')
 	await form.locator('button[type="submit"]', {hasText: t('new_submit')}).click()
 	await page.waitForURL(opened)
+
+	// Its card goes to its event, named by its type; the RSVP itself is in its menu
+	await page.goto(`/@${handle}/apps/${domainOf(event.id)}?type=example.event.rsvp`)
+	const card = page.locator('enform-record-card-item').first()
+	await card.getByRole('link', {name: t('action_record', {type: 'Event'})}).click()
+	await page.waitForURL((url) => opened(url) && address(url).searchParams.get('type') === event.id)
 })
 
 test('a recipe shows all it holds: its lists, steps numbered; its card counts them', async ({

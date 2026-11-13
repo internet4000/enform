@@ -1,7 +1,10 @@
 <script lang="ts">
 	// A record as a card in its app, shaped by its kind (from its lexicon): a link with its
-	// thumbnail, a photo, a status in big, an event's date, a post's text… While its list
-	// selects, the whole card is a checkbox's label: a click (shift: a range) selects it.
+	// thumbnail, a photo, a status in big, an event's date, a post's text… A click does
+	// its first action (play a track, read a post, go to the person followed, the event
+	// answered), named on it; with none, it opens the record. Its menu (⋯) has the record
+	// itself and the rest. While its list selects, the whole card is a checkbox's label:
+	// a click (shift: a range) selects it.
 	import {describeRecord, recordRest} from '#lib/describe/record'
 	import {fieldLabel} from '#lib/forms/labels'
 	import * as m from '#lib/paraglide/messages.js'
@@ -16,7 +19,10 @@
 	import {recordDate} from '#lib/records/summary'
 	import RowSummary from '../RowSummary.svelte'
 	import LinkThumb from './LinkThumb.svelte'
-	import RecordActionsMenu from './RecordActionsMenu.svelte'
+	import {atUriAppPath, repoPath} from '#lib/paths'
+	import {inReader, recordActions, type RecordAction} from '#lib/records/actions'
+	import ActionName from './ActionName.svelte'
+	import CardMenu from './CardMenu.svelte'
 
 	type Props = {
 		repo: Identity
@@ -48,6 +54,16 @@
 				: []
 		)
 	)
+	/** Its actions; the card's own is the first it can do here (the reader needs its list) */
+	let actions = $derived(recordActions(value, lexicon))
+	let primary = $derived(actions.find((action) => !inReader(action) || !!play))
+	let others = $derived(actions.filter((action) => action !== primary))
+	const target = (action: RecordAction) =>
+		action.verb === 'account'
+			? repoPath(action.did)
+			: action.verb === 'record'
+				? atUriAppPath(action.uri)
+				: undefined
 	let summary = $derived(
 		(shape.kind === 'status' && shape.fields.value
 			? String(value[shape.fields.value] ?? '')
@@ -66,6 +82,10 @@
 	{/if}
 	<RowSummary text={summary} />
 	{#if card.text && card.text !== summary}<span>{card.text}</span>{/if}
+	{#if primary && !select}
+		<enform-card-action data-verb={primary.verb}><ActionName action={primary} /></enform-card-action
+		>
+	{/if}
 	<small>
 		{#if date && shape.kind !== 'event'}<time datetime={date}>{formatDate(date)}</time>{/if}
 		{#if lists.length}{date && shape.kind !== 'event' ? ' · ' : ''}{lists.join(' · ')}{/if}
@@ -92,10 +112,24 @@
 			/>
 			{@render content()}
 		</label>
+	{:else if primary && inReader(primary) && play}
+		<!-- Plays (or reads) it; its address is the record's, for a new tab or a copied link -->
+		<a
+			{href}
+			role="button"
+			data-verb={primary.verb}
+			onclick={(event) => {
+				if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
+				event.preventDefault()
+				play()
+			}}>{@render content()}</a
+		>
+	{:else if primary && !inReader(primary)}
+		<a href={target(primary)}>{@render content()}</a>
 	{:else}
 		<a {href} aria-current={current ? 'true' : undefined}>{@render content()}</a>
 	{/if}
-	{#if play && !select}
-		<RecordActionsMenu value={record.value} {lexicon} title={summary} start={play} first />
+	{#if !select}
+		<CardMenu {repo} {record} {href} actions={others} {play} title={summary} />
 	{/if}
 </enform-record-card-item>

@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest'
-import {addressOf, atUriPath, hrefOf, recordPath, searchPath} from './paths'
+import {addressOf, atUriAppPath, atUriPath, hrefOf, recordPath, searchPath} from './paths'
 
 describe('searchPath', () => {
 	test('handles, with or without @', () => {
@@ -15,6 +15,11 @@ describe('searchPath', () => {
 		)
 		expect(atUriPath('at://alice.test/app.bsky.feed.post')).toBe(
 			'/data/@alice.test/apps/bsky.app?type=app.bsky.feed.post'
+		)
+	})
+	test('an at:// URI as its app shows it', () => {
+		expect(atUriAppPath('at://alice.test/example.event.event/3k')).toBe(
+			'/@alice.test/apps/event.example?type=example.event.event&record=3k'
 		)
 	})
 	test('anything else is refused', () => {

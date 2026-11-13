@@ -59,6 +59,17 @@ export function atUriPath(uri: string): string | undefined {
 	}
 }
 
+/** An at:// URI as its app shows it: a record open over its app's screen, else as stored */
+export function atUriAppPath(uri: string): string | undefined {
+	try {
+		const at = new AtUri(uri)
+		if (!at.collection || !at.rkey) return atUriPath(uri)
+		return appScreenPath(at.host, appOf(at.collection), {type: at.collection, record: at.rkey})
+	} catch {
+		return undefined
+	}
+}
+
 /** What someone typed to open a repo: a handle (with or without @), a DID or an at:// URI */
 export function searchPath(input: string): string | undefined {
 	const value = input.trim().replace(/^@/, '')

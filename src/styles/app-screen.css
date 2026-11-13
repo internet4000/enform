@@ -70,11 +70,24 @@ enform-record-card-item {
 	position: relative;
 }
 
-/* Its first action, in the card's corner, over its date line */
-enform-record-card-item > enform-record-actions {
+/* Its menu, in the card's corner, over its date line */
+enform-record-card-item > enform-card-menu {
 	position: absolute;
 	inset-block-end: var(--space-xs);
 	inset-inline-end: var(--space-xs);
+}
+
+enform-card-menu > button {
+	min-width: var(--control-height);
+	background: none;
+	border-color: transparent;
+}
+
+/* What a click on the card does, named on it */
+enform-card-action {
+	font-size: var(--font-size-s);
+	font-weight: var(--label-weight);
+	color: var(--color-accent-text);
 }
 
 enform-record-actions menu {
@@ -86,16 +99,13 @@ enform-record-actions menu {
 	list-style: none;
 }
 
-/* The date line leaves the action its room, on the same row */
-enform-record-card-item:has(> enform-record-actions) > a > small {
+/* The date line leaves the menu its room, on the same row */
+enform-record-card-item:has(> enform-card-menu) > a > small {
+	margin-top: auto;
 	display: flex;
 	align-items: center;
 	min-height: var(--control-height);
-	padding-inline-end: 8rem;
-}
-
-enform-record-card-item > enform-record-actions :is(a[role='button'], button) {
-	font-size: var(--font-size-s);
+	padding-inline-end: var(--control-height);
 }
 
 enform-record-actions :is(a, button)[data-verb='play'] {
@@ -116,6 +126,21 @@ enform-record-card-item > :is(a, label) {
 	border: var(--border-width) solid transparent;
 	border-radius: var(--radius-large);
 	-webkit-tap-highlight-color: transparent;
+}
+
+/* A card that plays or reads is still a card, not a button's look */
+enform-record-card-item > a[role='button'] {
+	display: flex;
+	align-items: stretch;
+	justify-content: flex-start;
+	width: 100%;
+	min-width: 0;
+	padding: var(--space-m);
+	color: inherit;
+	text-align: start;
+	white-space: normal;
+	background: var(--color-surface);
+	border-color: transparent;
 }
 
 enform-record-card-item > :is(a, label):hover,

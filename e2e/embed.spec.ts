@@ -44,8 +44,8 @@ test("a profile's home in an app, on any page", async ({page, context, request, 
 	await expect(embed.getByRole('heading', {name: /alice\.test/})).toBeVisible()
 	const shelf = embed.locator('enform-type-shelf').filter({hasText: text})
 	await expect(shelf).toBeVisible()
-	// Its records link to their pages in enform
-	await expect(shelf.getByRole('link', {name: text})).toHaveAttribute(
+	// Its records are read there; their addresses are their pages in enform
+	await expect(shelf.getByRole('button', {name: new RegExp(`^${text}`)})).toHaveAttribute(
 		'href',
 		new RegExp(`#/@alice\\.test/apps/enform\\.test\\?type=test\\.enform\\.note&record=`)
 	)
