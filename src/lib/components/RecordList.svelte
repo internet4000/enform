@@ -10,7 +10,7 @@
 	import {actorName, recordPath} from '#lib/paths'
 	import {recordDate} from '#lib/records/summary'
 	import RowSummary from './RowSummary.svelte'
-	import {page} from '$app/state'
+	import {shownUrl} from '#lib/where.svelte'
 
 	type Props = {
 		repo: Identity
@@ -49,7 +49,7 @@
 				<li>
 					<a
 						href={recordPath(actor, collection, rkey)}
-						aria-current={page.params.rkey === rkey ? 'page' : undefined}
+						aria-current={shownUrl().searchParams.get('record') === rkey ? 'page' : undefined}
 					>
 						<RowSummary text={describeRecord(record, doc).title ?? rkey} />
 						{#if date}<time datetime={date}>{formatDate(date)}</time>{/if}

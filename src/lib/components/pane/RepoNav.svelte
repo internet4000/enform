@@ -1,7 +1,7 @@
 <script lang="ts">
 	// A repo, app by app: who it is, then each app's profile and lists, named for people.
 	// The owner can add to lists, and start the app's other types.
-	import {page} from '$app/state'
+	import {shownUrl} from '#lib/where.svelte'
 	import * as m from '#lib/paraglide/messages.js'
 	import type {Identity} from '#lib/atproto/identity'
 	import {blobUrl} from '#lib/atproto/repo'
@@ -25,7 +25,7 @@
 			)
 	)
 
-	const current = (nsid: string) => page.params.collection === nsid
+	const current = (nsid: string) => shownUrl().searchParams.get('type') === nsid
 	const unused = (app: RepoApp): AppType[] => [
 		...(app.profile && !app.profile.record && app.profile.lexicon ? [app.profile] : []),
 		...app.lists.filter((type) => !type.used && type.lexicon)

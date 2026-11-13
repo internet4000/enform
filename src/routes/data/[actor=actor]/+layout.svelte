@@ -1,16 +1,20 @@
 <script lang="ts">
-	// A repo as panes: the repo (app by app), then a collection, then a record
+	// A repo as it is stored, in panes: the repo (app by app, or one app's), then a
+	// collection, then a record. At the app view's addresses, under /data.
+	import {page} from '$app/state'
 	import * as m from '#lib/paraglide/messages.js'
 	import {auth} from '#lib/auth/session.svelte'
 	import {blobUrl} from '#lib/atproto/repo'
 	import {personCard} from '#lib/apps/person'
 	import Pane from '#lib/components/pane/Pane.svelte'
 	import RepoNav from '#lib/components/pane/RepoNav.svelte'
-	import {actorName} from '#lib/paths'
+	import {actorName, dataPath} from '#lib/paths'
 
 	let {data, children} = $props()
 	let actor = $derived(actorName(data.repo))
 	let owner = $derived(auth.owns(data.repo))
+	/** The app at hand, when one is: only its collections show */
+	let app = $derived(page.params.app)
 
 	const who = async () => personCard(await data.apps)
 </script>
@@ -41,7 +45,11 @@
 		{#await data.apps}
 			<p><small>{m.collection_loading()}</small></p>
 		{:then apps}
-			<RepoNav repo={data.repo} {actor} {apps} {owner} />
+			{@const shown = app ? apps.filter((one) => one.app === app) : apps}
+			<RepoNav repo={data.repo} {actor} apps={shown} {owner} />
+			{#if app}
+				<p><a href={dataPath(actor)}>{m.data_all_apps()}</a></p>
+			{/if}
 		{/await}
 		{#if data.collections.length === 0}
 			<p>{m.repo_collections_empty()}</p>

@@ -11,9 +11,11 @@ describe('searchPath', () => {
 	})
 	test('at:// URIs to the repo, collection or record', () => {
 		expect(searchPath('at://did:plc:abc/app.bsky.feed.post/3k')).toBe(
-			'/@did:plc:abc/app.bsky.feed.post/3k'
+			'/data/@did:plc:abc/apps/bsky.app?type=app.bsky.feed.post&record=3k'
 		)
-		expect(atUriPath('at://alice.test/app.bsky.feed.post')).toBe('/@alice.test/app.bsky.feed.post')
+		expect(atUriPath('at://alice.test/app.bsky.feed.post')).toBe(
+			'/data/@alice.test/apps/bsky.app?type=app.bsky.feed.post'
+		)
 	})
 	test('anything else is refused', () => {
 		expect(searchPath('not a handle')).toBeUndefined()
@@ -21,9 +23,13 @@ describe('searchPath', () => {
 	})
 })
 
-test('record keys are encoded', () => {
-	expect(recordPath('alice.test', 'x.y.z', 'self')).toBe('/@alice.test/x.y.z/self')
-	expect(recordPath('alice.test', 'x.y.z', 'a:b')).toBe('/@alice.test/x.y.z/a%3Ab')
+test('records as stored: the data view, at the app view address, keys encoded', () => {
+	expect(recordPath('alice.test', 'x.y.z', 'self')).toBe(
+		'/data/@alice.test/apps/y.x?type=x.y.z&record=self'
+	)
+	expect(recordPath('alice.test', 'x.y.z', 'a:b')).toBe(
+		'/data/@alice.test/apps/y.x?type=x.y.z&record=a%3Ab'
+	)
 })
 
 test('addresses are after #, the part a browser never sends', () => {

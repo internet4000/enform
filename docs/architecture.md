@@ -29,7 +29,9 @@ components call directly (`records/kinds`, `card`, `summary`, `actions`,
    type, a record, `at://`); every link goes through it, with a base given to it (a
    hash, another instance). Done for links: `src/lib/paths.ts` builds them after `#`
    (the host never sees them), and reads where one is (`addressOf`, `shownUrl`); the
-   embed links to an instance's same addresses.
+   embed links to an instance's same addresses. A repo has two views at one address:
+   as its apps show it (`/@alice/apps/bsky.app?type=…&record=…`) and as it is stored,
+   in panes, the same address under `/data`; the App | Data switch keeps one's place.
 4. **Views**: person, app home, type list, record, lexicon, search. Each takes an
    address and renders descriptions only; what it needs from around it (the session,
    links, the reader) comes through Svelte context. Each is also a custom element.

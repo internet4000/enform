@@ -25,5 +25,5 @@ qualityTests([
 		open: loaded('/@alice.test/apps/enform.test?type=test.enform.note'),
 		touch: 44
 	},
-	{name: 'data', open: loaded('/@alice.test/data'), touch: 44}
+	{name: 'data', open: loaded('/data/@alice.test'), touch: 44}
 ])
